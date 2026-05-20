@@ -45,7 +45,7 @@ export const useFinanceStore = create<FinanceStore>((set, get) => ({
   load: async (farmId) => {
     set({ isLoading: true });
     const db = await getDatabase();
-    const rows = await db.getAllAsync<Transaction>(
+    const rows = await db.getAllAsync(
       'SELECT * FROM transactions WHERE farm_id=? ORDER BY transaction_date DESC, created_at DESC LIMIT 200',
       [farmId]
     );

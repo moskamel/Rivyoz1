@@ -7,7 +7,7 @@ interface InputProps extends Omit<TextInputProps, 'style'> {
   label?: string;
   error?: string;
   containerStyle?: ViewStyle;
-  style?: ViewStyle;
+  style?: any;
   required?: boolean;
 }
 

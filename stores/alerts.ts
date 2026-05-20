@@ -31,14 +31,14 @@ export const useAlertsStore = create<AlertsStore>((set, get) => ({
 
   load: async (farmId) => {
     const db = await getDatabase();
-    const rows = await db.getAllAsync<Alert>(
+    const rows = await db.getAllAsync(
       `SELECT * FROM alerts WHERE farm_id=? AND is_dismissed=0
        ORDER BY
          CASE severity WHEN 'critical' THEN 0 WHEN 'warning' THEN 1 ELSE 2 END,
          created_at DESC`,
       [farmId]
     );
-    const unread = rows.filter((a) => !a.is_read).length;
+    const unread = rows.filter((a: any) => !a.is_read).length;
     set({ alerts: rows, unreadCount: unread });
   },
 

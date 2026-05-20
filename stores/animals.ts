@@ -54,7 +54,7 @@ export const useAnimalsStore = create<AnimalsStore>((set, get) => ({
   load: async (farmId) => {
     set({ isLoading: true });
     const db = await getDatabase();
-    const rows = await db.getAllAsync<Animal>(
+    const rows = await db.getAllAsync(
       'SELECT * FROM animals WHERE farm_id=? AND status="active" ORDER BY created_at DESC',
       [farmId]
     );
