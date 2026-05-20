@@ -31,7 +31,7 @@ export const useFarmStore = create<FarmStore>((set, get) => ({
         return;
       }
       const db = await getDatabase();
-      const farm = await db.getFirstAsync<Farm>('SELECT * FROM farms LIMIT 1');
+      const farm = await db.getFirstAsync('SELECT * FROM farms LIMIT 1');
       set({ farm: farm ?? null, isOnboarded: true, isLoading: false });
     } catch {
       set({ isLoading: false });
