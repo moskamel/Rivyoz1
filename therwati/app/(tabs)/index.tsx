@@ -154,8 +154,13 @@ export default function HomeScreen() {
         marginBottom: 16,
       }}>
         <View style={{ flexDirection: 'row-reverse', justifyContent: 'space-between', alignItems: 'center' }}>
-          <View>
+          <View style={{ flexDirection: 'row-reverse', alignItems: 'center', gap: 10 }}>
             <Text size="sm" color="rgba(255,255,255,0.75)">{getGreeting()}</Text>
+            <Pressable onPress={() => router.push('/settings')} hitSlop={8}>
+              <Ionicons name="settings-outline" size={20} color="rgba(255,255,255,0.75)" />
+            </Pressable>
+          </View>
+          <View>
             <Text size="xl" weight="bold" color="#fff">{farm.name}</Text>
           </View>
           <Pressable
