@@ -41,7 +41,7 @@ function AnimalCard({ animal, onPress }: { animal: Animal; onPress: () => void }
         overflow: 'hidden',
         marginBottom: 10,
         opacity: pressed ? 0.92 : 1,
-        shadowColor: '#1A2E1B', shadowOffset: { width: 0, height: 2 },
+        shadowColor: '#1A2E1B',
         shadowOpacity: 0.06, shadowRadius: 8, elevation: 2,
       })}
     >

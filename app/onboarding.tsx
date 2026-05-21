@@ -53,7 +53,7 @@ function Step1({ selected, onToggle, onNext }: {
               key={key}
               onPress={() => onToggle(key)}
               style={({ pressed }) => ({
-                width: '45%',
+                flexBasis: '45%',
                 paddingVertical: 20,
                 borderRadius: Radius.xl,
                 backgroundColor: isSelected ? val.color + '18' : Colors.surface,

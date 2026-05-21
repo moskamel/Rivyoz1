@@ -52,7 +52,7 @@ export function Button({
           borderColor,
           opacity: disabled || loading ? 0.5 : pressed ? 0.88 : 1,
           ...(variant === 'primary' ? Shadow.sm : {}),
-          ...(fullWidth ? { width: '100%' } : {}),
+          ...(fullWidth ? { alignSelf: 'stretch' as const } : {}),
         },
         style,
       ]}
