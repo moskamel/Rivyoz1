@@ -30,7 +30,6 @@ export function Text({
           fontSize: Typography.size[size],
           color,
           textAlign: align,
-          writingDirection: 'rtl',
         },
         style,
       ]}

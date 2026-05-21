@@ -41,7 +41,6 @@ export function Input({ label, error, containerStyle, style, required, ...props 
             fontSize: Typography.size.base,
             color: Colors.textPrimary,
             textAlignVertical: 'top',
-            writingDirection: 'rtl',
           },
           style,
         ]}

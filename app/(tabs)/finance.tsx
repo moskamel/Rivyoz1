@@ -22,8 +22,9 @@ function ExpenseBar({ label, amount, total }: { label: string; amount: number; t
         <Text size="sm" weight="medium">{label}</Text>
         <Text size="sm" color={Colors.textSecondary}>{formatEGP(amount)} • {pct.toFixed(0)}%</Text>
       </View>
-      <View style={{ height: 8, backgroundColor: Colors.divider, borderRadius: 4, overflow: 'hidden' }}>
-        <View style={{ height: '100%', width: `${pct}%`, backgroundColor: Colors.primary, borderRadius: 4 }} />
+      <View style={{ height: 8, backgroundColor: Colors.divider, borderRadius: 4, overflow: 'hidden', flexDirection: 'row' }}>
+        <View style={{ height: 8, flex: pct, backgroundColor: Colors.primary, borderRadius: 4 }} />
+        <View style={{ height: 8, flex: Math.max(0, 100 - pct) }} />
       </View>
     </View>
   );
