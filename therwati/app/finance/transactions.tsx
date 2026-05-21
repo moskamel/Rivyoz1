@@ -203,7 +203,6 @@ export default function TransactionsScreen() {
                   gap: 12,
                   opacity: pressed ? 0.88 : 1,
                   shadowColor: '#1A2E1B',
-                  shadowOffset: { width: 0, height: 1 },
                   shadowOpacity: 0.05,
                   shadowRadius: 3,
                   elevation: 1,

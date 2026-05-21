@@ -76,7 +76,7 @@ export default function AddExpenseScreen() {
               key={key}
               onPress={() => { setCategory(key); setDescription(''); }}
               style={({ pressed }) => ({
-                width: '47%', padding: 14, borderRadius: Radius.lg,
+                flexBasis: '47%', padding: 14, borderRadius: Radius.lg,
                 backgroundColor: category === key ? Colors.dangerLight : Colors.surface,
                 borderWidth: 2, borderColor: category === key ? Colors.danger : Colors.border,
                 alignItems: 'center', gap: 6,

@@ -102,7 +102,7 @@ function QuickAction({ icon, label, color, onPress }: { icon: any; label: string
       style={({ pressed }) => ({
         flex: 1, backgroundColor: Colors.surface,
         borderRadius: 16, padding: 16, alignItems: 'center', gap: 8,
-        shadowColor: '#1A2E1B', shadowOffset: { width: 0, height: 2 },
+        shadowColor: '#1A2E1B',
         shadowOpacity: 0.06, shadowRadius: 8, elevation: 2,
         opacity: pressed ? 0.88 : 1,
       })}

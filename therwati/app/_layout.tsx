@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { I18nManager, View } from 'react-native';
 import { Stack } from 'expo-router';
 import * as Font from 'expo-font';
@@ -6,7 +5,6 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
 import { Colors } from '../constants/theme';
-import { setupNotificationHandler } from '../services/notifications';
 
 // Force RTL globally
 I18nManager.forceRTL(true);
@@ -23,10 +21,6 @@ const FONTS = {
 export default function RootLayout() {
   const [fontsLoaded] = Font.useFonts(FONTS);
 
-  useEffect(() => {
-    setupNotificationHandler();
-  }, []);
-
   if (!fontsLoaded) {
     return (
       <View style={{ flex: 1, backgroundColor: Colors.primary }} />
@@ -41,7 +35,7 @@ export default function RootLayout() {
           screenOptions={{
             headerShown: false,
             contentStyle: { backgroundColor: Colors.background },
-            animation: 'slide_from_left',
+            animation: 'default',
           }}
         >
           <Stack.Screen name="(tabs)" />

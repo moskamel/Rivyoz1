@@ -27,7 +27,7 @@ function TypeButton({ typeKey, selected, onPress }: { typeKey: AnimalTypeKey; se
     <Pressable
       onPress={onPress}
       style={({ pressed }) => ({
-        width: '30%', aspectRatio: 1,
+        flexBasis: '30%', aspectRatio: 1,
         borderRadius: Radius.lg,
         backgroundColor: selected ? info.color + '20' : Colors.surface,
         borderWidth: 2,

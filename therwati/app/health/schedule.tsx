@@ -106,7 +106,6 @@ export default function VaccineScheduleScreen() {
                   flexDirection: 'row-reverse',
                   overflow: 'hidden',
                   shadowColor: '#1A2E1B',
-                  shadowOffset: { width: 0, height: 1 },
                   shadowOpacity: 0.06,
                   shadowRadius: 4,
                   elevation: 2,
