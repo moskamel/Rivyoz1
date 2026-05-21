@@ -1,0 +1,42 @@
+diff --git a/node_modules/react-native-screens/lib/commonjs/components/Screen.js b/node_modules/react-native-screens/lib/commonjs/components/Screen.js
+index db0f2e3..a7b10d3 100644
+--- a/node_modules/react-native-screens/lib/commonjs/components/Screen.js
++++ b/node_modules/react-native-screens/lib/commonjs/components/Screen.js
+@@ -84,11 +84,11 @@ const InnerScreen = exports.InnerScreen = /*#__PURE__*/_react.default.forwardRef
+       freeze: freezeOnBlur && activityState === 0
+     }, /*#__PURE__*/_react.default.createElement(AnimatedScreen, _extends({}, props, {
+       activityState: activityState,
+-      sheetAllowedDetents: sheetAllowedDetents,
+-      sheetLargestUndimmedDetent: sheetLargestUndimmedDetent,
+-      sheetGrabberVisible: sheetGrabberVisible,
+-      sheetCornerRadius: sheetCornerRadius,
+-      sheetExpandsWhenScrolledToEdge: sheetExpandsWhenScrolledToEdge,
++      sheetAllowedDetents: stackPresentation === 'formSheet' ? sheetAllowedDetents : undefined,
++      sheetLargestUndimmedDetent: stackPresentation === 'formSheet' ? sheetLargestUndimmedDetent : undefined,
++      sheetGrabberVisible: stackPresentation === 'formSheet' ? sheetGrabberVisible : undefined,
++      sheetCornerRadius: stackPresentation === 'formSheet' ? sheetCornerRadius : undefined,
++      sheetExpandsWhenScrolledToEdge: stackPresentation === 'formSheet' ? sheetExpandsWhenScrolledToEdge : undefined,
+       gestureResponseDistance: {
+         start: gestureResponseDistance?.start ?? -1,
+         end: gestureResponseDistance?.end ?? -1,
+diff --git a/node_modules/react-native-screens/lib/module/components/Screen.js b/node_modules/react-native-screens/lib/module/components/Screen.js
+index ec8f973..083a545 100644
+--- a/node_modules/react-native-screens/lib/module/components/Screen.js
++++ b/node_modules/react-native-screens/lib/module/components/Screen.js
+@@ -79,11 +79,11 @@ export const InnerScreen = /*#__PURE__*/React.forwardRef(function InnerScreen(pr
+       freeze: freezeOnBlur && activityState === 0
+     }, /*#__PURE__*/React.createElement(AnimatedScreen, _extends({}, props, {
+       activityState: activityState,
+-      sheetAllowedDetents: sheetAllowedDetents,
+-      sheetLargestUndimmedDetent: sheetLargestUndimmedDetent,
+-      sheetGrabberVisible: sheetGrabberVisible,
+-      sheetCornerRadius: sheetCornerRadius,
+-      sheetExpandsWhenScrolledToEdge: sheetExpandsWhenScrolledToEdge,
++      sheetAllowedDetents: stackPresentation === 'formSheet' ? sheetAllowedDetents : undefined,
++      sheetLargestUndimmedDetent: stackPresentation === 'formSheet' ? sheetLargestUndimmedDetent : undefined,
++      sheetGrabberVisible: stackPresentation === 'formSheet' ? sheetGrabberVisible : undefined,
++      sheetCornerRadius: stackPresentation === 'formSheet' ? sheetCornerRadius : undefined,
++      sheetExpandsWhenScrolledToEdge: stackPresentation === 'formSheet' ? sheetExpandsWhenScrolledToEdge : undefined,
+       gestureResponseDistance: {
+         start: gestureResponseDistance?.start ?? -1,
+         end: gestureResponseDistance?.end ?? -1,
