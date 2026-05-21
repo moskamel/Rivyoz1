@@ -28,8 +28,9 @@ function CategoryBar({
         <Text size="sm">{icon}  {label}</Text>
         <Text size="sm" weight="semiBold" color={color}>{formatEGP(amount)}</Text>
       </View>
-      <View style={{ height: 6, backgroundColor: Colors.background, borderRadius: 3, overflow: 'hidden' }}>
-        <View style={{ height: 6, width: `${pct}%` as any, backgroundColor: color, borderRadius: 3 }} />
+      <View style={{ height: 6, backgroundColor: Colors.background, borderRadius: 3, overflow: 'hidden', flexDirection: 'row' }}>
+        <View style={{ height: 6, flex: pct, backgroundColor: color, borderRadius: 3 }} />
+        <View style={{ height: 6, flex: Math.max(0, 100 - pct) }} />
       </View>
       <Text size="xs" color={Colors.textTertiary} style={{ marginTop: 3 }}>
         {Math.round(pct)}٪ من الإجمالي
