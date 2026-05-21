@@ -20,7 +20,11 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#1B5E20"
       },
-      "package": "com.therwati.app"
+      "package": "com.therwati.app",
+      "minSdkVersion": 24,
+      "targetSdkVersion": 34,
+      "compileSdkVersion": 34,
+      "buildToolsVersion": "34.0.0"
     },
     "web": {
       "favicon": "./assets/favicon.png",
@@ -28,8 +32,16 @@
     },
     "plugins": [
       "expo-router",
-      "expo-font"
+      "expo-font",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/icon.png",
+          "color": "#1B5E20"
+        }
+      ]
     ],
+    "newArchEnabled": true,
     "scheme": "therwati",
     "experiments": {
       "typedRoutes": true
