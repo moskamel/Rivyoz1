@@ -137,6 +137,32 @@ export default function FinanceScreen() {
           </View>
         </View>
 
+        {/* Quick nav */}
+        <View style={{ flexDirection: 'row-reverse', gap: 10, marginBottom: -6 }}>
+          <Pressable
+            onPress={() => router.push('/finance/report')}
+            style={({ pressed }) => ({
+              flex: 1, backgroundColor: Colors.surface, borderRadius: 14, padding: 12,
+              flexDirection: 'row-reverse', alignItems: 'center', gap: 8,
+              opacity: pressed ? 0.88 : 1, borderWidth: 1, borderColor: Colors.border,
+            })}
+          >
+            <Ionicons name="bar-chart-outline" size={18} color={Colors.primary} />
+            <Text size="sm" weight="semiBold" color={Colors.primary}>التقرير الشهري</Text>
+          </Pressable>
+          <Pressable
+            onPress={() => router.push('/finance/transactions')}
+            style={({ pressed }) => ({
+              flex: 1, backgroundColor: Colors.surface, borderRadius: 14, padding: 12,
+              flexDirection: 'row-reverse', alignItems: 'center', gap: 8,
+              opacity: pressed ? 0.88 : 1, borderWidth: 1, borderColor: Colors.border,
+            })}
+          >
+            <Ionicons name="list-outline" size={18} color={Colors.primary} />
+            <Text size="sm" weight="semiBold" color={Colors.primary}>كل المعاملات</Text>
+          </Pressable>
+        </View>
+
         {/* Add buttons */}
         <View style={{ flexDirection: 'row-reverse', gap: 10 }}>
           <Pressable

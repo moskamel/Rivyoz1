@@ -6,6 +6,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
 import { Colors } from '../constants/theme';
+import { setupNotificationHandler } from '../services/notifications';
 
 // Force RTL globally
 I18nManager.forceRTL(true);
@@ -21,6 +22,10 @@ const FONTS = {
 
 export default function RootLayout() {
   const [fontsLoaded] = Font.useFonts(FONTS);
+
+  useEffect(() => {
+    setupNotificationHandler();
+  }, []);
 
   if (!fontsLoaded) {
     return (
@@ -56,6 +61,15 @@ export default function RootLayout() {
           />
           <Stack.Screen
             name="health/add-event"
+            options={{ animation: 'slide_from_bottom', presentation: 'modal' }}
+          />
+          <Stack.Screen name="health/record" />
+          <Stack.Screen name="health/schedule" />
+          <Stack.Screen name="finance/transactions" />
+          <Stack.Screen name="finance/report" />
+          <Stack.Screen name="animal/edit/[id]" />
+          <Stack.Screen
+            name="settings"
             options={{ animation: 'slide_from_bottom', presentation: 'modal' }}
           />
         </Stack>

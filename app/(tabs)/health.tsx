@@ -149,6 +149,44 @@ export default function HealthScreen() {
               </View>
               <Ionicons name="chevron-back" size={16} color={Colors.textTertiary} />
             </Pressable>
+
+            <Pressable
+              onPress={() => router.push('/health/record')}
+              style={({ pressed }) => ({
+                flexDirection: 'row-reverse', alignItems: 'center', gap: 12,
+                backgroundColor: Colors.surface, borderRadius: 12, padding: 14,
+                borderWidth: 1, borderColor: Colors.border,
+                opacity: pressed ? 0.88 : 1,
+              })}
+            >
+              <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: Colors.primaryFaded, alignItems: 'center', justifyContent: 'center' }}>
+                <Ionicons name="document-text-outline" size={18} color={Colors.primary} />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text weight="semiBold" size="sm">السجل الصحي الكامل</Text>
+                <Text size="xs" color={Colors.textSecondary}>جميع الأحداث الصحية</Text>
+              </View>
+              <Ionicons name="chevron-back" size={16} color={Colors.textTertiary} />
+            </Pressable>
+
+            <Pressable
+              onPress={() => router.push('/health/schedule')}
+              style={({ pressed }) => ({
+                flexDirection: 'row-reverse', alignItems: 'center', gap: 12,
+                backgroundColor: Colors.surface, borderRadius: 12, padding: 14,
+                borderWidth: 1, borderColor: Colors.border,
+                opacity: pressed ? 0.88 : 1,
+              })}
+            >
+              <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: Colors.primaryFaded, alignItems: 'center', justifyContent: 'center' }}>
+                <Ionicons name="calendar-outline" size={18} color={Colors.primary} />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text weight="semiBold" size="sm">جدول التطعيمات</Text>
+                <Text size="xs" color={Colors.textSecondary}>المواعيد القادمة والنماذج</Text>
+              </View>
+              <Ionicons name="chevron-back" size={16} color={Colors.textTertiary} />
+            </Pressable>
           </View>
         </Card>
       </ScrollView>
