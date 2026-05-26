@@ -5,6 +5,7 @@ import {
   Megaphone, BarChart3, Settings, ExternalLink, ChefHat,
   Users, UserCheck, Package, Monitor, ChevronDown, Check
 } from 'lucide-react'
+import { getConfig } from '../../lib/restaurantStore'
 
 const nav = [
   { to: '/', label: 'الرئيسية', icon: LayoutDashboard, exact: true },
@@ -132,7 +133,9 @@ export default function Sidebar() {
       {/* Preview link */}
       <div className="p-3 border-t border-gray-100">
         <a
-          href="#"
+          href={`/${getConfig().slug}`}
+          target="_blank"
+          rel="noopener noreferrer"
           className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition-all"
         >
           <ExternalLink size={18} />

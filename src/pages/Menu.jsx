@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { Plus, MoreVertical, X, GripVertical, Star } from 'lucide-react'
 import Layout from '../components/layout/Layout'
-import { mockMenuCategories, mockMenuItems } from '../lib/mock'
+import { getMenuItems, setMenuItems, getCategories } from '../lib/restaurantStore'
 
 export default function Menu() {
-  const [categories, setCategories] = useState(mockMenuCategories)
-  const [items, setItems] = useState(mockMenuItems)
+  const [categories, setCategories] = useState(getCategories)
+  const [items, setItems] = useState(getMenuItems)
   const [activeCategory, setActiveCategory] = useState(1)
   const [showForm, setShowForm] = useState(false)
   const [editItem, setEditItem] = useState(null)
@@ -14,7 +14,11 @@ export default function Menu() {
   const filteredItems = items.filter(i => i.categoryId === activeCategory)
 
   const toggleActive = (id) => {
-    setItems(prev => prev.map(i => i.id === id ? { ...i, active: !i.active } : i))
+    setItems(prev => {
+      const next = prev.map(i => i.id === id ? { ...i, active: !i.active } : i)
+      setMenuItems(next)
+      return next
+    })
   }
 
   const openAdd = () => {
@@ -32,16 +36,28 @@ export default function Menu() {
   const saveItem = () => {
     if (!form.name || !form.price) return
     if (editItem) {
-      setItems(prev => prev.map(i => i.id === editItem ? { ...i, ...form, price: Number(form.price) } : i))
+      setItems(prev => {
+        const next = prev.map(i => i.id === editItem ? { ...i, ...form, price: Number(form.price) } : i)
+        setMenuItems(next)
+        return next
+      })
     } else {
-      const newItem = { id: Date.now(), ...form, price: Number(form.price), image: null }
-      setItems(prev => [...prev, newItem])
+      setItems(prev => {
+        const newItem = { id: Date.now(), ...form, price: Number(form.price), image: null }
+        const next = [...prev, newItem]
+        setMenuItems(next)
+        return next
+      })
     }
     setShowForm(false)
   }
 
   const deleteItem = (id) => {
-    setItems(prev => prev.filter(i => i.id !== id))
+    setItems(prev => {
+      const next = prev.filter(i => i.id !== id)
+      setMenuItems(next)
+      return next
+    })
   }
 
   return (
@@ -120,7 +136,11 @@ export default function Menu() {
                       <div className="absolute left-0 top-8 bg-white border border-gray-100 rounded-xl shadow-lg z-10 min-w-[120px] hidden group-hover:block">
                         <button onClick={() => openEdit(item)} className="w-full text-right px-4 py-2 text-sm hover:bg-gray-50">تعديل</button>
                         <button
-                          onClick={() => setItems(prev => [...prev, { ...item, id: Date.now(), name: item.name + ' (نسخة)' }])}
+                          onClick={() => setItems(prev => {
+                            const next = [...prev, { ...item, id: Date.now(), name: item.name + ' (نسخة)' }]
+                            setMenuItems(next)
+                            return next
+                          })}
                           className="w-full text-right px-4 py-2 text-sm hover:bg-gray-50"
                         >نسخ</button>
                         <button onClick={() => deleteItem(item.id)} className="w-full text-right px-4 py-2 text-sm text-red-500 hover:bg-red-50">حذف</button>

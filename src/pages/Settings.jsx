@@ -1,14 +1,38 @@
 import { useState } from 'react'
 import { Download, QrCode } from 'lucide-react'
 import Layout from '../components/layout/Layout'
+import { getConfig, setConfig } from '../lib/restaurantStore'
 
 const tabs = ['المطعم', 'التصميم', 'التوصيل', 'QR Code', 'الاشتراك']
 
+function Toast({ message }) {
+  return (
+    <div className="fixed bottom-6 left-6 z-50 bg-green-600 text-white px-5 py-3 rounded-xl shadow-lg font-semibold text-sm animate-bounce-once">
+      {message}
+    </div>
+  )
+}
+
+function useToast() {
+  const [toast, setToast] = useState(null)
+  const showToast = (msg) => {
+    setToast(msg)
+    setTimeout(() => setToast(null), 2000)
+  }
+  return { toast, showToast }
+}
+
 function RestaurantTab() {
+  const storedConfig = getConfig()
   const [form, setForm] = useState({
-    name: 'مطعم الشيف أحمد', description: 'مطعم مشويات طازجة', category: 'مشويات',
-    address: 'التجمع الخامس، القاهرة', phone: '01012345678', email: 'chef@email.com',
+    name: storedConfig.name || 'مطعم الشيف أحمد',
+    description: storedConfig.description || 'مطعم مشويات طازجة',
+    category: 'مشويات',
+    address: storedConfig.address || 'التجمع الخامس، القاهرة',
+    phone: storedConfig.phone || '01012345678',
+    email: 'chef@email.com',
   })
+  const { toast, showToast } = useToast()
 
   return (
     <div className="max-w-lg space-y-4">
@@ -48,16 +72,21 @@ function RestaurantTab() {
           </div>
         </div>
       </div>
-      <button className="w-full max-w-xs py-3 bg-orange-500 text-white rounded-xl font-semibold hover:bg-orange-600">
+      <button
+        onClick={() => { setConfig(form); showToast('تم الحفظ ✓') }}
+        className="w-full max-w-xs py-3 bg-orange-500 text-white rounded-xl font-semibold hover:bg-orange-600"
+      >
         حفظ التغييرات
       </button>
+      {toast && <Toast message={toast} />}
     </div>
   )
 }
 
 function DesignTab() {
   const colors = ['#f97316', '#6366f1', '#22c55e', '#ec4899', '#1f2937']
-  const [color, setColor] = useState('#f97316')
+  const [color, setColor] = useState(() => getConfig().color)
+  const { toast, showToast } = useToast()
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
@@ -91,9 +120,13 @@ function DesignTab() {
             </div>
           </div>
         </div>
-        <button className="w-full py-3 bg-orange-500 text-white rounded-xl font-semibold hover:bg-orange-600">
+        <button
+          onClick={() => { setConfig({ color }); showToast('تم النشر ✓') }}
+          className="w-full py-3 bg-orange-500 text-white rounded-xl font-semibold hover:bg-orange-600"
+        >
           نشر التغييرات
         </button>
+        {toast && <Toast message={toast} />}
       </div>
 
       {/* Preview */}

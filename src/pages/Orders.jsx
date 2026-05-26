@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { X, ChevronDown } from 'lucide-react'
 import Layout from '../components/layout/Layout'
-import { mockOrders, statusMap } from '../lib/mock'
+import { statusMap } from '../lib/mock'
+import { getOrders, updateOrderStatus } from '../lib/restaurantStore'
 
 const tabs = [
   { key: 'all', label: 'الكل' },
@@ -29,21 +30,38 @@ const actionLabel = {
 
 export default function Orders() {
   const [activeTab, setActiveTab] = useState('all')
-  const [orders, setOrders] = useState(mockOrders)
+  const [orders, setOrders] = useState(getOrders)
   const [selected, setSelected] = useState(null)
   const [rejectModal, setRejectModal] = useState(null)
   const [rejectReason, setRejectReason] = useState('')
+
+  // Poll for new customer orders every 3 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setOrders(getOrders())
+    }, 3000)
+    return () => clearInterval(interval)
+  }, [])
 
   const filtered = activeTab === 'all' ? orders : orders.filter(o => o.status === activeTab)
   const count = (key) => key === 'all' ? orders.length : orders.filter(o => o.status === key).length
 
   const advance = (id) => {
-    setOrders(prev => prev.map(o => o.id === id && nextStatus[o.status] ? { ...o, status: nextStatus[o.status] } : o))
+    setOrders(prev => {
+      const next = prev.map(o => o.id === id && nextStatus[o.status] ? { ...o, status: nextStatus[o.status] } : o)
+      const updated = next.find(o => o.id === id)
+      if (updated) updateOrderStatus(id, updated.status)
+      return next
+    })
     setSelected(null)
   }
 
   const reject = (id) => {
-    setOrders(prev => prev.map(o => o.id === id ? { ...o, status: 'cancelled' } : o))
+    setOrders(prev => {
+      const next = prev.map(o => o.id === id ? { ...o, status: 'cancelled' } : o)
+      updateOrderStatus(id, 'cancelled')
+      return next
+    })
     setRejectModal(null)
     setSelected(null)
   }

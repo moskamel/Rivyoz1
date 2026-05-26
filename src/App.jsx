@@ -10,10 +10,16 @@ import KDS from './pages/KDS'
 import Customers from './pages/Customers'
 import Staff from './pages/Staff'
 import Inventory from './pages/Inventory'
+import StoreFront from './customer/StoreFront'
+import Cart from './customer/Cart'
+import OrderConfirm from './customer/OrderConfirm'
+import OrderTracking from './customer/OrderTracking'
+import Explore from './customer/Explore'
 
 export default function App() {
   return (
     <Routes>
+      {/* Dashboard routes */}
       <Route path="/login" element={<Login />} />
       <Route path="/kds" element={<KDS />} />
       <Route path="/" element={<Dashboard />} />
@@ -25,6 +31,13 @@ export default function App() {
       <Route path="/customers" element={<Customers />} />
       <Route path="/staff" element={<Staff />} />
       <Route path="/inventory" element={<Inventory />} />
+
+      {/* Customer-facing routes */}
+      <Route path="/chef-ahmed" element={<StoreFront />} />
+      <Route path="/cart" element={<Cart />} />
+      <Route path="/order-confirm" element={<OrderConfirm />} />
+      <Route path="/track/:orderId" element={<OrderTracking />} />
+      <Route path="/explore" element={<Explore />} />
     </Routes>
   )
 }
