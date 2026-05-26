@@ -1,117 +1,122 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { TrendingUp, TrendingDown, ShoppingBag, Users, DollarSign, BarChart2, ArrowLeft, Power } from 'lucide-react'
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
+import { TrendingUp, TrendingDown, ShoppingBag, Users, DollarSign, ArrowLeft, Power, ArrowUpRight } from 'lucide-react'
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
 import Layout from '../components/layout/Layout'
-import { mockStats, mockOrders, mockSalesData, mockTopItems, statusMap } from '../lib/mock'
+import { mockStats, mockSalesData, mockTopItems, statusMap } from '../lib/mock'
+import { getOrders } from '../lib/restaurantStore'
 
-function StatCard({ label, value, unit, change, icon: Icon, color }) {
+const CustomTooltip = ({ active, payload, label }) => {
+  if (active && payload?.length) {
+    return (
+      <div style={{ background: 'var(--surface-3)', border: '1px solid var(--border-strong)', borderRadius: 10, padding: '8px 12px', boxShadow: '0 8px 24px rgba(0,0,0,0.4)' }}>
+        <p style={{ fontSize: 11, color: 'var(--text-2)', marginBottom: 2 }}>{label}</p>
+        <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--accent)', fontFamily: 'Inter' }}>{payload[0].value.toLocaleString('ar-EG')} ج</p>
+      </div>
+    )
+  }
+  return null
+}
+
+function StatCard({ label, value, change, icon: Icon, color }) {
   const positive = change >= 0
   return (
-    <div className="bg-white rounded-2xl p-5 border border-gray-100 hover:shadow-md transition-shadow cursor-pointer">
-      <div className="flex items-start justify-between mb-3">
-        <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${color}`}>
-          <Icon size={20} />
+    <div className="glass animate-fade-in" style={{ padding: '20px', cursor: 'pointer', transition: 'all 0.2s' }}
+      onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--border-strong)'; e.currentTarget.style.transform = 'translateY(-2px)' }}
+      onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.transform = 'translateY(0)' }}
+    >
+      <div className="flex items-start justify-between mb-4">
+        <div style={{ width: 36, height: 36, borderRadius: 10, background: color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Icon size={17} color="white" strokeWidth={2} />
         </div>
         {change !== undefined && (
-          <span className={`flex items-center gap-1 text-xs font-semibold ${positive ? 'text-green-600' : 'text-red-500'}`}>
-            {positive ? <TrendingUp size={13} /> : <TrendingDown size={13} />}
-            {Math.abs(change)}% أمس
+          <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 600, color: positive ? 'var(--green)' : 'var(--red)', background: positive ? 'var(--green-muted)' : 'var(--red-muted)', padding: '3px 8px', borderRadius: 6 }}>
+            {positive ? <TrendingUp size={11} /> : <TrendingDown size={11} />}
+            {Math.abs(change)}%
           </span>
         )}
       </div>
-      <p className="text-2xl font-bold text-gray-900">{value.toLocaleString('ar-EG')}<span className="text-sm font-medium text-gray-400 mr-1">{unit}</span></p>
-      <p className="text-sm text-gray-500 mt-1">{label}</p>
+      <p className="num" style={{ fontSize: 26, fontWeight: 800, color: 'var(--text)', letterSpacing: '-0.02em', lineHeight: 1 }}>{value.toLocaleString()}</p>
+      <p style={{ fontSize: 11, color: 'var(--text-2)', marginTop: 6, fontWeight: 500 }}>{label}</p>
     </div>
   )
 }
 
 export default function Dashboard() {
   const [isOpen, setIsOpen] = useState(true)
-  const newOrders = mockOrders.filter(o => o.status === 'new')
-  const recentOrders = mockOrders.slice(0, 3)
+  const orders = getOrders()
+  const newOrders = orders.filter(o => o.status === 'new')
+  const recentOrders = orders.slice(0, 4)
 
   return (
     <Layout title="الرئيسية">
-      {/* Status strip */}
-      <div className="bg-white rounded-2xl p-4 border border-gray-100 mb-5 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <span className={`w-2.5 h-2.5 rounded-full ${isOpen ? 'bg-green-500' : 'bg-gray-400'}`} />
-          <div>
-            <p className="font-bold text-gray-900">مطعم الشيف أحمد</p>
-            <p className={`text-sm ${isOpen ? 'text-green-600' : 'text-gray-500'}`}>
-              {isOpen ? `مفتوح دلوقتي · حتى ${mockStats.closesAt || '11 مساءً'}` : 'مغلق مؤقتاً'}
-            </p>
+      {/* Status + alert row */}
+      <div className="flex gap-3 mb-6" style={{ flexWrap: 'wrap' }}>
+        <div className="glass flex items-center gap-3" style={{ padding: '12px 16px', flex: 1, minWidth: 240 }}>
+          <div style={{ width: 8, height: 8, borderRadius: '50%', background: isOpen ? 'var(--green)' : 'var(--text-3)', boxShadow: isOpen ? '0 0 8px var(--green)' : 'none' }} />
+          <div style={{ flex: 1 }}>
+            <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>مطعم الشيف أحمد</p>
+            <p style={{ fontSize: 11, color: isOpen ? 'var(--green)' : 'var(--text-3)', fontWeight: 500 }}>{isOpen ? 'مفتوح · حتى 11 مساءً' : 'مغلق مؤقتاً'}</p>
           </div>
+          <button onClick={() => setIsOpen(!isOpen)} style={{ fontSize: 12, fontWeight: 600, padding: '6px 12px', borderRadius: 8, cursor: 'pointer', border: 'none', background: isOpen ? 'var(--red-muted)' : 'var(--green-muted)', color: isOpen ? 'var(--red)' : 'var(--green)', display: 'flex', alignItems: 'center', gap: 5, transition: 'all 0.15s' }}>
+            <Power size={13} />
+            {isOpen ? 'إغلاق مؤقت' : 'فتح المطعم'}
+          </button>
         </div>
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
-            isOpen
-              ? 'bg-red-50 text-red-600 hover:bg-red-100'
-              : 'bg-green-50 text-green-600 hover:bg-green-100'
-          }`}
-        >
-          <Power size={15} />
-          {isOpen ? 'إغلاق مؤقت' : 'فتح المطعم'}
-        </button>
-      </div>
 
-      {/* New orders banner */}
-      {newOrders.length > 0 && (
-        <div className="bg-red-50 border border-red-200 rounded-2xl p-4 mb-5 flex items-center justify-between pulse-new-order">
-          <div className="flex items-center gap-3">
-            <span className="w-3 h-3 bg-red-500 rounded-full animate-pulse" />
-            <p className="font-bold text-red-700">{newOrders.length} {newOrders.length === 1 ? 'طلب ينتظر' : 'طلبات تنتظر'} موافقتك</p>
-          </div>
-          <Link to="/orders" className="flex items-center gap-2 text-sm font-bold text-red-600 hover:text-red-700">
-            شوف الطلبات
-            <ArrowLeft size={15} />
+        {newOrders.length > 0 && (
+          <Link to="/orders" className="flex items-center gap-3 pulse-accent" style={{ padding: '12px 16px', borderRadius: 16, background: 'var(--red-muted)', border: '1px solid rgba(248,113,113,0.2)', textDecoration: 'none', flexShrink: 0 }}>
+            <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--red)', display: 'block' }} />
+            <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--red)' }}>{newOrders.length} طلب جديد</span>
+            <ArrowLeft size={14} style={{ color: 'var(--red)' }} />
           </Link>
-        </div>
-      )}
-
-      {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <StatCard label="مبيعات اليوم" value={mockStats.revenue} unit="ج" change={mockStats.revenueChange} icon={DollarSign} color="bg-orange-100 text-orange-600" />
-        <StatCard label="طلبات اليوم" value={mockStats.orders} unit="" change={mockStats.ordersChange} icon={ShoppingBag} color="bg-blue-100 text-blue-600" />
-        <StatCard label="متوسط الطلب" value={mockStats.avgOrder} unit="ج" icon={BarChart2} color="bg-purple-100 text-purple-600" />
-        <StatCard label="زبائن جدد" value={mockStats.newCustomers} unit="" icon={Users} color="bg-green-100 text-green-600" />
+        )}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-5">
-        {/* Sales chart */}
-        <div className="lg:col-span-2 bg-white rounded-2xl p-5 border border-gray-100">
-          <p className="font-bold text-gray-900 mb-4">مبيعات آخر 7 أيام</p>
-          <ResponsiveContainer width="100%" height={180}>
-            <LineChart data={mockSalesData}>
-              <XAxis dataKey="day" tick={{ fontSize: 12, fontFamily: 'Cairo' }} axisLine={false} tickLine={false} />
+      {/* Stats grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 20 }}>
+        <StatCard label="مبيعات اليوم" value={mockStats.revenue} change={mockStats.revenueChange} icon={DollarSign} color="var(--accent)" />
+        <StatCard label="طلبات اليوم" value={mockStats.orders} change={mockStats.ordersChange} icon={ShoppingBag} color="#3B82F6" />
+        <StatCard label="متوسط الطلب" value={mockStats.avgOrder} icon={ArrowUpRight} color="#8B5CF6" />
+        <StatCard label="زبائن جدد" value={mockStats.newCustomers} icon={Users} color="#22C55E" />
+      </div>
+
+      {/* Chart + Top items */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: 12, marginBottom: 20 }}>
+        <div className="glass" style={{ padding: '20px' }}>
+          <div className="flex items-center justify-between mb-5">
+            <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>المبيعات — آخر 7 أيام</p>
+            <span style={{ fontSize: 11, color: 'var(--text-2)', background: 'var(--surface-2)', padding: '4px 10px', borderRadius: 6, border: '1px solid var(--border)' }}>هذا الأسبوع</span>
+          </div>
+          <ResponsiveContainer width="100%" height={160}>
+            <AreaChart data={mockSalesData}>
+              <defs>
+                <linearGradient id="grad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#F97316" stopOpacity={0.15} />
+                  <stop offset="100%" stopColor="#F97316" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <XAxis dataKey="day" tick={{ fontSize: 11, fill: 'var(--text-3)', fontFamily: 'Cairo' }} axisLine={false} tickLine={false} />
               <YAxis hide />
-              <Tooltip
-                formatter={(v) => [`${v.toLocaleString('ar-EG')} ج`, 'المبيعات']}
-                contentStyle={{ fontFamily: 'Cairo', borderRadius: 12, border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}
-              />
-              <Line type="monotone" dataKey="amount" stroke="#f97316" strokeWidth={2.5} dot={false} activeDot={{ r: 5 }} />
-            </LineChart>
+              <Tooltip content={<CustomTooltip />} />
+              <Area type="monotone" dataKey="amount" stroke="#F97316" strokeWidth={2} fill="url(#grad)" dot={false} activeDot={{ r: 4, fill: '#F97316', stroke: 'var(--bg)', strokeWidth: 2 }} />
+            </AreaChart>
           </ResponsiveContainer>
         </div>
 
-        {/* Top items */}
-        <div className="bg-white rounded-2xl p-5 border border-gray-100">
-          <p className="font-bold text-gray-900 mb-4">الأكثر مبيعاً اليوم</p>
-          <div className="space-y-3">
+        <div className="glass" style={{ padding: '20px' }}>
+          <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 16 }}>الأكثر مبيعاً</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             {mockTopItems.map((item, i) => (
               <div key={i} className="flex items-center gap-3">
-                <span className="w-6 h-6 bg-orange-100 text-orange-600 rounded-lg flex items-center justify-center text-xs font-bold flex-shrink-0">{i + 1}</span>
-                <div className="flex-1 min-w-0">
-                  <div className="flex justify-between text-sm">
-                    <span className="font-medium text-gray-800 truncate">{item.name}</span>
-                    <span className="text-gray-500 flex-shrink-0 mr-2">{item.orders} طلب</span>
-                  </div>
-                  <div className="mt-1 bg-gray-100 rounded-full h-1.5">
-                    <div className="bg-orange-400 h-1.5 rounded-full" style={{ width: `${(item.orders / mockTopItems[0].orders) * 100}%` }} />
+                <span style={{ width: 22, height: 22, borderRadius: 6, background: 'var(--surface-2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 700, color: 'var(--accent)', flexShrink: 0, fontFamily: 'Inter' }}>{i + 1}</span>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--text)', marginBottom: 4, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.name}</p>
+                  <div style={{ height: 3, background: 'var(--surface-3)', borderRadius: 2 }}>
+                    <div style={{ height: 3, borderRadius: 2, background: 'var(--accent)', width: `${(item.orders / mockTopItems[0].orders) * 100}%`, transition: 'width 0.5s ease' }} />
                   </div>
                 </div>
+                <span className="num" style={{ fontSize: 11, color: 'var(--text-2)', flexShrink: 0 }}>{item.orders}</span>
               </div>
             ))}
           </div>
@@ -119,27 +124,34 @@ export default function Dashboard() {
       </div>
 
       {/* Recent orders */}
-      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-        <div className="p-5 border-b border-gray-50 flex items-center justify-between">
-          <p className="font-bold text-gray-900">آخر الطلبات</p>
-          <Link to="/orders" className="text-sm text-orange-600 font-semibold hover:text-orange-700 flex items-center gap-1">
-            شوف كل الطلبات <ArrowLeft size={14} />
+      <div className="glass" style={{ overflow: 'hidden' }}>
+        <div className="flex items-center justify-between" style={{ padding: '16px 20px', borderBottom: '1px solid var(--border)' }}>
+          <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>آخر الطلبات</p>
+          <Link to="/orders" style={{ fontSize: 12, color: 'var(--accent)', fontWeight: 600, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4 }}>
+            عرض الكل <ArrowLeft size={13} />
           </Link>
         </div>
-        <div className="divide-y divide-gray-50">
-          {recentOrders.map(order => (
-            <div key={order.id} className="flex items-center justify-between px-5 py-3">
-              <div className="flex items-center gap-3">
-                <span className="text-sm font-bold text-gray-500">#{order.id}</span>
-                <div>
-                  <p className="text-sm font-medium text-gray-800">{order.items}</p>
-                  <p className="text-xs text-gray-400">{order.table} · {order.time}</p>
-                </div>
+        <div>
+          {recentOrders.map((order, i) => (
+            <div key={order.id} style={{ display: 'flex', alignItems: 'center', padding: '12px 20px', borderBottom: i < recentOrders.length - 1 ? '1px solid var(--border)' : 'none', transition: 'background 0.15s' }}
+              onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-2)'}
+              onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+            >
+              <div style={{ width: 32, height: 32, borderRadius: 8, background: 'var(--surface-2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700, color: 'var(--text-2)', fontFamily: 'Inter', border: '1px solid var(--border)', flexShrink: 0 }}>
+                {order.id}
+              </div>
+              <div style={{ flex: 1, marginRight: 12, marginLeft: 12 }}>
+                <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>{order.items}</p>
+                <p style={{ fontSize: 11, color: 'var(--text-2)', marginTop: 1 }}>{order.table} · {order.time}</p>
               </div>
               <div className="flex items-center gap-3">
-                <span className="text-sm font-bold text-gray-900">{order.total} ج</span>
-                <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${statusMap[order.status].color}`}>
-                  {statusMap[order.status].label}
+                <p className="num" style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>{order.total} ج</p>
+                <span style={{
+                  fontSize: 11, fontWeight: 600, padding: '3px 8px', borderRadius: 6,
+                  background: order.status === 'new' ? 'var(--red-muted)' : order.status === 'preparing' ? 'var(--blue-muted)' : order.status === 'ready' ? 'var(--yellow-muted)' : order.status === 'delivering' ? 'var(--accent-muted)' : 'var(--surface-2)',
+                  color: order.status === 'new' ? 'var(--red)' : order.status === 'preparing' ? 'var(--blue)' : order.status === 'ready' ? 'var(--yellow)' : order.status === 'delivering' ? 'var(--accent)' : 'var(--text-3)'
+                }}>
+                  {statusMap[order.status]?.label}
                 </span>
               </div>
             </div>

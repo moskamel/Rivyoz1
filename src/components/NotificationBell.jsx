@@ -2,11 +2,11 @@ import { useState, useRef, useEffect } from 'react'
 import { Bell, ShoppingBag, XCircle, AlertTriangle, Megaphone, UserPlus } from 'lucide-react'
 
 const mockNotifications = [
-  { id: 1, icon: ShoppingBag, iconColor: 'text-orange-500 bg-orange-50', text: 'طلب جديد #43 من طاولة 5', time: 'منذ دقيقة', read: false },
-  { id: 2, icon: XCircle, iconColor: 'text-red-500 bg-red-50', text: 'طلب #41 تم إلغاؤه من العميل', time: 'منذ 5 دقائق', read: false },
-  { id: 3, icon: AlertTriangle, iconColor: 'text-amber-500 bg-amber-50', text: 'صنف "الدجاج" على وشك النفاد (3 وحدات)', time: 'منذ 15 دقيقة', read: false },
-  { id: 4, icon: Megaphone, iconColor: 'text-purple-500 bg-purple-50', text: 'حملة "عروض رمضان" تم إرسالها بنجاح', time: 'منذ ساعة', read: true },
-  { id: 5, icon: UserPlus, iconColor: 'text-green-500 bg-green-50', text: 'زبون جديد مسجل: منى محمد', time: 'منذ ساعتين', read: true },
+  { id: 1, icon: ShoppingBag, iconBg: 'var(--accent-muted)', iconColor: 'var(--accent)', text: 'طلب جديد #43 من طاولة 5', time: 'منذ دقيقة', read: false },
+  { id: 2, icon: XCircle, iconBg: 'var(--red-muted)', iconColor: 'var(--red)', text: 'طلب #41 تم إلغاؤه من العميل', time: 'منذ 5 دقائق', read: false },
+  { id: 3, icon: AlertTriangle, iconBg: 'var(--yellow-muted)', iconColor: 'var(--yellow)', text: 'صنف "الدجاج" على وشك النفاد (3 وحدات)', time: 'منذ 15 دقيقة', read: false },
+  { id: 4, icon: Megaphone, iconBg: 'var(--blue-muted)', iconColor: 'var(--blue)', text: 'حملة "عروض رمضان" تم إرسالها بنجاح', time: 'منذ ساعة', read: true },
+  { id: 5, icon: UserPlus, iconBg: 'var(--green-muted)', iconColor: 'var(--green)', text: 'زبون جديد مسجل: منى محمد', time: 'منذ ساعتين', read: true },
 ]
 
 export default function NotificationBell() {
@@ -34,46 +34,50 @@ export default function NotificationBell() {
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen(!open)}
-        className="relative p-2 rounded-xl hover:bg-gray-50 text-gray-500 transition-colors"
+        style={{ position: 'relative', padding: 8, borderRadius: 8, background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-2)', transition: 'all 0.15s' }}
+        onMouseEnter={e => { e.currentTarget.style.background = 'var(--surface-2)'; e.currentTarget.style.color = 'var(--text)' }}
+        onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--text-2)' }}
       >
-        <Bell size={20} />
+        <Bell size={18} />
         {unreadCount > 0 && (
-          <span className="absolute top-1 right-1 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+          <span style={{ position: 'absolute', top: 4, right: 4, width: 16, height: 16, background: 'var(--red)', color: 'white', fontSize: 9, fontWeight: 700, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Inter' }}>
             {unreadCount}
           </span>
         )}
       </button>
 
       {open && (
-        <div className="absolute left-0 top-12 w-80 bg-white rounded-2xl shadow-xl border border-gray-100 z-50 overflow-hidden">
-          <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-            <p className="font-bold text-gray-900 text-sm">الإشعارات</p>
+        <div style={{ position: 'absolute', left: 0, top: 'calc(100% + 8px)', width: 320, background: 'var(--surface-2)', border: '1px solid var(--border-strong)', borderRadius: 14, zIndex: 50, overflow: 'hidden', boxShadow: '0 16px 40px rgba(0,0,0,0.5)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', borderBottom: '1px solid var(--border)' }}>
+            <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 13 }}>الإشعارات</p>
             {unreadCount > 0 && (
               <button
                 onClick={markAllRead}
-                className="text-xs text-orange-600 hover:text-orange-700 font-semibold"
+                style={{ fontSize: 11, color: 'var(--accent)', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer' }}
               >
                 تحديد الكل كمقروء
               </button>
             )}
           </div>
-          <div className="max-h-80 overflow-y-auto">
+          <div style={{ maxHeight: 320, overflowY: 'auto' }}>
             {notifications.map(n => {
               const Icon = n.icon
               return (
                 <div
                   key={n.id}
-                  className={`flex items-start gap-3 px-4 py-3 border-b border-gray-50 transition-colors hover:bg-gray-50 ${!n.read ? 'bg-orange-50/50' : ''}`}
+                  style={{ display: 'flex', alignItems: 'flex-start', gap: 12, padding: '10px 16px', borderBottom: '1px solid var(--border)', background: !n.read ? 'rgba(249,115,22,0.04)' : 'transparent', transition: 'background 0.15s', cursor: 'default' }}
+                  onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-3)'}
+                  onMouseLeave={e => e.currentTarget.style.background = !n.read ? 'rgba(249,115,22,0.04)' : 'transparent'}
                 >
-                  <div className={`w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5 ${n.iconColor}`}>
-                    <Icon size={15} />
+                  <div style={{ width: 32, height: 32, borderRadius: 9, background: n.iconBg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 2 }}>
+                    <Icon size={14} color={n.iconColor} />
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm text-gray-800 leading-snug">{n.text}</p>
-                    <p className="text-xs text-gray-400 mt-0.5">{n.time}</p>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <p style={{ fontSize: 12, color: 'var(--text)', lineHeight: 1.5 }}>{n.text}</p>
+                    <p style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 3 }}>{n.time}</p>
                   </div>
                   {!n.read && (
-                    <span className="w-2 h-2 bg-orange-500 rounded-full flex-shrink-0 mt-1.5" />
+                    <span style={{ width: 6, height: 6, background: 'var(--accent)', borderRadius: '50%', flexShrink: 0, marginTop: 6 }} />
                   )}
                 </div>
               )

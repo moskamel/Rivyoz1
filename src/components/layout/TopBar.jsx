@@ -12,16 +12,17 @@ export default function TopBar({ title }) {
   const roleLabel = roleLabels[role] || 'صاحب المطعم'
 
   return (
-    <header className="h-16 bg-white border-b border-gray-100 flex items-center justify-between px-6 sticky top-0 z-20">
-      <h1 className="text-lg font-bold text-gray-900">{title}</h1>
-      <div className="flex items-center gap-3">
+    <header style={{ height: 56, background: 'var(--surface)', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px', position: 'sticky', top: 0, zIndex: 20, backdropFilter: 'blur(8px)' }}>
+      <h1 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.01em' }}>{title}</h1>
+      <div className="flex items-center gap-2">
         <NotificationBell />
+        <div style={{ width: 1, height: 20, background: 'var(--border)', margin: '0 4px' }} />
         <div className="flex items-center gap-2">
-          <span className="text-xs font-bold px-2.5 py-1 bg-orange-100 text-orange-700 rounded-full">
+          <span style={{ fontSize: 11, fontWeight: 600, padding: '3px 8px', borderRadius: 6, background: 'var(--surface-2)', color: 'var(--text-2)', border: '1px solid var(--border)' }}>
             {roleLabel}
           </span>
-          <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
-            أ
+          <div style={{ width: 30, height: 30, borderRadius: '50%', background: 'linear-gradient(135deg, #F97316, #EA6C10)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: 12, fontWeight: 700, cursor: 'pointer', boxShadow: '0 0 10px rgba(249,115,22,0.2)' }}>
+            م
           </div>
         </div>
       </div>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { X, ChevronDown } from 'lucide-react'
+import { X, Check } from 'lucide-react'
 import Layout from '../components/layout/Layout'
 import { statusMap } from '../lib/mock'
 import { getOrders, updateOrderStatus } from '../lib/restaurantStore'
@@ -26,6 +26,15 @@ const actionLabel = {
   preparing: 'جاهز للاستلام',
   ready: 'تم التوصيل',
   delivering: 'اكتمل',
+}
+
+const statusStyle = {
+  new: { bg: 'var(--red-muted)', color: 'var(--red)' },
+  preparing: { bg: 'var(--blue-muted)', color: 'var(--blue)' },
+  ready: { bg: 'var(--yellow-muted)', color: 'var(--yellow)' },
+  delivering: { bg: 'var(--accent-muted)', color: 'var(--accent)' },
+  done: { bg: 'var(--surface-2)', color: 'var(--text-3)' },
+  cancelled: { bg: 'var(--surface-2)', color: 'var(--text-3)' },
 }
 
 export default function Orders() {
@@ -69,123 +78,195 @@ export default function Orders() {
   return (
     <Layout title="الطلبات">
       {/* Tabs */}
-      <div className="flex gap-2 overflow-x-auto pb-1 mb-5 no-scrollbar">
-        {tabs.map(tab => (
-          <button
-            key={tab.key}
-            onClick={() => setActiveTab(tab.key)}
-            className={`flex-shrink-0 px-4 py-2 rounded-xl text-sm font-semibold transition-all flex items-center gap-2 ${
-              activeTab === tab.key
-                ? 'bg-orange-500 text-white shadow-sm'
-                : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-100'
-            }`}
-          >
-            {tab.label}
-            <span className={`text-xs px-1.5 py-0.5 rounded-full font-bold ${
-              activeTab === tab.key ? 'bg-white/20' : 'bg-gray-100'
-            } ${tab.key === 'new' && count('new') > 0 ? '!bg-red-500 !text-white' : ''}`}>
-              {count(tab.key)}
-            </span>
-          </button>
-        ))}
+      <div className="flex gap-2 overflow-x-auto pb-1 mb-5" style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}>
+        {tabs.map(tab => {
+          const isActive = activeTab === tab.key
+          const cnt = count(tab.key)
+          return (
+            <button
+              key={tab.key}
+              onClick={() => setActiveTab(tab.key)}
+              style={{
+                flexShrink: 0,
+                padding: '7px 14px',
+                borderRadius: 10,
+                fontSize: 13,
+                fontWeight: 600,
+                cursor: 'pointer',
+                transition: 'all 0.15s',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 6,
+                border: isActive ? '1px solid rgba(249,115,22,0.25)' : '1px solid var(--border)',
+                background: isActive ? 'var(--accent-muted)' : 'var(--surface)',
+                color: isActive ? 'var(--accent)' : 'var(--text-2)',
+              }}
+            >
+              {tab.label}
+              <span style={{
+                fontSize: 10,
+                fontWeight: 700,
+                minWidth: 18,
+                height: 18,
+                borderRadius: 9,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '0 5px',
+                fontFamily: 'Inter',
+                background: tab.key === 'new' && cnt > 0 ? 'var(--red)' : isActive ? 'rgba(249,115,22,0.2)' : 'var(--surface-2)',
+                color: tab.key === 'new' && cnt > 0 ? 'white' : isActive ? 'var(--accent)' : 'var(--text-3)',
+              }}>
+                {cnt}
+              </span>
+            </button>
+          )
+        })}
       </div>
 
       {/* Orders list */}
-      <div className="space-y-3">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         {filtered.length === 0 && (
-          <div className="bg-white rounded-2xl p-12 border border-gray-100 text-center">
-            <p className="text-gray-400 font-medium">لا توجد طلبات</p>
+          <div className="glass" style={{ padding: '48px 24px', textAlign: 'center' }}>
+            <p style={{ color: 'var(--text-3)', fontWeight: 500, fontSize: 14 }}>لا توجد طلبات</p>
           </div>
         )}
-        {filtered.map(order => (
-          <div
-            key={order.id}
-            onClick={() => setSelected(order)}
-            className={`bg-white rounded-2xl border p-4 cursor-pointer hover:shadow-md transition-all ${
-              order.status === 'new' ? 'border-red-200 shadow-sm pulse-new-order' : 'border-gray-100'
-            }`}
-          >
-            <div className="flex items-start justify-between mb-3">
-              <div className="flex items-center gap-2">
-                <span className="font-bold text-gray-700">#{order.id}</span>
-                <span className="text-gray-400">·</span>
-                <span className="text-sm text-gray-600">{order.table}</span>
-                <span className="text-gray-400">·</span>
-                <span className="text-xs text-gray-400">{order.time}</span>
+        {filtered.map(order => {
+          const ss = statusStyle[order.status] || statusStyle.done
+          return (
+            <div
+              key={order.id}
+              onClick={() => setSelected(order)}
+              className="glass"
+              style={{
+                padding: '16px',
+                cursor: 'pointer',
+                transition: 'all 0.15s',
+                borderColor: order.status === 'new' ? 'rgba(248,113,113,0.3)' : 'var(--border)',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = order.status === 'new' ? 'rgba(248,113,113,0.5)' : 'var(--border-strong)'; e.currentTarget.style.background = 'var(--surface-2)' }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = order.status === 'new' ? 'rgba(248,113,113,0.3)' : 'var(--border)'; e.currentTarget.style.background = 'var(--surface)' }}
+            >
+              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 10 }}>
+                <div className="flex items-center gap-2">
+                  <span style={{ fontWeight: 700, color: 'var(--text)', fontFamily: 'Inter', fontSize: 13 }}>#{order.id}</span>
+                  <span style={{ color: 'var(--text-3)', fontSize: 12 }}>·</span>
+                  <span style={{ fontSize: 13, color: 'var(--text-2)' }}>{order.table}</span>
+                  <span style={{ color: 'var(--text-3)', fontSize: 12 }}>·</span>
+                  <span style={{ fontSize: 11, color: 'var(--text-3)' }}>{order.time}</span>
+                </div>
+                <span style={{ fontSize: 11, fontWeight: 600, padding: '3px 8px', borderRadius: 6, background: ss.bg, color: ss.color }}>
+                  {statusMap[order.status]?.label}
+                </span>
               </div>
-              <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${statusMap[order.status].color}`}>
-                {statusMap[order.status].label}
-              </span>
-            </div>
-            <div className="flex items-center justify-between">
-              <p className="text-sm text-gray-700">{order.items}</p>
-              <p className="font-bold text-gray-900">{order.total} ج</p>
-            </div>
-            {order.status === 'new' && (
-              <div className="flex gap-2 mt-3">
-                <button
-                  onClick={(e) => { e.stopPropagation(); setRejectModal(order) }}
-                  className="flex-1 py-2 rounded-xl border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-50"
-                >
-                  رفض
-                </button>
-                <button
-                  onClick={(e) => { e.stopPropagation(); advance(order.id) }}
-                  className="flex-1 py-2 rounded-xl bg-green-500 text-white text-sm font-semibold hover:bg-green-600"
-                >
-                  قبول الطلب ✓
-                </button>
+              <div className="flex items-center justify-between">
+                <p style={{ fontSize: 13, color: 'var(--text-2)' }}>{order.items}</p>
+                <p className="num" style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>{order.total} ج</p>
               </div>
-            )}
-          </div>
-        ))}
+              {order.status === 'new' && (
+                <div className="flex gap-2" style={{ marginTop: 12 }}>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setRejectModal(order) }}
+                    style={{ flex: 1, padding: '8px', borderRadius: 8, border: '1px solid var(--border)', fontSize: 13, fontWeight: 600, color: 'var(--text-2)', background: 'transparent', cursor: 'pointer', transition: 'all 0.15s' }}
+                    onMouseEnter={e => { e.currentTarget.style.background = 'var(--red-muted)'; e.currentTarget.style.color = 'var(--red)'; e.currentTarget.style.borderColor = 'rgba(248,113,113,0.3)' }}
+                    onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--text-2)'; e.currentTarget.style.borderColor = 'var(--border)' }}
+                  >
+                    رفض
+                  </button>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); advance(order.id) }}
+                    className="btn-primary"
+                    style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}
+                  >
+                    <Check size={14} />
+                    قبول الطلب
+                  </button>
+                </div>
+              )}
+            </div>
+          )
+        })}
       </div>
 
       {/* Order detail modal */}
       {selected && (
-        <div className="fixed inset-0 bg-black/40 z-50 flex items-end sm:items-center justify-center p-4" onClick={() => setSelected(null)}>
-          <div className="bg-white rounded-3xl w-full max-w-md max-h-[85vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
-            <div className="flex items-center justify-between p-5 border-b border-gray-100">
-              <p className="font-bold text-gray-900 text-lg">طلب #{selected.id}</p>
-              <button onClick={() => setSelected(null)} className="p-2 rounded-xl hover:bg-gray-100">
-                <X size={18} />
+        <div
+          style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}
+          onClick={() => setSelected(null)}
+        >
+          <div
+            style={{ background: 'var(--surface-2)', border: '1px solid var(--border-strong)', borderRadius: 20, width: '100%', maxWidth: 440, maxHeight: '85vh', overflowY: 'auto' }}
+            onClick={e => e.stopPropagation()}
+            className="animate-scale-in"
+          >
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', borderBottom: '1px solid var(--border)' }}>
+              <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 15 }}>طلب <span className="num">#{selected.id}</span></p>
+              <button
+                onClick={() => setSelected(null)}
+                style={{ width: 30, height: 30, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--surface-3)', border: '1px solid var(--border)', cursor: 'pointer', color: 'var(--text-2)', transition: 'all 0.15s' }}
+                onMouseEnter={e => { e.currentTarget.style.background = 'var(--surface)'; e.currentTarget.style.color = 'var(--text)' }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'var(--surface-3)'; e.currentTarget.style.color = 'var(--text-2)' }}
+              >
+                <X size={15} />
               </button>
             </div>
-            <div className="p-5 space-y-4">
-              <div className="flex gap-4 text-sm text-gray-600">
-                <span>👤 {selected.customer}</span>
-                <span>📞 {selected.phone}</span>
+            <div style={{ padding: '16px 20px' }}>
+              {/* Customer info */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 16 }}>
+                <div style={{ background: 'var(--surface-3)', borderRadius: 10, padding: '10px 12px' }}>
+                  <p style={{ fontSize: 10, color: 'var(--text-3)', fontWeight: 600, marginBottom: 4 }}>الزبون</p>
+                  <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 600 }}>{selected.customer}</p>
+                </div>
+                <div style={{ background: 'var(--surface-3)', borderRadius: 10, padding: '10px 12px' }}>
+                  <p style={{ fontSize: 10, color: 'var(--text-3)', fontWeight: 600, marginBottom: 4 }}>الهاتف</p>
+                  <p className="num" style={{ fontSize: 13, color: 'var(--text)', fontWeight: 600, direction: 'ltr' }}>{selected.phone}</p>
+                </div>
+                <div style={{ background: 'var(--surface-3)', borderRadius: 10, padding: '10px 12px' }}>
+                  <p style={{ fontSize: 10, color: 'var(--text-3)', fontWeight: 600, marginBottom: 4 }}>الموقع</p>
+                  <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 600 }}>{selected.table}</p>
+                </div>
+                <div style={{ background: 'var(--surface-3)', borderRadius: 10, padding: '10px 12px' }}>
+                  <p style={{ fontSize: 10, color: 'var(--text-3)', fontWeight: 600, marginBottom: 4 }}>الدفع</p>
+                  <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 600 }}>{selected.payment}</p>
+                </div>
               </div>
-              <div className="flex gap-4 text-sm text-gray-600">
-                <span>📍 {selected.table}</span>
-                <span>💳 {selected.payment}</span>
-              </div>
-              <div className="border-t border-gray-100 pt-4 space-y-3">
-                {selected.details.map((item, i) => (
-                  <div key={i} className="flex justify-between items-start">
-                    <div>
-                      <p className="text-sm font-medium text-gray-800">× {item.qty} {item.name}</p>
-                      {item.note && <p className="text-xs text-gray-400 mt-0.5">ملاحظة: {item.note}</p>}
+
+              {/* Items */}
+              <div style={{ borderTop: '1px solid var(--border)', paddingTop: 16, marginBottom: 16 }}>
+                <p style={{ fontSize: 11, color: 'var(--text-3)', fontWeight: 600, marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.06em' }}>الأصناف</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  {selected.details.map((item, i) => (
+                    <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                      <div>
+                        <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>× {item.qty} {item.name}</p>
+                        {item.note && <p style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 2 }}>ملاحظة: {item.note}</p>}
+                      </div>
+                      <span className="num" style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>{item.price} ج</span>
                     </div>
-                    <span className="text-sm font-semibold text-gray-900">{item.price} ج</span>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-              <div className="border-t border-gray-100 pt-4 flex justify-between font-bold text-gray-900">
-                <span>الإجمالي</span>
-                <span>{selected.total} ج</span>
+
+              {/* Total */}
+              <div style={{ borderTop: '1px solid var(--border)', paddingTop: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+                <span style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>الإجمالي</span>
+                <span className="num" style={{ fontWeight: 800, color: 'var(--accent)', fontSize: 18 }}>{selected.total} ج</span>
               </div>
+
+              {/* Actions */}
               {nextStatus[selected.status] && (
-                <div className="flex gap-2 pt-2">
+                <div className="flex gap-2">
                   <button
                     onClick={() => setRejectModal(selected)}
-                    className="flex-1 py-3 rounded-xl border border-gray-200 font-semibold text-gray-600 hover:bg-gray-50"
+                    className="btn-ghost"
+                    style={{ flex: 1 }}
                   >
                     رفض الطلب
                   </button>
                   <button
                     onClick={() => advance(selected.id)}
-                    className="flex-1 py-3 rounded-xl bg-orange-500 text-white font-semibold hover:bg-orange-600"
+                    className="btn-primary"
+                    style={{ flex: 1 }}
                   >
                     {actionLabel[selected.status]}
                   </button>
@@ -198,17 +279,34 @@ export default function Orders() {
 
       {/* Reject modal */}
       {rejectModal && (
-        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" onClick={() => setRejectModal(null)}>
-          <div className="bg-white rounded-3xl w-full max-w-sm p-6" onClick={e => e.stopPropagation()}>
-            <p className="font-bold text-gray-900 text-lg mb-4">سبب الرفض؟</p>
-            <div className="space-y-2 mb-4">
+        <div
+          style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}
+          onClick={() => setRejectModal(null)}
+        >
+          <div
+            style={{ background: 'var(--surface-2)', border: '1px solid var(--border-strong)', borderRadius: 20, width: '100%', maxWidth: 360, padding: 24 }}
+            onClick={e => e.stopPropagation()}
+            className="animate-scale-in"
+          >
+            <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 15, marginBottom: 16 }}>سبب الرفض؟</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 16 }}>
               {['الأكلة دي خلصت', 'المطعم مش شغال دلوقتي', 'العنوان بعيد جداً'].map(reason => (
                 <button
                   key={reason}
                   onClick={() => setRejectReason(reason)}
-                  className={`w-full text-right px-4 py-2.5 rounded-xl border text-sm font-medium transition-all ${
-                    rejectReason === reason ? 'border-orange-400 bg-orange-50 text-orange-700' : 'border-gray-200 hover:bg-gray-50'
-                  }`}
+                  style={{
+                    width: '100%',
+                    textAlign: 'right',
+                    padding: '10px 14px',
+                    borderRadius: 10,
+                    fontSize: 13,
+                    fontWeight: 500,
+                    cursor: 'pointer',
+                    transition: 'all 0.15s',
+                    border: rejectReason === reason ? '1px solid rgba(249,115,22,0.4)' : '1px solid var(--border)',
+                    background: rejectReason === reason ? 'var(--accent-muted)' : 'var(--surface-3)',
+                    color: rejectReason === reason ? 'var(--accent)' : 'var(--text-2)',
+                  }}
                 >
                   {reason}
                 </button>
@@ -218,13 +316,15 @@ export default function Orders() {
                 placeholder="سبب تاني..."
                 value={['الأكلة دي خلصت', 'المطعم مش شغال دلوقتي', 'العنوان بعيد جداً'].includes(rejectReason) ? '' : rejectReason}
                 onChange={e => setRejectReason(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm outline-none focus:border-orange-400"
+                style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--surface-3)', color: 'var(--text)', fontSize: 13, outline: 'none', fontFamily: 'Cairo', transition: 'border-color 0.15s' }}
+                onFocus={e => e.currentTarget.style.borderColor = 'var(--accent)'}
+                onBlur={e => e.currentTarget.style.borderColor = 'var(--border)'}
               />
             </div>
             <button
               onClick={() => reject(rejectModal.id)}
               disabled={!rejectReason}
-              className="w-full py-3 bg-red-500 text-white rounded-xl font-semibold disabled:opacity-40"
+              style={{ width: '100%', padding: '11px', background: rejectReason ? 'var(--red)' : 'var(--surface-3)', color: rejectReason ? 'white' : 'var(--text-3)', borderRadius: 10, fontWeight: 700, fontSize: 14, border: 'none', cursor: rejectReason ? 'pointer' : 'not-allowed', transition: 'all 0.15s', fontFamily: 'Cairo' }}
             >
               تأكيد الرفض
             </button>

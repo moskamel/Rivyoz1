@@ -3,11 +3,11 @@ import TopBar from './TopBar'
 
 export default function Layout({ title, children }) {
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg)' }}>
       <Sidebar />
-      <div className="flex-1 mr-60">
+      <div style={{ flex: 1, marginRight: 220 }}>
         <TopBar title={title} />
-        <main className="p-6">{children}</main>
+        <main style={{ padding: '24px', maxWidth: 1200, margin: '0 auto' }}>{children}</main>
       </div>
     </div>
   )
