@@ -84,3 +84,43 @@ export function updateOrderStatus(id, status) {
   const updated = orders.map(o => o.id === id ? { ...o, status } : o)
   localStorage.setItem('orders_list', JSON.stringify(updated))
 }
+
+/* ─── Banners ─────────────────────────────────────────────── */
+const defaultBanners = [
+  { id: 1, title: '🔥 عرض اليوم', subtitle: 'كفتة مشوية × 2 بـ 120 ج بدل 170!', color: ['#F97316', '#EA580C'], active: true },
+  { id: 2, title: '🎉 عرض العيد', subtitle: 'وجبة عائلية كاملة بـ 299 ج', color: ['#8B5CF6', '#7C3AED'], active: true },
+  { id: 3, title: '🚀 توصيل مجاني', subtitle: 'على الطلبات فوق 150 ج', color: ['#10B981', '#059669'], active: true },
+]
+export function getBanners() {
+  try { const r = localStorage.getItem('store_banners'); if (r) return JSON.parse(r) } catch (e) {}
+  return defaultBanners
+}
+export function setBanners(banners) { localStorage.setItem('store_banners', JSON.stringify(banners)) }
+
+/* ─── Combos ──────────────────────────────────────────────── */
+const defaultCombos = [
+  { id: 101, name: 'كومبو برجر مع عصير', items: '1 برجر + عصير ليمون', price: 89, originalPrice: 115, image: '🍔', active: true },
+  { id: 102, name: 'وجبة الكفتة الكاملة', items: '3 قطع كفتة + خبز + سلطة', price: 120, originalPrice: 155, image: '🥩', active: true },
+  { id: 103, name: 'ترايو الفراخ', items: '2 قطعة فراخ + بطاطس + كولا', price: 145, originalPrice: 185, image: '🍗', active: true },
+  { id: 104, name: 'وجبة عائلية', items: 'مشكل مشويات + أرز + سلطات × 4', price: 299, originalPrice: 370, image: '🍽️', active: true },
+]
+export function getCombos() {
+  try { const r = localStorage.getItem('store_combos'); if (r) return JSON.parse(r) } catch (e) {}
+  return defaultCombos
+}
+export function setCombos(combos) { localStorage.setItem('store_combos', JSON.stringify(combos)) }
+
+/* ─── Footer settings ─────────────────────────────────────── */
+const defaultFooter = {
+  showAppButtons: true,
+  iosUrl: '#',
+  androidUrl: '#',
+  showExploreLink: true,
+  tagline: 'منصة طلبات الطعام',
+  copyright: '© 2025 ريڤيو — جميع الحقوق محفوظة',
+}
+export function getFooterSettings() {
+  try { const r = localStorage.getItem('store_footer'); if (r) return { ...defaultFooter, ...JSON.parse(r) } } catch (e) {}
+  return defaultFooter
+}
+export function setFooterSettings(s) { localStorage.setItem('store_footer', JSON.stringify(s)) }

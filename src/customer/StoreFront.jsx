@@ -1,23 +1,8 @@
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ShoppingCart, Menu, X, Search, Star, ChevronLeft, ChevronRight, Smartphone, Tag, Flame } from 'lucide-react'
-import { getConfig, getMenuItems, getCategories } from '../lib/restaurantStore'
+import { getConfig, getMenuItems, getCategories, getBanners, getCombos, getFooterSettings } from '../lib/restaurantStore'
 import { useCart } from './CartContext'
-
-/* ─── Mock banners ─────────────────────────────────────────── */
-const mockBanners = [
-  { id: 1, title: '🔥 عرض اليوم', subtitle: 'كفتة مشوية × 2 بـ 120 ج بدل 170!', color: ['#F97316', '#EA580C'] },
-  { id: 2, title: '🎉 عرض العيد', subtitle: 'وجبة عائلية كاملة بـ 299 ج', color: ['#8B5CF6', '#7C3AED'] },
-  { id: 3, title: '🚀 توصيل مجاني', subtitle: 'على الطلبات فوق 150 ج', color: ['#10B981', '#059669'] },
-]
-
-/* ─── Mock combos/offers ────────────────────────────────────── */
-const mockCombos = [
-  { id: 101, name: 'كومبو برجر مع عصير', items: '1 برجر + عصير ليمون', price: 89, originalPrice: 115, image: '🍔' },
-  { id: 102, name: 'وجبة الكفتة الكاملة', items: '3 قطع كفتة + خبز + سلطة', price: 120, originalPrice: 155, image: '🥩' },
-  { id: 103, name: 'ترايو الفراخ', items: '2 قطعة فراخ + بطاطس + كولا', price: 145, originalPrice: 185, image: '🍗' },
-  { id: 104, name: 'وجبة عائلية', items: 'مشكل مشويات + أرز + سلطات × 4', price: 299, originalPrice: 370, image: '🍽️' },
-]
 
 /* ─── Nearby restaurants ────────────────────────────────────── */
 const mockNearbyRestaurants = [
@@ -32,20 +17,24 @@ const categoryFilters = ['الكل', 'مشويات', 'بيتزا', 'كافيه']
 
 /* ─── Banner Carousel ───────────────────────────────────────── */
 function BannerCarousel({ accentColor }) {
+  const banners = getBanners().filter(b => b.active)
   const [current, setCurrent] = useState(0)
   const timerRef = useRef(null)
 
   useEffect(() => {
-    timerRef.current = setInterval(() => setCurrent(c => (c + 1) % mockBanners.length), 4000)
+    if (banners.length < 2) return
+    timerRef.current = setInterval(() => setCurrent(c => (c + 1) % banners.length), 4000)
     return () => clearInterval(timerRef.current)
-  }, [])
+  }, [banners.length])
+
+  if (banners.length === 0) return null
 
   const go = (dir) => {
     clearInterval(timerRef.current)
-    setCurrent(c => (c + dir + mockBanners.length) % mockBanners.length)
+    setCurrent(c => (c + dir + banners.length) % banners.length)
   }
 
-  const b = mockBanners[current]
+  const b = banners[current]
   return (
     <div style={{ position: 'relative', overflow: 'hidden', height: 180 }}>
       {/* Slide */}
@@ -74,7 +63,7 @@ function BannerCarousel({ accentColor }) {
 
       {/* Dots */}
       <div style={{ position: 'absolute', bottom: 12, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 6 }}>
-        {mockBanners.map((_, i) => (
+        {banners.map((_, i) => (
           <button key={i} onClick={() => setCurrent(i)} style={{ width: i === current ? 20 : 6, height: 6, borderRadius: 3, background: 'white', opacity: i === current ? 1 : 0.4, border: 'none', cursor: 'pointer', padding: 0, transition: 'all 0.3s' }} />
         ))}
       </div>
@@ -117,6 +106,8 @@ function PopularSlider({ items, accentColor, onOpen }) {
 
 /* ─── Offers/Combos Section ─────────────────────────────────── */
 function OffersSection({ accentColor, onAddCombo }) {
+  const combos = getCombos().filter(c => c.active)
+  if (combos.length === 0) return null
   return (
     <div style={{ marginBottom: 8 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '16px 16px 10px' }}>
@@ -124,7 +115,7 @@ function OffersSection({ accentColor, onAddCombo }) {
         <p style={{ fontWeight: 800, fontSize: 15, color: '#1a1a1a' }}>العروض والكومبو</p>
       </div>
       <div style={{ display: 'flex', gap: 12, overflowX: 'auto', padding: '0 16px 16px', scrollbarWidth: 'none' }} className="no-scrollbar">
-        {mockCombos.map(combo => {
+        {combos.map(combo => {
           const discount = Math.round((1 - combo.price / combo.originalPrice) * 100)
           return (
             <div
@@ -164,47 +155,43 @@ function OffersSection({ accentColor, onAddCombo }) {
 /* ─── Footer ────────────────────────────────────────────────── */
 function Footer({ accentColor }) {
   const navigate = useNavigate()
+  const f = getFooterSettings()
   return (
     <div style={{ background: '#1a1a1a', color: 'white', padding: '32px 20px', direction: 'rtl' }}>
       <div style={{ maxWidth: 480, margin: '0 auto' }}>
-        {/* Logo */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
           <div style={{ width: 36, height: 36, borderRadius: 10, background: accentColor, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, fontWeight: 900 }}>ر</div>
           <div>
             <p style={{ fontWeight: 900, fontSize: 16 }}>ريڤيو</p>
-            <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', marginTop: 1 }}>منصة طلبات الطعام</p>
+            <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', marginTop: 1 }}>{f.tagline}</p>
           </div>
         </div>
 
-        {/* App download buttons */}
-        <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', marginBottom: 14 }}>حمّل التطبيق واطلب بسهولة أكبر</p>
-        <div style={{ display: 'flex', gap: 10, marginBottom: 24 }}>
-          <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '11px 16px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 12, color: 'white', fontSize: 13, fontWeight: 700, cursor: 'pointer', backdropFilter: 'blur(4px)' }}>
-            <span style={{ fontSize: 20 }}>🍎</span>
-            App Store
-          </button>
-          <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '11px 16px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 12, color: 'white', fontSize: 13, fontWeight: 700, cursor: 'pointer', backdropFilter: 'blur(4px)' }}>
-            <span style={{ fontSize: 20 }}>🤖</span>
-            Google Play
-          </button>
-        </div>
+        {f.showAppButtons && (
+          <>
+            <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', marginBottom: 14 }}>حمّل التطبيق واطلب بسهولة أكبر</p>
+            <div style={{ display: 'flex', gap: 10, marginBottom: 24 }}>
+              <a href={f.iosUrl} target="_blank" rel="noopener noreferrer" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '11px 16px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 12, color: 'white', fontSize: 13, fontWeight: 700, cursor: 'pointer', backdropFilter: 'blur(4px)', textDecoration: 'none' }}>
+                <span style={{ fontSize: 20 }}>🍎</span> App Store
+              </a>
+              <a href={f.androidUrl} target="_blank" rel="noopener noreferrer" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '11px 16px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 12, color: 'white', fontSize: 13, fontWeight: 700, cursor: 'pointer', backdropFilter: 'blur(4px)', textDecoration: 'none' }}>
+                <span style={{ fontSize: 20 }}>🤖</span> Google Play
+              </a>
+            </div>
+          </>
+        )}
 
-        {/* Links */}
         <div style={{ display: 'flex', gap: 20, marginBottom: 20, borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 20 }}>
-          <button onClick={() => navigate('/explore')} style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>
-            🗺️ قائمة المطاعم
-          </button>
-          <button style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>
-            📞 تواصل معنا
-          </button>
-          <button style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>
-            ❓ المساعدة
-          </button>
+          {f.showExploreLink && (
+            <button onClick={() => navigate('/explore')} style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>
+              🗺️ قائمة المطاعم
+            </button>
+          )}
+          <button style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>📞 تواصل معنا</button>
+          <button style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>❓ المساعدة</button>
         </div>
 
-        <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', textAlign: 'center' }}>
-          © 2025 ريڤيو — جميع الحقوق محفوظة
-        </p>
+        <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', textAlign: 'center' }}>{f.copyright}</p>
       </div>
     </div>
   )
