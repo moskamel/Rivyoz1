@@ -62,30 +62,37 @@ function RestaurantTab() {
   const { toast, showToast } = useToast()
 
   return (
-    <div style={{ maxWidth: 480 }}>
-      <div className="glass" style={{ padding: 20, marginBottom: 16 }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          <Field label="اسم المطعم" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
-          <Field label="الوصف" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} />
-          <Field label="العنوان" value={form.address} onChange={e => setForm({ ...form, address: e.target.value })} />
-          <Field label="رقم الموبايل" value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} />
-          <Field label="البريد الإلكتروني" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} />
+    <div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
+        <div className="glass" style={{ padding: 20 }}>
+          <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 16 }}>معلومات المطعم</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <Field label="اسم المطعم" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
+            <Field label="الوصف" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} />
+            <Field label="العنوان" value={form.address} onChange={e => setForm({ ...form, address: e.target.value })} />
+          </div>
         </div>
-        <div style={{ marginTop: 20 }}>
-          <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: 'var(--text-2)', marginBottom: 10 }}>ساعات العمل</label>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {[
-              { days: 'السبت – الخميس', from: '12:00', to: '23:00' },
-              { days: 'الجمعة', from: '13:00', to: '00:00' },
-            ].map((row, i) => (
-              <div key={i} className="flex items-center gap-3" style={{ fontSize: 13 }}>
-                <span style={{ width: 110, color: 'var(--text-2)', flexShrink: 0 }}>{row.days}</span>
-                <span style={{ color: 'var(--text-3)' }}>من</span>
-                <input type="time" defaultValue={row.from} style={{ ...inputStyle, width: 110, padding: '6px 10px' }} />
-                <span style={{ color: 'var(--text-3)' }}>إلى</span>
-                <input type="time" defaultValue={row.to} style={{ ...inputStyle, width: 110, padding: '6px 10px' }} />
-              </div>
-            ))}
+        <div className="glass" style={{ padding: 20 }}>
+          <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 16 }}>بيانات التواصل</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <Field label="رقم الموبايل" value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} />
+            <Field label="البريد الإلكتروني" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} />
+          </div>
+          <div style={{ marginTop: 20 }}>
+            <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: 'var(--text-2)', marginBottom: 10 }}>ساعات العمل</label>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {[
+                { days: 'السبت – الخميس', from: '12:00', to: '23:00' },
+                { days: 'الجمعة', from: '13:00', to: '00:00' },
+              ].map((row, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13 }}>
+                  <span style={{ width: 100, color: 'var(--text-2)', flexShrink: 0, fontSize: 12 }}>{row.days}</span>
+                  <input type="time" defaultValue={row.from} style={{ ...inputStyle, flex: 1, padding: '6px 8px' }} />
+                  <span style={{ color: 'var(--text-3)', fontSize: 12 }}>–</span>
+                  <input type="time" defaultValue={row.to} style={{ ...inputStyle, flex: 1, padding: '6px 8px' }} />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -179,38 +186,42 @@ function DeliveryTab() {
   const toggle = (k) => setOpts(p => ({ ...p, [k]: !p[k] }))
 
   return (
-    <div style={{ maxWidth: 480 }}>
-      <div className="glass" style={{ padding: 20, marginBottom: 16 }}>
-        <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 16 }}>خيارات الطلب</p>
-        {[
-          { key: 'delivery', label: 'توصيل (لديّ سواقين)' },
-          { key: 'pickup', label: 'استلام من المطعم' },
-          { key: 'table', label: 'طلب على الطاولة (QR طاولة)' },
-        ].map(o => (
-          <div key={o.key} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid var(--border)' }}>
-            <span style={{ fontSize: 13, color: 'var(--text)' }}>{o.label}</span>
-            <Toggle value={opts[o.key]} onChange={() => toggle(o.key)} />
-          </div>
-        ))}
-      </div>
-      {opts.delivery && (
-        <div className="glass" style={{ padding: 20, marginBottom: 16 }}>
-          <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 16 }}>إعدادات التوصيل</p>
+    <div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
+        <div className="glass" style={{ padding: 20 }}>
+          <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 16 }}>خيارات الطلب</p>
+          {[
+            { key: 'delivery', label: 'توصيل', sub: 'لديّ سواقين للتوصيل' },
+            { key: 'pickup', label: 'استلام من المطعم', sub: 'يمر الزبون بنفسه' },
+            { key: 'table', label: 'طلب على الطاولة', sub: 'QR كود على الطاولة' },
+          ].map(o => (
+            <div key={o.key} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 0', borderBottom: '1px solid var(--border)' }}>
+              <div>
+                <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>{o.label}</p>
+                <p style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 2 }}>{o.sub}</p>
+              </div>
+              <Toggle value={opts[o.key]} onChange={() => toggle(o.key)} />
+            </div>
+          ))}
+        </div>
+
+        <div className="glass" style={{ padding: 20 }}>
+          <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 16 }}>إعدادات التوصيل</p>
           {[
             { label: 'رسوم التوصيل', placeholder: '15', unit: 'ج' },
             { label: 'الحد الأدنى للطلب', placeholder: '50', unit: 'ج' },
             { label: 'وقت التوصيل المتوقع', placeholder: '30', unit: 'دقيقة' },
           ].map(f => (
-            <div key={f.label} style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
+            <div key={f.label} style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
               <label style={{ flex: 1, fontSize: 13, color: 'var(--text-2)' }}>{f.label}</label>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <input type="number" defaultValue={f.placeholder} style={{ ...inputStyle, width: 70, textAlign: 'center', padding: '8px' }} />
-                <span style={{ fontSize: 12, color: 'var(--text-3)' }}>{f.unit}</span>
+                <input type="number" defaultValue={f.placeholder} style={{ ...inputStyle, width: 80, textAlign: 'center', padding: '8px' }} />
+                <span style={{ fontSize: 12, color: 'var(--text-3)', minWidth: 36 }}>{f.unit}</span>
               </div>
             </div>
           ))}
         </div>
-      )}
+      </div>
       <button style={{ padding: '11px 28px', background: 'var(--accent)', color: 'white', borderRadius: 10, fontWeight: 600, fontSize: 14, border: 'none', cursor: 'pointer' }}>
         حفظ
       </button>
@@ -220,23 +231,29 @@ function DeliveryTab() {
 
 function QRTab() {
   return (
-    <div style={{ maxWidth: 360 }}>
-      <div className="glass" style={{ padding: 32, textAlign: 'center' }}>
-        <div style={{ width: 160, height: 160, background: 'var(--surface-2)', borderRadius: 16, margin: '0 auto 20px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--border)' }}>
-          <QrCode size={80} style={{ color: 'var(--text-3)' }} />
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+      <div className="glass" style={{ padding: 32, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <div style={{ width: 180, height: 180, background: 'var(--surface-2)', borderRadius: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--border)', marginBottom: 16 }}>
+          <QrCode size={96} style={{ color: 'var(--text-3)' }} />
         </div>
-        <p style={{ fontSize: 12, color: 'var(--text-3)', marginBottom: 20 }}>منصة.com/مطعم-الشيف-أحمد</p>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <p style={{ fontSize: 12, color: 'var(--text-3)', marginBottom: 4 }}>رابط الصفحة</p>
+        <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--accent)' }}>منصة.com/مطعم-الشيف-أحمد</p>
+      </div>
+
+      <div className="glass" style={{ padding: 20 }}>
+        <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 16 }}>تحميل الكود</p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 20 }}>
           {['تحميل PNG عالي الدقة', 'تحميل PDF جاهز للطباعة A4', 'تحميل ملصق جاهز 10×10 سم'].map(label => (
-            <button key={label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '10px 16px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 13, fontWeight: 500, color: 'var(--text-2)', background: 'transparent', cursor: 'pointer' }}>
+            <button key={label} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '11px 14px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 13, fontWeight: 500, color: 'var(--text-2)', background: 'transparent', cursor: 'pointer', width: '100%' }}>
               <Download size={14} />
               {label}
             </button>
           ))}
         </div>
-        <div style={{ marginTop: 20, background: 'var(--surface-2)', borderRadius: 10, padding: 14, textAlign: 'right' }}>
-          <p style={{ fontSize: 12, color: 'var(--text-3)' }}>✓ اطبع بدقة 300 DPI على الأقل</p>
-          <p style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 4 }}>✓ تأكد المسافة بين الكود والحافة 5مم</p>
+        <div style={{ background: 'var(--surface-2)', borderRadius: 10, padding: 14 }}>
+          <p style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-2)', marginBottom: 8 }}>تعليمات الطباعة</p>
+          <p style={{ fontSize: 12, color: 'var(--text-3)', marginBottom: 4 }}>✓ اطبع بدقة 300 DPI على الأقل</p>
+          <p style={{ fontSize: 12, color: 'var(--text-3)' }}>✓ تأكد المسافة بين الكود والحافة 5مم</p>
         </div>
       </div>
     </div>
@@ -245,31 +262,39 @@ function QRTab() {
 
 function SubscriptionTab() {
   return (
-    <div style={{ maxWidth: 440 }}>
-      <div className="glass" style={{ padding: 20, marginBottom: 16 }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-          <div>
-            <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>اشتراكك الحالي</p>
-            <p style={{ fontSize: 12, color: 'var(--text-2)', marginTop: 3 }}>تجدد في: 15 يوليو 2026</p>
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <div className="glass" style={{ padding: 20 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+            <div>
+              <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>اشتراكك الحالي</p>
+              <p style={{ fontSize: 12, color: 'var(--text-2)', marginTop: 3 }}>تجدد في: 15 يوليو 2026</p>
+            </div>
+            <span style={{ background: 'var(--accent-muted)', color: 'var(--accent)', fontWeight: 700, fontSize: 13, padding: '5px 12px', borderRadius: 10, border: '1px solid rgba(249,115,22,0.2)' }}>Pro ✓</span>
           </div>
-          <span style={{ background: 'var(--accent-muted)', color: 'var(--accent)', fontWeight: 700, fontSize: 13, padding: '5px 12px', borderRadius: 10, border: '1px solid rgba(249,115,22,0.2)' }}>Pro ✓</span>
-        </div>
-        <p style={{ fontSize: 13, color: 'var(--text-2)', marginBottom: 16 }}>طريقة الدفع: فيزا ****4242</p>
-        <div className="flex gap-2">
-          <button style={{ flex: 1, padding: '10px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 13, fontWeight: 600, color: 'var(--text-2)', background: 'transparent', cursor: 'pointer' }}>تغيير طريقة الدفع</button>
-          <button style={{ flex: 1, padding: '10px', border: '1px solid var(--red-muted)', borderRadius: 10, fontSize: 13, fontWeight: 600, color: 'var(--red)', background: 'transparent', cursor: 'pointer' }}>إلغاء الاشتراك</button>
+          <div style={{ padding: '12px 14px', background: 'var(--surface-2)', borderRadius: 10, marginBottom: 16 }}>
+            <p style={{ fontSize: 11, color: 'var(--text-3)', marginBottom: 3 }}>طريقة الدفع</p>
+            <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>فيزا ****4242</p>
+          </div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button style={{ flex: 1, padding: '10px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 13, fontWeight: 600, color: 'var(--text-2)', background: 'transparent', cursor: 'pointer' }}>تغيير طريقة الدفع</button>
+            <button style={{ flex: 1, padding: '10px', border: '1px solid var(--red-muted)', borderRadius: 10, fontSize: 13, fontWeight: 600, color: 'var(--red)', background: 'transparent', cursor: 'pointer' }}>إلغاء الاشتراك</button>
+          </div>
         </div>
       </div>
+
       <div className="glass" style={{ overflow: 'hidden' }}>
         <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--border)' }}>
           <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>تاريخ الفواتير</p>
         </div>
-        {['يونيو 2026', 'مايو 2026', 'أبريل 2026'].map((m, i, arr) => (
+        {['يونيو 2026', 'مايو 2026', 'أبريل 2026', 'مارس 2026'].map((m, i, arr) => (
           <div key={m} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 20px', borderBottom: i < arr.length - 1 ? '1px solid var(--border)' : 'none' }}>
             <span style={{ fontSize: 13, color: 'var(--text)' }}>{m}</span>
-            <div className="flex items-center gap-3">
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
               <span className="num" style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>500 ج</span>
-              <button style={{ fontSize: 12, color: 'var(--accent)', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer' }}>تحميل</button>
+              <button style={{ fontSize: 12, color: 'var(--accent)', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}>
+                <Download size={12} /> تحميل
+              </button>
             </div>
           </div>
         ))}
