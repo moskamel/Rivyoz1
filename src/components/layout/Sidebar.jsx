@@ -4,7 +4,7 @@ import {
   LayoutDashboard, ClipboardList, UtensilsCrossed,
   Megaphone, BarChart3, Settings, ExternalLink,
   Users, UserCheck, Package, Monitor, ChevronDown,
-  Check, Zap, ArrowUpRight
+  Check, Zap, ArrowUpRight, Palette
 } from 'lucide-react'
 import { getConfig } from '../../lib/restaurantStore'
 
@@ -21,6 +21,7 @@ const navGrowth = [
 ]
 const navSystem = [
   { to: '/staff', label: 'الموظفون', icon: UserCheck },
+  { to: '/design', label: 'تصميم الموقع', icon: Palette },
   { to: '/settings', label: 'الإعدادات', icon: Settings },
 ]
 

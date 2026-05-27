@@ -1,11 +1,10 @@
 import { useState } from 'react'
-import { Download, QrCode, Check, Store, Palette, Bike, CreditCard } from 'lucide-react'
+import { Download, QrCode, Store, Bike, CreditCard } from 'lucide-react'
 import Layout from '../components/layout/Layout'
 import { getConfig, setConfig } from '../lib/restaurantStore'
 
 const tabs = [
   { label: 'المطعم',   icon: Store },
-  { label: 'التصميم',  icon: Palette },
   { label: 'التوصيل',  icon: Bike },
   { label: 'QR Code',  icon: QrCode },
   { label: 'الاشتراك', icon: CreditCard },
@@ -103,69 +102,6 @@ function RestaurantTab() {
         حفظ التغييرات
       </button>
       {toast && <Toast message={toast} />}
-    </div>
-  )
-}
-
-function DesignTab() {
-  const colors = ['#f97316', '#6366f1', '#22c55e', '#ec4899', '#1f2937']
-  const [color, setColor] = useState(() => getConfig().color || '#f97316')
-  const { toast, showToast } = useToast()
-
-  return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-      <div className="glass" style={{ padding: 20 }}>
-        <div style={{ marginBottom: 20 }}>
-          <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', marginBottom: 12 }}>اللون الرئيسي</p>
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
-            {colors.map(c => (
-              <button
-                key={c}
-                onClick={() => setColor(c)}
-                style={{ width: 32, height: 32, borderRadius: 8, background: c, border: 'none', cursor: 'pointer', transition: 'all 0.15s', transform: color === c ? 'scale(1.15)' : 'scale(1)', outline: color === c ? `2px solid var(--border-strong)` : 'none', outlineOffset: 2 }}
-              />
-            ))}
-            <input type="color" value={color} onChange={e => setColor(e.target.value)} style={{ width: 32, height: 32, borderRadius: 8, border: '1px solid var(--border)', cursor: 'pointer', background: 'transparent', padding: 2 }} />
-          </div>
-        </div>
-        <div style={{ marginBottom: 20 }}>
-          <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', marginBottom: 10 }}>اللوجو</p>
-          <div className="flex items-center gap-3">
-            <div style={{ width: 56, height: 56, background: 'var(--surface-2)', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, border: '1px solid var(--border)' }}>🍽️</div>
-            <div className="flex gap-2">
-              <button style={{ padding: '6px 12px', border: '1px solid var(--border)', borderRadius: 8, fontSize: 12, fontWeight: 500, color: 'var(--text-2)', background: 'transparent', cursor: 'pointer' }}>تغيير</button>
-              <button style={{ padding: '6px 12px', border: '1px solid var(--red-muted)', borderRadius: 8, fontSize: 12, fontWeight: 500, color: 'var(--red)', background: 'transparent', cursor: 'pointer' }}>حذف</button>
-            </div>
-          </div>
-        </div>
-        <button
-          onClick={() => { setConfig({ color }); showToast('تم النشر ✓') }}
-          style={{ padding: '11px 24px', background: 'var(--accent)', color: 'white', borderRadius: 10, fontWeight: 600, fontSize: 14, border: 'none', cursor: 'pointer', width: '100%' }}
-        >
-          نشر التغييرات
-        </button>
-        {toast && <Toast message={toast} />}
-      </div>
-
-      <div className="glass" style={{ padding: 20 }}>
-        <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', marginBottom: 12 }}>معاينة مباشرة</p>
-        <div style={{ border: '1px solid var(--border)', borderRadius: 12, overflow: 'hidden' }}>
-          <div style={{ padding: 16, background: color }}>
-            <p style={{ fontWeight: 700, fontSize: 16, color: 'white' }}>مطعم الشيف أحمد</p>
-            <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.7)', marginTop: 2 }}>التجمع الخامس</p>
-          </div>
-          <div style={{ padding: 16, background: 'var(--surface-2)' }}>
-            <p style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-3)', marginBottom: 8, letterSpacing: '0.08em' }}>مشويات</p>
-            {['كفتة مشوية — 85 ج', 'فراخ مشوية — 70 ج'].map(item => (
-              <div key={item} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, paddingBottom: 8, borderBottom: '1px solid var(--border)' }}>
-                <span style={{ color: 'var(--text)' }}>{item.split(' — ')[0]}</span>
-                <span style={{ fontWeight: 700, color }}>{item.split(' — ')[1]}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-        <p style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 10, textAlign: 'center' }}>منصة.com/مطعم-الشيف-أحمد</p>
-      </div>
     </div>
   )
 }
@@ -303,7 +239,7 @@ function SubscriptionTab() {
   )
 }
 
-const tabComponents = [RestaurantTab, DesignTab, DeliveryTab, QRTab, SubscriptionTab]
+const tabComponents = [RestaurantTab, DeliveryTab, QRTab, SubscriptionTab]
 
 export default function Settings() {
   const [activeTab, setActiveTab] = useState(0)

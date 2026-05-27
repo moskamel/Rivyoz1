@@ -5,6 +5,7 @@ import Menu from './pages/Menu'
 import Marketing from './pages/Marketing'
 import Reports from './pages/Reports'
 import Settings from './pages/Settings'
+import Design from './pages/Design'
 import Login from './pages/Login'
 import KDS from './pages/KDS'
 import Customers from './pages/Customers'
@@ -28,6 +29,7 @@ export default function App() {
       <Route path="/marketing" element={<Marketing />} />
       <Route path="/reports" element={<Reports />} />
       <Route path="/settings" element={<Settings />} />
+      <Route path="/design" element={<Design />} />
       <Route path="/customers" element={<Customers />} />
       <Route path="/staff" element={<Staff />} />
       <Route path="/inventory" element={<Inventory />} />
