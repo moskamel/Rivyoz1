@@ -68,46 +68,61 @@ export default function Menu() {
 
   return (
     <Layout title="إدارة القائمة">
-      <div className="flex gap-5">
-        {/* Categories sidebar */}
-        <div style={{ width: 180, flexShrink: 0 }}>
-          <div className="glass" style={{ overflow: 'hidden' }}>
-            <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <p style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)' }}>الأقسام</p>
-              <button style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--accent)', display: 'flex' }}>
-                <Plus size={16} />
-              </button>
-            </div>
-            {categories.map(cat => (
+      {/* Category tabs + add button */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16, gap: 12 }}>
+        <div style={{ display: 'flex', gap: 6, overflowX: 'auto', flexWrap: 'wrap' }}>
+          {categories.map(cat => {
+            const active = activeCategory === cat.id
+            const count = items.filter(i => i.categoryId === cat.id).length
+            return (
               <button
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}
                 style={{
-                  width: '100%', textAlign: 'right', padding: '10px 16px', fontSize: 13, fontWeight: 500, display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', border: 'none', borderBottom: '1px solid var(--border)', transition: 'all 0.15s',
-                  background: activeCategory === cat.id ? 'var(--accent-muted)' : 'transparent',
-                  color: activeCategory === cat.id ? 'var(--accent)' : 'var(--text-2)',
+                  display: 'flex', alignItems: 'center', gap: 6, padding: '7px 14px', borderRadius: 10,
+                  fontSize: 13, fontWeight: 600, cursor: 'pointer', border: '1px solid', transition: 'all 0.15s', flexShrink: 0,
+                  background: active ? 'var(--accent)' : 'var(--surface)',
+                  borderColor: active ? 'var(--accent)' : 'var(--border)',
+                  color: active ? 'white' : 'var(--text-2)',
                 }}
               >
-                <span>{cat.name}</span>
-                <span style={{ fontSize: 11, color: 'var(--text-3)' }}>{items.filter(i => i.categoryId === cat.id).length}</span>
+                {cat.name}
+                <span style={{
+                  fontSize: 11, fontWeight: 700, padding: '1px 6px', borderRadius: 6,
+                  background: active ? 'rgba(255,255,255,0.25)' : 'var(--surface-3)',
+                  color: active ? 'white' : 'var(--text-3)',
+                }}>
+                  {count}
+                </span>
               </button>
-            ))}
-          </div>
+            )
+          })}
+          <button
+            style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '7px 12px', borderRadius: 10, fontSize: 12, fontWeight: 600, cursor: 'pointer', border: '1px dashed var(--border)', background: 'transparent', color: 'var(--text-3)', flexShrink: 0, transition: 'all 0.15s' }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.color = 'var(--accent)' }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-3)' }}
+          >
+            <Plus size={12} /> قسم جديد
+          </button>
         </div>
+        <button
+          onClick={openAdd}
+          style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'var(--accent)', color: 'white', padding: '8px 16px', borderRadius: 10, fontSize: 13, fontWeight: 600, border: 'none', cursor: 'pointer', flexShrink: 0 }}
+        >
+          <Plus size={14} />
+          إضافة أكلة
+        </button>
+      </div>
 
-        {/* Items list */}
-        <div style={{ flex: 1 }}>
-          <div className="glass" style={{ overflow: 'hidden' }}>
-            <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>{categories.find(c => c.id === activeCategory)?.name}</p>
-              <button
-                onClick={openAdd}
-                style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'var(--accent)', color: 'white', padding: '8px 14px', borderRadius: 10, fontSize: 13, fontWeight: 600, border: 'none', cursor: 'pointer' }}
-              >
-                <Plus size={14} />
-                إضافة أكلة
-              </button>
-            </div>
+      {/* Items table */}
+      <div>
+        <div className="glass" style={{ overflow: 'hidden' }}>
+          <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>
+              {categories.find(c => c.id === activeCategory)?.name}
+              <span style={{ fontSize: 12, color: 'var(--text-3)', fontWeight: 400, marginRight: 8 }}>({filteredItems.length} أكلة)</span>
+            </p>
+          </div>
 
             {filteredItems.length === 0 ? (
               <div style={{ padding: 48, textAlign: 'center' }}>
@@ -157,7 +172,6 @@ export default function Menu() {
             )}
           </div>
         </div>
-      </div>
 
       {/* Item form modal */}
       {showForm && (

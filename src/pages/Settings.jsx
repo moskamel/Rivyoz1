@@ -311,42 +311,34 @@ export default function Settings() {
 
   return (
     <Layout title="الإعدادات">
-      <div style={{ display: 'flex', gap: 20, alignItems: 'flex-start' }}>
-        {/* Vertical side-nav */}
-        <div className="glass" style={{ width: 192, flexShrink: 0, padding: 8, display: 'flex', flexDirection: 'column', gap: 2 }}>
-          {tabs.map((t, i) => {
-            const Icon = t.icon
-            const active = activeTab === i
-            return (
-              <button
-                key={i}
-                onClick={() => setActiveTab(i)}
-                style={{
-                  width: '100%', display: 'flex', alignItems: 'center', gap: 10,
-                  padding: '10px 12px', borderRadius: 10, fontSize: 13, fontWeight: 600,
-                  cursor: 'pointer', border: 'none', textAlign: 'right', transition: 'all 0.15s',
-                  background: active ? 'var(--accent-muted)' : 'transparent',
-                  color: active ? 'var(--accent)' : 'var(--text-2)',
-                  position: 'relative',
-                }}
-                onMouseEnter={e => { if (!active) e.currentTarget.style.background = 'var(--surface-2)' }}
-                onMouseLeave={e => { if (!active) e.currentTarget.style.background = 'transparent' }}
-              >
-                {active && (
-                  <span style={{ position: 'absolute', right: 0, top: '20%', bottom: '20%', width: 3, borderRadius: 4, background: 'var(--accent)' }} />
-                )}
-                <Icon size={15} />
-                {t.label}
-              </button>
-            )
-          })}
-        </div>
-
-        {/* Content area */}
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <TabComponent />
-        </div>
+      {/* Horizontal tab bar */}
+      <div style={{ display: 'flex', gap: 6, marginBottom: 20, borderBottom: '1px solid var(--border)', paddingBottom: 0 }}>
+        {tabs.map((t, i) => {
+          const Icon = t.icon
+          const active = activeTab === i
+          return (
+            <button
+              key={i}
+              onClick={() => setActiveTab(i)}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 7, padding: '9px 16px',
+                fontSize: 13, fontWeight: 600, cursor: 'pointer', border: 'none', background: 'none',
+                color: active ? 'var(--accent)' : 'var(--text-2)', transition: 'all 0.15s',
+                borderBottom: `2px solid ${active ? 'var(--accent)' : 'transparent'}`,
+                marginBottom: -1,
+              }}
+              onMouseEnter={e => { if (!active) e.currentTarget.style.color = 'var(--text)' }}
+              onMouseLeave={e => { if (!active) e.currentTarget.style.color = 'var(--text-2)' }}
+            >
+              <Icon size={14} />
+              {t.label}
+            </button>
+          )
+        })}
       </div>
+
+      {/* Content */}
+      <TabComponent />
     </Layout>
   )
 }
