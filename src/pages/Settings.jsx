@@ -1,9 +1,15 @@
 import { useState } from 'react'
-import { Download, QrCode, Check } from 'lucide-react'
+import { Download, QrCode, Check, Store, Palette, Bike, CreditCard } from 'lucide-react'
 import Layout from '../components/layout/Layout'
 import { getConfig, setConfig } from '../lib/restaurantStore'
 
-const tabs = ['المطعم', 'التصميم', 'التوصيل', 'QR Code', 'الاشتراك']
+const tabs = [
+  { label: 'المطعم',   icon: Store },
+  { label: 'التصميم',  icon: Palette },
+  { label: 'التوصيل',  icon: Bike },
+  { label: 'QR Code',  icon: QrCode },
+  { label: 'الاشتراك', icon: CreditCard },
+]
 
 function Toast({ message }) {
   return (
@@ -280,23 +286,42 @@ export default function Settings() {
 
   return (
     <Layout title="الإعدادات">
-      <div className="flex gap-2 mb-6 overflow-x-auto pb-1">
-        {tabs.map((t, i) => (
-          <button
-            key={i}
-            onClick={() => setActiveTab(i)}
-            style={{
-              flexShrink: 0, padding: '7px 16px', borderRadius: 10, fontSize: 13, fontWeight: 600, cursor: 'pointer', border: '1px solid', transition: 'all 0.15s',
-              background: activeTab === i ? 'var(--accent)' : 'var(--surface)',
-              borderColor: activeTab === i ? 'var(--accent)' : 'var(--border)',
-              color: activeTab === i ? 'white' : 'var(--text-2)',
-            }}
-          >
-            {t}
-          </button>
-        ))}
+      <div style={{ display: 'flex', gap: 20, alignItems: 'flex-start' }}>
+        {/* Vertical side-nav */}
+        <div className="glass" style={{ width: 192, flexShrink: 0, padding: 8, display: 'flex', flexDirection: 'column', gap: 2 }}>
+          {tabs.map((t, i) => {
+            const Icon = t.icon
+            const active = activeTab === i
+            return (
+              <button
+                key={i}
+                onClick={() => setActiveTab(i)}
+                style={{
+                  width: '100%', display: 'flex', alignItems: 'center', gap: 10,
+                  padding: '10px 12px', borderRadius: 10, fontSize: 13, fontWeight: 600,
+                  cursor: 'pointer', border: 'none', textAlign: 'right', transition: 'all 0.15s',
+                  background: active ? 'var(--accent-muted)' : 'transparent',
+                  color: active ? 'var(--accent)' : 'var(--text-2)',
+                  position: 'relative',
+                }}
+                onMouseEnter={e => { if (!active) e.currentTarget.style.background = 'var(--surface-2)' }}
+                onMouseLeave={e => { if (!active) e.currentTarget.style.background = 'transparent' }}
+              >
+                {active && (
+                  <span style={{ position: 'absolute', right: 0, top: '20%', bottom: '20%', width: 3, borderRadius: 4, background: 'var(--accent)' }} />
+                )}
+                <Icon size={15} />
+                {t.label}
+              </button>
+            )
+          })}
+        </div>
+
+        {/* Content area */}
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <TabComponent />
+        </div>
       </div>
-      <TabComponent />
     </Layout>
   )
 }
