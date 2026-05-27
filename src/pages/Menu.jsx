@@ -3,6 +3,12 @@ import { Plus, MoreVertical, X, GripVertical, Star } from 'lucide-react'
 import Layout from '../components/layout/Layout'
 import { getMenuItems, setMenuItems, getCategories } from '../lib/restaurantStore'
 
+const inputStyle = {
+  width: '100%', padding: '10px 14px', borderRadius: 10, border: '1px solid var(--border)',
+  background: 'var(--surface-2)', color: 'var(--text)', fontSize: 13, outline: 'none',
+  fontFamily: 'Cairo, sans-serif', boxSizing: 'border-box', transition: 'border-color 0.15s',
+}
+
 export default function Menu() {
   const [categories, setCategories] = useState(getCategories)
   const [items, setItems] = useState(getMenuItems)
@@ -64,91 +70,90 @@ export default function Menu() {
     <Layout title="إدارة القائمة">
       <div className="flex gap-5">
         {/* Categories sidebar */}
-        <div className="w-48 flex-shrink-0">
-          <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-            <div className="p-4 border-b border-gray-50 flex items-center justify-between">
-              <p className="font-bold text-sm text-gray-700">الأقسام</p>
-              <button className="text-orange-500 hover:text-orange-600">
+        <div style={{ width: 180, flexShrink: 0 }}>
+          <div className="glass" style={{ overflow: 'hidden' }}>
+            <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <p style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)' }}>الأقسام</p>
+              <button style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--accent)', display: 'flex' }}>
                 <Plus size={16} />
               </button>
             </div>
-            <div className="divide-y divide-gray-50">
-              {categories.map(cat => (
-                <button
-                  key={cat.id}
-                  onClick={() => setActiveCategory(cat.id)}
-                  className={`w-full text-right px-4 py-3 text-sm font-medium flex items-center justify-between transition-colors ${
-                    activeCategory === cat.id ? 'bg-orange-50 text-orange-600' : 'text-gray-600 hover:bg-gray-50'
-                  }`}
-                >
-                  <span>{cat.name}</span>
-                  <span className="text-xs text-gray-400">{items.filter(i => i.categoryId === cat.id).length}</span>
-                </button>
-              ))}
-            </div>
+            {categories.map(cat => (
+              <button
+                key={cat.id}
+                onClick={() => setActiveCategory(cat.id)}
+                style={{
+                  width: '100%', textAlign: 'right', padding: '10px 16px', fontSize: 13, fontWeight: 500, display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', border: 'none', borderBottom: '1px solid var(--border)', transition: 'all 0.15s',
+                  background: activeCategory === cat.id ? 'var(--accent-muted)' : 'transparent',
+                  color: activeCategory === cat.id ? 'var(--accent)' : 'var(--text-2)',
+                }}
+              >
+                <span>{cat.name}</span>
+                <span style={{ fontSize: 11, color: 'var(--text-3)' }}>{items.filter(i => i.categoryId === cat.id).length}</span>
+              </button>
+            ))}
           </div>
         </div>
 
         {/* Items list */}
-        <div className="flex-1">
-          <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-            <div className="p-5 border-b border-gray-50 flex items-center justify-between">
-              <p className="font-bold text-gray-900">{categories.find(c => c.id === activeCategory)?.name}</p>
+        <div style={{ flex: 1 }}>
+          <div className="glass" style={{ overflow: 'hidden' }}>
+            <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>{categories.find(c => c.id === activeCategory)?.name}</p>
               <button
                 onClick={openAdd}
-                className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-xl text-sm font-semibold"
+                style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'var(--accent)', color: 'white', padding: '8px 14px', borderRadius: 10, fontSize: 13, fontWeight: 600, border: 'none', cursor: 'pointer' }}
               >
-                <Plus size={16} />
+                <Plus size={14} />
                 إضافة أكلة
               </button>
             </div>
 
             {filteredItems.length === 0 ? (
-              <div className="p-12 text-center text-gray-400">
-                <p className="font-medium">لا توجد أكلات في هذا القسم</p>
-                <button onClick={openAdd} className="mt-3 text-orange-500 text-sm font-semibold hover:underline">إضافة أولى أكلة</button>
+              <div style={{ padding: 48, textAlign: 'center' }}>
+                <p style={{ color: 'var(--text-3)', fontWeight: 500, fontSize: 14 }}>لا توجد أكلات في هذا القسم</p>
+                <button onClick={openAdd} style={{ marginTop: 10, color: 'var(--accent)', fontSize: 13, fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer' }}>إضافة أولى أكلة</button>
               </div>
             ) : (
-              <div className="divide-y divide-gray-50">
-                {filteredItems.map(item => (
-                  <div key={item.id} className="flex items-center gap-4 px-5 py-3 hover:bg-gray-50/50">
-                    <GripVertical size={16} className="text-gray-300 cursor-grab flex-shrink-0" />
-                    <div className="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <span className="text-lg">🍽️</span>
+              filteredItems.map(item => (
+                <div key={item.id}
+                  style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '12px 20px', borderBottom: '1px solid var(--border)', transition: 'background 0.15s' }}
+                  onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-2)'}
+                  onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                >
+                  <GripVertical size={15} style={{ color: 'var(--text-3)', cursor: 'grab', flexShrink: 0 }} />
+                  <div style={{ width: 38, height: 38, background: 'var(--surface-2)', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, border: '1px solid var(--border)' }}>
+                    <span style={{ fontSize: 18 }}>🍽️</span>
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div className="flex items-center gap-2">
+                      <p style={{ fontWeight: 600, color: 'var(--text)', fontSize: 13 }}>{item.name}</p>
+                      {item.bestseller && <Star size={12} style={{ color: 'var(--yellow)', fill: 'var(--yellow)' }} />}
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <p className="font-medium text-gray-800 text-sm">{item.name}</p>
-                        {item.bestseller && <Star size={12} className="text-yellow-500 fill-yellow-500" />}
-                      </div>
-                      <p className="text-sm text-orange-600 font-semibold mt-0.5">{item.price} ج</p>
-                    </div>
-                    <button
-                      onClick={() => toggleActive(item.id)}
-                      className={`relative w-11 h-6 rounded-full transition-colors flex-shrink-0 ${item.active ? 'bg-green-500' : 'bg-gray-200'}`}
-                    >
-                      <span className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-all ${item.active ? 'right-1' : 'left-1'}`} />
+                    <p className="num" style={{ fontSize: 12, color: 'var(--accent)', fontWeight: 700, marginTop: 2 }}>{item.price} ج</p>
+                  </div>
+                  {/* Toggle */}
+                  <button
+                    onClick={() => toggleActive(item.id)}
+                    style={{ position: 'relative', width: 40, height: 22, borderRadius: 11, background: item.active ? 'var(--green)' : 'var(--surface-3)', border: 'none', cursor: 'pointer', transition: 'all 0.2s', flexShrink: 0 }}
+                  >
+                    <span style={{ position: 'absolute', top: 3, width: 16, height: 16, background: 'white', borderRadius: '50%', transition: 'all 0.2s', right: item.active ? 3 : 'auto', left: item.active ? 'auto' : 3 }} />
+                  </button>
+                  <div style={{ position: 'relative' }} className="group">
+                    <button style={{ padding: 6, borderRadius: 8, background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-3)' }}>
+                      <MoreVertical size={15} />
                     </button>
-                    <div className="relative group flex-shrink-0">
-                      <button className="p-2 rounded-xl hover:bg-gray-100 text-gray-400">
-                        <MoreVertical size={16} />
-                      </button>
-                      <div className="absolute left-0 top-8 bg-white border border-gray-100 rounded-xl shadow-lg z-10 min-w-[120px] hidden group-hover:block">
-                        <button onClick={() => openEdit(item)} className="w-full text-right px-4 py-2 text-sm hover:bg-gray-50">تعديل</button>
-                        <button
-                          onClick={() => setItems(prev => {
-                            const next = [...prev, { ...item, id: Date.now(), name: item.name + ' (نسخة)' }]
-                            setMenuItems(next)
-                            return next
-                          })}
-                          className="w-full text-right px-4 py-2 text-sm hover:bg-gray-50"
-                        >نسخ</button>
-                        <button onClick={() => deleteItem(item.id)} className="w-full text-right px-4 py-2 text-sm text-red-500 hover:bg-red-50">حذف</button>
-                      </div>
+                    <div style={{ position: 'absolute', left: 0, top: 30, background: 'var(--surface-3)', border: '1px solid var(--border-strong)', borderRadius: 10, overflow: 'hidden', zIndex: 10, minWidth: 120, boxShadow: '0 8px 24px rgba(0,0,0,0.4)', display: 'none' }} className="group-hover:!block">
+                      <button onClick={() => openEdit(item)} style={{ width: '100%', textAlign: 'right', padding: '8px 14px', fontSize: 13, color: 'var(--text-2)', background: 'transparent', border: 'none', cursor: 'pointer' }}>تعديل</button>
+                      <button
+                        onClick={() => setItems(prev => { const next = [...prev, { ...item, id: Date.now(), name: item.name + ' (نسخة)' }]; setMenuItems(next); return next })}
+                        style={{ width: '100%', textAlign: 'right', padding: '8px 14px', fontSize: 13, color: 'var(--text-2)', background: 'transparent', border: 'none', cursor: 'pointer' }}
+                      >نسخ</button>
+                      <button onClick={() => deleteItem(item.id)} style={{ width: '100%', textAlign: 'right', padding: '8px 14px', fontSize: 13, color: 'var(--red)', background: 'transparent', border: 'none', cursor: 'pointer' }}>حذف</button>
                     </div>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))
             )}
           </div>
         </div>
@@ -156,65 +161,53 @@ export default function Menu() {
 
       {/* Item form modal */}
       {showForm && (
-        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" onClick={() => setShowForm(false)}>
-          <div className="bg-white rounded-3xl w-full max-w-md" onClick={e => e.stopPropagation()}>
-            <div className="flex items-center justify-between p-5 border-b border-gray-100">
-              <p className="font-bold text-lg text-gray-900">{editItem ? 'تعديل الأكلة' : 'إضافة أكلة جديدة'}</p>
-              <button onClick={() => setShowForm(false)} className="p-2 rounded-xl hover:bg-gray-100"><X size={18} /></button>
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }} onClick={() => setShowForm(false)}>
+          <div style={{ background: 'var(--surface)', border: '1px solid var(--border-strong)', borderRadius: 20, width: '100%', maxWidth: 420 }} onClick={e => e.stopPropagation()}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', borderBottom: '1px solid var(--border)' }}>
+              <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 16 }}>{editItem ? 'تعديل الأكلة' : 'إضافة أكلة جديدة'}</p>
+              <button onClick={() => setShowForm(false)} style={{ width: 28, height: 28, borderRadius: 8, border: 'none', background: 'var(--surface-2)', color: 'var(--text-2)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <X size={14} />
+              </button>
             </div>
-            <div className="p-5 space-y-4">
-              {/* Image upload */}
-              <div className="w-20 h-20 bg-gray-100 rounded-2xl flex flex-col items-center justify-center cursor-pointer hover:bg-gray-200 transition-colors border-2 border-dashed border-gray-300">
-                <Plus size={20} className="text-gray-400" />
-                <p className="text-xs text-gray-400 mt-1">صورة</p>
+            <div style={{ padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: 14 }}>
+              <div style={{ width: 64, height: 64, background: 'var(--surface-2)', borderRadius: 14, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', border: '2px dashed var(--border)', gap: 4 }}>
+                <Plus size={18} style={{ color: 'var(--text-3)' }} />
+                <p style={{ fontSize: 10, color: 'var(--text-3)' }}>صورة</p>
               </div>
-
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1.5">اسم الأكلة *</label>
-                <input
-                  type="text"
-                  value={form.name}
-                  onChange={e => setForm({ ...form, name: e.target.value })}
-                  className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm outline-none focus:border-orange-400"
-                  placeholder="مثال: كفتة مشوية"
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: 'var(--text-2)', marginBottom: 6 }}>اسم الأكلة *</label>
+                <input type="text" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} style={inputStyle} placeholder="مثال: كفتة مشوية"
+                  onFocus={e => e.target.style.borderColor = 'var(--accent)'}
+                  onBlur={e => e.target.style.borderColor = 'var(--border)'}
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1.5">السعر *</label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    value={form.price}
-                    onChange={e => setForm({ ...form, price: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm outline-none focus:border-orange-400"
-                    placeholder="85"
-                  />
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">ج</span>
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1.5">الوصف</label>
-                <textarea
-                  value={form.description}
-                  onChange={e => setForm({ ...form, description: e.target.value })}
-                  className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm outline-none focus:border-orange-400 resize-none"
-                  rows={2}
-                  placeholder="وصف مختصر..."
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: 'var(--text-2)', marginBottom: 6 }}>السعر *</label>
+                <input type="number" value={form.price} onChange={e => setForm({ ...form, price: e.target.value })} style={inputStyle} placeholder="85"
+                  onFocus={e => e.target.style.borderColor = 'var(--accent)'}
+                  onBlur={e => e.target.style.borderColor = 'var(--border)'}
                 />
               </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-semibold text-gray-700">الأكلة نشطة</span>
+              <div>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: 'var(--text-2)', marginBottom: 6 }}>الوصف</label>
+                <textarea value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} style={{ ...inputStyle, resize: 'none' }} rows={2} placeholder="وصف مختصر..."
+                  onFocus={e => e.target.style.borderColor = 'var(--accent)'}
+                  onBlur={e => e.target.style.borderColor = 'var(--border)'}
+                />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>الأكلة نشطة</span>
                 <button
                   onClick={() => setForm({ ...form, active: !form.active })}
-                  className={`relative w-11 h-6 rounded-full transition-colors ${form.active ? 'bg-green-500' : 'bg-gray-200'}`}
+                  style={{ position: 'relative', width: 44, height: 24, borderRadius: 12, background: form.active ? 'var(--green)' : 'var(--surface-3)', border: 'none', cursor: 'pointer', transition: 'all 0.2s' }}
                 >
-                  <span className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-all ${form.active ? 'right-1' : 'left-1'}`} />
+                  <span style={{ position: 'absolute', top: 4, width: 16, height: 16, background: 'white', borderRadius: '50%', transition: 'all 0.2s', right: form.active ? 4 : 'auto', left: form.active ? 'auto' : 4 }} />
                 </button>
               </div>
               <button
                 onClick={saveItem}
                 disabled={!form.name || !form.price}
-                className="w-full py-3 bg-orange-500 text-white rounded-xl font-semibold disabled:opacity-40 hover:bg-orange-600"
+                style={{ padding: '12px', background: form.name && form.price ? 'var(--accent)' : 'var(--surface-2)', color: form.name && form.price ? 'white' : 'var(--text-3)', borderRadius: 12, fontWeight: 600, fontSize: 14, border: 'none', cursor: form.name && form.price ? 'pointer' : 'not-allowed', transition: 'all 0.15s' }}
               >
                 حفظ الأكلة
               </button>

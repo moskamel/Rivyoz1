@@ -5,6 +5,23 @@ import { mockCoupons } from '../lib/mock'
 
 const tabs = ['برنامج الولاء', 'حملات واتساب', 'الكوبونات']
 
+const inputStyle = {
+  width: '100%', padding: '9px 12px', borderRadius: 10, border: '1px solid var(--border)',
+  background: 'var(--surface-2)', color: 'var(--text)', fontSize: 13, outline: 'none',
+  fontFamily: 'Cairo, sans-serif', boxSizing: 'border-box',
+}
+
+function Toggle({ value, onChange }) {
+  return (
+    <button
+      onClick={() => onChange(!value)}
+      style={{ position: 'relative', width: 44, height: 24, borderRadius: 12, background: value ? 'var(--green)' : 'var(--surface-3)', border: 'none', cursor: 'pointer', transition: 'all 0.2s', flexShrink: 0 }}
+    >
+      <span style={{ position: 'absolute', top: 4, width: 16, height: 16, background: 'white', borderRadius: '50%', transition: 'all 0.2s', right: value ? 4 : 'auto', left: value ? 'auto' : 4 }} />
+    </button>
+  )
+}
+
 function LoyaltyTab() {
   const [enabled, setEnabled] = useState(true)
   const [spendPer, setSpendPer] = useState(10)
@@ -13,57 +30,55 @@ function LoyaltyTab() {
   const [discountVal, setDiscountVal] = useState(10)
 
   return (
-    <div className="max-w-lg space-y-5">
-      <div className="bg-white rounded-2xl border border-gray-100 p-5">
-        <div className="flex items-center justify-between mb-4">
+    <div style={{ maxWidth: 480 }}>
+      <div className="glass" style={{ padding: 20, marginBottom: 16 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
           <div>
-            <p className="font-bold text-gray-900">برنامج النقاط</p>
-            <p className="text-sm text-gray-500 mt-0.5">اكسب ولاء زبائنك بنظام مكافآت</p>
+            <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>برنامج النقاط</p>
+            <p style={{ fontSize: 12, color: 'var(--text-2)', marginTop: 3 }}>اكسب ولاء زبائنك بنظام مكافآت</p>
           </div>
-          <button onClick={() => setEnabled(!enabled)} className={`relative w-12 h-6 rounded-full transition-colors ${enabled ? 'bg-green-500' : 'bg-gray-200'}`}>
-            <span className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-all ${enabled ? 'right-1' : 'left-1'}`} />
-          </button>
+          <Toggle value={enabled} onChange={setEnabled} />
         </div>
 
         {enabled && (
-          <div className="space-y-4 pt-4 border-t border-gray-100">
-            <div className="flex items-center gap-3">
-              <span className="text-sm text-gray-600 whitespace-nowrap">كل</span>
-              <input type="number" value={spendPer} onChange={e => setSpendPer(e.target.value)} className="w-16 px-3 py-2 border border-gray-200 rounded-xl text-sm text-center outline-none focus:border-orange-400" />
-              <span className="text-sm text-gray-600 whitespace-nowrap">ج = </span>
-              <input type="number" value={pointsPer} onChange={e => setPointsPer(e.target.value)} className="w-16 px-3 py-2 border border-gray-200 rounded-xl text-sm text-center outline-none focus:border-orange-400" />
-              <span className="text-sm text-gray-600 whitespace-nowrap">نقطة</span>
+          <div style={{ paddingTop: 16, borderTop: '1px solid var(--border)' }}>
+            <div className="flex items-center gap-3" style={{ marginBottom: 12 }}>
+              <span style={{ fontSize: 13, color: 'var(--text-2)', whiteSpace: 'nowrap' }}>كل</span>
+              <input type="number" value={spendPer} onChange={e => setSpendPer(e.target.value)} style={{ ...inputStyle, width: 64, textAlign: 'center' }} />
+              <span style={{ fontSize: 13, color: 'var(--text-2)', whiteSpace: 'nowrap' }}>ج =</span>
+              <input type="number" value={pointsPer} onChange={e => setPointsPer(e.target.value)} style={{ ...inputStyle, width: 64, textAlign: 'center' }} />
+              <span style={{ fontSize: 13, color: 'var(--text-2)', whiteSpace: 'nowrap' }}>نقطة</span>
             </div>
             <div className="flex items-center gap-3">
-              <input type="number" value={redeemAt} onChange={e => setRedeemAt(e.target.value)} className="w-20 px-3 py-2 border border-gray-200 rounded-xl text-sm text-center outline-none focus:border-orange-400" />
-              <span className="text-sm text-gray-600 whitespace-nowrap">نقطة = خصم</span>
-              <input type="number" value={discountVal} onChange={e => setDiscountVal(e.target.value)} className="w-16 px-3 py-2 border border-gray-200 rounded-xl text-sm text-center outline-none focus:border-orange-400" />
-              <span className="text-sm text-gray-600">ج</span>
+              <input type="number" value={redeemAt} onChange={e => setRedeemAt(e.target.value)} style={{ ...inputStyle, width: 80, textAlign: 'center' }} />
+              <span style={{ fontSize: 13, color: 'var(--text-2)', whiteSpace: 'nowrap' }}>نقطة = خصم</span>
+              <input type="number" value={discountVal} onChange={e => setDiscountVal(e.target.value)} style={{ ...inputStyle, width: 64, textAlign: 'center' }} />
+              <span style={{ fontSize: 13, color: 'var(--text-2)' }}>ج</span>
             </div>
           </div>
         )}
       </div>
 
       {enabled && (
-        <div className="bg-white rounded-2xl border border-gray-100 p-5">
-          <p className="font-bold text-gray-900 mb-4">إحصائيات هذا الشهر</p>
-          <div className="grid grid-cols-2 gap-4">
+        <div className="glass" style={{ padding: 20, marginBottom: 16 }}>
+          <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14, marginBottom: 14 }}>إحصائيات هذا الشهر</p>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
             {[
               { label: 'أعضاء البرنامج', value: '234' },
               { label: 'نقاط محصودة', value: '12,400' },
               { label: 'خصومات مستخدمة', value: '89 (890 ج)' },
               { label: 'متوسط الطلبات/عضو', value: '3.2 طلب/شهر' },
             ].map(s => (
-              <div key={s.label} className="bg-gray-50 rounded-xl p-4">
-                <p className="text-xl font-bold text-gray-900">{s.value}</p>
-                <p className="text-xs text-gray-500 mt-0.5">{s.label}</p>
+              <div key={s.label} style={{ background: 'var(--surface-2)', borderRadius: 12, padding: '12px 14px', border: '1px solid var(--border)' }}>
+                <p className="num" style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)' }}>{s.value}</p>
+                <p style={{ fontSize: 11, color: 'var(--text-2)', marginTop: 3 }}>{s.label}</p>
               </div>
             ))}
           </div>
         </div>
       )}
 
-      <button className="w-full max-w-xs py-3 bg-orange-500 text-white rounded-xl font-semibold hover:bg-orange-600">
+      <button style={{ padding: '11px 24px', background: 'var(--accent)', color: 'white', borderRadius: 10, fontWeight: 600, fontSize: 13, border: 'none', cursor: 'pointer' }}>
         حفظ الإعدادات
       </button>
     </div>
@@ -82,48 +97,53 @@ function WhatsappTab() {
   ]
 
   return (
-    <div className="max-w-lg space-y-5">
-      <div className="bg-white rounded-2xl border border-gray-100 p-5">
-        <p className="font-bold text-gray-900 mb-4">المستهدفون</p>
-        <div className="space-y-2">
+    <div style={{ maxWidth: 480 }}>
+      <div className="glass" style={{ padding: 20, marginBottom: 16 }}>
+        <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14, marginBottom: 12 }}>المستهدفون</p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           {targets.map(t => (
             <button
               key={t.key}
               onClick={() => setTarget(t.key)}
-              className={`w-full text-right px-4 py-3 rounded-xl border text-sm font-medium flex items-center justify-between transition-all ${
-                target === t.key ? 'border-orange-400 bg-orange-50 text-orange-700' : 'border-gray-200 hover:bg-gray-50'
-              }`}
+              style={{
+                width: '100%', textAlign: 'right', padding: '10px 14px', borderRadius: 10, fontSize: 13, fontWeight: 500, display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', transition: 'all 0.15s',
+                border: `1px solid ${target === t.key ? 'var(--accent)' : 'var(--border)'}`,
+                background: target === t.key ? 'var(--accent-muted)' : 'transparent',
+                color: target === t.key ? 'var(--accent)' : 'var(--text-2)',
+              }}
             >
               <span>{t.label}</span>
-              <span className="text-xs font-bold text-gray-400">{t.count} شخص</span>
+              <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-3)' }}>{t.count} شخص</span>
             </button>
           ))}
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl border border-gray-100 p-5">
-        <p className="font-bold text-gray-900 mb-3">الرسالة</p>
+      <div className="glass" style={{ padding: 20, marginBottom: 16 }}>
+        <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14, marginBottom: 10 }}>الرسالة</p>
         <textarea
           value={message}
           onChange={e => setMessage(e.target.value)}
-          className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm outline-none focus:border-orange-400 resize-none"
+          style={{ ...inputStyle, resize: 'none' }}
           rows={4}
           placeholder="اكتب رسالتك..."
+          onFocus={e => e.target.style.borderColor = 'var(--accent)'}
+          onBlur={e => e.target.style.borderColor = 'var(--border)'}
         />
-        <p className="text-xs text-gray-400 mt-2">المتغيرات المتاحة: &#123;الاسم&#125; &#123;آخر_طلب&#125;</p>
+        <p style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 6 }}>المتغيرات المتاحة: &#123;الاسم&#125; &#123;آخر_طلب&#125;</p>
         {preview && (
-          <div className="mt-3 bg-green-50 border border-green-200 rounded-xl p-3">
-            <p className="text-xs font-semibold text-green-700 mb-1">معاينة</p>
-            <p className="text-sm text-green-800 whitespace-pre-wrap">{preview}</p>
+          <div style={{ marginTop: 12, background: 'var(--green-muted)', border: '1px solid rgba(34,197,94,0.2)', borderRadius: 10, padding: 12 }}>
+            <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--green)', marginBottom: 4 }}>معاينة</p>
+            <p style={{ fontSize: 13, color: 'var(--text)', whiteSpace: 'pre-wrap' }}>{preview}</p>
           </div>
         )}
       </div>
 
       <div className="flex gap-3">
-        <button className="flex-1 py-3 border border-gray-200 text-gray-700 rounded-xl font-semibold hover:bg-gray-50">
+        <button style={{ flex: 1, padding: '11px', border: '1px solid var(--border)', color: 'var(--text-2)', borderRadius: 10, fontWeight: 600, fontSize: 13, background: 'transparent', cursor: 'pointer' }}>
           جدولة لوقت معين
         </button>
-        <button className="flex-1 py-3 bg-green-500 text-white rounded-xl font-semibold hover:bg-green-600">
+        <button style={{ flex: 1, padding: '11px', background: 'var(--green)', color: 'white', borderRadius: 10, fontWeight: 600, fontSize: 13, border: 'none', cursor: 'pointer' }}>
           إرسال الآن
         </button>
       </div>
@@ -149,55 +169,61 @@ function CouponsTab() {
   }
 
   return (
-    <div className="max-w-2xl space-y-4">
-      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-        <div className="p-5 border-b border-gray-50 flex items-center justify-between">
-          <p className="font-bold text-gray-900">الكوبونات</p>
-          <button onClick={() => setShowForm(!showForm)} className="flex items-center gap-2 bg-orange-500 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-orange-600">
-            <Plus size={15} /> كوبون جديد
+    <div style={{ maxWidth: 560 }}>
+      <div className="glass" style={{ overflow: 'hidden' }}>
+        <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>الكوبونات</p>
+          <button onClick={() => setShowForm(!showForm)} style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'var(--accent)', color: 'white', padding: '7px 14px', borderRadius: 10, fontSize: 13, fontWeight: 600, border: 'none', cursor: 'pointer' }}>
+            <Plus size={14} /> كوبون جديد
           </button>
         </div>
+
         {showForm && (
-          <div className="p-5 border-b border-orange-100 bg-orange-50/50 space-y-3">
-            <div className="flex gap-3">
-              <div className="flex-1">
-                <label className="block text-xs font-semibold text-gray-600 mb-1.5">كود الخصم</label>
+          <div style={{ padding: 16, borderBottom: '1px solid var(--border)', background: 'var(--surface-2)' }}>
+            <div className="flex gap-3 mb-3">
+              <div style={{ flex: 1 }}>
+                <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: 'var(--text-2)', marginBottom: 5 }}>كود الخصم</label>
                 <div className="flex gap-2">
-                  <input type="text" value={form.code} onChange={e => setForm({ ...form, code: e.target.value.toUpperCase() })} placeholder="PROMO20" className="flex-1 px-3 py-2 border border-gray-200 rounded-xl text-sm outline-none focus:border-orange-400" />
-                  <button onClick={generateCode} className="px-3 py-2 border border-gray-200 rounded-xl text-xs font-medium hover:bg-white">توليد</button>
+                  <input type="text" value={form.code} onChange={e => setForm({ ...form, code: e.target.value.toUpperCase() })} placeholder="PROMO20" style={{ ...inputStyle, flex: 1 }}
+                    onFocus={e => e.target.style.borderColor = 'var(--accent)'}
+                    onBlur={e => e.target.style.borderColor = 'var(--border)'}
+                  />
+                  <button onClick={generateCode} style={{ padding: '9px 12px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 12, fontWeight: 600, background: 'transparent', color: 'var(--text-2)', cursor: 'pointer', whiteSpace: 'nowrap' }}>توليد</button>
                 </div>
               </div>
-              <div className="w-28">
-                <label className="block text-xs font-semibold text-gray-600 mb-1.5">القيمة</label>
+              <div style={{ width: 120 }}>
+                <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: 'var(--text-2)', marginBottom: 5 }}>القيمة</label>
                 <div className="flex">
-                  <input type="number" value={form.value} onChange={e => setForm({ ...form, value: e.target.value })} placeholder="20" className="flex-1 w-full px-3 py-2 border border-gray-200 rounded-r-none rounded-xl text-sm outline-none focus:border-orange-400" />
-                  <select value={form.type} onChange={e => setForm({ ...form, type: e.target.value })} className="px-2 py-2 border border-r-0 border-gray-200 rounded-l-xl text-xs bg-gray-50 outline-none">
+                  <input type="number" value={form.value} onChange={e => setForm({ ...form, value: e.target.value })} placeholder="20" style={{ ...inputStyle, flex: 1, borderRadius: '10px 0 0 10px' }} />
+                  <select value={form.type} onChange={e => setForm({ ...form, type: e.target.value })} style={{ padding: '9px 8px', border: '1px solid var(--border)', borderRight: 'none', borderRadius: '0 10px 10px 0', background: 'var(--surface-3)', color: 'var(--text-2)', fontSize: 12, outline: 'none' }}>
                     <option value="percent">%</option>
                     <option value="fixed">ج</option>
                   </select>
                 </div>
               </div>
             </div>
-            <button onClick={save} disabled={!form.code || !form.value} className="w-full py-2.5 bg-orange-500 text-white rounded-xl text-sm font-semibold disabled:opacity-40 hover:bg-orange-600">
+            <button onClick={save} disabled={!form.code || !form.value} style={{ width: '100%', padding: '10px', background: form.code && form.value ? 'var(--accent)' : 'var(--surface-3)', color: form.code && form.value ? 'white' : 'var(--text-3)', borderRadius: 10, fontSize: 13, fontWeight: 600, border: 'none', cursor: form.code && form.value ? 'pointer' : 'not-allowed' }}>
               حفظ الكوبون
             </button>
           </div>
         )}
-        <div className="divide-y divide-gray-50">
-          {coupons.map(c => (
-            <div key={c.id} className="flex items-center px-5 py-3 gap-4">
-              <button className="flex items-center gap-2 font-mono font-bold text-gray-800 hover:text-orange-600 transition-colors">
-                {c.code}
-                <Copy size={13} className="text-gray-400" />
-              </button>
-              <span className="bg-orange-100 text-orange-700 text-xs font-bold px-2 py-0.5 rounded-full">{c.discount}</span>
-              <span className="text-sm text-gray-500 mr-auto">
-                {c.used}{c.max ? `/${c.max}` : ''} استخدام
-              </span>
-              {c.expiry && <span className="text-xs text-gray-400">ينتهي {c.expiry}</span>}
-            </div>
-          ))}
-        </div>
+
+        {coupons.map((c, i) => (
+          <div key={c.id} style={{ display: 'flex', alignItems: 'center', padding: '12px 20px', gap: 12, borderBottom: i < coupons.length - 1 ? '1px solid var(--border)' : 'none', transition: 'background 0.15s' }}
+            onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-2)'}
+            onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+          >
+            <button className="flex items-center gap-2" style={{ fontFamily: 'Inter, monospace', fontWeight: 700, fontSize: 14, color: 'var(--text)', background: 'none', border: 'none', cursor: 'pointer' }}>
+              {c.code}
+              <Copy size={12} style={{ color: 'var(--text-3)' }} />
+            </button>
+            <span style={{ fontSize: 11, fontWeight: 700, padding: '3px 8px', borderRadius: 6, background: 'var(--accent-muted)', color: 'var(--accent)' }}>{c.discount}</span>
+            <span style={{ fontSize: 12, color: 'var(--text-3)', marginRight: 'auto' }}>
+              {c.used}{c.max ? `/${c.max}` : ''} استخدام
+            </span>
+            {c.expiry && <span style={{ fontSize: 11, color: 'var(--text-3)' }}>ينتهي {c.expiry}</span>}
+          </div>
+        ))}
       </div>
     </div>
   )
@@ -213,9 +239,12 @@ export default function Marketing() {
           <button
             key={i}
             onClick={() => setActiveTab(i)}
-            className={`px-5 py-2 rounded-xl text-sm font-semibold transition-all ${
-              activeTab === i ? 'bg-orange-500 text-white' : 'bg-white text-gray-600 border border-gray-100 hover:bg-gray-50'
-            }`}
+            style={{
+              padding: '7px 16px', borderRadius: 10, fontSize: 13, fontWeight: 600, cursor: 'pointer', border: '1px solid', transition: 'all 0.15s',
+              background: activeTab === i ? 'var(--accent)' : 'var(--surface)',
+              borderColor: activeTab === i ? 'var(--accent)' : 'var(--border)',
+              color: activeTab === i ? 'white' : 'var(--text-2)',
+            }}
           >
             {t}
           </button>

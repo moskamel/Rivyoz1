@@ -16,13 +16,9 @@ const initialItems = [
 ]
 
 function getStatus(qty, min) {
-  if (qty === 0) return { label: 'نفد', class: 'bg-red-100 text-red-700' }
-  if (qty < min) return { label: 'منخفض', class: 'bg-orange-100 text-orange-700' }
-  return { label: 'متوفر', class: 'bg-green-100 text-green-700' }
-}
-
-function getLowItems(items) {
-  return items.filter(i => i.qty < i.min)
+  if (qty === 0) return { label: 'نفد', bg: 'var(--red-muted)', color: 'var(--red)' }
+  if (qty < min) return { label: 'منخفض', bg: 'var(--yellow-muted)', color: 'var(--yellow)' }
+  return { label: 'متوفر', bg: 'var(--green-muted)', color: 'var(--green)' }
 }
 
 export default function Inventory() {
@@ -30,8 +26,8 @@ export default function Inventory() {
   const [editingId, setEditingId] = useState(null)
   const [editQty, setEditQty] = useState('')
 
-  const lowItems = getLowItems(items)
-  const totalValue = items.reduce((sum, i) => sum + i.qty * 10, 0) // mock value calculation
+  const lowItems = items.filter(i => i.qty < i.min)
+  const totalValue = items.reduce((sum, i) => sum + i.qty * 10, 0)
   const outOfStock = items.filter(i => i.qty === 0).length
 
   function startEdit(item) {
@@ -57,101 +53,107 @@ export default function Inventory() {
     <Layout title="المخزون">
       {/* Low stock alert */}
       {lowItems.length > 0 && (
-        <div className="bg-red-50 border border-red-200 rounded-2xl p-4 mb-5 flex items-center gap-3">
-          <AlertTriangle size={20} className="text-red-500 flex-shrink-0" />
-          <p className="font-bold text-red-700">
+        <div style={{ background: 'var(--red-muted)', border: '1px solid rgba(248,113,113,0.2)', borderRadius: 14, padding: '12px 16px', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 10 }}>
+          <AlertTriangle size={18} style={{ color: 'var(--red)', flexShrink: 0 }} />
+          <p style={{ fontWeight: 700, color: 'var(--red)', fontSize: 13 }}>
             {lowItems.length} {lowItems.length === 1 ? 'صنف على وشك النفاد' : 'أصناف على وشك النفاد'} —{' '}
-            <span className="font-normal">{lowItems.map(i => i.name).join('، ')}</span>
+            <span style={{ fontWeight: 400 }}>{lowItems.map(i => i.name).join('، ')}</span>
           </p>
         </div>
       )}
 
       {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 20 }}>
         {[
-          { label: 'إجمالي الأصناف', value: items.length, icon: Package, color: 'bg-orange-100 text-orange-600' },
-          { label: 'قيمة المخزون (تقريبي)', value: `${totalValue.toLocaleString('ar-EG')} ج`, icon: ShoppingCart, color: 'bg-blue-100 text-blue-600' },
-          { label: 'أصناف منخفضة', value: lowItems.length, icon: TrendingDown, color: 'bg-red-100 text-red-600' },
-          { label: 'طلبات اليوم', value: 3, icon: ShoppingCart, color: 'bg-green-100 text-green-600' },
+          { label: 'إجمالي الأصناف', value: items.length, icon: Package, color: 'var(--accent)' },
+          { label: 'قيمة المخزون (تقريبي)', value: `${totalValue.toLocaleString('ar-EG')} ج`, icon: ShoppingCart, color: 'var(--blue)' },
+          { label: 'أصناف منخفضة', value: lowItems.length, icon: TrendingDown, color: 'var(--red)' },
+          { label: 'طلبات اليوم', value: 3, icon: ShoppingCart, color: 'var(--green)' },
         ].map((s, i) => (
-          <div key={i} className="bg-white rounded-2xl p-5 border border-gray-100">
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${s.color}`}>
-              <s.icon size={20} />
+          <div key={i} className="glass" style={{ padding: 20 }}>
+            <div style={{ width: 34, height: 34, borderRadius: 10, background: s.color + '18', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>
+              <s.icon size={17} style={{ color: s.color }} />
             </div>
-            <p className="text-2xl font-black text-gray-900">{s.value}</p>
-            <p className="text-sm text-gray-500 mt-1">{s.label}</p>
+            <p className="num" style={{ fontSize: 22, fontWeight: 800, color: 'var(--text)', lineHeight: 1 }}>{s.value}</p>
+            <p style={{ fontSize: 11, color: 'var(--text-2)', marginTop: 5 }}>{s.label}</p>
           </div>
         ))}
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-        <div className="flex items-center justify-between p-4 border-b border-gray-100">
-          <p className="font-bold text-gray-900">قائمة المخزون</p>
-          <button className="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-sm font-bold transition-colors">
-            <Download size={15} />
+      <div className="glass" style={{ overflow: 'hidden' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 20px', borderBottom: '1px solid var(--border)' }}>
+          <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>قائمة المخزون</p>
+          <button style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '7px 14px', background: 'var(--surface-2)', color: 'var(--text-2)', border: '1px solid var(--border)', borderRadius: 10, fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
+            <Download size={13} />
             تصدير
           </button>
         </div>
-        <div className="overflow-x-auto">
-          <table className="w-full">
+        <div style={{ overflowX: 'auto' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
-              <tr className="border-b border-gray-100 bg-gray-50/50">
+              <tr style={{ borderBottom: '1px solid var(--border)', background: 'var(--surface-2)' }}>
                 {['الصنف', 'الوحدة', 'الكمية الحالية', 'الحد الأدنى', 'الحالة', 'آخر تحديث', 'الإجراءات'].map(h => (
-                  <th key={h} className="text-right px-5 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">{h}</th>
+                  <th key={h} style={{ textAlign: 'right', padding: '10px 16px', fontSize: 11, fontWeight: 700, color: 'var(--text-3)', letterSpacing: '0.05em' }}>{h}</th>
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-50">
+            <tbody>
               {items.map(item => {
                 const status = getStatus(item.qty, item.min)
                 const isEditing = editingId === item.id
                 const isLow = item.qty < item.min
 
                 return (
-                  <tr key={item.id} className={`transition-colors ${isLow ? 'bg-red-50/30 hover:bg-red-50/50' : 'hover:bg-gray-50/50'}`}>
-                    <td className="px-5 py-3.5">
+                  <tr key={item.id}
+                    style={{ borderBottom: '1px solid var(--border)', background: isLow ? 'rgba(248,113,113,0.03)' : 'transparent', transition: 'background 0.15s' }}
+                    onMouseEnter={e => e.currentTarget.style.background = isLow ? 'rgba(248,113,113,0.06)' : 'var(--surface-2)'}
+                    onMouseLeave={e => e.currentTarget.style.background = isLow ? 'rgba(248,113,113,0.03)' : 'transparent'}
+                  >
+                    <td style={{ padding: '12px 16px' }}>
                       <div className="flex items-center gap-2">
-                        {isLow && <AlertTriangle size={14} className="text-orange-500 flex-shrink-0" />}
-                        <p className="font-semibold text-gray-900 text-sm">{item.name}</p>
+                        {isLow && <AlertTriangle size={13} style={{ color: 'var(--yellow)', flexShrink: 0 }} />}
+                        <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>{item.name}</p>
                       </div>
                     </td>
-                    <td className="px-5 py-3.5 text-sm text-gray-600">{item.unit}</td>
-                    <td className="px-5 py-3.5">
+                    <td style={{ padding: '12px 16px', fontSize: 12, color: 'var(--text-2)' }}>{item.unit}</td>
+                    <td style={{ padding: '12px 16px' }}>
                       {isEditing ? (
                         <input
                           type="number"
                           value={editQty}
                           onChange={e => setEditQty(e.target.value)}
-                          className="w-20 px-2 py-1 border border-orange-400 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-300"
+                          style={{ width: 70, padding: '5px 8px', border: '1px solid var(--accent)', borderRadius: 8, background: 'var(--surface-2)', color: 'var(--text)', fontSize: 13, outline: 'none' }}
                           autoFocus
                           min="0"
                         />
                       ) : (
-                        <p className={`font-bold text-sm ${item.qty < item.min ? 'text-red-600' : 'text-gray-900'}`}>
+                        <p className="num" style={{ fontSize: 13, fontWeight: 700, color: item.qty < item.min ? 'var(--red)' : 'var(--text)' }}>
                           {item.qty}
                         </p>
                       )}
                     </td>
-                    <td className="px-5 py-3.5 text-sm text-gray-500">{item.min}</td>
-                    <td className="px-5 py-3.5">
-                      <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${status.class}`}>
+                    <td style={{ padding: '12px 16px' }}>
+                      <span className="num" style={{ fontSize: 12, color: 'var(--text-3)' }}>{item.min}</span>
+                    </td>
+                    <td style={{ padding: '12px 16px' }}>
+                      <span style={{ fontSize: 11, fontWeight: 700, padding: '3px 10px', borderRadius: 6, background: status.bg, color: status.color }}>
                         {status.label}
                       </span>
                     </td>
-                    <td className="px-5 py-3.5 text-sm text-gray-400">{item.lastUpdated}</td>
-                    <td className="px-5 py-3.5">
+                    <td style={{ padding: '12px 16px', fontSize: 12, color: 'var(--text-3)' }}>{item.lastUpdated}</td>
+                    <td style={{ padding: '12px 16px' }}>
                       {isEditing ? (
                         <div className="flex items-center gap-1.5">
                           <button
                             onClick={() => saveEdit(item.id)}
-                            className="p-1.5 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+                            style={{ width: 28, height: 28, background: 'var(--green)', color: 'white', borderRadius: 8, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                           >
                             <Check size={13} />
                           </button>
                           <button
                             onClick={cancelEdit}
-                            className="p-1.5 bg-gray-200 text-gray-600 rounded-lg hover:bg-gray-300 transition-colors"
+                            style={{ width: 28, height: 28, background: 'var(--surface-2)', color: 'var(--text-2)', borderRadius: 8, border: '1px solid var(--border)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                           >
                             <X size={13} />
                           </button>
@@ -159,9 +161,9 @@ export default function Inventory() {
                       ) : (
                         <button
                           onClick={() => startEdit(item)}
-                          className="flex items-center gap-1.5 px-3 py-1.5 bg-orange-50 text-orange-600 rounded-lg text-xs font-bold hover:bg-orange-100 transition-colors"
+                          style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '5px 10px', background: 'var(--accent-muted)', color: 'var(--accent)', borderRadius: 8, fontSize: 11, fontWeight: 700, border: 'none', cursor: 'pointer' }}
                         >
-                          <Edit3 size={13} />
+                          <Edit3 size={12} />
                           تحديث الكمية
                         </button>
                       )}

@@ -14,75 +14,72 @@ const mockCustomers = [
 ]
 
 const levelConfig = {
-  beginner: { label: 'مبتدئ', class: 'bg-gray-100 text-gray-600' },
-  contributor: { label: 'مساهم', class: 'bg-blue-100 text-blue-700' },
-  trusted: { label: 'موثوق', class: 'bg-green-100 text-green-700' },
-  expert: { label: 'خبير', class: 'bg-amber-100 text-amber-700' },
+  beginner: { label: 'مبتدئ', bg: 'var(--surface-2)', color: 'var(--text-2)' },
+  contributor: { label: 'مساهم', bg: 'var(--blue-muted)', color: 'var(--blue)' },
+  trusted: { label: 'موثوق', bg: 'var(--green-muted)', color: 'var(--green)' },
+  expert: { label: 'خبير', bg: 'var(--yellow-muted)', color: 'var(--yellow)' },
 }
 
 function CustomerDrawer({ customer, onClose }) {
+  const lvl = levelConfig[customer.level]
   return (
-    <div className="fixed inset-0 z-50 flex" dir="rtl">
-      <div className="flex-1 bg-black/30 backdrop-blur-sm" onClick={onClose} />
-      <div className="w-96 bg-white shadow-2xl flex flex-col overflow-y-auto">
-        {/* Header */}
-        <div className="p-5 border-b border-gray-100 flex items-start justify-between">
+    <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex' }} dir="rtl">
+      <div style={{ flex: 1, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)' }} onClick={onClose} />
+      <div style={{ width: 380, background: 'var(--surface)', borderRight: '1px solid var(--border)', display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
+        <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-orange-100 rounded-2xl flex items-center justify-center text-orange-600 font-black text-lg">
+            <div style={{ width: 44, height: 44, background: 'var(--accent-muted)', borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)', fontWeight: 900, fontSize: 17, border: '1px solid rgba(249,115,22,0.2)' }}>
               {customer.name[0]}
             </div>
             <div>
-              <p className="font-bold text-gray-900">{customer.name}</p>
-              <p className="text-sm text-gray-500">{customer.phone}</p>
-              <span className={`text-xs font-bold px-2 py-0.5 rounded-full mt-1 inline-block ${levelConfig[customer.level].class}`}>
-                {levelConfig[customer.level].label}
+              <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>{customer.name}</p>
+              <p className="num" style={{ fontSize: 12, color: 'var(--text-2)', marginTop: 2 }}>{customer.phone}</p>
+              <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 6, background: lvl.bg, color: lvl.color, display: 'inline-block', marginTop: 4 }}>
+                {lvl.label}
               </span>
             </div>
           </div>
-          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-xl text-gray-400">
-            <X size={18} />
+          <button onClick={onClose} style={{ width: 28, height: 28, borderRadius: 8, border: 'none', background: 'var(--surface-2)', color: 'var(--text-2)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <X size={14} />
           </button>
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-2 gap-3 p-5">
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, padding: 16 }}>
           {[
             { label: 'إجمالي الطلبات', value: customer.orders },
             { label: 'إجمالي الإنفاق', value: `${customer.spent} ج` },
             { label: 'متوسط الطلب', value: `${customer.avgOrder} ج` },
             { label: 'النقاط المكتسبة', value: customer.points },
           ].map((s, i) => (
-            <div key={i} className="bg-gray-50 rounded-xl p-3">
-              <p className="text-xl font-black text-gray-900">{s.value}</p>
-              <p className="text-xs text-gray-500 mt-0.5">{s.label}</p>
+            <div key={i} style={{ background: 'var(--surface-2)', borderRadius: 12, padding: '12px 14px', border: '1px solid var(--border)' }}>
+              <p style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)', fontFamily: 'Inter' }}>{s.value}</p>
+              <p style={{ fontSize: 11, color: 'var(--text-2)', marginTop: 2 }}>{s.label}</p>
             </div>
           ))}
         </div>
 
-        {/* Last 3 orders */}
-        <div className="px-5 pb-5">
-          <p className="font-bold text-gray-900 mb-3 text-sm">آخر الطلبات</p>
-          <div className="space-y-2">
+        <div style={{ padding: '0 16px 16px' }}>
+          <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 13, marginBottom: 10 }}>آخر الطلبات</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {customer.recentOrders.map((order, i) => (
-              <div key={i} className="flex items-center justify-between py-2.5 px-3 bg-gray-50 rounded-xl">
+              <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', background: 'var(--surface-2)', borderRadius: 10, border: '1px solid var(--border)' }}>
                 <div>
-                  <p className="text-sm font-semibold text-gray-800">#{order.id} · {order.items}</p>
-                  <p className="text-xs text-gray-400 mt-0.5">{order.date}</p>
+                  <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>#{order.id} · {order.items}</p>
+                  <p style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 2 }}>{order.date}</p>
                 </div>
-                <p className="font-bold text-gray-900 text-sm">{order.total} ج</p>
+                <p className="num" style={{ fontWeight: 700, color: 'var(--text)', fontSize: 13 }}>{order.total} ج</p>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Actions */}
-        <div className="p-5 border-t border-gray-100 mt-auto space-y-2">
-          <button className="w-full py-3 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl flex items-center justify-center gap-2 transition-all">
-            <Send size={16} />
+        <div style={{ padding: 16, borderTop: '1px solid var(--border)', marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <button style={{ width: '100%', padding: '12px', background: 'var(--accent)', color: 'white', fontWeight: 700, borderRadius: 12, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, fontSize: 14 }}>
+            <Send size={15} />
             إرسال كوبون
           </button>
-          <button className="w-full py-3 bg-green-50 text-green-700 hover:bg-green-100 font-bold rounded-xl flex items-center justify-center gap-2 transition-all">
-            <MessageCircle size={16} />
+          <button style={{ width: '100%', padding: '12px', background: 'var(--green-muted)', color: 'var(--green)', fontWeight: 700, borderRadius: 12, border: '1px solid rgba(34,197,94,0.2)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, fontSize: 14 }}>
+            <MessageCircle size={15} />
             رسالة واتساب
           </button>
         </div>
@@ -102,84 +99,97 @@ export default function Customers() {
   return (
     <Layout title="زبائني">
       {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 20 }}>
         {[
-          { label: 'إجمالي الزبائن', value: '234', icon: Users, color: 'bg-orange-100 text-orange-600' },
-          { label: 'زبائن جدد هذا الشهر', value: '45', icon: TrendingUp, color: 'bg-green-100 text-green-600' },
-          { label: 'متوسط الطلبات', value: '3.2', icon: ShoppingBag, color: 'bg-blue-100 text-blue-600' },
-          { label: 'أعلى قيمة عميل', value: '580 ج', icon: Star, color: 'bg-amber-100 text-amber-600' },
+          { label: 'إجمالي الزبائن', value: '234', icon: Users, color: 'var(--accent)' },
+          { label: 'زبائن جدد هذا الشهر', value: '45', icon: TrendingUp, color: 'var(--green)' },
+          { label: 'متوسط الطلبات', value: '3.2', icon: ShoppingBag, color: 'var(--blue)' },
+          { label: 'أعلى قيمة عميل', value: '580 ج', icon: Star, color: 'var(--yellow)' },
         ].map((s, i) => (
-          <div key={i} className="bg-white rounded-2xl p-5 border border-gray-100">
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${s.color}`}>
-              <s.icon size={20} />
+          <div key={i} className="glass" style={{ padding: 20 }}>
+            <div style={{ width: 34, height: 34, borderRadius: 10, background: s.color + '18', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>
+              <s.icon size={17} style={{ color: s.color }} />
             </div>
-            <p className="text-2xl font-black text-gray-900">{s.value}</p>
-            <p className="text-sm text-gray-500 mt-1">{s.label}</p>
+            <p className="num" style={{ fontSize: 22, fontWeight: 800, color: 'var(--text)', lineHeight: 1 }}>{s.value}</p>
+            <p style={{ fontSize: 11, color: 'var(--text-2)', marginTop: 5 }}>{s.label}</p>
           </div>
         ))}
       </div>
 
-      {/* Search */}
-      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-        <div className="p-4 border-b border-gray-100">
-          <div className="relative">
-            <Search size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
+      {/* Table */}
+      <div className="glass" style={{ overflow: 'hidden' }}>
+        <div style={{ padding: 14, borderBottom: '1px solid var(--border)' }}>
+          <div style={{ position: 'relative' }}>
+            <Search size={15} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-3)' }} />
             <input
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="ابحث بالاسم أو رقم الهاتف..."
-              className="w-full pr-9 pl-4 py-2.5 bg-gray-50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-300 border border-transparent"
+              style={{ width: '100%', padding: '9px 38px 9px 14px', background: 'var(--surface-2)', border: '1px solid var(--border)', borderRadius: 10, color: 'var(--text)', fontSize: 13, outline: 'none', boxSizing: 'border-box', fontFamily: 'Cairo, sans-serif' }}
+              onFocus={e => e.target.style.borderColor = 'var(--accent)'}
+              onBlur={e => e.target.style.borderColor = 'var(--border)'}
             />
           </div>
         </div>
 
-        {/* Table */}
-        <div className="overflow-x-auto">
-          <table className="w-full">
+        <div style={{ overflowX: 'auto' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
-              <tr className="border-b border-gray-100 bg-gray-50/50">
+              <tr style={{ borderBottom: '1px solid var(--border)' }}>
                 {['الاسم', 'الهاتف', 'عدد الطلبات', 'إجمالي الإنفاق', 'آخر طلب', 'المستوى', 'الإجراءات'].map(h => (
-                  <th key={h} className="text-right px-5 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">{h}</th>
+                  <th key={h} style={{ textAlign: 'right', padding: '10px 16px', fontSize: 11, fontWeight: 700, color: 'var(--text-3)', letterSpacing: '0.05em', background: 'var(--surface-2)' }}>{h}</th>
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-50">
-              {filtered.map(c => (
-                <tr key={c.id} className="hover:bg-gray-50/50 transition-colors">
-                  <td className="px-5 py-3.5">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-orange-100 rounded-xl flex items-center justify-center text-orange-600 font-black text-sm flex-shrink-0">
-                        {c.name[0]}
+            <tbody>
+              {filtered.map((c, idx) => {
+                const lvl = levelConfig[c.level]
+                return (
+                  <tr key={c.id} style={{ borderBottom: '1px solid var(--border)', transition: 'background 0.15s' }}
+                    onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-2)'}
+                    onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                  >
+                    <td style={{ padding: '12px 16px' }}>
+                      <div className="flex items-center gap-2.5">
+                        <div style={{ width: 30, height: 30, background: 'var(--accent-muted)', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)', fontWeight: 800, fontSize: 12, flexShrink: 0 }}>
+                          {c.name[0]}
+                        </div>
+                        <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>{c.name}</p>
                       </div>
-                      <p className="font-semibold text-gray-900 text-sm">{c.name}</p>
-                    </div>
-                  </td>
-                  <td className="px-5 py-3.5 text-sm text-gray-600 font-mono">{c.phone}</td>
-                  <td className="px-5 py-3.5 text-sm font-bold text-gray-900">{c.orders}</td>
-                  <td className="px-5 py-3.5 text-sm font-bold text-gray-900">{c.spent.toLocaleString('ar-EG')} ج</td>
-                  <td className="px-5 py-3.5 text-sm text-gray-500">{c.lastOrder}</td>
-                  <td className="px-5 py-3.5">
-                    <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${levelConfig[c.level].class}`}>
-                      {levelConfig[c.level].label}
-                    </span>
-                  </td>
-                  <td className="px-5 py-3.5">
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => setSelected(c)}
-                        className="flex items-center gap-1.5 px-3 py-1.5 bg-orange-50 text-orange-600 rounded-lg text-xs font-bold hover:bg-orange-100 transition-colors"
-                      >
-                        <Eye size={13} />
-                        عرض
-                      </button>
-                      <button className="flex items-center gap-1.5 px-3 py-1.5 bg-green-50 text-green-700 rounded-lg text-xs font-bold hover:bg-green-100 transition-colors">
-                        <MessageCircle size={13} />
-                        واتساب
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                    </td>
+                    <td style={{ padding: '12px 16px' }}>
+                      <span className="num" style={{ fontSize: 12, color: 'var(--text-2)' }}>{c.phone}</span>
+                    </td>
+                    <td style={{ padding: '12px 16px' }}>
+                      <span className="num" style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>{c.orders}</span>
+                    </td>
+                    <td style={{ padding: '12px 16px' }}>
+                      <span className="num" style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>{c.spent.toLocaleString('ar-EG')} ج</span>
+                    </td>
+                    <td style={{ padding: '12px 16px', fontSize: 12, color: 'var(--text-2)' }}>{c.lastOrder}</td>
+                    <td style={{ padding: '12px 16px' }}>
+                      <span style={{ fontSize: 11, fontWeight: 700, padding: '3px 10px', borderRadius: 6, background: lvl.bg, color: lvl.color }}>
+                        {lvl.label}
+                      </span>
+                    </td>
+                    <td style={{ padding: '12px 16px' }}>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => setSelected(c)}
+                          style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '5px 10px', background: 'var(--accent-muted)', color: 'var(--accent)', borderRadius: 8, fontSize: 11, fontWeight: 700, border: 'none', cursor: 'pointer' }}
+                        >
+                          <Eye size={12} />
+                          عرض
+                        </button>
+                        <button style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '5px 10px', background: 'var(--green-muted)', color: 'var(--green)', borderRadius: 8, fontSize: 11, fontWeight: 700, border: 'none', cursor: 'pointer' }}>
+                          <MessageCircle size={12} />
+                          واتساب
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                )
+              })}
             </tbody>
           </table>
         </div>

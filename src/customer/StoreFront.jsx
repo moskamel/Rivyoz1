@@ -1,9 +1,25 @@
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ShoppingCart, Menu, X, Search, Star } from 'lucide-react'
+import { ShoppingCart, Menu, X, Search, Star, ChevronLeft, ChevronRight, Smartphone, Tag, Flame } from 'lucide-react'
 import { getConfig, getMenuItems, getCategories } from '../lib/restaurantStore'
 import { useCart } from './CartContext'
 
+/* ─── Mock banners ─────────────────────────────────────────── */
+const mockBanners = [
+  { id: 1, title: '🔥 عرض اليوم', subtitle: 'كفتة مشوية × 2 بـ 120 ج بدل 170!', color: ['#F97316', '#EA580C'] },
+  { id: 2, title: '🎉 عرض العيد', subtitle: 'وجبة عائلية كاملة بـ 299 ج', color: ['#8B5CF6', '#7C3AED'] },
+  { id: 3, title: '🚀 توصيل مجاني', subtitle: 'على الطلبات فوق 150 ج', color: ['#10B981', '#059669'] },
+]
+
+/* ─── Mock combos/offers ────────────────────────────────────── */
+const mockCombos = [
+  { id: 101, name: 'كومبو برجر مع عصير', items: '1 برجر + عصير ليمون', price: 89, originalPrice: 115, image: '🍔' },
+  { id: 102, name: 'وجبة الكفتة الكاملة', items: '3 قطع كفتة + خبز + سلطة', price: 120, originalPrice: 155, image: '🥩' },
+  { id: 103, name: 'ترايو الفراخ', items: '2 قطعة فراخ + بطاطس + كولا', price: 145, originalPrice: 185, image: '🍗' },
+  { id: 104, name: 'وجبة عائلية', items: 'مشكل مشويات + أرز + سلطات × 4', price: 299, originalPrice: 370, image: '🍽️' },
+]
+
+/* ─── Nearby restaurants ────────────────────────────────────── */
 const mockNearbyRestaurants = [
   { id: 1, name: 'بيتزا بلازا', category: 'بيتزا', rating: 4.7, deliveryTime: 25, color: '#ef4444', slug: 'pizza-plaza' },
   { id: 2, name: 'كافيه ميترو', category: 'كافيه', rating: 4.5, deliveryTime: 20, color: '#8b5cf6', slug: 'metro-cafe' },
@@ -14,12 +30,193 @@ const mockNearbyRestaurants = [
 
 const categoryFilters = ['الكل', 'مشويات', 'بيتزا', 'كافيه']
 
+/* ─── Banner Carousel ───────────────────────────────────────── */
+function BannerCarousel({ accentColor }) {
+  const [current, setCurrent] = useState(0)
+  const timerRef = useRef(null)
+
+  useEffect(() => {
+    timerRef.current = setInterval(() => setCurrent(c => (c + 1) % mockBanners.length), 4000)
+    return () => clearInterval(timerRef.current)
+  }, [])
+
+  const go = (dir) => {
+    clearInterval(timerRef.current)
+    setCurrent(c => (c + dir + mockBanners.length) % mockBanners.length)
+  }
+
+  const b = mockBanners[current]
+  return (
+    <div style={{ position: 'relative', overflow: 'hidden', height: 180 }}>
+      {/* Slide */}
+      <div
+        key={b.id}
+        style={{
+          width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+          background: `linear-gradient(135deg, ${b.color[0]}, ${b.color[1]})`,
+          transition: 'all 0.4s ease',
+        }}
+      >
+        <p style={{ color: 'white', fontWeight: 900, fontSize: 22, textShadow: '0 2px 8px rgba(0,0,0,0.2)' }}>{b.title}</p>
+        <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: 14, marginTop: 6, fontWeight: 500 }}>{b.subtitle}</p>
+        <button style={{ marginTop: 16, background: 'rgba(255,255,255,0.2)', border: '1px solid rgba(255,255,255,0.3)', color: 'white', padding: '8px 20px', borderRadius: 20, fontSize: 13, fontWeight: 700, cursor: 'pointer', backdropFilter: 'blur(4px)' }}>
+          اطلب الآن
+        </button>
+      </div>
+
+      {/* Arrows */}
+      <button onClick={() => go(-1)} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', width: 32, height: 32, borderRadius: '50%', background: 'rgba(255,255,255,0.2)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', backdropFilter: 'blur(4px)' }}>
+        <ChevronRight size={18} />
+      </button>
+      <button onClick={() => go(1)} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', width: 32, height: 32, borderRadius: '50%', background: 'rgba(255,255,255,0.2)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', backdropFilter: 'blur(4px)' }}>
+        <ChevronLeft size={18} />
+      </button>
+
+      {/* Dots */}
+      <div style={{ position: 'absolute', bottom: 12, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 6 }}>
+        {mockBanners.map((_, i) => (
+          <button key={i} onClick={() => setCurrent(i)} style={{ width: i === current ? 20 : 6, height: 6, borderRadius: 3, background: 'white', opacity: i === current ? 1 : 0.4, border: 'none', cursor: 'pointer', padding: 0, transition: 'all 0.3s' }} />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+/* ─── Popular Slider ────────────────────────────────────────── */
+function PopularSlider({ items, accentColor, onOpen }) {
+  const popular = items.filter(i => i.active && i.bestseller).slice(0, 8)
+  if (popular.length === 0) return null
+
+  return (
+    <div style={{ marginBottom: 8 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '16px 16px 10px' }}>
+        <Flame size={16} style={{ color: accentColor }} />
+        <p style={{ fontWeight: 800, fontSize: 15, color: '#1a1a1a' }}>الأكثر طلباً</p>
+      </div>
+      <div style={{ display: 'flex', gap: 12, overflowX: 'auto', padding: '0 16px 16px', scrollbarWidth: 'none' }} className="no-scrollbar">
+        {popular.map(item => (
+          <div
+            key={item.id}
+            onClick={() => onOpen(item)}
+            style={{ flexShrink: 0, width: 130, background: 'white', borderRadius: 16, overflow: 'hidden', boxShadow: '0 2px 12px rgba(0,0,0,0.07)', cursor: 'pointer', border: '1px solid #f3f4f6' }}
+          >
+            <div style={{ height: 90, background: accentColor + '15', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 34, position: 'relative' }}>
+              {item.image ? <img src={item.image} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : '🍽️'}
+              <span style={{ position: 'absolute', top: 6, right: 6, background: '#F97316', color: 'white', fontSize: 9, fontWeight: 800, padding: '2px 6px', borderRadius: 8 }}>🔥 بيستر</span>
+            </div>
+            <div style={{ padding: '8px 10px' }}>
+              <p style={{ fontWeight: 700, fontSize: 12, color: '#1a1a1a', marginBottom: 3, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.name}</p>
+              <p style={{ fontWeight: 800, fontSize: 13, color: accentColor }}>{item.price} ج</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+/* ─── Offers/Combos Section ─────────────────────────────────── */
+function OffersSection({ accentColor, onAddCombo }) {
+  return (
+    <div style={{ marginBottom: 8 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '16px 16px 10px' }}>
+        <Tag size={16} style={{ color: accentColor }} />
+        <p style={{ fontWeight: 800, fontSize: 15, color: '#1a1a1a' }}>العروض والكومبو</p>
+      </div>
+      <div style={{ display: 'flex', gap: 12, overflowX: 'auto', padding: '0 16px 16px', scrollbarWidth: 'none' }} className="no-scrollbar">
+        {mockCombos.map(combo => {
+          const discount = Math.round((1 - combo.price / combo.originalPrice) * 100)
+          return (
+            <div
+              key={combo.id}
+              style={{ flexShrink: 0, width: 200, background: 'white', borderRadius: 16, overflow: 'hidden', boxShadow: '0 2px 12px rgba(0,0,0,0.07)', cursor: 'pointer', border: `1px solid ${accentColor}22` }}
+            >
+              <div style={{ height: 80, background: `linear-gradient(135deg, ${accentColor}22, ${accentColor}11)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 36, position: 'relative' }}>
+                {combo.image}
+                <span style={{ position: 'absolute', top: 8, left: 8, background: '#22C55E', color: 'white', fontSize: 10, fontWeight: 800, padding: '2px 7px', borderRadius: 8 }}>
+                  خصم {discount}%
+                </span>
+              </div>
+              <div style={{ padding: '10px 12px' }}>
+                <p style={{ fontWeight: 700, fontSize: 13, color: '#1a1a1a', marginBottom: 3 }}>{combo.name}</p>
+                <p style={{ fontSize: 11, color: '#6b7280', marginBottom: 8, lineHeight: 1.4 }}>{combo.items}</p>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div>
+                    <span style={{ fontWeight: 800, fontSize: 15, color: accentColor }}>{combo.price} ج</span>
+                    <span style={{ fontSize: 11, color: '#9ca3af', textDecoration: 'line-through', marginRight: 5 }}>{combo.originalPrice}</span>
+                  </div>
+                  <button
+                    onClick={() => onAddCombo(combo)}
+                    style={{ background: accentColor, color: 'white', border: 'none', borderRadius: 10, padding: '6px 12px', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}
+                  >
+                    أضف +
+                  </button>
+                </div>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+/* ─── Footer ────────────────────────────────────────────────── */
+function Footer({ accentColor }) {
+  const navigate = useNavigate()
+  return (
+    <div style={{ background: '#1a1a1a', color: 'white', padding: '32px 20px', direction: 'rtl' }}>
+      <div style={{ maxWidth: 480, margin: '0 auto' }}>
+        {/* Logo */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
+          <div style={{ width: 36, height: 36, borderRadius: 10, background: accentColor, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, fontWeight: 900 }}>ر</div>
+          <div>
+            <p style={{ fontWeight: 900, fontSize: 16 }}>ريڤيو</p>
+            <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', marginTop: 1 }}>منصة طلبات الطعام</p>
+          </div>
+        </div>
+
+        {/* App download buttons */}
+        <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', marginBottom: 14 }}>حمّل التطبيق واطلب بسهولة أكبر</p>
+        <div style={{ display: 'flex', gap: 10, marginBottom: 24 }}>
+          <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '11px 16px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 12, color: 'white', fontSize: 13, fontWeight: 700, cursor: 'pointer', backdropFilter: 'blur(4px)' }}>
+            <span style={{ fontSize: 20 }}>🍎</span>
+            App Store
+          </button>
+          <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '11px 16px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 12, color: 'white', fontSize: 13, fontWeight: 700, cursor: 'pointer', backdropFilter: 'blur(4px)' }}>
+            <span style={{ fontSize: 20 }}>🤖</span>
+            Google Play
+          </button>
+        </div>
+
+        {/* Links */}
+        <div style={{ display: 'flex', gap: 20, marginBottom: 20, borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 20 }}>
+          <button onClick={() => navigate('/explore')} style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>
+            🗺️ قائمة المطاعم
+          </button>
+          <button style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>
+            📞 تواصل معنا
+          </button>
+          <button style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>
+            ❓ المساعدة
+          </button>
+        </div>
+
+        <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', textAlign: 'center' }}>
+          © 2025 ريڤيو — جميع الحقوق محفوظة
+        </p>
+      </div>
+    </div>
+  )
+}
+
+/* ─── Main StoreFront ───────────────────────────────────────── */
 export default function StoreFront() {
   const navigate = useNavigate()
   const config = getConfig()
   const menuItems = getMenuItems()
   const categories = getCategories()
-  const { cartItems, addItem, itemCount, total } = useCart()
+  const { addItem, itemCount, total } = useCart()
 
   const [selectedItem, setSelectedItem] = useState(null)
   const [sheetOpen, setSheetOpen] = useState(false)
@@ -47,22 +244,19 @@ export default function StoreFront() {
 
   const handleAddToCart = () => {
     if (!selectedItem) return
-    addItem({
-      itemId: selectedItem.id,
-      name: selectedItem.name,
-      price: selectedItem.price,
-      qty,
-      note,
-    })
+    addItem({ itemId: selectedItem.id, name: selectedItem.name, price: selectedItem.price, qty, note })
     closeSheet()
+  }
+
+  const handleAddCombo = (combo) => {
+    addItem({ itemId: combo.id, name: combo.name, price: combo.price, qty: 1, note: combo.items })
   }
 
   const scrollToSection = (catId) => {
     setActiveTab(catId)
     const el = sectionRefs.current[catId]
     if (el) {
-      const offset = 110
-      const top = el.getBoundingClientRect().top + window.scrollY - offset
+      const top = el.getBoundingClientRect().top + window.scrollY - 110
       window.scrollTo({ top, behavior: 'smooth' })
     }
   }
@@ -76,46 +270,30 @@ export default function StoreFront() {
     : filteredNearby
 
   return (
-    <div className="min-h-screen bg-gray-50" dir="rtl">
-      {/* Sticky Header */}
-      <div className="sticky top-0 z-40">
-        <div className="text-white px-4 py-3 flex items-center justify-between" style={{ background: config.color }}>
-          {/* Right: logo + name + status */}
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center font-bold text-lg flex-shrink-0">
+    <div style={{ minHeight: '100vh', background: '#f9fafb', fontFamily: 'Cairo, sans-serif' }} dir="rtl">
+
+      {/* ─── Sticky Header ─── */}
+      <div style={{ position: 'sticky', top: 0, zIndex: 40 }}>
+        <div style={{ background: config.color, padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: 16, color: 'white', flexShrink: 0 }}>
               {config.name.charAt(0)}
             </div>
             <div>
-              <p className="font-bold text-sm leading-tight">{config.name}</p>
-              <p className="text-xs opacity-90">
-                {config.isOpen
-                  ? <span>● مفتوح · يغلق {config.closesAt}</span>
-                  : <span>● مغلق · يفتح {config.opensAt}</span>
-                }
+              <p style={{ fontWeight: 700, fontSize: 14, color: 'white', lineHeight: 1.2 }}>{config.name}</p>
+              <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.85)' }}>
+                {config.isOpen ? '● مفتوح · يغلق ' + config.closesAt : '● مغلق · يفتح ' + config.opensAt}
               </p>
             </div>
           </div>
-          {/* Left: actions */}
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setSidebarOpen(true)}
-              className="text-sm font-medium opacity-90 hover:opacity-100 hidden sm:block"
-            >
-              اكتشف مطاعم
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+            <button onClick={() => setSidebarOpen(true)} style={{ padding: '8px', borderRadius: 10, background: 'rgba(255,255,255,0.15)', border: 'none', cursor: 'pointer', color: 'white', display: 'flex' }}>
+              <Menu size={19} />
             </button>
-            <button
-              onClick={() => setSidebarOpen(true)}
-              className="p-2 rounded-xl hover:bg-white/10"
-            >
-              <Menu size={20} />
-            </button>
-            <button
-              onClick={() => navigate('/cart')}
-              className="p-2 rounded-xl hover:bg-white/10 relative"
-            >
-              <ShoppingCart size={20} />
+            <button onClick={() => navigate('/cart')} style={{ padding: '8px', borderRadius: 10, background: 'rgba(255,255,255,0.15)', border: 'none', cursor: 'pointer', color: 'white', display: 'flex', position: 'relative' }}>
+              <ShoppingCart size={19} />
               {itemCount > 0 && (
-                <span className="absolute -top-1 -left-1 bg-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center" style={{ color: config.color }}>
+                <span style={{ position: 'absolute', top: -4, left: -4, background: 'white', fontSize: 9, fontWeight: 800, borderRadius: '50%', width: 16, height: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', color: config.color }}>
                   {itemCount}
                 </span>
               )}
@@ -123,24 +301,24 @@ export default function StoreFront() {
           </div>
         </div>
 
-        {/* Closed warning */}
         {!config.isOpen && (
-          <div className="bg-orange-100 text-orange-800 text-sm font-medium text-center py-2 px-4">
+          <div style={{ background: '#FEF3C7', color: '#92400E', fontSize: 12, fontWeight: 600, textAlign: 'center', padding: '8px 16px' }}>
             المطعم مغلق حالياً — يفتح الساعة {config.opensAt} ظهر
           </div>
         )}
 
         {/* Category Tabs */}
-        <div className="bg-white border-b border-gray-100 px-2 flex overflow-x-auto no-scrollbar">
+        <div style={{ background: 'white', borderBottom: '1px solid #f3f4f6', display: 'flex', overflowX: 'auto', scrollbarWidth: 'none' }} className="no-scrollbar">
           {categories.map(cat => (
             <button
               key={cat.id}
               onClick={() => scrollToSection(cat.id)}
-              className="flex-shrink-0 px-4 py-3 text-sm font-medium transition-colors whitespace-nowrap"
-              style={activeTab === cat.id
-                ? { color: config.color, borderBottom: `2px solid ${config.color}` }
-                : { color: '#6b7280', borderBottom: '2px solid transparent' }
-              }
+              style={{
+                flexShrink: 0, padding: '12px 16px', fontSize: 14, fontWeight: 600, cursor: 'pointer', background: 'none', border: 'none', whiteSpace: 'nowrap', transition: 'all 0.15s',
+                color: activeTab === cat.id ? config.color : '#6b7280',
+                borderBottom: `2px solid ${activeTab === cat.id ? config.color : 'transparent'}`,
+                fontFamily: 'Cairo, sans-serif',
+              }}
             >
               {cat.name}
             </button>
@@ -148,70 +326,59 @@ export default function StoreFront() {
         </div>
       </div>
 
-      {/* Banner */}
-      <div className="relative overflow-hidden" style={{ height: 180 }}>
-        {config.bannerUrl ? (
-          <img src={config.bannerUrl} alt="banner" className="w-full h-full object-cover" />
-        ) : (
-          <div
-            className="w-full h-full flex flex-col items-center justify-center"
-            style={{ background: `linear-gradient(135deg, ${config.color}, ${config.color}cc)` }}
-          >
-            <p className="text-white font-bold text-2xl">{config.name}</p>
-            <p className="text-white/80 text-sm mt-1">{config.description}</p>
-            <p className="text-white/60 text-xs mt-1">📍 {config.address}</p>
-          </div>
-        )}
+      {/* ─── Banner Carousel ─── */}
+      <BannerCarousel accentColor={config.color} />
+
+      {/* ─── Popular Slider ─── */}
+      <div style={{ background: 'white', marginTop: 8, borderRadius: '0 0 16px 16px' }}>
+        <PopularSlider items={menuItems} accentColor={config.color} onOpen={openItem} />
       </div>
 
-      {/* Menu Sections */}
-      <div className="max-w-lg mx-auto px-3 pb-32 mt-4 space-y-6">
+      {/* ─── Offers / Combos ─── */}
+      <div style={{ background: 'white', marginTop: 8 }}>
+        <OffersSection accentColor={config.color} onAddCombo={handleAddCombo} />
+      </div>
+
+      {/* ─── Menu Sections ─── */}
+      <div style={{ maxWidth: 480, margin: '8px auto 0', paddingBottom: 32 }}>
         {categories.map(cat => {
           const catItems = menuItems.filter(i => i.categoryId === cat.id)
           if (catItems.length === 0) return null
           return (
-            <div key={cat.id} ref={el => sectionRefs.current[cat.id] = el}>
-              <h2 className="font-bold text-gray-800 text-base mb-3 px-1">{cat.name}</h2>
-              <div className="grid grid-cols-2 gap-3">
+            <div key={cat.id} ref={el => sectionRefs.current[cat.id] = el} style={{ background: 'white', marginBottom: 8 }}>
+              <h2 style={{ fontWeight: 800, color: '#1a1a1a', fontSize: 15, padding: '14px 16px 10px', borderBottom: '1px solid #f9fafb' }}>{cat.name}</h2>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, padding: 12 }}>
                 {catItems.map(item => (
                   <div
                     key={item.id}
-                    className="bg-white rounded-2xl overflow-hidden shadow-sm relative"
                     onClick={() => openItem(item)}
+                    style={{ background: 'white', borderRadius: 16, overflow: 'hidden', boxShadow: '0 2px 10px rgba(0,0,0,0.06)', cursor: 'pointer', border: '1px solid #f3f4f6', transition: 'transform 0.15s' }}
+                    onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.02)'}
+                    onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
                   >
-                    {/* Image / placeholder */}
-                    <div
-                      className="w-full h-28 flex items-center justify-center text-3xl relative"
-                      style={{ background: `${config.color}22` }}
-                    >
-                      {item.image
-                        ? <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
-                        : <span>🍽️</span>
-                      }
+                    <div style={{ height: 100, background: config.color + '18', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32, position: 'relative' }}>
+                      {item.image ? <img src={item.image} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : '🍽️'}
                       {item.bestseller && (
-                        <span className="absolute top-2 right-2 bg-orange-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-lg">
-                          🔥 الأكثر طلباً
-                        </span>
+                        <span style={{ position: 'absolute', top: 8, right: 8, background: '#F97316', color: 'white', fontSize: 9, fontWeight: 800, padding: '2px 7px', borderRadius: 8 }}>🔥</span>
                       )}
                       {!item.active && (
-                        <div className="absolute inset-0 bg-gray-200/80 flex items-center justify-center">
-                          <span className="text-gray-500 text-xs font-semibold">غير متاح</span>
+                        <div style={{ position: 'absolute', inset: 0, background: 'rgba(255,255,255,0.75)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <span style={{ fontSize: 11, fontWeight: 700, color: '#9ca3af' }}>غير متاح</span>
                         </div>
                       )}
                     </div>
-                    <div className="p-2.5">
-                      <p className="font-bold text-gray-800 text-sm leading-tight">{item.name}</p>
+                    <div style={{ padding: '10px 10px 12px' }}>
+                      <p style={{ fontWeight: 700, color: '#1a1a1a', fontSize: 13, lineHeight: 1.3, marginBottom: 2 }}>{item.name}</p>
                       {item.description && (
-                        <p className="text-xs text-gray-400 mt-0.5 truncate">{item.description}</p>
+                        <p style={{ fontSize: 11, color: '#9ca3af', marginBottom: 6, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.description}</p>
                       )}
-                      <div className="flex items-center justify-between mt-2">
-                        <span className="font-bold text-sm" style={{ color: config.color }}>{item.price} ج</span>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 6 }}>
+                        <span style={{ fontWeight: 800, fontSize: 14, color: config.color }}>{item.price} ج</span>
                       </div>
                       <button
                         disabled={!item.active}
-                        className="w-full mt-2 py-1.5 text-white text-sm font-semibold rounded-xl disabled:opacity-40 transition-opacity"
-                        style={{ background: config.color }}
                         onClick={(e) => { e.stopPropagation(); openItem(item) }}
+                        style={{ width: '100%', marginTop: 8, padding: '7px', background: item.active ? config.color : '#e5e7eb', color: 'white', fontWeight: 700, fontSize: 13, borderRadius: 10, border: 'none', cursor: item.active ? 'pointer' : 'not-allowed', fontFamily: 'Cairo, sans-serif' }}
                       >
                         أضف +
                       </button>
@@ -224,13 +391,15 @@ export default function StoreFront() {
         })}
       </div>
 
-      {/* Floating Cart Button */}
+      {/* ─── Footer ─── */}
+      <Footer accentColor={config.color} />
+
+      {/* ─── Floating Cart Button ─── */}
       {itemCount > 0 && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-30 px-4 w-full max-w-lg">
+        <div style={{ position: 'fixed', bottom: 24, left: '50%', transform: 'translateX(-50%)', zIndex: 30, padding: '0 16px', width: '100%', maxWidth: 480 }}>
           <button
             onClick={() => navigate('/cart')}
-            className="w-full py-3.5 rounded-2xl text-white font-bold text-sm shadow-lg flex items-center justify-center gap-2 transition-transform active:scale-95"
-            style={{ background: config.color }}
+            style={{ width: '100%', padding: '14px', borderRadius: 18, background: config.color, color: 'white', fontWeight: 800, fontSize: 14, boxShadow: `0 8px 30px ${config.color}60`, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}
           >
             <ShoppingCart size={18} />
             عرض السلة · {itemCount} أصناف · {total} ج
@@ -238,65 +407,47 @@ export default function StoreFront() {
         </div>
       )}
 
-      {/* Item Detail Bottom Sheet */}
+      {/* ─── Item Detail Bottom Sheet ─── */}
       {selectedItem && (
         <>
-          <div
-            className={`fixed inset-0 bg-black/50 z-50 transition-opacity ${sheetOpen ? 'opacity-100' : 'opacity-0'}`}
-            onClick={closeSheet}
-          />
-          <div
-            className={`fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-3xl max-w-lg mx-auto transition-transform duration-300 ${sheetOpen ? 'translate-y-0' : 'translate-y-full'}`}
-          >
-            {/* Swipe indicator */}
-            <div className="flex justify-center pt-3 pb-1 cursor-pointer" onClick={closeSheet}>
-              <div className="w-10 h-1 bg-gray-200 rounded-full" />
+          <div onClick={closeSheet} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 50, opacity: sheetOpen ? 1 : 0, transition: 'opacity 0.3s' }} />
+          <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 50, background: 'white', borderRadius: '24px 24px 0 0', maxWidth: 480, margin: '0 auto', transform: sheetOpen ? 'translateY(0)' : 'translateY(100%)', transition: 'transform 0.3s ease' }}>
+            <div onClick={closeSheet} style={{ display: 'flex', justifyContent: 'center', paddingTop: 12, paddingBottom: 4, cursor: 'pointer' }}>
+              <div style={{ width: 40, height: 4, background: '#e5e7eb', borderRadius: 2 }} />
             </div>
-            <div className="px-5 pb-8 pt-2">
-              <div className="flex items-start justify-between mb-4">
+            <div style={{ padding: '8px 20px 32px' }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 16 }}>
                 <div>
-                  <h3 className="font-bold text-gray-900 text-lg">{selectedItem.name}</h3>
-                  {selectedItem.description && (
-                    <p className="text-sm text-gray-500 mt-1">{selectedItem.description}</p>
-                  )}
-                  <p className="font-bold text-lg mt-2" style={{ color: config.color }}>{selectedItem.price} ج</p>
+                  <h3 style={{ fontWeight: 800, color: '#1a1a1a', fontSize: 18 }}>{selectedItem.name}</h3>
+                  {selectedItem.description && <p style={{ fontSize: 13, color: '#6b7280', marginTop: 4 }}>{selectedItem.description}</p>}
+                  <p style={{ fontWeight: 800, fontSize: 18, color: config.color, marginTop: 8 }}>{selectedItem.price} ج</p>
                 </div>
-                <button onClick={closeSheet} className="p-2 rounded-xl hover:bg-gray-100 flex-shrink-0">
-                  <X size={18} />
+                <button onClick={closeSheet} style={{ padding: 8, borderRadius: 10, background: '#f3f4f6', border: 'none', cursor: 'pointer', display: 'flex' }}>
+                  <X size={17} />
                 </button>
               </div>
 
               {/* Qty stepper */}
-              <div className="flex items-center justify-center gap-5 my-5">
-                <button
-                  onClick={() => setQty(q => Math.max(1, q - 1))}
-                  className="w-10 h-10 rounded-full border-2 border-gray-200 flex items-center justify-center font-bold text-lg hover:border-gray-400"
-                >
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 20, margin: '20px 0' }}>
+                <button onClick={() => setQty(q => Math.max(1, q - 1))} style={{ width: 40, height: 40, borderRadius: '50%', border: '2px solid #e5e7eb', background: 'none', cursor: 'pointer', fontSize: 20, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   −
                 </button>
-                <span className="font-bold text-xl w-8 text-center">{qty}</span>
-                <button
-                  onClick={() => setQty(q => q + 1)}
-                  className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg text-white"
-                  style={{ background: config.color }}
-                >
+                <span style={{ fontWeight: 800, fontSize: 22, color: '#1a1a1a', minWidth: 28, textAlign: 'center' }}>{qty}</span>
+                <button onClick={() => setQty(q => q + 1)} style={{ width: 40, height: 40, borderRadius: '50%', background: config.color, border: 'none', cursor: 'pointer', fontSize: 20, fontWeight: 700, color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   +
                 </button>
               </div>
 
-              {/* Note */}
               <textarea
                 value={note}
                 onChange={e => setNote(e.target.value)}
                 placeholder="ملاحظات... (اختياري)"
                 rows={2}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-orange-400 resize-none mb-4"
+                style={{ width: '100%', padding: '12px 14px', borderRadius: 12, border: '1px solid #e5e7eb', fontSize: 13, outline: 'none', resize: 'none', marginBottom: 16, fontFamily: 'Cairo, sans-serif', boxSizing: 'border-box' }}
               />
-
               <button
                 onClick={handleAddToCart}
-                className="w-full py-3.5 rounded-xl text-white font-bold text-sm"
-                style={{ background: config.color }}
+                style={{ width: '100%', padding: '14px', background: config.color, color: 'white', fontWeight: 800, fontSize: 14, borderRadius: 14, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}
               >
                 أضف للسلة · {selectedItem.price * qty} ج
               </button>
@@ -305,78 +456,51 @@ export default function StoreFront() {
         </>
       )}
 
-      {/* Marketplace Sidebar (left side) */}
+      {/* ─── Marketplace Sidebar ─── */}
       {sidebarOpen && (
         <>
-          <div
-            className="fixed inset-0 bg-black/50 z-50"
-            onClick={() => setSidebarOpen(false)}
-          />
-          <div className="fixed top-0 left-0 bottom-0 z-50 bg-white w-80 shadow-2xl flex flex-col" dir="rtl">
-            <div className="flex items-center justify-between p-4 border-b border-gray-100">
-              <h2 className="font-bold text-gray-900 text-base">المطاعم القريبة</h2>
-              <button onClick={() => setSidebarOpen(false)} className="p-2 rounded-xl hover:bg-gray-100">
-                <X size={18} />
+          <div onClick={() => setSidebarOpen(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 50 }} />
+          <div style={{ position: 'fixed', top: 0, left: 0, bottom: 0, zIndex: 50, background: 'white', width: 300, boxShadow: '4px 0 24px rgba(0,0,0,0.15)', display: 'flex', flexDirection: 'column' }} dir="rtl">
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px', borderBottom: '1px solid #f3f4f6' }}>
+              <h2 style={{ fontWeight: 800, color: '#1a1a1a', fontSize: 15 }}>المطاعم القريبة</h2>
+              <button onClick={() => setSidebarOpen(false)} style={{ padding: 6, borderRadius: 8, background: '#f3f4f6', border: 'none', cursor: 'pointer', display: 'flex' }}>
+                <X size={16} />
               </button>
             </div>
-
-            {/* Search */}
-            <div className="p-3 border-b border-gray-50">
-              <div className="relative">
-                <Search size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="ابحث عن مطعم..."
-                  value={searchQuery}
-                  onChange={e => setSearchQuery(e.target.value)}
-                  className="w-full pr-9 pl-3 py-2.5 bg-gray-50 rounded-xl text-sm outline-none"
+            <div style={{ padding: 12, borderBottom: '1px solid #f9fafb' }}>
+              <div style={{ position: 'relative' }}>
+                <Search size={14} style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', color: '#9ca3af' }} />
+                <input type="text" placeholder="ابحث عن مطعم..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
+                  style={{ width: '100%', padding: '9px 34px 9px 12px', background: '#f9fafb', border: '1px solid #f3f4f6', borderRadius: 10, fontSize: 13, outline: 'none', fontFamily: 'Cairo, sans-serif', boxSizing: 'border-box' }}
                 />
               </div>
             </div>
-
-            {/* Category chips */}
-            <div className="px-3 py-2 flex gap-2 overflow-x-auto no-scrollbar border-b border-gray-50">
+            <div style={{ display: 'flex', gap: 8, padding: '10px 12px', borderBottom: '1px solid #f9fafb', overflowX: 'auto', scrollbarWidth: 'none' }} className="no-scrollbar">
               {categoryFilters.map(f => (
-                <button
-                  key={f}
-                  onClick={() => setActiveCategoryFilter(f)}
-                  className="flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-all"
-                  style={activeCategoryFilter === f
-                    ? { background: config.color, color: 'white' }
-                    : { background: '#f3f4f6', color: '#6b7280' }
-                  }
+                <button key={f} onClick={() => setActiveCategoryFilter(f)}
+                  style={{ flexShrink: 0, padding: '5px 12px', borderRadius: 20, fontSize: 12, fontWeight: 600, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif', background: activeCategoryFilter === f ? config.color : '#f3f4f6', color: activeCategoryFilter === f ? 'white' : '#6b7280' }}
                 >
                   {f}
                 </button>
               ))}
             </div>
-
-            {/* Restaurant list */}
-            <div className="flex-1 overflow-y-auto p-3 space-y-2">
+            <div style={{ flex: 1, overflowY: 'auto', padding: 12, display: 'flex', flexDirection: 'column', gap: 4 }}>
               {filteredNearbyBySearch.map(r => (
-                <div
-                  key={r.id}
-                  className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 cursor-pointer relative"
-                  onClick={() => { setSidebarOpen(false); navigate(`/${r.slug}`) }}
+                <div key={r.id} onClick={() => { setSidebarOpen(false); navigate(`/${r.slug}`) }}
+                  style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 12px', borderRadius: 12, cursor: 'pointer', transition: 'background 0.15s' }}
+                  onMouseEnter={e => e.currentTarget.style.background = '#f9fafb'}
+                  onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                 >
-                  <div
-                    className="w-11 h-11 rounded-xl flex items-center justify-center text-white font-bold flex-shrink-0"
-                    style={{ background: r.color }}
-                  >
+                  <div style={{ width: 42, height: 42, borderRadius: 12, background: r.color, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 900, fontSize: 16, flexShrink: 0 }}>
                     {r.name.charAt(0)}
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-sm text-gray-800">{r.name}</p>
-                    <p className="text-xs text-gray-400">{r.category} · {r.deliveryTime} دقيقة</p>
-                    <p className="text-xs text-yellow-500 font-semibold">⭐ {r.rating}</p>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <p style={{ fontWeight: 700, fontSize: 13, color: '#1a1a1a' }}>{r.name}</p>
+                    <p style={{ fontSize: 11, color: '#9ca3af' }}>{r.category} · {r.deliveryTime} دقيقة</p>
+                    <p style={{ fontSize: 11, color: '#F59E0B', fontWeight: 600 }}>⭐ {r.rating}</p>
                   </div>
                   {r.slug === config.slug && (
-                    <span
-                      className="text-white text-xs font-bold px-2 py-0.5 rounded-full flex-shrink-0"
-                      style={{ background: config.color }}
-                    >
-                      أنت هنا
-                    </span>
+                    <span style={{ fontSize: 10, fontWeight: 800, padding: '3px 8px', borderRadius: 8, background: config.color, color: 'white', flexShrink: 0 }}>أنت هنا</span>
                   )}
                 </div>
               ))}

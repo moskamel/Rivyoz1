@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ChefHat, Eye, EyeOff, LogIn } from 'lucide-react'
+import { Zap, Eye, EyeOff, LogIn } from 'lucide-react'
 
 const roles = [
   { id: 'owner', label: 'صاحب المطعم', email: 'owner@restaurant.com', password: 'owner123' },
@@ -8,6 +8,12 @@ const roles = [
   { id: 'cashier', label: 'كاشير', email: 'cashier@restaurant.com', password: 'cashier123' },
   { id: 'kitchen', label: 'مطبخ', email: 'kitchen@restaurant.com', password: 'kitchen123' },
 ]
+
+const inputStyle = {
+  width: '100%', padding: '12px 14px', borderRadius: 12, border: '1px solid var(--border)',
+  background: 'var(--surface-2)', color: 'var(--text)', fontSize: 14, outline: 'none',
+  fontFamily: 'Cairo, sans-serif', boxSizing: 'border-box', transition: 'border-color 0.15s',
+}
 
 export default function Login() {
   const navigate = useNavigate()
@@ -39,66 +45,67 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex" dir="rtl" style={{ fontFamily: "'Cairo', sans-serif" }}>
-      {/* Left side — orange gradient */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-orange-500 via-orange-600 to-amber-600 flex-col items-center justify-center p-12 text-white relative overflow-hidden">
-        {/* Background circles */}
-        <div className="absolute top-[-80px] right-[-80px] w-72 h-72 bg-white/10 rounded-full" />
-        <div className="absolute bottom-[-100px] left-[-60px] w-96 h-96 bg-white/5 rounded-full" />
+    <div style={{ minHeight: '100vh', display: 'flex', background: 'var(--bg)' }} dir="rtl">
+      {/* Left panel — brand */}
+      <div style={{ display: 'none', width: '50%', background: 'linear-gradient(135deg, #F97316 0%, #EA6C10 60%, #D97706 100%)', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 48, position: 'relative', overflow: 'hidden' }} className="lg:flex">
+        {/* Decorative circles */}
+        <div style={{ position: 'absolute', top: -80, right: -80, width: 300, height: 300, borderRadius: '50%', background: 'rgba(255,255,255,0.08)' }} />
+        <div style={{ position: 'absolute', bottom: -100, left: -60, width: 400, height: 400, borderRadius: '50%', background: 'rgba(255,255,255,0.04)' }} />
 
-        <div className="relative z-10 text-center">
-          <div className="w-24 h-24 bg-white/20 backdrop-blur rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-2xl">
-            <ChefHat size={48} className="text-white" />
+        <div style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
+          <div style={{ width: 80, height: 80, background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(10px)', borderRadius: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px', boxShadow: '0 20px 60px rgba(0,0,0,0.15)' }}>
+            <Zap size={40} color="white" strokeWidth={2.5} />
           </div>
-          <h1 className="text-4xl font-black mb-3">ريڤيو</h1>
-          <p className="text-xl font-semibold text-orange-100 mb-2">نظام إدارة المطعم الذكي</p>
-          <p className="text-orange-200 text-sm leading-relaxed max-w-xs mx-auto">
+          <h1 style={{ fontSize: 42, fontWeight: 900, color: 'white', marginBottom: 10, letterSpacing: '-0.02em' }}>ريڤيو</h1>
+          <p style={{ fontSize: 18, fontWeight: 600, color: 'rgba(255,255,255,0.85)', marginBottom: 8 }}>نظام إدارة المطعم الذكي</p>
+          <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.65)', lineHeight: 1.7, maxWidth: 280, margin: '0 auto 40px' }}>
             أدر طلباتك، قائمتك، وفريقك من مكان واحد بسهولة تامة
           </p>
 
-          <div className="mt-10 grid grid-cols-3 gap-4">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 14 }}>
             {[
               { n: '+2340', l: 'ج مبيعات اليوم' },
               { n: '18', l: 'طلب اليوم' },
               { n: '4.9★', l: 'تقييم الزبائن' },
             ].map((s, i) => (
-              <div key={i} className="bg-white/10 rounded-2xl p-3 text-center">
-                <p className="text-xl font-black">{s.n}</p>
-                <p className="text-xs text-orange-200 mt-0.5">{s.l}</p>
+              <div key={i} style={{ background: 'rgba(255,255,255,0.12)', borderRadius: 16, padding: '14px 10px', textAlign: 'center' }}>
+                <p style={{ fontSize: 22, fontWeight: 900, color: 'white', fontFamily: 'Inter' }}>{s.n}</p>
+                <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.7)', marginTop: 4 }}>{s.l}</p>
               </div>
             ))}
           </div>
         </div>
       </div>
 
-      {/* Right side — login form */}
-      <div className="flex-1 flex items-center justify-center bg-white p-8">
-        <div className="w-full max-w-md">
+      {/* Right panel — form */}
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32 }}>
+        <div style={{ width: '100%', maxWidth: 400 }}>
           {/* Mobile logo */}
-          <div className="lg:hidden flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 bg-orange-500 rounded-2xl flex items-center justify-center">
-              <ChefHat size={22} className="text-white" />
+          <div className="flex items-center gap-3 mb-8 lg:hidden">
+            <div style={{ width: 38, height: 38, background: 'linear-gradient(135deg, #F97316, #EA6C10)', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Zap size={20} color="white" strokeWidth={2.5} />
             </div>
-            <p className="text-xl font-black text-gray-900">ريڤيو</p>
+            <p style={{ fontSize: 20, fontWeight: 900, color: 'var(--text)' }}>ريڤيو</p>
           </div>
 
-          <h2 className="text-2xl font-black text-gray-900 mb-1">أهلاً بعودتك 👋</h2>
-          <p className="text-gray-500 text-sm mb-8">سجّل دخولك لإدارة مطعمك</p>
+          <h2 style={{ fontSize: 26, fontWeight: 900, color: 'var(--text)', marginBottom: 6, letterSpacing: '-0.02em' }}>أهلاً بعودتك 👋</h2>
+          <p style={{ fontSize: 14, color: 'var(--text-2)', marginBottom: 28 }}>سجّل دخولك لإدارة مطعمك</p>
 
           {/* Role selector */}
-          <div className="mb-6">
-            <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">اختر دورك</p>
-            <div className="grid grid-cols-2 gap-2">
+          <div style={{ marginBottom: 24 }}>
+            <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-3)', letterSpacing: '0.08em', marginBottom: 10 }}>اختر دورك</p>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
               {roles.map(role => (
                 <button
                   key={role.id}
                   type="button"
                   onClick={() => selectRole(role)}
-                  className={`py-2.5 px-4 rounded-xl text-sm font-bold border-2 transition-all ${
-                    selectedRole === role.id
-                      ? 'border-orange-500 bg-orange-50 text-orange-600'
-                      : 'border-gray-200 text-gray-600 hover:border-orange-300 hover:bg-orange-50/50'
-                  }`}
+                  style={{
+                    padding: '10px 14px', borderRadius: 10, fontSize: 13, fontWeight: 600, cursor: 'pointer', transition: 'all 0.15s',
+                    border: `1px solid ${selectedRole === role.id ? 'var(--accent)' : 'var(--border)'}`,
+                    background: selectedRole === role.id ? 'var(--accent-muted)' : 'var(--surface)',
+                    color: selectedRole === role.id ? 'var(--accent)' : 'var(--text-2)',
+                  }}
                 >
                   {role.label}
                 </button>
@@ -106,36 +113,40 @@ export default function Login() {
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-bold text-gray-700 mb-1.5">البريد الإلكتروني</label>
+          <form onSubmit={handleSubmit}>
+            <div style={{ marginBottom: 14 }}>
+              <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: 'var(--text-2)', marginBottom: 6 }}>البريد الإلكتروني</label>
               <input
                 type="email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 placeholder="example@restaurant.com"
                 required
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent text-sm bg-gray-50 transition-all"
+                style={inputStyle}
+                onFocus={e => e.target.style.borderColor = 'var(--accent)'}
+                onBlur={e => e.target.style.borderColor = 'var(--border)'}
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-bold text-gray-700 mb-1.5">كلمة المرور</label>
-              <div className="relative">
+            <div style={{ marginBottom: 20 }}>
+              <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: 'var(--text-2)', marginBottom: 6 }}>كلمة المرور</label>
+              <div style={{ position: 'relative' }}>
                 <input
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={e => setPassword(e.target.value)}
                   placeholder="••••••••"
                   required
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent text-sm bg-gray-50 transition-all pl-12"
+                  style={{ ...inputStyle, paddingLeft: 44 }}
+                  onFocus={e => e.target.style.borderColor = 'var(--accent)'}
+                  onBlur={e => e.target.style.borderColor = 'var(--border)'}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-3)', display: 'flex' }}
                 >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
                 </button>
               </div>
             </div>
@@ -143,42 +154,44 @@ export default function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-orange-200 disabled:opacity-70 disabled:cursor-not-allowed"
+              style={{
+                width: '100%', padding: '14px', background: 'var(--accent)', color: 'white', fontWeight: 700, borderRadius: 12, border: 'none', cursor: loading ? 'not-allowed' : 'pointer', fontSize: 15, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'all 0.15s', opacity: loading ? 0.75 : 1, boxShadow: '0 4px 20px rgba(249,115,22,0.25)',
+              }}
             >
               {loading ? (
-                <span className="w-5 h-5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                <span style={{ width: 20, height: 20, border: '2px solid rgba(255,255,255,0.3)', borderTopColor: 'white', borderRadius: '50%', animation: 'spin 0.7s linear infinite', display: 'inline-block' }} />
               ) : (
                 <>
-                  <LogIn size={18} />
+                  <LogIn size={17} />
                   تسجيل الدخول
                 </>
               )}
             </button>
           </form>
 
-          <div className="relative my-5">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-200" />
-            </div>
-            <div className="relative flex justify-center">
-              <span className="bg-white px-3 text-xs text-gray-400">أو</span>
-            </div>
+          <div style={{ position: 'relative', margin: '20px 0' }}>
+            <div style={{ height: 1, background: 'var(--border)' }} />
+            <span style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: 'var(--bg)', padding: '0 12px', fontSize: 12, color: 'var(--text-3)' }}>أو</span>
           </div>
 
           <button
             type="button"
             onClick={demoLogin}
             disabled={loading}
-            className="w-full py-3 border-2 border-dashed border-orange-300 text-orange-600 font-bold rounded-xl text-sm hover:bg-orange-50 transition-all disabled:opacity-70"
+            style={{ width: '100%', padding: '12px', border: '2px dashed var(--border)', color: 'var(--accent)', fontWeight: 700, borderRadius: 12, fontSize: 14, background: 'transparent', cursor: 'pointer', transition: 'all 0.15s' }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.background = 'var(--accent-muted)' }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.background = 'transparent' }}
           >
             تسجيل الدخول تجريبي بدون كلمة مرور
           </button>
 
-          <p className="text-center text-xs text-gray-400 mt-6">
+          <p style={{ textAlign: 'center', fontSize: 12, color: 'var(--text-3)', marginTop: 24 }}>
             نظام ريڤيو لإدارة المطاعم · جميع الحقوق محفوظة
           </p>
         </div>
       </div>
+
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   )
 }
