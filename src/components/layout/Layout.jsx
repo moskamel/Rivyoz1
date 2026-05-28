@@ -7,7 +7,7 @@ export default function Layout({ title, children }) {
       <Sidebar />
       <div style={{ flex: 1, marginRight: 220 }}>
         <TopBar title={title} />
-        <main style={{ padding: '24px', maxWidth: 1200, margin: '0 auto' }}>{children}</main>
+        <main style={{ padding: '24px' }}>{children}</main>
       </div>
     </div>
   )
