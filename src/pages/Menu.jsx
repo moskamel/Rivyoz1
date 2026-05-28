@@ -17,7 +17,21 @@ export default function Menu() {
   const [editItem, setEditItem] = useState(null)
   const [form, setForm] = useState({ name: '', price: '', categoryId: 1, description: '', active: true, bestseller: false })
 
+  const [dragIdx, setDragIdx] = useState(null)
+  const [dragOverIdx, setDragOverIdx] = useState(null)
+
   const filteredItems = items.filter(i => i.categoryId === activeCategory)
+
+  const handleDrop = (dropIdx) => {
+    if (dragIdx === null || dragIdx === dropIdx) return
+    const reordered = [...filteredItems]
+    const [moved] = reordered.splice(dragIdx, 1)
+    reordered.splice(dropIdx, 0, moved)
+    let catIdx = 0
+    const next = items.map(i => i.categoryId === activeCategory ? reordered[catIdx++] : i)
+    setItems(next); setMenuItems(next)
+    setDragIdx(null); setDragOverIdx(null)
+  }
 
   const toggleActive = (id) => {
     setItems(prev => {
@@ -130,11 +144,16 @@ export default function Menu() {
                 <button onClick={openAdd} style={{ marginTop: 10, color: 'var(--accent)', fontSize: 13, fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer' }}>إضافة أولى أكلة</button>
               </div>
             ) : (
-              filteredItems.map(item => (
+              filteredItems.map((item, idx) => (
                 <div key={item.id}
-                  style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '12px 20px', borderBottom: '1px solid var(--border)', transition: 'background 0.15s' }}
-                  onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-2)'}
-                  onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                  draggable
+                  onDragStart={() => setDragIdx(idx)}
+                  onDragOver={(e) => { e.preventDefault(); setDragOverIdx(idx) }}
+                  onDrop={() => handleDrop(idx)}
+                  onDragEnd={() => { setDragIdx(null); setDragOverIdx(null) }}
+                  style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '12px 20px', borderBottom: '1px solid var(--border)', transition: 'background 0.15s, opacity 0.15s', background: dragOverIdx === idx && dragIdx !== idx ? 'var(--surface-3)' : 'transparent', opacity: dragIdx === idx ? 0.4 : 1, userSelect: 'none' }}
+                  onMouseEnter={e => { if (dragIdx === null) e.currentTarget.style.background = 'var(--surface-2)' }}
+                  onMouseLeave={e => { if (dragIdx === null) e.currentTarget.style.background = 'transparent' }}
                 >
                   <GripVertical size={15} style={{ color: 'var(--text-3)', cursor: 'grab', flexShrink: 0 }} />
                   <div style={{ width: 38, height: 38, background: 'var(--surface-2)', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, border: '1px solid var(--border)' }}>
