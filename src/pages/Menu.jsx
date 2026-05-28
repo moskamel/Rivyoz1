@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Plus, MoreVertical, X, GripVertical, Star } from 'lucide-react'
 import Layout from '../components/layout/Layout'
 import { getMenuItems, setMenuItems, getCategories } from '../lib/restaurantStore'
@@ -16,6 +16,16 @@ export default function Menu() {
   const [showForm, setShowForm] = useState(false)
   const [editItem, setEditItem] = useState(null)
   const [form, setForm] = useState({ name: '', price: '', categoryId: 1, description: '', active: true, bestseller: false })
+  const [openMenuId, setOpenMenuId] = useState(null)
+  const menuRef = useRef(null)
+
+  useEffect(() => {
+    function handleOutside(e) {
+      if (menuRef.current && !menuRef.current.contains(e.target)) setOpenMenuId(null)
+    }
+    document.addEventListener('mousedown', handleOutside)
+    return () => document.removeEventListener('mousedown', handleOutside)
+  }, [])
 
   const [dragIdx, setDragIdx] = useState(null)
   const [dragOverIdx, setDragOverIdx] = useState(null)
@@ -173,18 +183,31 @@ export default function Menu() {
                   >
                     <span style={{ position: 'absolute', top: 3, width: 16, height: 16, background: 'white', borderRadius: '50%', transition: 'all 0.2s', right: item.active ? 3 : 'auto', left: item.active ? 'auto' : 3 }} />
                   </button>
-                  <div style={{ position: 'relative' }} className="group">
-                    <button style={{ padding: 6, borderRadius: 8, background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-3)' }}>
+                  <div style={{ position: 'relative' }} ref={openMenuId === item.id ? menuRef : null}>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); setOpenMenuId(openMenuId === item.id ? null : item.id) }}
+                      style={{ padding: 6, borderRadius: 8, background: openMenuId === item.id ? 'var(--surface-2)' : 'none', border: 'none', cursor: 'pointer', color: 'var(--text-3)', transition: 'background 0.15s' }}
+                    >
                       <MoreVertical size={15} />
                     </button>
-                    <div style={{ position: 'absolute', left: 0, top: 30, background: 'var(--surface-3)', border: '1px solid var(--border-strong)', borderRadius: 10, overflow: 'hidden', zIndex: 10, minWidth: 120, boxShadow: '0 8px 24px rgba(0,0,0,0.4)', display: 'none' }} className="group-hover:!block">
-                      <button onClick={() => openEdit(item)} style={{ width: '100%', textAlign: 'right', padding: '8px 14px', fontSize: 13, color: 'var(--text-2)', background: 'transparent', border: 'none', cursor: 'pointer' }}>تعديل</button>
-                      <button
-                        onClick={() => setItems(prev => { const next = [...prev, { ...item, id: Date.now(), name: item.name + ' (نسخة)' }]; setMenuItems(next); return next })}
-                        style={{ width: '100%', textAlign: 'right', padding: '8px 14px', fontSize: 13, color: 'var(--text-2)', background: 'transparent', border: 'none', cursor: 'pointer' }}
-                      >نسخ</button>
-                      <button onClick={() => deleteItem(item.id)} style={{ width: '100%', textAlign: 'right', padding: '8px 14px', fontSize: 13, color: 'var(--red)', background: 'transparent', border: 'none', cursor: 'pointer' }}>حذف</button>
-                    </div>
+                    {openMenuId === item.id && (
+                      <div style={{ position: 'absolute', left: 0, top: 34, background: 'var(--surface-3)', border: '1px solid var(--border-strong)', borderRadius: 10, overflow: 'hidden', zIndex: 20, minWidth: 120, boxShadow: '0 8px 24px rgba(0,0,0,0.4)' }}>
+                        <button onClick={() => { openEdit(item); setOpenMenuId(null) }} style={{ width: '100%', textAlign: 'right', padding: '8px 14px', fontSize: 13, color: 'var(--text-2)', background: 'transparent', border: 'none', cursor: 'pointer' }}
+                          onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-2)'}
+                          onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                        >تعديل</button>
+                        <button
+                          onClick={() => { setItems(prev => { const next = [...prev, { ...item, id: Date.now(), name: item.name + ' (نسخة)' }]; setMenuItems(next); return next }); setOpenMenuId(null) }}
+                          style={{ width: '100%', textAlign: 'right', padding: '8px 14px', fontSize: 13, color: 'var(--text-2)', background: 'transparent', border: 'none', cursor: 'pointer' }}
+                          onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-2)'}
+                          onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                        >نسخ</button>
+                        <button onClick={() => { deleteItem(item.id); setOpenMenuId(null) }} style={{ width: '100%', textAlign: 'right', padding: '8px 14px', fontSize: 13, color: 'var(--red)', background: 'transparent', border: 'none', cursor: 'pointer' }}
+                          onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-2)'}
+                          onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                        >حذف</button>
+                      </div>
+                    )}
                   </div>
                 </div>
               ))
