@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Plus, Trash2, Edit3, X, Check, Palette, Image, Tag, LayoutTemplate, Smartphone } from 'lucide-react'
+import { Plus, Trash2, Edit3, X, Check, Palette, Image, Tag, LayoutTemplate, Smartphone, ChevronDown } from 'lucide-react'
 import Layout from '../components/layout/Layout'
 import {
   getConfig, setConfig,
@@ -271,15 +271,111 @@ function BannersTab() {
 /* ─── Tab 3: Combos / Offers ───────────────────────────────── */
 const EMOJIS = ['🍔', '🥩', '🍗', '🍕', '🌯', '🍝', '🍣', '🥗', '🍽️', '🥤', '🍰', '🍟']
 
+function ItemsPicker({ selected, onChange }) {
+  const [open, setOpen] = useState(false)
+  const [search, setSearch] = useState('')
+  const allItems = getMenuItems().filter(i => i.active !== false)
+  const filtered = search ? allItems.filter(i => i.name.includes(search)) : allItems
+
+  const isSelected = (id) => selected.some(s => s.id === id)
+  const toggle = (item) => {
+    if (isSelected(item.id)) {
+      onChange(selected.filter(s => s.id !== item.id))
+    } else {
+      onChange([...selected, { id: item.id, name: item.name, price: item.price }])
+    }
+  }
+  const removeChip = (id) => onChange(selected.filter(s => s.id !== id))
+
+  return (
+    <div style={{ position: 'relative' }}>
+      {/* Trigger */}
+      <button
+        type="button"
+        onClick={() => setOpen(o => !o)}
+        style={{ ...inputStyle, textAlign: 'right', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: selected.length ? 'var(--text)' : 'var(--text-3)' }}
+      >
+        <span>{selected.length === 0 ? 'اختر منتجات...' : `${selected.length} منتجات محددة`}</span>
+        <span style={{ fontSize: 10, color: 'var(--text-3)' }}>▾</span>
+      </button>
+
+      {/* Selected chips */}
+      {selected.length > 0 && (
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 8 }}>
+          {selected.map(s => (
+            <span key={s.id} style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '3px 8px', borderRadius: 20, background: 'var(--accent-muted)', border: '1px solid rgba(249,115,22,0.2)', fontSize: 11, fontWeight: 600, color: 'var(--accent)' }}>
+              {s.name}
+              <button type="button" onClick={() => removeChip(s.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--accent)', lineHeight: 1, padding: 0, fontSize: 13 }}>×</button>
+            </span>
+          ))}
+        </div>
+      )}
+
+      {/* Dropdown */}
+      {open && (
+        <>
+          <div onClick={() => setOpen(false)} style={{ position: 'fixed', inset: 0, zIndex: 10 }} />
+          <div style={{ position: 'absolute', top: 'calc(100% + 6px)', right: 0, left: 0, zIndex: 20, background: 'var(--surface-3)', border: '1px solid var(--border-strong)', borderRadius: 12, boxShadow: '0 8px 24px rgba(0,0,0,0.5)', overflow: 'hidden', maxHeight: 260, display: 'flex', flexDirection: 'column' }}>
+            <div style={{ padding: '8px 10px', borderBottom: '1px solid var(--border)' }}>
+              <input
+                autoFocus
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                placeholder="ابحث في المنتجات..."
+                style={{ ...inputStyle, padding: '6px 10px', fontSize: 12 }}
+                onFocus={e => e.target.style.borderColor = 'var(--accent)'}
+                onBlur={e => e.target.style.borderColor = 'var(--border)'}
+              />
+            </div>
+            <div style={{ overflowY: 'auto', flex: 1 }}>
+              {filtered.length === 0 && (
+                <p style={{ padding: '12px 14px', fontSize: 12, color: 'var(--text-3)', textAlign: 'center' }}>لا توجد نتائج</p>
+              )}
+              {filtered.map(item => {
+                const checked = isSelected(item.id)
+                return (
+                  <div
+                    key={item.id}
+                    onClick={() => toggle(item)}
+                    style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 14px', cursor: 'pointer', transition: 'background 0.1s', background: checked ? 'var(--accent-muted)' : 'transparent' }}
+                    onMouseEnter={e => { if (!checked) e.currentTarget.style.background = 'var(--surface-2)' }}
+                    onMouseLeave={e => { if (!checked) e.currentTarget.style.background = 'transparent' }}
+                  >
+                    <div style={{ width: 16, height: 16, borderRadius: 4, border: `2px solid ${checked ? 'var(--accent)' : 'var(--border-strong)'}`, background: checked ? 'var(--accent)' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.15s' }}>
+                      {checked && <Check size={10} color="white" strokeWidth={3} />}
+                    </div>
+                    <span style={{ flex: 1, fontSize: 13, color: checked ? 'var(--accent)' : 'var(--text)', fontWeight: checked ? 600 : 400 }}>{item.name}</span>
+                    <span style={{ fontSize: 11, color: 'var(--text-3)', fontFamily: 'Inter' }}>{item.price} ج</span>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
+
 function CombosTab() {
   const [combos, setCombosState] = useState(getCombos)
   const [editing, setEditing] = useState(null)
-  const [form, setForm] = useState({ name: '', items: '', price: '', originalPrice: '', image: '🍔', active: true })
+  const [form, setForm] = useState({ name: '', selectedItems: [], price: '', originalPrice: '', image: '🍔', active: true })
   const { toast, showToast } = useToast()
+
+  const itemsLabel = (selectedItems) => selectedItems.map(i => i.name).join(' + ')
 
   const save = () => {
     if (!form.name || !form.price) return
-    const entry = { id: editing === 'new' ? Date.now() : editing, ...form, price: Number(form.price), originalPrice: Number(form.originalPrice) }
+    const entry = {
+      id: editing === 'new' ? Date.now() : editing,
+      name: form.name,
+      items: itemsLabel(form.selectedItems),
+      price: Number(form.price),
+      originalPrice: Number(form.originalPrice),
+      image: form.image,
+      active: form.active,
+    }
     const next = editing === 'new' ? [...combos, entry] : combos.map(c => c.id === editing ? entry : c)
     setCombosState(next); setCombos(next); setEditing(null); showToast('تم الحفظ ✓')
   }
@@ -288,9 +384,16 @@ function CombosTab() {
   const toggle = (id) => { const next = combos.map(c => c.id === id ? { ...c, active: !c.active } : c); setCombosState(next); setCombos(next) }
 
   const startEdit = (c) => {
-    setForm({ name: c.name, items: c.items, price: String(c.price), originalPrice: String(c.originalPrice), image: c.image, active: c.active })
+    setForm({ name: c.name, selectedItems: [], price: String(c.price), originalPrice: String(c.originalPrice), image: c.image, active: c.active })
     setEditing(c.id)
   }
+
+  const startNew = () => {
+    setForm({ name: '', selectedItems: [], price: '', originalPrice: '', image: '🍔', active: true })
+    setEditing('new')
+  }
+
+  const autoPrice = form.selectedItems.reduce((sum, i) => sum + i.price, 0)
 
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
@@ -298,7 +401,7 @@ function CombosTab() {
       <div>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
           <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>العروض ({combos.length})</p>
-          <button onClick={() => { setForm({ name: '', items: '', price: '', originalPrice: '', image: '🍔', active: true }); setEditing('new') }} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '7px 14px', background: 'var(--accent)', color: 'white', borderRadius: 10, fontSize: 13, fontWeight: 600, border: 'none', cursor: 'pointer' }}>
+          <button onClick={startNew} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '7px 14px', background: 'var(--accent)', color: 'white', borderRadius: 10, fontSize: 13, fontWeight: 600, border: 'none', cursor: 'pointer' }}>
             <Plus size={13} /> عرض جديد
           </button>
         </div>
@@ -338,11 +441,18 @@ function CombosTab() {
               <input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} style={inputStyle} placeholder="كومبو برجر مع عصير"
                 onFocus={e => e.target.style.borderColor = 'var(--accent)'} onBlur={e => e.target.style.borderColor = 'var(--border)'} />
             </div>
+
             <div>
               <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: 'var(--text-2)', marginBottom: 5 }}>محتويات العرض</label>
-              <input value={form.items} onChange={e => setForm({ ...form, items: e.target.value })} style={inputStyle} placeholder="1 برجر + عصير + بطاطس"
-                onFocus={e => e.target.style.borderColor = 'var(--accent)'} onBlur={e => e.target.style.borderColor = 'var(--border)'} />
+              <ItemsPicker
+                selected={form.selectedItems}
+                onChange={sel => {
+                  const total = sel.reduce((s, i) => s + i.price, 0)
+                  setForm(f => ({ ...f, selectedItems: sel, originalPrice: total > 0 ? String(total) : f.originalPrice }))
+                }}
+              />
             </div>
+
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
               <div>
                 <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: 'var(--text-2)', marginBottom: 5 }}>السعر الجديد ج</label>
@@ -350,11 +460,15 @@ function CombosTab() {
                   onFocus={e => e.target.style.borderColor = 'var(--accent)'} onBlur={e => e.target.style.borderColor = 'var(--border)'} />
               </div>
               <div>
-                <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: 'var(--text-2)', marginBottom: 5 }}>السعر الأصلي ج</label>
+                <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: 'var(--text-2)', marginBottom: 5 }}>
+                  السعر الأصلي ج
+                  {autoPrice > 0 && <span style={{ color: 'var(--text-3)', fontWeight: 400, marginRight: 4 }}>(مجموع: {autoPrice})</span>}
+                </label>
                 <input type="number" value={form.originalPrice} onChange={e => setForm({ ...form, originalPrice: e.target.value })} style={inputStyle} placeholder="115"
                   onFocus={e => e.target.style.borderColor = 'var(--accent)'} onBlur={e => e.target.style.borderColor = 'var(--border)'} />
               </div>
             </div>
+
             <div>
               <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: 'var(--text-2)', marginBottom: 8 }}>أيقونة</label>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
@@ -363,16 +477,21 @@ function CombosTab() {
                 ))}
               </div>
             </div>
+
+            {/* Live preview */}
             {form.name && form.price && (
               <div style={{ padding: '10px 14px', borderRadius: 10, background: 'var(--surface-2)', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 10 }}>
                 <span style={{ fontSize: 22 }}>{form.image}</span>
-                <div>
+                <div style={{ flex: 1, minWidth: 0 }}>
                   <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>{form.name}</p>
-                  <p style={{ fontSize: 11, color: 'var(--text-3)' }}>{form.items}</p>
-                  <p style={{ fontSize: 13, fontWeight: 800, color: 'var(--accent)', fontFamily: 'Inter' }}>{form.price} ج {form.originalPrice && <span style={{ fontSize: 11, color: 'var(--text-3)', textDecoration: 'line-through' }}>{form.originalPrice}</span>}</p>
+                  {form.selectedItems.length > 0 && <p style={{ fontSize: 11, color: 'var(--text-3)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{itemsLabel(form.selectedItems)}</p>}
+                  <p style={{ fontSize: 13, fontWeight: 800, color: 'var(--accent)', fontFamily: 'Inter', marginTop: 2 }}>
+                    {form.price} ج {form.originalPrice && <span style={{ fontSize: 11, color: 'var(--text-3)', textDecoration: 'line-through' }}>{form.originalPrice}</span>}
+                  </p>
                 </div>
               </div>
             )}
+
             <button onClick={save} disabled={!form.name || !form.price} style={{ padding: '11px', background: form.name && form.price ? 'var(--accent)' : 'var(--surface-3)', color: form.name && form.price ? 'white' : 'var(--text-3)', borderRadius: 10, fontWeight: 700, fontSize: 13, border: 'none', cursor: form.name && form.price ? 'pointer' : 'not-allowed' }}>
               حفظ العرض
             </button>
