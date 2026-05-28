@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import Dashboard from './pages/Dashboard'
 import Orders from './pages/Orders'
@@ -11,6 +12,7 @@ import KDS from './pages/KDS'
 import Customers from './pages/Customers'
 import Staff from './pages/Staff'
 import Inventory from './pages/Inventory'
+import Profile from './pages/Profile'
 import StoreFront from './customer/StoreFront'
 import Cart from './customer/Cart'
 import Checkout from './customer/Checkout'
@@ -18,15 +20,57 @@ import OrderConfirm from './customer/OrderConfirm'
 import OrderTracking from './customer/OrderTracking'
 import Explore from './customer/Explore'
 import RestaurantPage from './customer/RestaurantPage'
+import Loyalty from './customer/Loyalty'
 
 function ProtectedRoute({ children }) {
   if (!localStorage.getItem('auth_role')) return <Navigate to="/login" replace />
   return children
 }
 
+function OfflineBanner() {
+  const [offline, setOffline] = useState(!navigator.onLine)
+
+  useEffect(() => {
+    const onOnline = () => setOffline(false)
+    const onOffline = () => setOffline(true)
+    window.addEventListener('online', onOnline)
+    window.addEventListener('offline', onOffline)
+    return () => {
+      window.removeEventListener('online', onOnline)
+      window.removeEventListener('offline', onOffline)
+    }
+  }, [])
+
+  if (!offline) return null
+
+  return (
+    <div style={{
+      position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9999,
+      background: '#374151',
+      color: 'white',
+      textAlign: 'center',
+      padding: '10px 16px',
+      fontSize: 13,
+      fontWeight: 700,
+      fontFamily: 'Cairo, sans-serif',
+      direction: 'rtl',
+      boxShadow: '0 2px 8px rgba(0,0,0,0.25)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 8,
+    }}>
+      <span>📵</span>
+      <span>أنت غير متصل بالإنترنت حالياً</span>
+    </div>
+  )
+}
+
 export default function App() {
   return (
-    <Routes>
+    <>
+      <OfflineBanner />
+      <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/kds" element={<KDS />} />
 
@@ -41,8 +85,10 @@ export default function App() {
       <Route path="/customers" element={<ProtectedRoute><Customers /></ProtectedRoute>} />
       <Route path="/staff" element={<ProtectedRoute><Staff /></ProtectedRoute>} />
       <Route path="/inventory" element={<ProtectedRoute><Inventory /></ProtectedRoute>} />
+      <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
 
       {/* Customer-facing routes */}
+      <Route path="/loyalty" element={<Loyalty />} />
       <Route path="/chef-ahmed" element={<StoreFront />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/checkout" element={<Checkout />} />
@@ -58,5 +104,6 @@ export default function App() {
       <Route path="/burger-factory" element={<RestaurantPage />} />
       <Route path="/r/:slug" element={<RestaurantPage />} />
     </Routes>
+    </>
   )
 }
