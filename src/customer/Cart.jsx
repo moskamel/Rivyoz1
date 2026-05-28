@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ArrowLeft, Trash2, CheckCircle, X } from 'lucide-react'
+import { ArrowRight, Trash2, CheckCircle, X } from 'lucide-react'
 import { getConfig, getCoupons } from '../lib/restaurantStore'
 import { useCart } from './CartContext'
 
@@ -70,7 +70,7 @@ export default function Cart() {
         {/* Header */}
         <div style={{ background: 'white', borderBottom: '1px solid #F3F4F6', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 10, position: 'sticky', top: 0, zIndex: 10, boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
           <button onClick={() => navigate(-1)} style={{ width: 36, height: 36, borderRadius: 10, background: '#F9FAFB', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <ArrowLeft size={18} color="#374151" />
+            <ArrowRight size={18} color="#374151" />
           </button>
           <h1 style={{ fontWeight: 800, color: '#1a1a1a', fontSize: 17, flex: 1 }}>سلتك</h1>
         </div>
@@ -94,7 +94,7 @@ export default function Cart() {
       {/* ── HEADER ── */}
       <div style={{ background: 'white', borderBottom: '1px solid #F3F4F6', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 10, position: 'sticky', top: 0, zIndex: 10, boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
         <button onClick={() => navigate(-1)} style={{ width: 36, height: 36, borderRadius: 10, background: '#F9FAFB', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-          <ArrowLeft size={18} color="#374151" />
+          <ArrowRight size={18} color="#374151" />
         </button>
         <h1 style={{ fontWeight: 800, color: '#1a1a1a', fontSize: 17, flex: 1 }}>
           سلتك <span style={{ fontWeight: 500, color: '#9CA3AF', fontSize: 14 }}>({itemCount} منتج)</span>
