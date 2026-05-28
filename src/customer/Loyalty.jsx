@@ -63,7 +63,7 @@ export default function Loyalty() {
         </h1>
       </div>
 
-      <div style={{ maxWidth: 480, margin: '0 auto', padding: '16px 14px 40px', display: 'flex', flexDirection: 'column', gap: 14 }}>
+      <div style={{ maxWidth: 480, margin: '0 auto', padding: '16px 14px 88px', display: 'flex', flexDirection: 'column', gap: 14 }}>
 
         {/* ── POINTS HERO CARD ── */}
         <div style={{

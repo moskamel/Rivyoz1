@@ -91,9 +91,9 @@ function MapBottomSheet({ restaurant, onClose, onNavigate }) {
   return (
     <div
       style={{
-        position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 1000,
+        position: 'absolute', bottom: 64, left: 0, right: 0, zIndex: 1000,
         background: 'white', borderRadius: '20px 20px 0 0',
-        padding: '12px 16px 32px',
+        padding: '12px 16px 24px',
         boxShadow: '0 -8px 32px rgba(0,0,0,0.14)',
         animation: 'slideUp 0.22s cubic-bezier(0.16,1,0.3,1)',
         fontFamily: 'Cairo, sans-serif',
@@ -338,7 +338,7 @@ export default function Explore() {
 
           {/* Count badge */}
           <div style={{
-            position: 'absolute', bottom: selectedOnMap ? 200 : 24, right: 16, zIndex: 500,
+            position: 'absolute', bottom: selectedOnMap ? 260 : 84, right: 16, zIndex: 500,
             background: 'white', borderRadius: 12, padding: '7px 13px',
             boxShadow: '0 2px 10px rgba(0,0,0,0.14)',
             fontSize: 12, fontWeight: 700, color: '#374151',
@@ -363,7 +363,7 @@ export default function Explore() {
       ) : (
         /* ── List view ── */
         <div style={{ flex: 1, overflowY: 'auto' }}>
-          <div style={{ maxWidth: 480, margin: '0 auto', padding: '16px 16px 40px' }}>
+          <div style={{ maxWidth: 480, margin: '0 auto', padding: '16px 16px 88px' }}>
 
             {/* Filter tabs */}
             <div style={{ display: 'flex', gap: 8, overflowX: 'auto', scrollbarWidth: 'none', marginBottom: 16, paddingBottom: 2 }}>
