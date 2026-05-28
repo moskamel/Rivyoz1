@@ -30,7 +30,7 @@ export default function TopBar({ title }) {
     <header
       style={{
         height: 56,
-        background: 'rgba(8,8,8,0.85)',
+        background: isLight ? 'rgba(255,255,255,0.85)' : 'rgba(8,8,8,0.85)',
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
         borderBottom: '1px solid var(--border)',
