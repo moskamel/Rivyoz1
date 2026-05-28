@@ -487,3 +487,40 @@ html, body {
 .truncate-1 { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .truncate-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .truncate-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* ═══════════════════════════════════════════════════
+   RESPONSIVE LAYOUT UTILITIES
+═══════════════════════════════════════════════════ */
+
+/* Two-column on desktop, single column on mobile */
+.split-panel {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+@media (min-width: 768px) {
+  .split-panel {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Design page tab bar — scrollable on small screens */
+.design-tabs {
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 20px;
+}
+.design-tabs::-webkit-scrollbar { display: none; }
+.design-tabs button {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+/* Stack admin content on narrow screens */
+@media (max-width: 640px) {
+  .admin-page-content { padding: 12px; }
+}

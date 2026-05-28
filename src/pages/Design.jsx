@@ -41,7 +41,7 @@ function Toggle({ value, onChange }) {
 const tabs = [
   { label: 'اللون والهوية', icon: Palette },
   { label: 'البانرات', icon: Image },
-  { label: 'العروض والكومبو', icon: Tag },
+  { label: 'العروض', icon: Tag },
   { label: 'الأقسام والمنتجات', icon: LayoutTemplate },
   { label: 'الفوتر', icon: Smartphone },
 ]
@@ -57,7 +57,7 @@ function ColorTab() {
   const { toast, showToast } = useToast()
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+    <div className="split-panel">
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
         <div className="glass" style={{ padding: 24 }}>
           <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>اللون الرئيسي</p>
@@ -179,7 +179,7 @@ function BannersTab() {
   const previewColors = editing === 'new' ? form.color : (previewBanner?.color || ['#F97316', '#EA580C'])
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+    <div className="split-panel">
       {/* Left: storefront preview */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
         {/* Hero banner preview (storefront style) */}
@@ -283,12 +283,16 @@ function BannersTab() {
               {!form.imageUrl && <p style={{ fontSize: 10, color: 'var(--text-3)', marginTop: 4 }}>بدون صورة سيُستخدم لون التدرج</p>}
             </div>
             <div>
-              <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: 'var(--text-2)', marginBottom: 5 }}>العنوان</label>
+              <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: 'var(--text-2)', marginBottom: 5 }}>
+                العنوان <span style={{ fontWeight: 400, color: 'var(--text-3)' }}>(اختياري)</span>
+              </label>
               <input value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} style={inputStyle} placeholder="🔥 عرض اليوم"
                 onFocus={e => e.target.style.borderColor = 'var(--accent)'} onBlur={e => e.target.style.borderColor = 'var(--border)'} />
             </div>
             <div>
-              <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: 'var(--text-2)', marginBottom: 5 }}>الوصف</label>
+              <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: 'var(--text-2)', marginBottom: 5 }}>
+                الوصف <span style={{ fontWeight: 400, color: 'var(--text-3)' }}>(اختياري)</span>
+              </label>
               <input value={form.subtitle} onChange={e => setForm({ ...form, subtitle: e.target.value })} style={inputStyle} placeholder="تفاصيل العرض..."
                 onFocus={e => e.target.style.borderColor = 'var(--accent)'} onBlur={e => e.target.style.borderColor = 'var(--border)'} />
             </div>
@@ -302,7 +306,7 @@ function BannersTab() {
                 </div>
               </div>
             )}
-            <button onClick={save} disabled={!form.title} style={{ padding: '11px', background: form.title ? 'var(--accent)' : 'var(--surface-3)', color: form.title ? 'white' : 'var(--text-3)', borderRadius: 10, fontWeight: 700, fontSize: 13, border: 'none', cursor: form.title ? 'pointer' : 'not-allowed', marginTop: 4 }}>
+            <button onClick={save} className="btn-primary" style={{ padding: '11px', marginTop: 4, width: '100%' }}>
               حفظ البانر
             </button>
           </div>
@@ -445,7 +449,7 @@ function CombosTab() {
   const autoPrice = form.selectedItems.reduce((sum, i) => sum + i.price, 0)
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+    <div className="split-panel">
       {/* List */}
       <div>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
@@ -588,7 +592,7 @@ function CategoriesTab() {
   }
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+    <div className="split-panel">
 
       {/* Left: Slider items only */}
       <div>
@@ -714,7 +718,7 @@ function FooterTab() {
   const save = () => { setFooterSettings(settings); showToast('تم الحفظ ✓') }
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+    <div className="split-panel">
       <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
         {/* App buttons */}
         <div className="glass" style={{ padding: 20 }}>
@@ -812,12 +816,21 @@ export default function Design() {
 
   return (
     <Layout title="تصميم الموقع">
-      <div style={{ display: 'flex', gap: 6, marginBottom: 20, borderBottom: '1px solid var(--border)', paddingBottom: 0 }}>
+      <div className="design-tabs" style={{ paddingBottom: 0 }}>
         {tabs.map((t, i) => {
           const Icon = t.icon
           const active = activeTab === i
           return (
-            <button key={i} onClick={() => setActiveTab(i)} style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '9px 16px', fontSize: 13, fontWeight: 600, cursor: 'pointer', border: 'none', background: 'none', color: active ? 'var(--accent)' : 'var(--text-2)', transition: 'all 0.15s', borderBottom: `2px solid ${active ? 'var(--accent)' : 'transparent'}`, marginBottom: -1 }}
+            <button key={i} onClick={() => setActiveTab(i)}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 7,
+                padding: '9px 14px', fontSize: 13, fontWeight: 600,
+                cursor: 'pointer', border: 'none', background: 'none',
+                color: active ? 'var(--accent)' : 'var(--text-2)',
+                transition: 'all 0.15s',
+                borderBottom: `2px solid ${active ? 'var(--accent)' : 'transparent'}`,
+                marginBottom: -1,
+              }}
               onMouseEnter={e => { if (!active) e.currentTarget.style.color = 'var(--text)' }}
               onMouseLeave={e => { if (!active) e.currentTarget.style.color = 'var(--text-2)' }}
             >

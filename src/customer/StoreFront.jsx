@@ -177,7 +177,7 @@ function OffersSection({ accentColor, onAddCombo }) {
   if (combos.length === 0) return null
 
   return (
-    <ItemGrid title="العروض والكومبو" icon={Tag} accentColor={accentColor}>
+    <ItemGrid title="العروض" icon={Tag} accentColor={accentColor}>
       {combos.map(combo => {
         const discount = Math.round((1 - combo.price / combo.originalPrice) * 100)
         return (
@@ -257,7 +257,7 @@ export default function StoreFront() {
 
   const specialTabs = [
     ...(popularItems.length > 0 ? [{ id: 'popular', name: '🔥 الأكثر طلباً' }] : []),
-    ...(activeCombos.length > 0 ? [{ id: 'combos', name: '🏷️ العروض والكومبو' }] : []),
+    ...(activeCombos.length > 0 ? [{ id: 'combos', name: '🏷️ العروض' }] : []),
   ]
   const allTabs = [...specialTabs, ...categories]
 
