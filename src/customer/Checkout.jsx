@@ -1,0 +1,567 @@
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { ArrowRight, CheckCircle } from 'lucide-react'
+import { getConfig, addOrder, getCoupons } from '../lib/restaurantStore'
+import { useCart } from './CartContext'
+
+// ── Input style ──────────────────────────────────────────────────────────────
+function makeInputStyle() {
+  return {
+    width: '100%', padding: '13px 14px', borderRadius: 12,
+    border: '1.5px solid #E5E7EB', fontSize: 14, outline: 'none',
+    fontFamily: 'Cairo, sans-serif', background: 'white', color: '#1a1a1a',
+    boxSizing: 'border-box', transition: 'border-color 0.2s, box-shadow 0.2s',
+  }
+}
+
+function focusInput(e, color) {
+  e.target.style.borderColor = color
+  e.target.style.boxShadow = `0 0 0 3px ${color}22`
+}
+function blurInput(e) {
+  e.target.style.borderColor = '#E5E7EB'
+  e.target.style.boxShadow = 'none'
+}
+
+// ── Step Indicator ───────────────────────────────────────────────────────────
+function StepIndicator({ step, color }) {
+  const steps = [
+    { num: 1, label: 'تفاصيل التوصيل' },
+    { num: 2, label: 'الدفع' },
+    { num: 3, label: 'تأكيد الطلب' },
+  ]
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0, padding: '14px 20px' }}>
+      {steps.map((s, idx) => (
+        <div key={s.num} style={{ display: 'flex', alignItems: 'center', flex: idx < steps.length - 1 ? 1 : 'none' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, flexShrink: 0 }}>
+            <div style={{
+              width: 32, height: 32, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontWeight: 800, fontSize: 13, fontFamily: 'Inter, sans-serif',
+              background: s.num < step ? '#22C55E' : s.num === step ? color : '#E5E7EB',
+              color: s.num <= step ? 'white' : '#9CA3AF',
+              transition: 'all 0.3s',
+            }}>
+              {s.num < step ? <CheckCircle size={15} /> : s.num}
+            </div>
+            <span style={{
+              fontSize: 10, fontWeight: 700,
+              color: s.num === step ? color : s.num < step ? '#22C55E' : '#9CA3AF',
+              whiteSpace: 'nowrap', fontFamily: 'Cairo, sans-serif', transition: 'color 0.3s',
+            }}>
+              {s.label}
+            </span>
+          </div>
+          {idx < steps.length - 1 && (
+            <div style={{
+              flex: 1, height: 2,
+              background: s.num < step ? '#22C55E' : '#E5E7EB',
+              margin: '0 6px', marginBottom: 20, transition: 'background 0.3s', minWidth: 20,
+            }} />
+          )}
+        </div>
+      ))}
+    </div>
+  )
+}
+
+// ── Compact order summary (used in step 2 & 3) ───────────────────────────────
+function CompactSummary({ cartItems, total, deliveryFee, couponDiscount, couponApplied, color }) {
+  const finalTotal = Math.max(0, total + deliveryFee - couponDiscount)
+  return (
+    <div style={{ background: '#F9FAFB', borderRadius: 14, padding: '12px 14px', marginBottom: 16 }}>
+      <p style={{ fontWeight: 700, color: '#374151', fontSize: 13, marginBottom: 10 }}>ملخص الطلب</p>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+        {cartItems.map(item => (
+          <div key={item.cartId} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, color: '#6B7280' }}>
+            <span>{item.name} × {item.qty}</span>
+            <span style={{ fontWeight: 600, fontFamily: 'Inter, sans-serif' }}>{item.price * item.qty} ج</span>
+          </div>
+        ))}
+        <div style={{ borderTop: '1px dashed #E5E7EB', paddingTop: 8, marginTop: 4, display: 'flex', flexDirection: 'column', gap: 5 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: '#9CA3AF' }}>
+            <span>المجموع الفرعي</span>
+            <span style={{ fontFamily: 'Inter, sans-serif' }}>{total} ج</span>
+          </div>
+          {deliveryFee > 0 && (
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: '#9CA3AF' }}>
+              <span>رسوم التوصيل</span>
+              <span style={{ fontFamily: 'Inter, sans-serif' }}>{deliveryFee} ج</span>
+            </div>
+          )}
+          {couponApplied && couponDiscount > 0 && (
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: '#22C55E' }}>
+              <span>الخصم</span>
+              <span style={{ fontFamily: 'Inter, sans-serif', fontWeight: 700 }}>− {couponDiscount} ج</span>
+            </div>
+          )}
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 800, fontSize: 15, color: '#1a1a1a', paddingTop: 4 }}>
+            <span>الإجمالي</span>
+            <span style={{ color: color, fontFamily: 'Inter, sans-serif' }}>{finalTotal} ج</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ── Main Checkout Component ──────────────────────────────────────────────────
+export default function Checkout() {
+  const navigate = useNavigate()
+  const config = getConfig()
+  const { cartItems, clearCart, total, itemCount } = useCart()
+  const inputStyle = makeInputStyle()
+  const accentColor = config.color
+
+  // redirect if cart is empty
+  useEffect(() => {
+    if (itemCount === 0) navigate('/cart')
+  }, [itemCount, navigate])
+
+  // load coupon/orderType saved from Cart
+  const savedCart = (() => {
+    try { return JSON.parse(localStorage.getItem('cart_coupon') || '{}') } catch (e) { return {} }
+  })()
+
+  const [step, setStep] = useState(1)
+  const [animating, setAnimating] = useState(false)
+
+  // Step 1 fields
+  const [name, setName] = useState(() => localStorage.getItem('customer_name') || '')
+  const [phone, setPhone] = useState(() => localStorage.getItem('customer_phone') || '')
+  const [orderType, setOrderType] = useState(savedCart.orderType || 'delivery')
+  const [address, setAddress] = useState('')
+  const [driverNote, setDriverNote] = useState('')
+  const [tableNumber, setTableNumber] = useState('')
+  const [step1Errors, setStep1Errors] = useState({})
+
+  // Step 2
+  const [payment, setPayment] = useState('cash')
+
+  // Coupon (step 3)
+  const [coupon, setCoupon] = useState(savedCart.coupon || '')
+  const [couponApplied, setCouponApplied] = useState(savedCart.couponApplied || false)
+  const [couponDiscount, setCouponDiscount] = useState(savedCart.couponDiscount || 0)
+  const [couponError, setCouponError] = useState('')
+
+  const deliveryFee = orderType === 'delivery' ? config.deliveryFee : 0
+  const finalTotal = Math.max(0, total + deliveryFee - couponDiscount)
+
+  const goToStep = (target) => {
+    setAnimating(true)
+    setTimeout(() => {
+      setStep(target)
+      setAnimating(false)
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }, 180)
+  }
+
+  // ── Coupon logic ──
+  const applyCoupon = () => {
+    const code = coupon.trim().toUpperCase()
+    const coupons = getCoupons()
+    const match = coupons.find(c => c.code === code)
+    if (!match) {
+      setCouponError('كود غير صحيح'); setCouponApplied(false); setCouponDiscount(0); return
+    }
+    if (match.max && match.used >= match.max) {
+      setCouponError('هذا الكوبون وصل لأقصى عدد استخدامات'); setCouponApplied(false); setCouponDiscount(0); return
+    }
+    if (match.expiry && new Date(match.expiry) < new Date()) {
+      setCouponError('هذا الكوبون منتهي الصلاحية'); setCouponApplied(false); setCouponDiscount(0); return
+    }
+    if (match.minOrder && total < match.minOrder) {
+      setCouponError(`الحد الأدنى للطلب ${match.minOrder} ج`); setCouponApplied(false); setCouponDiscount(0); return
+    }
+    const discount = match.type === 'percent' ? Math.round(total * match.value / 100) : match.value
+    setCouponApplied(true); setCouponDiscount(discount); setCouponError('')
+  }
+
+  // ── Step 1 validation ──
+  const validateStep1 = () => {
+    const errors = {}
+    if (!name.trim()) errors.name = 'الاسم مطلوب'
+    if (!phone.trim()) errors.phone = 'رقم الهاتف مطلوب'
+    if (orderType === 'delivery' && !address.trim()) errors.address = 'العنوان مطلوب'
+    if (orderType === 'table' && !tableNumber) errors.tableNumber = 'رقم الطاولة مطلوب'
+    setStep1Errors(errors)
+    return Object.keys(errors).length === 0
+  }
+
+  // ── Final order submission ──
+  const handleConfirmOrder = () => {
+    const paymentLabels = { cash: 'كاش عند الاستلام', card: 'بطاقة بنكية', fawry: 'فوري' }
+    const order = {
+      customer: name, phone,
+      table: orderType === 'table' ? `طاولة ${tableNumber}` : orderType === 'delivery' ? 'توصيل' : 'استلام',
+      items: cartItems.map(i => i.name).join(' + '),
+      total: finalTotal,
+      payment: paymentLabels[payment],
+      details: cartItems.map(i => ({ name: i.name, qty: i.qty, price: i.price, note: i.note })),
+      address: orderType === 'delivery' ? address : '',
+      note: orderType === 'delivery' ? driverNote : '',
+      coupon: couponApplied ? coupon.trim().toUpperCase() : '',
+      orderType, deliveryFee,
+    }
+    const savedOrder = addOrder(order)
+    localStorage.setItem('customer_name', name)
+    localStorage.setItem('customer_phone', phone)
+    localStorage.removeItem('cart_coupon')
+    clearCart()
+    navigate('/order-confirm', { state: { order: savedOrder } })
+  }
+
+  // ── Shared UI helpers ──
+  const Label = ({ children, error }) => (
+    <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: error ? '#EF4444' : '#374151', marginBottom: 6 }}>
+      {children}
+    </label>
+  )
+
+  const ErrorMsg = ({ msg }) => msg
+    ? <p style={{ color: '#EF4444', fontSize: 11, marginTop: 5, fontWeight: 600 }}>{msg}</p>
+    : null
+
+  const BackBtn = ({ onClick }) => (
+    <button onClick={onClick} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '10px 0', background: 'none', border: 'none', cursor: 'pointer', color: '#6B7280', fontWeight: 700, fontSize: 14, fontFamily: 'Cairo, sans-serif' }}>
+      <ArrowRight size={16} />
+      رجوع
+    </button>
+  )
+
+  const NextBtn = ({ onClick, label, disabled }) => (
+    <button
+      onClick={onClick}
+      disabled={!!disabled}
+      style={{
+        width: '100%', padding: '16px', borderRadius: 18,
+        background: disabled ? '#E5E7EB' : accentColor,
+        color: disabled ? '#9CA3AF' : 'white',
+        fontWeight: 800, fontSize: 16, border: 'none',
+        cursor: disabled ? 'not-allowed' : 'pointer',
+        fontFamily: 'Cairo, sans-serif',
+        boxShadow: disabled ? 'none' : `0 6px 20px ${accentColor}40`,
+        transition: 'all 0.2s',
+        marginTop: 8,
+      }}
+    >{label || 'متابعة'}</button>
+  )
+
+  const orderTypeOpts = [
+    { key: 'delivery', label: 'توصيل', icon: '🚗', enabled: config.allowDelivery },
+    { key: 'pickup', label: 'استلام', icon: '🏃', enabled: config.allowPickup },
+    { key: 'table', label: 'طاولة', icon: '🍽️', enabled: config.allowTable },
+  ]
+
+  const paymentOptions = [
+    { key: 'cash', label: 'كاش عند الاستلام', icon: '💵' },
+    { key: 'card', label: 'بطاقة بنكية', icon: '💳' },
+    { key: 'fawry', label: 'فوري', icon: '📱' },
+  ]
+
+  // ── RENDER ───────────────────────────────────────────────────────────────
+  return (
+    <div style={{ minHeight: '100vh', background: '#F9FAFB', fontFamily: 'Cairo, sans-serif', direction: 'rtl' }}>
+
+      {/* Sticky header */}
+      <div style={{ background: 'white', borderBottom: '1px solid #F3F4F6', position: 'sticky', top: 0, zIndex: 20, boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
+        <div style={{ maxWidth: 480, margin: '0 auto' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 16px 0' }}>
+            <button
+              onClick={() => step === 1 ? navigate('/cart') : goToStep(step - 1)}
+              style={{ width: 36, height: 36, borderRadius: 10, background: '#F9FAFB', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
+            >
+              <ArrowRight size={18} color="#374151" />
+            </button>
+            <div style={{ flex: 1 }}>
+              <p style={{ fontWeight: 800, fontSize: 16, color: '#1a1a1a' }}>{config.name}</p>
+              <p style={{ fontSize: 11, color: '#9CA3AF', marginTop: 1 }}>إتمام الطلب</p>
+            </div>
+          </div>
+          <StepIndicator step={step} color={accentColor} />
+        </div>
+      </div>
+
+      {/* Step content */}
+      <div style={{ maxWidth: 480, margin: '0 auto', padding: '16px 14px 100px', opacity: animating ? 0 : 1, transition: 'opacity 0.18s ease' }}>
+
+        {/* ── STEP 1: Delivery details ── */}
+        {step === 1 && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+
+            {/* Name & phone */}
+            <div style={{ background: 'white', borderRadius: 16, padding: '16px 16px', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
+              <p style={{ fontWeight: 800, fontSize: 14, color: '#1a1a1a', marginBottom: 14 }}>بياناتك الشخصية</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <div>
+                  <Label error={step1Errors.name}>الاسم الكامل *</Label>
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={e => { setName(e.target.value); setStep1Errors(p => ({ ...p, name: '' })) }}
+                    placeholder="اسمك الكامل"
+                    style={{ ...inputStyle, borderColor: step1Errors.name ? '#EF4444' : '#E5E7EB' }}
+                    onFocus={e => focusInput(e, accentColor)}
+                    onBlur={blurInput}
+                  />
+                  <ErrorMsg msg={step1Errors.name} />
+                </div>
+                <div>
+                  <Label error={step1Errors.phone}>رقم الهاتف *</Label>
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={e => { setPhone(e.target.value); setStep1Errors(p => ({ ...p, phone: '' })) }}
+                    placeholder="01XXXXXXXXX"
+                    dir="ltr"
+                    style={{ ...inputStyle, borderColor: step1Errors.phone ? '#EF4444' : '#E5E7EB', fontFamily: 'Inter, sans-serif' }}
+                    onFocus={e => focusInput(e, accentColor)}
+                    onBlur={blurInput}
+                  />
+                  <ErrorMsg msg={step1Errors.phone} />
+                </div>
+              </div>
+            </div>
+
+            {/* Order type */}
+            <div style={{ background: 'white', borderRadius: 16, padding: '16px 16px', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
+              <p style={{ fontWeight: 800, fontSize: 14, color: '#1a1a1a', marginBottom: 12 }}>نوع الطلب</p>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8 }}>
+                {orderTypeOpts.map(opt => (
+                  <button
+                    key={opt.key}
+                    onClick={() => opt.enabled && setOrderType(opt.key)}
+                    disabled={!opt.enabled}
+                    style={{
+                      padding: '12px 6px', borderRadius: 14, fontSize: 12, fontWeight: 700,
+                      cursor: opt.enabled ? 'pointer' : 'not-allowed',
+                      display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5,
+                      transition: 'all 0.15s',
+                      border: `2px solid ${orderType === opt.key ? accentColor : '#E5E7EB'}`,
+                      background: orderType === opt.key ? accentColor + '12' : '#FAFAFA',
+                      color: orderType === opt.key ? accentColor : '#6B7280',
+                      opacity: opt.enabled ? 1 : 0.4,
+                      fontFamily: 'Cairo, sans-serif',
+                    }}
+                  >
+                    <span style={{ fontSize: 22 }}>{opt.icon}</span>
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Delivery address */}
+            {orderType === 'delivery' && (
+              <div style={{ background: 'white', borderRadius: 16, padding: '16px 16px', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
+                <p style={{ fontWeight: 800, fontSize: 14, color: '#1a1a1a', marginBottom: 14 }}>بيانات التوصيل</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                  <div>
+                    <Label error={step1Errors.address}>العنوان *</Label>
+                    <textarea
+                      value={address}
+                      onChange={e => { setAddress(e.target.value); setStep1Errors(p => ({ ...p, address: '' })) }}
+                      placeholder="الشارع، المنطقة، المبنى، رقم الشقة..."
+                      rows={3}
+                      style={{ ...inputStyle, resize: 'none', borderColor: step1Errors.address ? '#EF4444' : '#E5E7EB' }}
+                      onFocus={e => focusInput(e, accentColor)}
+                      onBlur={blurInput}
+                    />
+                    <ErrorMsg msg={step1Errors.address} />
+                  </div>
+                  <div>
+                    <Label>ملاحظات للسائق (اختياري)</Label>
+                    <input
+                      type="text"
+                      value={driverNote}
+                      onChange={e => setDriverNote(e.target.value)}
+                      placeholder="مثال: الدور الثاني، جنب المسجد"
+                      style={inputStyle}
+                      onFocus={e => focusInput(e, accentColor)}
+                      onBlur={blurInput}
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Table number */}
+            {orderType === 'table' && (
+              <div style={{ background: 'white', borderRadius: 16, padding: '16px 16px', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
+                <p style={{ fontWeight: 800, fontSize: 14, color: '#1a1a1a', marginBottom: 12 }}>رقم الطاولة</p>
+                <div>
+                  <input
+                    type="number"
+                    value={tableNumber}
+                    onChange={e => { setTableNumber(e.target.value); setStep1Errors(p => ({ ...p, tableNumber: '' })) }}
+                    placeholder="مثال: 5"
+                    style={{ ...inputStyle, borderColor: step1Errors.tableNumber ? '#EF4444' : '#E5E7EB', fontFamily: 'Inter, sans-serif' }}
+                    onFocus={e => focusInput(e, accentColor)}
+                    onBlur={blurInput}
+                  />
+                  <ErrorMsg msg={step1Errors.tableNumber} />
+                </div>
+              </div>
+            )}
+
+            <NextBtn
+              onClick={() => { if (validateStep1()) goToStep(2) }}
+              label="متابعة للدفع"
+            />
+          </div>
+        )}
+
+        {/* ── STEP 2: Payment ── */}
+        {step === 2 && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <CompactSummary
+              cartItems={cartItems} total={total}
+              deliveryFee={deliveryFee} couponDiscount={couponDiscount}
+              couponApplied={couponApplied} color={accentColor}
+            />
+
+            {/* Payment cards */}
+            <div style={{ background: 'white', borderRadius: 16, padding: '16px 16px', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
+              <p style={{ fontWeight: 800, fontSize: 14, color: '#1a1a1a', marginBottom: 14 }}>طريقة الدفع</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                {paymentOptions.map(opt => (
+                  <button
+                    key={opt.key}
+                    onClick={() => setPayment(opt.key)}
+                    style={{
+                      padding: '16px 18px', borderRadius: 14,
+                      border: `2px solid ${payment === opt.key ? accentColor : '#E5E7EB'}`,
+                      background: payment === opt.key ? accentColor + '08' : 'white',
+                      cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 14,
+                      transition: 'all 0.15s', fontFamily: 'Cairo, sans-serif', textAlign: 'right',
+                    }}
+                  >
+                    <div style={{ width: 22, height: 22, borderRadius: '50%', border: `2.5px solid ${payment === opt.key ? accentColor : '#D1D5DB'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'border-color 0.15s' }}>
+                      {payment === opt.key && <div style={{ width: 10, height: 10, borderRadius: '50%', background: accentColor }} />}
+                    </div>
+                    <span style={{ fontSize: 26 }}>{opt.icon}</span>
+                    <span style={{ fontSize: 14, fontWeight: 700, color: payment === opt.key ? accentColor : '#374151' }}>{opt.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <BackBtn onClick={() => goToStep(1)} />
+              <NextBtn onClick={() => goToStep(3)} label="متابعة للمراجعة" />
+            </div>
+          </div>
+        )}
+
+        {/* ── STEP 3: Review & Confirm ── */}
+        {step === 3 && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+
+            {/* Items list */}
+            <div style={{ background: 'white', borderRadius: 16, overflow: 'hidden', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
+              <div style={{ padding: '14px 16px', borderBottom: '1px solid #F3F4F6' }}>
+                <p style={{ fontWeight: 800, fontSize: 14, color: '#1a1a1a' }}>أصناف الطلب</p>
+              </div>
+              {cartItems.map((item, idx) => (
+                <div key={item.cartId} style={{ padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: idx < cartItems.length - 1 ? '1px solid #F9FAFB' : 'none' }}>
+                  <div style={{ flex: 1 }}>
+                    <p style={{ fontWeight: 600, color: '#1a1a1a', fontSize: 13 }}>{item.name}</p>
+                    {item.modifiers && item.modifiers.length > 0 && (
+                      <p style={{ fontSize: 11, color: '#9CA3AF', marginTop: 2 }}>
+                        {item.modifiers.map(m => m.name).filter(Boolean).join('، ')}
+                      </p>
+                    )}
+                  </div>
+                  <div style={{ textAlign: 'left', display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <span style={{ fontSize: 12, color: '#9CA3AF', fontFamily: 'Inter, sans-serif' }}>× {item.qty}</span>
+                    <span style={{ fontSize: 13, fontWeight: 700, color: accentColor, fontFamily: 'Inter, sans-serif' }}>{item.price * item.qty} ج</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Coupon */}
+            <div style={{ background: 'white', borderRadius: 16, padding: '16px 16px', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
+              <p style={{ fontWeight: 800, fontSize: 14, color: '#1a1a1a', marginBottom: 12 }}>كود الخصم</p>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <input
+                  type="text"
+                  value={coupon}
+                  onChange={e => { setCoupon(e.target.value); setCouponError('') }}
+                  placeholder="أدخل كود الخصم"
+                  style={{ ...inputStyle, flex: 1, borderColor: couponApplied ? '#22C55E' : '#E5E7EB', direction: 'ltr' }}
+                  onFocus={e => focusInput(e, accentColor)}
+                  onBlur={e => { e.target.style.borderColor = couponApplied ? '#22C55E' : '#E5E7EB'; e.target.style.boxShadow = 'none' }}
+                />
+                <button
+                  onClick={applyCoupon}
+                  style={{ padding: '11px 18px', borderRadius: 12, background: accentColor, color: 'white', fontWeight: 700, fontSize: 13, border: 'none', cursor: 'pointer', flexShrink: 0, fontFamily: 'Cairo, sans-serif' }}
+                >تطبيق</button>
+              </div>
+              {couponError && <p style={{ color: '#EF4444', fontSize: 12, marginTop: 6, fontWeight: 600 }}>{couponError}</p>}
+              {couponApplied && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 8, background: '#F0FDF4', padding: '7px 12px', borderRadius: 10 }}>
+                  <CheckCircle size={13} color="#22C55E" />
+                  <p style={{ color: '#16A34A', fontSize: 12, fontWeight: 700 }}>تم تطبيق خصم {couponDiscount} ج</p>
+                </div>
+              )}
+            </div>
+
+            {/* Totals breakdown */}
+            <div style={{ background: 'white', borderRadius: 16, padding: '16px 16px', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
+              <p style={{ fontWeight: 800, fontSize: 14, color: '#1a1a1a', marginBottom: 12 }}>ملخص المدفوعات</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, color: '#6B7280' }}>
+                  <span>المجموع الفرعي</span>
+                  <span style={{ fontFamily: 'Inter, sans-serif' }}>{total} ج</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, color: '#6B7280' }}>
+                  <span>رسوم التوصيل</span>
+                  <span style={{ fontFamily: 'Inter, sans-serif' }}>
+                    {orderType === 'delivery' ? `${config.deliveryFee} ج` : 'مجاني'}
+                  </span>
+                </div>
+                {couponApplied && couponDiscount > 0 && (
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, color: '#22C55E' }}>
+                    <span>الخصم</span>
+                    <span style={{ fontFamily: 'Inter, sans-serif', fontWeight: 700 }}>− {couponDiscount} ج</span>
+                  </div>
+                )}
+                <div style={{ borderTop: '1.5px dashed #E5E7EB', paddingTop: 10, display: 'flex', justifyContent: 'space-between', fontWeight: 800, fontSize: 18 }}>
+                  <span style={{ color: '#1a1a1a' }}>الإجمالي</span>
+                  <span style={{ color: accentColor, fontFamily: 'Inter, sans-serif' }}>{finalTotal} ج</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Delivery address summary */}
+            {orderType === 'delivery' && address && (
+              <div style={{ background: 'white', borderRadius: 16, padding: '14px 16px', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
+                <p style={{ fontWeight: 800, fontSize: 13, color: '#374151', marginBottom: 6 }}>📍 عنوان التوصيل</p>
+                <p style={{ fontSize: 13, color: '#6B7280', lineHeight: 1.6 }}>{address}</p>
+                {driverNote && <p style={{ fontSize: 12, color: '#9CA3AF', marginTop: 4 }}>ملاحظة: {driverNote}</p>}
+              </div>
+            )}
+
+            {/* Payment method summary */}
+            <div style={{ background: 'white', borderRadius: 16, padding: '14px 16px', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
+              <p style={{ fontWeight: 800, fontSize: 13, color: '#374151', marginBottom: 6 }}>💳 طريقة الدفع</p>
+              <p style={{ fontSize: 14, color: '#1a1a1a', fontWeight: 600 }}>
+                {paymentOptions.find(p => p.key === payment)?.icon}{' '}
+                {paymentOptions.find(p => p.key === payment)?.label}
+              </p>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <BackBtn onClick={() => goToStep(2)} />
+              <NextBtn
+                onClick={handleConfirmOrder}
+                label={`تأكيد الطلب · ${finalTotal} ج`}
+              />
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
