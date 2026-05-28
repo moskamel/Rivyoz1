@@ -84,36 +84,90 @@ function BannerCarousel({ accentColor }) {
   )
 }
 
-/* ─── Popular Slider ────────────────────────────────────────── */
+/* ─── Shared item card used by all sections ─────────────────── */
+function ItemCard({ accentColor, onClick, image, emoji = '🍽️', title, subtitle, price, originalPrice, badgeText, badgeColor = '#F97316', disabled, actionLabel = 'أضف +', onAction }) {
+  return (
+    <div
+      onClick={onClick}
+      style={{ background: 'white', borderRadius: 16, overflow: 'hidden', boxShadow: '0 2px 10px rgba(0,0,0,0.06)', cursor: disabled ? 'default' : 'pointer', border: '1px solid #f3f4f6', transition: 'transform 0.15s' }}
+      onMouseEnter={e => { if (!disabled) e.currentTarget.style.transform = 'scale(1.02)' }}
+      onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+    >
+      <div style={{ height: 100, background: accentColor + '18', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32, position: 'relative' }}>
+        {image ? <img src={image} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : emoji}
+        {badgeText && (
+          <span style={{ position: 'absolute', top: 8, right: 8, background: badgeColor, color: 'white', fontSize: 9, fontWeight: 800, padding: '2px 7px', borderRadius: 8 }}>
+            {badgeText}
+          </span>
+        )}
+        {disabled && (
+          <div style={{ position: 'absolute', inset: 0, background: 'rgba(255,255,255,0.75)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ fontSize: 11, fontWeight: 700, color: '#9ca3af' }}>غير متاح</span>
+          </div>
+        )}
+      </div>
+      <div style={{ padding: '10px 10px 12px' }}>
+        <p style={{ fontWeight: 700, color: '#1a1a1a', fontSize: 13, lineHeight: 1.3, marginBottom: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{title}</p>
+        {subtitle && (
+          <p style={{ fontSize: 11, color: '#9ca3af', marginBottom: 4, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{subtitle}</p>
+        )}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginTop: 4 }}>
+          <span style={{ fontWeight: 800, fontSize: 14, color: accentColor }}>{price} ج</span>
+          {originalPrice && (
+            <span style={{ fontSize: 11, color: '#9ca3af', textDecoration: 'line-through' }}>{originalPrice}</span>
+          )}
+        </div>
+        <button
+          disabled={disabled}
+          onClick={onAction ? (e) => { e.stopPropagation(); onAction() } : undefined}
+          style={{ width: '100%', marginTop: 8, padding: '7px', background: disabled ? '#e5e7eb' : accentColor, color: 'white', fontWeight: 700, fontSize: 13, borderRadius: 10, border: 'none', cursor: disabled ? 'not-allowed' : 'pointer', fontFamily: 'Cairo, sans-serif' }}
+        >
+          {actionLabel}
+        </button>
+      </div>
+    </div>
+  )
+}
+
+/* ─── Shared grid wrapper ───────────────────────────────────── */
+function ItemGrid({ title, icon: Icon, accentColor, children }) {
+  return (
+    <div style={{ maxWidth: 480, margin: '8px auto 0', paddingBottom: 32 }}>
+      <div style={{ background: 'white' }}>
+        <h2 style={{ fontWeight: 800, color: '#1a1a1a', fontSize: 15, padding: '14px 16px 10px', borderBottom: '1px solid #f9fafb', display: 'flex', alignItems: 'center', gap: 6 }}>
+          {Icon && <Icon size={16} style={{ color: accentColor }} />}
+          {title}
+        </h2>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, padding: 12 }}>
+          {children}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ─── Popular Section ───────────────────────────────────────── */
 function PopularSlider({ items, accentColor, onOpen }) {
   const popular = items.filter(i => i.active && i.bestseller).slice(0, 8)
   if (popular.length === 0) return null
 
   return (
-    <div style={{ marginBottom: 8 }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '16px 16px 10px' }}>
-        <Flame size={16} style={{ color: accentColor }} />
-        <p style={{ fontWeight: 800, fontSize: 15, color: '#1a1a1a' }}>الأكثر طلباً</p>
-      </div>
-      <div style={{ display: 'flex', gap: 12, overflowX: 'auto', padding: '0 16px 16px', scrollbarWidth: 'none' }} className="no-scrollbar">
-        {popular.map(item => (
-          <div
-            key={item.id}
-            onClick={() => onOpen(item)}
-            style={{ flexShrink: 0, width: 130, background: 'white', borderRadius: 16, overflow: 'hidden', boxShadow: '0 2px 12px rgba(0,0,0,0.07)', cursor: 'pointer', border: '1px solid #f3f4f6' }}
-          >
-            <div style={{ height: 90, background: accentColor + '15', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 34, position: 'relative' }}>
-              {item.image ? <img src={item.image} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : '🍽️'}
-              <span style={{ position: 'absolute', top: 6, right: 6, background: '#F97316', color: 'white', fontSize: 9, fontWeight: 800, padding: '2px 6px', borderRadius: 8 }}>🔥 بيستر</span>
-            </div>
-            <div style={{ padding: '8px 10px' }}>
-              <p style={{ fontWeight: 700, fontSize: 12, color: '#1a1a1a', marginBottom: 3, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.name}</p>
-              <p style={{ fontWeight: 800, fontSize: 13, color: accentColor }}>{item.price} ج</p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+    <ItemGrid title="الأكثر طلباً" icon={Flame} accentColor={accentColor}>
+      {popular.map(item => (
+        <ItemCard
+          key={item.id}
+          accentColor={accentColor}
+          onClick={() => onOpen(item)}
+          onAction={() => onOpen(item)}
+          image={item.image}
+          title={item.name}
+          subtitle={item.description}
+          price={item.price}
+          badgeText="🔥 بيستر"
+          badgeColor="#F97316"
+        />
+      ))}
+    </ItemGrid>
   )
 }
 
@@ -121,47 +175,27 @@ function PopularSlider({ items, accentColor, onOpen }) {
 function OffersSection({ accentColor, onAddCombo }) {
   const combos = getCombos().filter(c => c.active)
   if (combos.length === 0) return null
+
   return (
-    <div style={{ marginBottom: 8 }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '16px 16px 10px' }}>
-        <Tag size={16} style={{ color: accentColor }} />
-        <p style={{ fontWeight: 800, fontSize: 15, color: '#1a1a1a' }}>العروض والكومبو</p>
-      </div>
-      <div style={{ display: 'flex', gap: 12, overflowX: 'auto', padding: '0 16px 16px', scrollbarWidth: 'none' }} className="no-scrollbar">
-        {combos.map(combo => {
-          const discount = Math.round((1 - combo.price / combo.originalPrice) * 100)
-          return (
-            <div
-              key={combo.id}
-              style={{ flexShrink: 0, width: 200, background: 'white', borderRadius: 16, overflow: 'hidden', boxShadow: '0 2px 12px rgba(0,0,0,0.07)', cursor: 'pointer', border: `1px solid ${accentColor}22` }}
-            >
-              <div style={{ height: 80, background: `linear-gradient(135deg, ${accentColor}22, ${accentColor}11)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 36, position: 'relative' }}>
-                {combo.image}
-                <span style={{ position: 'absolute', top: 8, left: 8, background: '#22C55E', color: 'white', fontSize: 10, fontWeight: 800, padding: '2px 7px', borderRadius: 8 }}>
-                  خصم {discount}%
-                </span>
-              </div>
-              <div style={{ padding: '10px 12px' }}>
-                <p style={{ fontWeight: 700, fontSize: 13, color: '#1a1a1a', marginBottom: 3 }}>{combo.name}</p>
-                <p style={{ fontSize: 11, color: '#6b7280', marginBottom: 8, lineHeight: 1.4 }}>{combo.items}</p>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <div>
-                    <span style={{ fontWeight: 800, fontSize: 15, color: accentColor }}>{combo.price} ج</span>
-                    <span style={{ fontSize: 11, color: '#9ca3af', textDecoration: 'line-through', marginRight: 5 }}>{combo.originalPrice}</span>
-                  </div>
-                  <button
-                    onClick={() => onAddCombo(combo)}
-                    style={{ background: accentColor, color: 'white', border: 'none', borderRadius: 10, padding: '6px 12px', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}
-                  >
-                    أضف +
-                  </button>
-                </div>
-              </div>
-            </div>
-          )
-        })}
-      </div>
-    </div>
+    <ItemGrid title="العروض والكومبو" icon={Tag} accentColor={accentColor}>
+      {combos.map(combo => {
+        const discount = Math.round((1 - combo.price / combo.originalPrice) * 100)
+        return (
+          <ItemCard
+            key={combo.id}
+            accentColor={accentColor}
+            emoji={combo.image}
+            title={combo.name}
+            subtitle={combo.items}
+            price={combo.price}
+            originalPrice={combo.originalPrice}
+            badgeText={`خصم ${discount}%`}
+            badgeColor="#22C55E"
+            onAction={() => onAddCombo(combo)}
+          />
+        )
+      })}
+    </ItemGrid>
   )
 }
 
@@ -348,50 +382,23 @@ export default function StoreFront() {
           <div style={{ textAlign: 'center', padding: '48px 16px', color: '#9ca3af', fontSize: 14 }}>لا توجد أصناف في هذا القسم</div>
         )
         return (
-          <div style={{ maxWidth: 480, margin: '8px auto 0', paddingBottom: 32 }}>
-            <div style={{ background: 'white' }}>
-              <h2 style={{ fontWeight: 800, color: '#1a1a1a', fontSize: 15, padding: '14px 16px 10px', borderBottom: '1px solid #f9fafb' }}>{cat.name}</h2>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, padding: 12 }}>
-                {catItems.map(item => (
-                  <div
-                    key={item.id}
-                    onClick={() => openItem(item)}
-                    style={{ background: 'white', borderRadius: 16, overflow: 'hidden', boxShadow: '0 2px 10px rgba(0,0,0,0.06)', cursor: 'pointer', border: '1px solid #f3f4f6', transition: 'transform 0.15s' }}
-                    onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.02)'}
-                    onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
-                  >
-                    <div style={{ height: 100, background: config.color + '18', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32, position: 'relative' }}>
-                      {item.image ? <img src={item.image} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : '🍽️'}
-                      {item.bestseller && (
-                        <span style={{ position: 'absolute', top: 8, right: 8, background: '#F97316', color: 'white', fontSize: 9, fontWeight: 800, padding: '2px 7px', borderRadius: 8 }}>🔥</span>
-                      )}
-                      {!item.active && (
-                        <div style={{ position: 'absolute', inset: 0, background: 'rgba(255,255,255,0.75)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          <span style={{ fontSize: 11, fontWeight: 700, color: '#9ca3af' }}>غير متاح</span>
-                        </div>
-                      )}
-                    </div>
-                    <div style={{ padding: '10px 10px 12px' }}>
-                      <p style={{ fontWeight: 700, color: '#1a1a1a', fontSize: 13, lineHeight: 1.3, marginBottom: 2 }}>{item.name}</p>
-                      {item.description && (
-                        <p style={{ fontSize: 11, color: '#9ca3af', marginBottom: 6, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.description}</p>
-                      )}
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 6 }}>
-                        <span style={{ fontWeight: 800, fontSize: 14, color: config.color }}>{item.price} ج</span>
-                      </div>
-                      <button
-                        disabled={!item.active}
-                        onClick={(e) => { e.stopPropagation(); openItem(item) }}
-                        style={{ width: '100%', marginTop: 8, padding: '7px', background: item.active ? config.color : '#e5e7eb', color: 'white', fontWeight: 700, fontSize: 13, borderRadius: 10, border: 'none', cursor: item.active ? 'pointer' : 'not-allowed', fontFamily: 'Cairo, sans-serif' }}
-                      >
-                        أضف +
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+          <ItemGrid title={cat.name} accentColor={config.color}>
+            {catItems.map(item => (
+              <ItemCard
+                key={item.id}
+                accentColor={config.color}
+                onClick={() => openItem(item)}
+                onAction={() => openItem(item)}
+                image={item.image}
+                title={item.name}
+                subtitle={item.description}
+                price={item.price}
+                badgeText={item.bestseller ? '🔥' : null}
+                badgeColor="#F97316"
+                disabled={!item.active}
+              />
+            ))}
+          </ItemGrid>
         )
       })()}
 
