@@ -22,6 +22,9 @@ import OrderTracking from './customer/OrderTracking'
 import Explore from './customer/Explore'
 import RestaurantPage from './customer/RestaurantPage'
 import Loyalty from './customer/Loyalty'
+import CustomerAuth from './customer/CustomerAuth'
+import MyOrders from './customer/MyOrders'
+import CustomerProfile from './customer/CustomerProfile'
 
 function ProtectedRoute({ children }) {
   if (!localStorage.getItem('auth_role')) return <Navigate to="/login" replace />
@@ -90,6 +93,9 @@ export default function App() {
       <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
 
       {/* Customer-facing routes */}
+      <Route path="/customer-login" element={<CustomerAuth />} />
+      <Route path="/my-orders" element={<MyOrders />} />
+      <Route path="/my-profile" element={<CustomerProfile />} />
       <Route path="/loyalty" element={<Loyalty />} />
       <Route path="/chef-ahmed" element={<StoreFront />} />
       <Route path="/cart" element={<Cart />} />

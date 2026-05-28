@@ -164,3 +164,52 @@ export function getNotifications() {
   return defaultNotifications
 }
 export function setNotifications(n) { localStorage.setItem('app_notifications', JSON.stringify(n)) }
+
+/* ─── Customer Profile ────────────────────────────────────── */
+export function getCustomerProfile() {
+  try { const r = localStorage.getItem('customer_profile'); if (r) return JSON.parse(r) } catch (e) {}
+  return null
+}
+export function setCustomerProfile(profile) {
+  localStorage.setItem('customer_profile', JSON.stringify(profile))
+}
+export function clearCustomerProfile() {
+  localStorage.removeItem('customer_profile')
+}
+
+/* ─── Order Ratings ───────────────────────────────────────── */
+export function rateOrder(orderId, stars) {
+  const orders = getOrders()
+  const updated = orders.map(o => String(o.id) === String(orderId) ? { ...o, rating: stars } : o)
+  localStorage.setItem('orders_list', JSON.stringify(updated))
+}
+
+/* ─── Customer Loyalty ────────────────────────────────────── */
+export function getCustomerPoints(phone) {
+  if (!phone) return { earned: 0, spent: 0, balance: 0, history: [] }
+  const done = getOrders().filter(o => o.phone === phone && o.status === 'done')
+  const earned = done.reduce((s, o) => s + Math.floor((o.total || 0) / 10), 0)
+  const spent = getCustomerProfile()?.pointsSpent || 0
+  return {
+    earned,
+    spent,
+    balance: Math.max(0, earned - spent),
+    history: [...done].reverse().map(o => ({
+      id: o.id,
+      delta: Math.floor((o.total || 0) / 10),
+      label: `طلب #${o.id}`,
+      time: o.time || 'سابقاً',
+    })),
+  }
+}
+
+export function redeemPoints(amount) {
+  const profile = getCustomerProfile()
+  if (!profile) return
+  setCustomerProfile({ ...profile, pointsSpent: (profile.pointsSpent || 0) + amount })
+}
+
+export function getCustomerOrders(phone) {
+  if (!phone) return []
+  return getOrders().filter(o => o.phone === phone)
+}

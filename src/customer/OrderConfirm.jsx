@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { getConfig } from '../lib/restaurantStore'
-import { MapPin, Clock } from 'lucide-react'
+import { MapPin, Clock, UtensilsCrossed } from 'lucide-react'
 
 export default function OrderConfirm() {
   const navigate = useNavigate()
@@ -121,7 +121,7 @@ export default function OrderConfirm() {
             opacity: visible ? 1 : 0, transition: 'opacity 0.4s ease 0.4s',
           }}>
             <span style={{ fontSize: 16 }}>⏱</span>
-            <span style={{ fontSize: 14, fontWeight: 700, color: config.color }}>25-35 دقيقة</span>
+            <span style={{ fontSize: 14, fontWeight: 700, color: config.color }}>{config.deliveryTime}-{config.deliveryTime + 10} دقيقة</span>
           </div>
         </div>
 
@@ -165,8 +165,26 @@ export default function OrderConfirm() {
                 </div>
                 <span style={{ fontSize: 13, color: '#6B7280' }}>الوقت المتوقع</span>
               </div>
-              <span style={{ fontSize: 13, fontWeight: 700, color: '#111827' }}>{config.deliveryTime} دقيقة</span>
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#111827' }}>{config.deliveryTime}-{config.deliveryTime + 10} دقيقة</span>
             </div>
+
+            {/* Order items */}
+            {order.details && order.details.length > 0 && (
+              <div style={{ paddingTop: 12, borderTop: '1px solid #F3F4F6' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10 }}>
+                  <UtensilsCrossed size={13} color="#9CA3AF" />
+                  <span style={{ fontSize: 12, fontWeight: 700, color: '#9CA3AF' }}>الأصناف</span>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  {order.details.map((item, idx) => (
+                    <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, color: '#374151' }}>
+                      <span>{item.name} <span style={{ color: '#9CA3AF' }}>× {item.qty}</span></span>
+                      <span style={{ fontWeight: 600, fontFamily: 'Inter, sans-serif' }}>{item.price * item.qty} ج</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             <div style={{ paddingTop: 12, borderTop: '1px solid #F3F4F6', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <span style={{ fontSize: 14, fontWeight: 700, color: '#111827' }}>الإجمالي</span>
@@ -228,7 +246,7 @@ export default function OrderConfirm() {
           </button>
 
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => navigate(`/${config.slug || 'chef-ahmed'}`)}
             style={{
               width: '100%', padding: '13px', borderRadius: 14, fontWeight: 700, fontSize: 14, cursor: 'pointer',
               background: 'white', border: `2px solid ${config.color}`, color: config.color,

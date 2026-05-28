@@ -1,20 +1,23 @@
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Compass, UtensilsCrossed, Star, ShoppingCart } from 'lucide-react'
+import { Compass, ClipboardList, ShoppingCart, User } from 'lucide-react'
 import { useCart } from './CartContext'
+import { getConfig } from '../lib/restaurantStore'
 
 const tabs = [
   { label: 'استكشف', icon: Compass, path: '/explore' },
-  { label: 'المطعم', icon: UtensilsCrossed, path: '/chef-ahmed' },
-  { label: 'مكافآت', icon: Star, path: '/loyalty' },
+  { label: 'طلباتي', icon: ClipboardList, path: '/my-orders' },
   { label: 'السلة', icon: ShoppingCart, path: '/cart' },
+  { label: 'حسابي', icon: User, path: '/my-profile' },
 ]
 
 export default function CustomerNav() {
   const { pathname } = useLocation()
   const navigate = useNavigate()
   const { itemCount } = useCart()
+  const config = getConfig()
+  const color = config.color
 
-  const active = (path) => pathname === path || (path === '/chef-ahmed' && pathname.startsWith('/chef-ahmed'))
+  const isActive = (path) => pathname === path
 
   return (
     <nav
@@ -30,7 +33,7 @@ export default function CustomerNav() {
       }}
     >
       {tabs.map(({ label, icon: Icon, path }) => {
-        const isActive = active(path)
+        const active = isActive(path)
         const isCart = path === '/cart'
         return (
           <button
@@ -40,7 +43,7 @@ export default function CustomerNav() {
               flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center',
               justifyContent: 'center', gap: 3, padding: '10px 4px 8px',
               background: 'none', border: 'none', cursor: 'pointer',
-              color: isActive ? '#F97316' : '#9CA3AF',
+              color: active ? color : '#9CA3AF',
               transition: 'color 0.15s',
               position: 'relative',
             }}
@@ -48,13 +51,13 @@ export default function CustomerNav() {
             <div style={{ position: 'relative' }}>
               <Icon
                 size={20}
-                strokeWidth={isActive ? 2.5 : 1.8}
-                fill={isActive && !isCart ? 'rgba(249,115,22,0.12)' : 'none'}
+                strokeWidth={active ? 2.5 : 1.8}
+                fill={active && !isCart ? `${color}18` : 'none'}
               />
               {isCart && itemCount > 0 && (
                 <span style={{
                   position: 'absolute', top: -6, left: -6,
-                  background: '#F97316', color: 'white',
+                  background: color, color: 'white',
                   fontSize: 9, fontWeight: 800, borderRadius: '50%',
                   width: 16, height: 16,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -64,13 +67,13 @@ export default function CustomerNav() {
                 </span>
               )}
             </div>
-            <span style={{ fontSize: 10, fontWeight: isActive ? 700 : 500 }}>{label}</span>
-            {isActive && (
+            <span style={{ fontSize: 10, fontWeight: active ? 700 : 500 }}>{label}</span>
+            {active && (
               <span style={{
                 position: 'absolute', bottom: 0, left: '50%',
                 transform: 'translateX(-50%)',
                 width: 20, height: 3, borderRadius: '3px 3px 0 0',
-                background: '#F97316',
+                background: color,
               }} />
             )}
           </button>

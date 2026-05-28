@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { getConfig, getOrders } from '../lib/restaurantStore'
+import { getConfig, getOrders, rateOrder } from '../lib/restaurantStore'
 import { ArrowRight, MessageCircle, Compass } from 'lucide-react'
 
 const steps = [
@@ -23,7 +23,10 @@ export default function OrderTracking() {
   const { orderId } = useParams()
   const navigate = useNavigate()
   const config = getConfig()
-  const [stars, setStars] = useState(0)
+  const [stars, setStars] = useState(() => {
+    const orders = getOrders()
+    return orders.find(o => String(o.id) === String(orderId))?.rating || 0
+  })
   const [hoverStar, setHoverStar] = useState(0)
 
   const [order, setOrder] = useState(() => {
@@ -170,7 +173,7 @@ export default function OrderTracking() {
               {[1, 2, 3, 4, 5].map(s => (
                 <button
                   key={s}
-                  onClick={() => setStars(s)}
+                  onClick={() => { setStars(s); rateOrder(orderId, s) }}
                   onMouseEnter={() => setHoverStar(s)}
                   onMouseLeave={() => setHoverStar(0)}
                   style={{ fontSize: 28, background: 'none', border: 'none', cursor: 'pointer', padding: 2, transition: 'transform 0.1s', transform: s <= (hoverStar || stars) ? 'scale(1.2)' : 'scale(1)' }}

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ArrowRight, CheckCircle } from 'lucide-react'
-import { getConfig, addOrder, getCoupons } from '../lib/restaurantStore'
+import { getConfig, addOrder, getCoupons, getCustomerProfile, setCustomerProfile } from '../lib/restaurantStore'
 import { useCart } from './CartContext'
 
 // ── Input style ──────────────────────────────────────────────────────────────
@@ -123,17 +123,21 @@ export default function Checkout() {
     try { return JSON.parse(localStorage.getItem('cart_coupon') || '{}') } catch (e) { return {} }
   })()
 
+  const customerProfile = getCustomerProfile()
+
   const [step, setStep] = useState(1)
   const [animating, setAnimating] = useState(false)
 
-  // Step 1 fields
-  const [name, setName] = useState(() => localStorage.getItem('customer_name') || '')
-  const [phone, setPhone] = useState(() => localStorage.getItem('customer_phone') || '')
+  // Step 1 fields — auto-fill from customer profile if logged in
+  const [name, setName] = useState(() => customerProfile?.name || localStorage.getItem('customer_name') || '')
+  const [phone, setPhone] = useState(() => customerProfile?.phone || localStorage.getItem('customer_phone') || '')
   const [orderType, setOrderType] = useState(savedCart.orderType || 'delivery')
+  const [governorate, setGovernorate] = useState('')
   const [address, setAddress] = useState('')
   const [driverNote, setDriverNote] = useState('')
   const [tableNumber, setTableNumber] = useState('')
   const [step1Errors, setStep1Errors] = useState({})
+  const [showSavedAddresses, setShowSavedAddresses] = useState(false)
 
   // Step 2
   const [payment, setPayment] = useState('cash')
@@ -182,7 +186,12 @@ export default function Checkout() {
     const errors = {}
     if (!name.trim()) errors.name = 'الاسم مطلوب'
     if (!phone.trim()) errors.phone = 'رقم الهاتف مطلوب'
-    if (orderType === 'delivery' && !address.trim()) errors.address = 'العنوان مطلوب'
+    else if (!/^(010|011|012|015)\d{8}$/.test(phone.replace(/\s|-/g, '')))
+      errors.phone = 'رقم هاتف غير صحيح (010/011/012/015 + 8 أرقام)'
+    if (orderType === 'delivery') {
+      if (!governorate) errors.governorate = 'المحافظة مطلوبة'
+      if (!address.trim()) errors.address = 'العنوان التفصيلي مطلوب'
+    }
     if (orderType === 'table' && !tableNumber) errors.tableNumber = 'رقم الطاولة مطلوب'
     setStep1Errors(errors)
     return Object.keys(errors).length === 0
@@ -191,14 +200,16 @@ export default function Checkout() {
   // ── Final order submission ──
   const handleConfirmOrder = () => {
     const paymentLabels = { cash: 'كاش عند الاستلام', card: 'بطاقة بنكية', fawry: 'فوري' }
+    const fullAddress = orderType === 'delivery' ? `${governorate}، ${address}` : ''
     const order = {
       customer: name, phone,
       table: orderType === 'table' ? `طاولة ${tableNumber}` : orderType === 'delivery' ? 'توصيل' : 'استلام',
       items: cartItems.map(i => i.name).join(' + '),
       total: finalTotal,
       payment: paymentLabels[payment],
+      paymentMethod: paymentLabels[payment],
       details: cartItems.map(i => ({ name: i.name, qty: i.qty, price: i.price, note: i.note })),
-      address: orderType === 'delivery' ? address : '',
+      address: fullAddress,
       note: orderType === 'delivery' ? driverNote : '',
       coupon: couponApplied ? coupon.trim().toUpperCase() : '',
       orderType, deliveryFee,
@@ -206,6 +217,7 @@ export default function Checkout() {
     const savedOrder = addOrder(order)
     localStorage.setItem('customer_name', name)
     localStorage.setItem('customer_phone', phone)
+    if (customerProfile) setCustomerProfile({ ...customerProfile, name })
     localStorage.removeItem('cart_coupon')
     clearCart()
     navigate('/order-confirm', { state: { order: savedOrder } })
@@ -356,12 +368,63 @@ export default function Checkout() {
               <div style={{ background: 'white', borderRadius: 16, padding: '16px 16px', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
                 <p style={{ fontWeight: 800, fontSize: 14, color: '#1a1a1a', marginBottom: 14 }}>بيانات التوصيل</p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+
+                  {/* Saved addresses shortcut */}
+                  {customerProfile?.addresses?.length > 0 && (
+                    <div>
+                      <button
+                        onClick={() => setShowSavedAddresses(!showSavedAddresses)}
+                        style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 12px', borderRadius: 10, background: `${accentColor}12`, border: `1px solid ${accentColor}30`, color: accentColor, fontWeight: 700, fontSize: 12, cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}
+                      >
+                        📍 استخدم عنوان محفوظ {showSavedAddresses ? '▲' : '▼'}
+                      </button>
+                      {showSavedAddresses && (
+                        <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                          {customerProfile.addresses.map((addr, i) => (
+                            <button
+                              key={i}
+                              onClick={() => {
+                                const parts = addr.split('، ')
+                                if (parts.length >= 2) { setGovernorate(parts[0]); setAddress(parts.slice(1).join('، ')) }
+                                else setAddress(addr)
+                                setShowSavedAddresses(false)
+                                setStep1Errors(p => ({ ...p, governorate: '', address: '' }))
+                              }}
+                              style={{ textAlign: 'right', padding: '10px 12px', borderRadius: 10, background: '#F9FAFB', border: '1px solid #F3F4F6', fontSize: 13, color: '#374151', fontWeight: 600, cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}
+                            >
+                              📍 {addr}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Governorate */}
                   <div>
-                    <Label error={step1Errors.address}>العنوان *</Label>
+                    <Label error={step1Errors.governorate}>المحافظة *</Label>
+                    <select
+                      value={governorate}
+                      onChange={e => { setGovernorate(e.target.value); setStep1Errors(p => ({ ...p, governorate: '' })) }}
+                      style={{ ...inputStyle, borderColor: step1Errors.governorate ? '#EF4444' : '#E5E7EB', appearance: 'none', backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'left 14px center' }}
+                      onFocus={e => focusInput(e, accentColor)}
+                      onBlur={blurInput}
+                    >
+                      <option value="">اختر المحافظة...</option>
+                      {['القاهرة','الجيزة','الإسكندرية','الشرقية','الدقهلية','القليوبية','البحيرة','المنوفية','الغربية','كفر الشيخ','دمياط','الإسماعيلية','بورسعيد','السويس','شمال سيناء','جنوب سيناء','الفيوم','بني سويف','المنيا','أسيوط','سوهاج','قنا','الأقصر','أسوان','البحر الأحمر','الوادي الجديد','مطروح'].map(g => (
+                        <option key={g} value={g}>{g}</option>
+                      ))}
+                    </select>
+                    <ErrorMsg msg={step1Errors.governorate} />
+                  </div>
+
+                  {/* Detailed address */}
+                  <div>
+                    <Label error={step1Errors.address}>العنوان التفصيلي *</Label>
                     <textarea
                       value={address}
                       onChange={e => { setAddress(e.target.value); setStep1Errors(p => ({ ...p, address: '' })) }}
-                      placeholder="الشارع، المنطقة، المبنى، رقم الشقة..."
+                      placeholder="الحي / المنطقة، الشارع، رقم المبنى، الشقة..."
                       rows={3}
                       style={{ ...inputStyle, resize: 'none', borderColor: step1Errors.address ? '#EF4444' : '#E5E7EB' }}
                       onFocus={e => focusInput(e, accentColor)}
@@ -369,6 +432,7 @@ export default function Checkout() {
                     />
                     <ErrorMsg msg={step1Errors.address} />
                   </div>
+
                   <div>
                     <Label>ملاحظات للسائق (اختياري)</Label>
                     <input
@@ -538,6 +602,7 @@ export default function Checkout() {
             {orderType === 'delivery' && address && (
               <div style={{ background: 'white', borderRadius: 16, padding: '14px 16px', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
                 <p style={{ fontWeight: 800, fontSize: 13, color: '#374151', marginBottom: 6 }}>📍 عنوان التوصيل</p>
+                {governorate && <p style={{ fontSize: 12, color: accentColor, fontWeight: 700, marginBottom: 2 }}>{governorate}</p>}
                 <p style={{ fontSize: 13, color: '#6B7280', lineHeight: 1.6 }}>{address}</p>
                 {driverNote && <p style={{ fontSize: 12, color: '#9CA3AF', marginTop: 4 }}>ملاحظة: {driverNote}</p>}
               </div>
