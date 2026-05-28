@@ -1,10 +1,14 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { TrendingUp, TrendingDown, ShoppingBag, Users, DollarSign, ArrowLeft, Power, ArrowUpRight } from 'lucide-react'
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import Layout from '../components/layout/Layout'
 import { mockStats, mockSalesData, mockTopItems, statusMap } from '../lib/mock'
 import { getOrders, getConfig, setConfig } from '../lib/restaurantStore'
+
+function Skel({ w = '100%', h = 16, r = 8, mb = 0 }) {
+  return <div style={{ width: w, height: h, borderRadius: r, marginBottom: mb, background: 'var(--surface-3)', animation: 'skel-pulse 1.5s ease-in-out infinite' }} />
+}
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload?.length) {
@@ -52,8 +56,14 @@ function StatCard({ label, value, change, icon: Icon, color }) {
 const periodOptions = ['7 أيام', '30 يوم', '3 أشهر']
 
 export default function Dashboard() {
+  const [loading, setLoading] = useState(true)
   const [isOpen, setIsOpen] = useState(() => getConfig().isOpen)
   const [period, setPeriod] = useState('7 أيام')
+
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 1000)
+    return () => clearTimeout(t)
+  }, [])
   const orders = getOrders()
   const newOrders = orders.filter(o => o.status === 'new')
   const recentOrders = orders.slice(0, 4)
@@ -65,6 +75,77 @@ export default function Dashboard() {
     delivering: 'badge-accent',
     done:       'badge-green',
     cancelled:  'badge-red',
+  }
+
+  if (loading) {
+    return (
+      <Layout title="الرئيسية">
+        <style>{`@keyframes skel-pulse { 0%,100%{opacity:0.5} 50%{opacity:1} }`}</style>
+
+        {/* Hero row skeleton */}
+        <div style={{ marginBottom: 20 }}>
+          <Skel h={56} r={12} />
+        </div>
+
+        {/* 4 stat card skeletons */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 20 }}>
+          {[0, 1, 2, 3].map(i => (
+            <div key={i} className="glass" style={{ padding: '20px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 16 }}>
+                <Skel w={38} h={38} r={10} />
+                <Skel w={44} h={20} r={10} />
+              </div>
+              <Skel w="60%" h={28} r={6} mb={8} />
+              <Skel w="80%" h={12} r={4} />
+            </div>
+          ))}
+        </div>
+
+        {/* Chart + top items skeletons */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 12, marginBottom: 20 }}>
+          <div className="glass" style={{ padding: '20px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 20 }}>
+              <Skel w={60} h={16} r={4} />
+              <Skel w={120} h={28} r={14} />
+            </div>
+            <Skel h={160} r={8} />
+          </div>
+          <div className="glass" style={{ padding: '20px' }}>
+            <Skel w={80} h={16} r={4} mb={18} />
+            {[0, 1, 2, 3, 4].map(i => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
+                <Skel w={22} h={22} r={6} />
+                <div style={{ flex: 1 }}>
+                  <Skel w="70%" h={12} r={4} mb={6} />
+                  <Skel h={3} r={2} />
+                </div>
+                <Skel w={24} h={12} r={4} />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Recent orders skeleton */}
+        <div className="glass" style={{ overflow: 'hidden' }}>
+          <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between' }}>
+            <Skel w={80} h={14} r={4} />
+            <Skel w={60} h={14} r={4} />
+          </div>
+          {[0, 1, 2, 3].map(i => (
+            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 20px', borderBottom: i < 3 ? '1px solid var(--border)' : 'none' }}>
+              <Skel w={34} h={34} r={8} />
+              <div style={{ flex: 1 }}>
+                <Skel w="55%" h={13} r={4} mb={6} />
+                <Skel w="35%" h={11} r={4} />
+              </div>
+              <Skel w={40} h={11} r={4} />
+              <Skel w={50} h={13} r={4} />
+              <Skel w={56} h={20} r={10} />
+            </div>
+          ))}
+        </div>
+      </Layout>
+    )
   }
 
   return (

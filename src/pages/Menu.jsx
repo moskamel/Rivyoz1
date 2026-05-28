@@ -3,6 +3,10 @@ import { Plus, MoreVertical, X, GripVertical, Star } from 'lucide-react'
 import Layout from '../components/layout/Layout'
 import { getMenuItems, setMenuItems, getCategories } from '../lib/restaurantStore'
 
+function Skel({ w = '100%', h = 16, r = 8, mb = 0 }) {
+  return <div style={{ width: w, height: h, borderRadius: r, marginBottom: mb, background: 'var(--surface-3)', animation: 'skel-pulse 1.5s ease-in-out infinite' }} />
+}
+
 const inputStyle = {
   width: '100%', padding: '10px 14px', borderRadius: 'var(--radius)', border: '1px solid var(--border)',
   background: 'var(--surface-2)', color: 'var(--text)', fontSize: 13, outline: 'none',
@@ -11,6 +15,7 @@ const inputStyle = {
 }
 
 export default function Menu() {
+  const [loading, setLoading] = useState(true)
   const [categories, setCategories] = useState(getCategories)
   const [items, setItems] = useState(getMenuItems)
   const [activeCategory, setActiveCategory] = useState(1)
@@ -19,6 +24,11 @@ export default function Menu() {
   const [form, setForm] = useState({ name: '', price: '', categoryId: 1, description: '', active: true, bestseller: false })
   const [openMenuId, setOpenMenuId] = useState(null)
   const menuRef = useRef(null)
+
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 1000)
+    return () => clearTimeout(t)
+  }, [])
 
   useEffect(() => {
     function handleOutside(e) {
@@ -89,6 +99,47 @@ export default function Menu() {
       setMenuItems(next)
       return next
     })
+  }
+
+  if (loading) {
+    return (
+      <Layout title="إدارة القائمة">
+        <style>{`@keyframes skel-pulse { 0%,100%{opacity:0.5} 50%{opacity:1} }`}</style>
+
+        {/* Category pill tabs + add button skeleton */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16, gap: 12 }}>
+          <div style={{ display: 'flex', gap: 6 }}>
+            {[80, 70, 90, 75, 65].map((w, i) => (
+              <Skel key={i} w={w} h={32} r={16} />
+            ))}
+          </div>
+          <Skel w={100} h={34} r={8} />
+        </div>
+
+        {/* Table header skeleton */}
+        <div className="glass" style={{ overflow: 'hidden' }}>
+          <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between' }}>
+            <Skel w={120} h={14} r={4} />
+            <Skel w={80} h={12} r={4} />
+          </div>
+
+          {/* 6 menu item row skeletons */}
+          {[0, 1, 2, 3, 4, 5].map(i => (
+            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '12px 20px', borderBottom: i < 5 ? '1px solid var(--border)' : 'none' }}>
+              <Skel w={15} h={15} r={4} />
+              <Skel w={40} h={40} r={10} />
+              <div style={{ flex: 1 }}>
+                <Skel w="45%" h={13} r={4} mb={6} />
+                <Skel w="30%" h={11} r={4} mb={5} />
+                <Skel w="20%" h={12} r={4} />
+              </div>
+              <Skel w={40} h={22} r={11} />
+              <Skel w={30} h={30} r={6} />
+            </div>
+          ))}
+        </div>
+      </Layout>
+    )
   }
 
   return (

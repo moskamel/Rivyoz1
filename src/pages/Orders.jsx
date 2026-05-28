@@ -4,6 +4,10 @@ import Layout from '../components/layout/Layout'
 import { statusMap } from '../lib/mock'
 import { getOrders, updateOrderStatus } from '../lib/restaurantStore'
 
+function Skel({ w = '100%', h = 16, r = 8, mb = 0 }) {
+  return <div style={{ width: w, height: h, borderRadius: r, marginBottom: mb, background: 'var(--surface-3)', animation: 'skel-pulse 1.5s ease-in-out infinite' }} />
+}
+
 const tabs = [
   { key: 'all', label: 'الكل' },
   { key: 'new', label: 'جديد' },
@@ -50,11 +54,17 @@ function statusBadge(status) {
 }
 
 export default function Orders() {
+  const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState('all')
   const [orders, setOrders] = useState(getOrders)
   const [selected, setSelected] = useState(null)
   const [rejectModal, setRejectModal] = useState(null)
   const [rejectReason, setRejectReason] = useState('')
+
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 1000)
+    return () => clearTimeout(t)
+  }, [])
 
   // Poll for new customer orders every 3 seconds
   useEffect(() => {
@@ -85,6 +95,62 @@ export default function Orders() {
     })
     setRejectModal(null)
     setSelected(null)
+  }
+
+  if (loading) {
+    return (
+      <Layout title="الطلبات">
+        <style>{`@keyframes skel-pulse { 0%,100%{opacity:0.5} 50%{opacity:1} }`}</style>
+
+        {/* Top bar skeleton */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <Skel w={36} h={26} r={13} />
+            <Skel w={60} h={14} r={4} />
+          </div>
+          <Skel w={100} h={36} r={8} />
+        </div>
+
+        {/* Filter tab skeletons */}
+        <div style={{ display: 'flex', gap: 6, marginBottom: 16 }}>
+          {[70, 55, 65, 55, 70, 65, 55].map((w, i) => (
+            <Skel key={i} w={w} h={34} r={17} />
+          ))}
+        </div>
+
+        {/* 8 order row skeletons */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {[0, 1, 2, 3, 4, 5, 6, 7].map(i => (
+            <div key={i} className="glass" style={{ padding: 0, overflow: 'hidden' }}>
+              {/* Card header */}
+              <div style={{ padding: '14px 16px 12px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 12 }}>
+                <Skel w={36} h={36} r={8} />
+                <div style={{ flex: 1 }}>
+                  <Skel w="40%" h={13} r={4} mb={6} />
+                  <Skel w="25%" h={11} r={4} />
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <Skel w={50} h={16} r={4} />
+                  <Skel w={60} h={22} r={11} />
+                </div>
+              </div>
+              {/* Card body */}
+              <div style={{ padding: '10px 16px 14px', display: 'flex', gap: 6 }}>
+                <Skel w={80} h={22} r={6} />
+                <Skel w={100} h={22} r={6} />
+                <Skel w={70} h={22} r={6} />
+              </div>
+              {/* Card footer */}
+              <div style={{ padding: '10px 16px', borderTop: '1px solid var(--border)', display: 'flex', gap: 8 }}>
+                <Skel h={34} r={8} />
+                <Skel w={70} h={34} r={8} />
+                <Skel w={80} h={34} r={8} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </Layout>
+    )
   }
 
   return (
