@@ -13,9 +13,11 @@ import Staff from './pages/Staff'
 import Inventory from './pages/Inventory'
 import StoreFront from './customer/StoreFront'
 import Cart from './customer/Cart'
+import Checkout from './customer/Checkout'
 import OrderConfirm from './customer/OrderConfirm'
 import OrderTracking from './customer/OrderTracking'
 import Explore from './customer/Explore'
+import RestaurantPage from './customer/RestaurantPage'
 
 function ProtectedRoute({ children }) {
   if (!localStorage.getItem('auth_role')) return <Navigate to="/login" replace />
@@ -43,15 +45,18 @@ export default function App() {
       {/* Customer-facing routes */}
       <Route path="/chef-ahmed" element={<StoreFront />} />
       <Route path="/cart" element={<Cart />} />
+      <Route path="/checkout" element={<Checkout />} />
       <Route path="/order-confirm" element={<OrderConfirm />} />
       <Route path="/track/:orderId" element={<OrderTracking />} />
       <Route path="/explore" element={<Explore />} />
-      {/* Redirect unregistered restaurant slugs to explore */}
-      <Route path="/pizza-plaza" element={<Navigate to="/explore" replace />} />
-      <Route path="/metro-cafe" element={<Navigate to="/explore" replace />} />
-      <Route path="/shawarma-king" element={<Navigate to="/explore" replace />} />
-      <Route path="/sushi-house" element={<Navigate to="/explore" replace />} />
-      <Route path="/burger-factory" element={<Navigate to="/explore" replace />} />
+
+      {/* Restaurant listing pages */}
+      <Route path="/pizza-plaza" element={<RestaurantPage />} />
+      <Route path="/metro-cafe" element={<RestaurantPage />} />
+      <Route path="/shawarma-king" element={<RestaurantPage />} />
+      <Route path="/sushi-house" element={<RestaurantPage />} />
+      <Route path="/burger-factory" element={<RestaurantPage />} />
+      <Route path="/r/:slug" element={<RestaurantPage />} />
     </Routes>
   )
 }
