@@ -202,7 +202,7 @@ function Footer({ accentColor }) {
   const f = getFooterSettings()
   return (
     <div style={{ background: '#1a1a1a', color: 'white', padding: '32px 20px', direction: 'rtl' }}>
-      <div style={{ maxWidth: 480, margin: '0 auto' }}>
+      <div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
           <div style={{ width: 36, height: 36, borderRadius: 10, background: accentColor, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, fontWeight: 900 }}>ر</div>
           <div>
