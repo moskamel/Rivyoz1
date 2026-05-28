@@ -1,14 +1,7 @@
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Compass, ClipboardList, ShoppingCart, User } from 'lucide-react'
+import { Compass, UtensilsCrossed, ShoppingCart, User } from 'lucide-react'
 import { useCart } from './CartContext'
-import { getConfig } from '../lib/restaurantStore'
-
-const tabs = [
-  { label: 'استكشف', icon: Compass, path: '/explore' },
-  { label: 'طلباتي', icon: ClipboardList, path: '/my-orders' },
-  { label: 'السلة', icon: ShoppingCart, path: '/cart' },
-  { label: 'حسابي', icon: User, path: '/my-profile' },
-]
+import { getConfig, getCustomerProfile, getCustomerPoints } from '../lib/restaurantStore'
 
 export default function CustomerNav() {
   const { pathname } = useLocation()
@@ -16,6 +9,17 @@ export default function CustomerNav() {
   const { itemCount } = useCart()
   const config = getConfig()
   const color = config.color
+  const restaurantPath = `/${config.slug || 'chef-ahmed'}`
+
+  const customerProfile = getCustomerProfile()
+  const pts = customerProfile ? getCustomerPoints(customerProfile.phone) : null
+
+  const tabs = [
+    { label: 'استكشف', icon: Compass, path: '/explore' },
+    { label: 'المطعم', icon: UtensilsCrossed, path: restaurantPath },
+    { label: 'السلة', icon: ShoppingCart, path: '/cart' },
+    { label: 'حسابي', icon: User, path: '/my-profile' },
+  ]
 
   const isActive = (path) => pathname === path
 
@@ -35,6 +39,7 @@ export default function CustomerNav() {
       {tabs.map(({ label, icon: Icon, path }) => {
         const active = isActive(path)
         const isCart = path === '/cart'
+        const isProfile = path === '/my-profile'
         return (
           <button
             key={path}
@@ -64,6 +69,19 @@ export default function CustomerNav() {
                   border: '1.5px solid white',
                 }}>
                   {itemCount > 9 ? '9+' : itemCount}
+                </span>
+              )}
+              {isProfile && pts && pts.balance > 0 && (
+                <span style={{
+                  position: 'absolute', top: -7, left: -8,
+                  background: '#F59E0B', color: 'white',
+                  fontSize: 8, fontWeight: 800, borderRadius: 8,
+                  padding: '1px 4px',
+                  border: '1.5px solid white',
+                  whiteSpace: 'nowrap',
+                  lineHeight: 1.4,
+                }}>
+                  {pts.balance > 999 ? '999+' : pts.balance}
                 </span>
               )}
             </div>

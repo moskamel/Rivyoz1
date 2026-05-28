@@ -127,30 +127,61 @@ export default function CustomerProfile() {
           ))}
         </div>
 
-        {/* Quick links */}
-        <div style={{ background: 'white', borderRadius: 18, overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', border: '1px solid #F3F4F6' }}>
-          {[
-            { icon: '📋', label: 'طلباتي', sub: `${orders.length} طلب`, to: '/my-orders' },
-            { icon: '⭐', label: 'نقاط المكافآت', sub: `${pts.balance.toLocaleString()} نقطة متاحة`, to: '/loyalty' },
-          ].map((item, i, arr) => (
-            <button
-              key={i}
-              onClick={() => navigate(item.to)}
-              style={{
-                width: '100%', display: 'flex', alignItems: 'center', gap: 14,
-                padding: '17px 16px', background: 'none', border: 'none',
-                borderBottom: i < arr.length - 1 ? '1px solid #F9FAFB' : 'none',
-                cursor: 'pointer', textAlign: 'right', fontFamily: 'Cairo, sans-serif',
-              }}
-            >
-              <span style={{ fontSize: 22 }}>{item.icon}</span>
-              <div style={{ flex: 1 }}>
-                <p style={{ fontSize: 14, fontWeight: 700, color: '#111827' }}>{item.label}</p>
-                <p style={{ fontSize: 12, color: '#9CA3AF', marginTop: 2 }}>{item.sub}</p>
+        {/* Loyalty card */}
+        <div
+          onClick={() => navigate('/loyalty')}
+          style={{
+            background: 'linear-gradient(135deg, #F59E0B, #F97316)',
+            borderRadius: 20, padding: '20px 20px 18px', cursor: 'pointer',
+            boxShadow: '0 6px 24px rgba(249,115,22,0.35)',
+            position: 'relative', overflow: 'hidden',
+          }}
+        >
+          <div style={{ position: 'absolute', top: -20, left: -20, width: 100, height: 100, borderRadius: '50%', background: 'rgba(255,255,255,0.08)' }} />
+          <div style={{ position: 'absolute', bottom: -30, right: -10, width: 120, height: 120, borderRadius: '50%', background: 'rgba(255,255,255,0.06)' }} />
+          <div style={{ position: 'relative', zIndex: 1 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+              <span style={{ fontSize: 28 }}>🎁</span>
+              <span style={{ fontSize: 12, fontWeight: 700, color: 'rgba(255,255,255,0.85)', background: 'rgba(255,255,255,0.2)', padding: '4px 12px', borderRadius: 20 }}>
+                برنامج المكافآت
+              </span>
+            </div>
+            <p style={{ fontSize: 32, fontWeight: 900, color: 'white', fontFamily: 'Inter, sans-serif', marginBottom: 2 }}>
+              {pts.balance.toLocaleString()}
+            </p>
+            <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.85)', marginBottom: 14 }}>نقطة متاحة للاستبدال</p>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', gap: 16 }}>
+                <div>
+                  <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.7)' }}>المكتسبة</p>
+                  <p style={{ fontSize: 14, fontWeight: 700, color: 'white', fontFamily: 'Inter, sans-serif' }}>{pts.earned.toLocaleString()}</p>
+                </div>
+                <div>
+                  <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.7)' }}>المستخدمة</p>
+                  <p style={{ fontSize: 14, fontWeight: 700, color: 'white', fontFamily: 'Inter, sans-serif' }}>{pts.spent.toLocaleString()}</p>
+                </div>
               </div>
-              <span style={{ fontSize: 16, color: '#D1D5DB' }}>←</span>
-            </button>
-          ))}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,0.25)', padding: '8px 16px', borderRadius: 12 }}>
+                <span style={{ fontSize: 12, fontWeight: 700, color: 'white' }}>استبدل</span>
+                <span style={{ fontSize: 14, color: 'white' }}>←</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* طلباتي link */}
+        <div style={{ background: 'white', borderRadius: 18, overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', border: '1px solid #F3F4F6' }}>
+          <button
+            onClick={() => navigate('/my-orders')}
+            style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 14, padding: '17px 16px', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'right', fontFamily: 'Cairo, sans-serif' }}
+          >
+            <span style={{ fontSize: 22 }}>📋</span>
+            <div style={{ flex: 1 }}>
+              <p style={{ fontSize: 14, fontWeight: 700, color: '#111827' }}>طلباتي</p>
+              <p style={{ fontSize: 12, color: '#9CA3AF', marginTop: 2 }}>{orders.length} طلب</p>
+            </div>
+            <span style={{ fontSize: 16, color: '#D1D5DB' }}>←</span>
+          </button>
         </div>
 
         {/* Saved addresses */}

@@ -378,25 +378,6 @@ export default function StoreFront() {
 
           {/* Actions */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
-            {/* Search */}
-            <button
-              onClick={() => { setSearchOpen(true); setSearchMenuQuery('') }}
-              style={{ width: 36, height: 36, borderRadius: 10, background: '#f3f4f6', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6b7280' }}
-            >
-              <Search size={17} />
-            </button>
-            {/* Cart */}
-            <button
-              onClick={() => navigate('/cart')}
-              style={{ width: 36, height: 36, borderRadius: 10, background: itemCount > 0 ? config.color : '#f3f4f6', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: itemCount > 0 ? 'white' : '#6b7280', position: 'relative' }}
-            >
-              <ShoppingCart size={17} />
-              {itemCount > 0 && (
-                <span style={{ position: 'absolute', top: -4, left: -4, background: 'white', fontSize: 9, fontWeight: 800, borderRadius: '50%', width: 16, height: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', color: config.color, border: `1.5px solid ${config.color}` }}>
-                  {itemCount}
-                </span>
-              )}
-            </button>
             {/* Sidebar */}
             <button
               onClick={() => setSidebarOpen(true)}
