@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
+import CustomerNav from './CustomerNav'
 
 const POINTS = 2450
 const NEXT_REWARD = 2900
@@ -253,6 +254,8 @@ export default function Loyalty() {
         </div>
 
       </div>
+
+      <CustomerNav />
 
       {/* ── REDEEM CONFIRMATION BOTTOM SHEET ── */}
       {confirmReward && (

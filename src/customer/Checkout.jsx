@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ArrowLeft, CheckCircle } from 'lucide-react'
+import { ArrowRight, CheckCircle } from 'lucide-react'
 import { getConfig, addOrder, getCoupons } from '../lib/restaurantStore'
 import { useCart } from './CartContext'
 
@@ -224,7 +224,7 @@ export default function Checkout() {
 
   const BackBtn = ({ onClick }) => (
     <button onClick={onClick} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '10px 0', background: 'none', border: 'none', cursor: 'pointer', color: '#6B7280', fontWeight: 700, fontSize: 14, fontFamily: 'Cairo, sans-serif' }}>
-      <ArrowLeft size={16} />
+      <ArrowRight size={16} />
       رجوع
     </button>
   )
@@ -271,7 +271,7 @@ export default function Checkout() {
               onClick={() => step === 1 ? navigate('/cart') : goToStep(step - 1)}
               style={{ width: 36, height: 36, borderRadius: 10, background: '#F9FAFB', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
             >
-              <ArrowLeft size={18} color="#374151" />
+              <ArrowRight size={18} color="#374151" />
             </button>
             <div style={{ flex: 1 }}>
               <p style={{ fontWeight: 800, fontSize: 16, color: '#1a1a1a' }}>{config.name}</p>

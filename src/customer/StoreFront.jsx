@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { ShoppingCart, Menu, X, Search, Star, ChevronLeft, ChevronRight, Smartphone, Tag, Flame } from 'lucide-react'
 import { getConfig, getMenuItems, getCategories, getBanners, getCombos, getFooterSettings } from '../lib/restaurantStore'
 import { useCart } from './CartContext'
+import CustomerNav from './CustomerNav'
 
 /* ─── Nearby restaurants ────────────────────────────────────── */
 const mockNearbyRestaurants = [
@@ -811,6 +812,7 @@ export default function StoreFront() {
           </div>
         </>
       )}
+      <CustomerNav />
     </div>
   )
 }

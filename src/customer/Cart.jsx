@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { ArrowRight, Trash2, CheckCircle, X } from 'lucide-react'
 import { getConfig, getCoupons } from '../lib/restaurantStore'
 import { useCart } from './CartContext'
+import CustomerNav from './CustomerNav'
 
 export default function Cart() {
   const navigate = useNavigate()
@@ -314,6 +315,7 @@ export default function Cart() {
           </div>
         </div>
       )}
+      <CustomerNav />
     </div>
   )
 }

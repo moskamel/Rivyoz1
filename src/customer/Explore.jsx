@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Search, Star, Clock, MapPin, List, Map } from 'lucide-react'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
+import CustomerNav from './CustomerNav'
 
 const mockRestaurants = [
   { id: 1, name: 'مطعم الشيف أحمد', category: 'مشويات', rating: 4.9, reviews: 312, deliveryTime: 30, deliveryFee: 15, color: '#f97316', emoji: '🍖', slug: 'chef-ahmed', isOpen: true, tags: ['مشهور', 'طازج'], lat: 30.0131, lng: 31.4368 },
@@ -518,6 +519,7 @@ export default function Explore() {
           </div>
         </div>
       )}
+      <CustomerNav />
     </div>
   )
 }
