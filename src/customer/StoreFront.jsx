@@ -35,36 +35,49 @@ function BannerCarousel({ accentColor }) {
   }
 
   const b = banners[current]
+  const hasImage = !!b.imageUrl
+
   return (
-    <div style={{ position: 'relative', overflow: 'hidden', height: 180 }}>
+    <div style={{ position: 'relative', overflow: 'hidden', height: 200 }}>
       {/* Slide */}
       <div
         key={b.id}
         style={{
-          width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-          background: `linear-gradient(135deg, ${b.color[0]}, ${b.color[1]})`,
-          transition: 'all 0.4s ease',
+          width: '100%', height: '100%', position: 'relative',
+          background: hasImage
+            ? `url(${b.imageUrl}) center/cover no-repeat`
+            : `linear-gradient(135deg, ${b.color[0]}, ${b.color[1]})`,
+          transition: 'opacity 0.4s ease',
         }}
       >
-        <p style={{ color: 'white', fontWeight: 900, fontSize: 22, textShadow: '0 2px 8px rgba(0,0,0,0.2)' }}>{b.title}</p>
-        <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: 14, marginTop: 6, fontWeight: 500 }}>{b.subtitle}</p>
-        <button style={{ marginTop: 16, background: 'rgba(255,255,255,0.2)', border: '1px solid rgba(255,255,255,0.3)', color: 'white', padding: '8px 20px', borderRadius: 20, fontSize: 13, fontWeight: 700, cursor: 'pointer', backdropFilter: 'blur(4px)' }}>
-          اطلب الآن
-        </button>
+        {/* Overlay (always shown for images, transparent for gradients) */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: hasImage ? 'rgba(0,0,0,0.38)' : 'transparent',
+          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+        }}>
+          {b.title && <p style={{ color: 'white', fontWeight: 900, fontSize: 22, textShadow: '0 2px 8px rgba(0,0,0,0.3)', textAlign: 'center', padding: '0 24px' }}>{b.title}</p>}
+          {b.subtitle && <p style={{ color: 'rgba(255,255,255,0.9)', fontSize: 14, marginTop: 6, fontWeight: 500, textAlign: 'center', padding: '0 24px' }}>{b.subtitle}</p>}
+          {!hasImage && (
+            <button style={{ marginTop: 16, background: 'rgba(255,255,255,0.2)', border: '1px solid rgba(255,255,255,0.3)', color: 'white', padding: '8px 20px', borderRadius: 20, fontSize: 13, fontWeight: 700, cursor: 'pointer', backdropFilter: 'blur(4px)' }}>
+              اطلب الآن
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Arrows */}
-      <button onClick={() => go(-1)} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', width: 32, height: 32, borderRadius: '50%', background: 'rgba(255,255,255,0.2)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', backdropFilter: 'blur(4px)' }}>
+      <button onClick={() => go(-1)} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', width: 32, height: 32, borderRadius: '50%', background: 'rgba(0,0,0,0.25)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', backdropFilter: 'blur(4px)' }}>
         <ChevronRight size={18} />
       </button>
-      <button onClick={() => go(1)} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', width: 32, height: 32, borderRadius: '50%', background: 'rgba(255,255,255,0.2)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', backdropFilter: 'blur(4px)' }}>
+      <button onClick={() => go(1)} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', width: 32, height: 32, borderRadius: '50%', background: 'rgba(0,0,0,0.25)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', backdropFilter: 'blur(4px)' }}>
         <ChevronLeft size={18} />
       </button>
 
       {/* Dots */}
       <div style={{ position: 'absolute', bottom: 12, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 6 }}>
         {banners.map((_, i) => (
-          <button key={i} onClick={() => setCurrent(i)} style={{ width: i === current ? 20 : 6, height: 6, borderRadius: 3, background: 'white', opacity: i === current ? 1 : 0.4, border: 'none', cursor: 'pointer', padding: 0, transition: 'all 0.3s' }} />
+          <button key={i} onClick={() => setCurrent(i)} style={{ width: i === current ? 20 : 6, height: 6, borderRadius: 3, background: 'white', opacity: i === current ? 1 : 0.5, border: 'none', cursor: 'pointer', padding: 0, transition: 'all 0.3s' }} />
         ))}
       </div>
     </div>
@@ -223,8 +236,6 @@ export default function StoreFront() {
   const [activeCategoryFilter, setActiveCategoryFilter] = useState('الكل')
   const [activeTab, setActiveTab] = useState(allTabs[0]?.id)
 
-  const sectionRefs = useRef({})
-
   const openItem = (item) => {
     if (!item.active) return
     setSelectedItem(item)
@@ -246,15 +257,6 @@ export default function StoreFront() {
 
   const handleAddCombo = (combo) => {
     addItem({ itemId: combo.id, name: combo.name, price: combo.price, qty: 1, note: combo.items })
-  }
-
-  const scrollToSection = (catId) => {
-    setActiveTab(catId)
-    const el = sectionRefs.current[catId]
-    if (el) {
-      const top = el.getBoundingClientRect().top + window.scrollY - 110
-      window.scrollTo({ top, behavior: 'smooth' })
-    }
   }
 
   const filteredNearby = activeCategoryFilter === 'الكل'
@@ -302,50 +304,52 @@ export default function StoreFront() {
             المطعم مغلق حالياً — يفتح الساعة {config.opensAt} ظهر
           </div>
         )}
-
-        {/* Category Tabs */}
-        <div style={{ background: 'white', borderBottom: '1px solid #f3f4f6', display: 'flex', overflowX: 'auto', scrollbarWidth: 'none' }} className="no-scrollbar">
-          {allTabs.map(tab => (
-            <button
-              key={tab.id}
-              onClick={() => scrollToSection(tab.id)}
-              style={{
-                flexShrink: 0, padding: '12px 16px', fontSize: 14, fontWeight: 600, cursor: 'pointer', background: 'none', border: 'none', whiteSpace: 'nowrap', transition: 'all 0.15s',
-                color: activeTab === tab.id ? config.color : '#6b7280',
-                borderBottom: `2px solid ${activeTab === tab.id ? config.color : 'transparent'}`,
-                fontFamily: 'Cairo, sans-serif',
-              }}
-            >
-              {tab.name}
-            </button>
-          ))}
-        </div>
       </div>
 
       {/* ─── Banner Carousel ─── */}
       <BannerCarousel accentColor={config.color} />
 
-      {/* ─── Popular Slider ─── */}
-      {popularItems.length > 0 && (
-        <div ref={el => sectionRefs.current['popular'] = el} style={{ background: 'white', marginTop: 8 }}>
+      {/* ─── Category Tabs (below banner) ─── */}
+      <div style={{ position: 'sticky', top: 56, zIndex: 30, background: 'white', borderBottom: '1px solid #f3f4f6', display: 'flex', overflowX: 'auto', scrollbarWidth: 'none' }} className="no-scrollbar">
+        {allTabs.map(tab => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            style={{
+              flexShrink: 0, padding: '12px 16px', fontSize: 14, fontWeight: 600, cursor: 'pointer', background: 'none', border: 'none', whiteSpace: 'nowrap', transition: 'all 0.15s',
+              color: activeTab === tab.id ? config.color : '#6b7280',
+              borderBottom: `2px solid ${activeTab === tab.id ? config.color : 'transparent'}`,
+              fontFamily: 'Cairo, sans-serif',
+            }}
+          >
+            {tab.name}
+          </button>
+        ))}
+      </div>
+
+      {/* ─── Tab Content ─── */}
+      {activeTab === 'popular' && (
+        <div style={{ background: 'white', marginTop: 8 }}>
           <PopularSlider items={menuItems} accentColor={config.color} onOpen={openItem} />
         </div>
       )}
 
-      {/* ─── Offers / Combos ─── */}
-      {activeCombos.length > 0 && (
-        <div ref={el => sectionRefs.current['combos'] = el} style={{ background: 'white', marginTop: 8 }}>
+      {activeTab === 'combos' && (
+        <div style={{ background: 'white', marginTop: 8 }}>
           <OffersSection accentColor={config.color} onAddCombo={handleAddCombo} />
         </div>
       )}
 
-      {/* ─── Menu Sections ─── */}
-      <div style={{ maxWidth: 480, margin: '8px auto 0', paddingBottom: 32 }}>
-        {categories.map(cat => {
-          const catItems = menuItems.filter(i => i.categoryId === cat.id)
-          if (catItems.length === 0) return null
-          return (
-            <div key={cat.id} ref={el => sectionRefs.current[cat.id] = el} style={{ background: 'white', marginBottom: 8 }}>
+      {activeTab !== 'popular' && activeTab !== 'combos' && (() => {
+        const cat = categories.find(c => c.id === activeTab)
+        if (!cat) return null
+        const catItems = menuItems.filter(i => i.categoryId === cat.id)
+        if (catItems.length === 0) return (
+          <div style={{ textAlign: 'center', padding: '48px 16px', color: '#9ca3af', fontSize: 14 }}>لا توجد أصناف في هذا القسم</div>
+        )
+        return (
+          <div style={{ maxWidth: 480, margin: '8px auto 0', paddingBottom: 32 }}>
+            <div style={{ background: 'white' }}>
               <h2 style={{ fontWeight: 800, color: '#1a1a1a', fontSize: 15, padding: '14px 16px 10px', borderBottom: '1px solid #f9fafb' }}>{cat.name}</h2>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, padding: 12 }}>
                 {catItems.map(item => (
@@ -387,9 +391,9 @@ export default function StoreFront() {
                 ))}
               </div>
             </div>
-          )
-        })}
-      </div>
+          </div>
+        )
+      })()}
 
       {/* ─── Footer ─── */}
       <Footer accentColor={config.color} />

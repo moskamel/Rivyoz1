@@ -87,9 +87,9 @@ export function updateOrderStatus(id, status) {
 
 /* ─── Banners ─────────────────────────────────────────────── */
 const defaultBanners = [
-  { id: 1, title: '🔥 عرض اليوم', subtitle: 'كفتة مشوية × 2 بـ 120 ج بدل 170!', color: ['#F97316', '#EA580C'], active: true },
-  { id: 2, title: '🎉 عرض العيد', subtitle: 'وجبة عائلية كاملة بـ 299 ج', color: ['#8B5CF6', '#7C3AED'], active: true },
-  { id: 3, title: '🚀 توصيل مجاني', subtitle: 'على الطلبات فوق 150 ج', color: ['#10B981', '#059669'], active: true },
+  { id: 1, title: '🔥 عرض اليوم', subtitle: 'كفتة مشوية × 2 بـ 120 ج بدل 170!', color: ['#F97316', '#EA580C'], active: true, imageUrl: null },
+  { id: 2, title: '🎉 عرض العيد', subtitle: 'وجبة عائلية كاملة بـ 299 ج', color: ['#8B5CF6', '#7C3AED'], active: true, imageUrl: null },
+  { id: 3, title: '🚀 توصيل مجاني', subtitle: 'على الطلبات فوق 150 ج', color: ['#10B981', '#059669'], active: true, imageUrl: null },
 ]
 export function getBanners() {
   try { const r = localStorage.getItem('store_banners'); if (r) return JSON.parse(r) } catch (e) {}

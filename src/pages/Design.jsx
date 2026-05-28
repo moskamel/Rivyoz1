@@ -128,8 +128,16 @@ const gradientPresets = [
 function BannersTab() {
   const [banners, setBannersState] = useState(getBanners)
   const [editing, setEditing] = useState(null)
-  const [form, setForm] = useState({ title: '', subtitle: '', color: ['#F97316', '#EA580C'], active: true })
+  const [form, setForm] = useState({ title: '', subtitle: '', color: ['#F97316', '#EA580C'], active: true, imageUrl: '' })
   const { toast, showToast } = useToast()
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = (ev) => setForm(f => ({ ...f, imageUrl: ev.target.result }))
+    reader.readAsDataURL(file)
+  }
 
   const save = () => {
     let next
@@ -152,20 +160,23 @@ function BannersTab() {
   }
 
   const startEdit = (b) => {
-    setForm({ title: b.title, subtitle: b.subtitle, color: b.color, active: b.active })
+    setForm({ title: b.title, subtitle: b.subtitle, color: b.color, active: b.active, imageUrl: b.imageUrl || '' })
     setEditing(b.id)
   }
 
   const startNew = () => {
-    setForm({ title: '', subtitle: '', color: ['#F97316', '#EA580C'], active: true })
+    setForm({ title: '', subtitle: '', color: ['#F97316', '#EA580C'], active: true, imageUrl: '' })
     setEditing('new')
   }
 
   const activeBanners = banners.filter(b => b.active)
   const previewBanner = editing && editing !== 'new'
     ? banners.find(b => b.id === editing)
-    : editing === 'new' ? { title: form.title, subtitle: form.subtitle, color: form.color }
+    : editing === 'new' ? { title: form.title, subtitle: form.subtitle, color: form.color, imageUrl: form.imageUrl }
     : activeBanners[0] || banners[0]
+
+  const previewImageUrl = editing === 'new' ? form.imageUrl : previewBanner?.imageUrl
+  const previewColors = editing === 'new' ? form.color : (previewBanner?.color || ['#F97316', '#EA580C'])
 
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
@@ -173,22 +184,31 @@ function BannersTab() {
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
         {/* Hero banner preview (storefront style) */}
         {previewBanner && (
-          <div style={{ borderRadius: 16, overflow: 'hidden', background: `linear-gradient(135deg, ${(editing === 'new' ? form.color : previewBanner.color)[0]}, ${(editing === 'new' ? form.color : previewBanner.color)[1]})`, padding: '28px 24px', position: 'relative', minHeight: 140 }}>
-            <div style={{ position: 'absolute', top: 12, left: 14, right: 14, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.6)', fontWeight: 600, letterSpacing: '0.05em' }}>معاينة البانر</span>
-              <div style={{ display: 'flex', gap: 5 }}>
-                {banners.filter(b => b.active).map((b, i) => (
-                  <span key={b.id} style={{ width: editing !== 'new' && b.id === editing ? 16 : 6, height: 6, borderRadius: 3, background: editing !== 'new' && b.id === editing ? 'white' : 'rgba(255,255,255,0.4)', transition: 'width 0.2s' }} />
-                ))}
+          <div style={{
+            borderRadius: 16, overflow: 'hidden', position: 'relative', minHeight: 140,
+            background: previewImageUrl
+              ? `url(${previewImageUrl}) center/cover no-repeat`
+              : `linear-gradient(135deg, ${previewColors[0]}, ${previewColors[1]})`,
+          }}>
+            <div style={{ position: 'absolute', inset: 0, background: previewImageUrl ? 'rgba(0,0,0,0.38)' : 'transparent', padding: '28px 24px' }}>
+              <div style={{ position: 'absolute', top: 12, left: 14, right: 14, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.6)', fontWeight: 600, letterSpacing: '0.05em' }}>معاينة البانر</span>
+                <div style={{ display: 'flex', gap: 5 }}>
+                  {banners.filter(b => b.active).map((b) => (
+                    <span key={b.id} style={{ width: editing !== 'new' && b.id === editing ? 16 : 6, height: 6, borderRadius: 3, background: editing !== 'new' && b.id === editing ? 'white' : 'rgba(255,255,255,0.4)', transition: 'width 0.2s' }} />
+                  ))}
+                </div>
               </div>
+              <p style={{ color: 'white', fontWeight: 800, fontSize: 22, lineHeight: 1.2, marginTop: 16 }}>
+                {editing === 'new' ? (form.title || 'عنوان البانر') : previewBanner.title}
+              </p>
+              <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: 13, marginTop: 8, lineHeight: 1.5 }}>
+                {editing === 'new' ? (form.subtitle || 'وصف العرض...') : previewBanner.subtitle}
+              </p>
+              {!previewImageUrl && (
+                <button style={{ marginTop: 16, padding: '8px 20px', background: 'white', color: previewColors[0], borderRadius: 20, fontSize: 12, fontWeight: 700, border: 'none', cursor: 'pointer' }}>اطلب الآن</button>
+              )}
             </div>
-            <p style={{ color: 'white', fontWeight: 800, fontSize: 22, lineHeight: 1.2, marginTop: 16 }}>
-              {editing === 'new' ? (form.title || 'عنوان البانر') : previewBanner.title}
-            </p>
-            <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: 13, marginTop: 8, lineHeight: 1.5 }}>
-              {editing === 'new' ? (form.subtitle || 'وصف العرض...') : previewBanner.subtitle}
-            </p>
-            <button style={{ marginTop: 16, padding: '8px 20px', background: 'white', color: (editing === 'new' ? form.color : previewBanner.color)[0], borderRadius: 20, fontSize: 12, fontWeight: 700, border: 'none', cursor: 'pointer' }}>اطلب الآن</button>
           </div>
         )}
 
@@ -204,12 +224,17 @@ function BannersTab() {
                 outlineOffset: 2, transition: 'all 0.15s',
               }}
             >
-              <div style={{ background: `linear-gradient(135deg, ${b.color[0]}, ${b.color[1]})`, padding: '14px 18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <div style={{ flex: 1, minWidth: 0, marginLeft: 10 }}>
+              <div style={{
+                background: b.imageUrl ? `url(${b.imageUrl}) center/cover no-repeat` : `linear-gradient(135deg, ${b.color[0]}, ${b.color[1]})`,
+                padding: '14px 18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                position: 'relative',
+              }}>
+                {b.imageUrl && <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.35)' }} />}
+                <div style={{ flex: 1, minWidth: 0, marginLeft: 10, position: 'relative', zIndex: 1 }}>
                   <p style={{ color: 'white', fontWeight: 700, fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{b.title}</p>
                   <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: 11, marginTop: 3, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{b.subtitle}</p>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0, position: 'relative', zIndex: 1 }}>
                   <div onClick={e => { e.stopPropagation(); toggle(b.id) }}>
                     <Toggle value={b.active} onChange={() => toggle(b.id)} />
                   </div>
@@ -235,6 +260,28 @@ function BannersTab() {
             <button onClick={() => setEditing(null)} style={{ padding: 6, borderRadius: 8, background: 'var(--surface-2)', border: 'none', cursor: 'pointer', color: 'var(--text-2)', display: 'flex' }}><X size={13} /></button>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {/* Image upload */}
+            <div>
+              <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: 'var(--text-2)', marginBottom: 5 }}>صورة البانر (اختياري)</label>
+              {form.imageUrl ? (
+                <div style={{ position: 'relative', borderRadius: 10, overflow: 'hidden', height: 80 }}>
+                  <img src={form.imageUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <button
+                    onClick={() => setForm(f => ({ ...f, imageUrl: '' }))}
+                    style={{ position: 'absolute', top: 6, left: 6, width: 24, height: 24, borderRadius: '50%', background: 'rgba(0,0,0,0.6)', border: 'none', cursor: 'pointer', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  >
+                    <X size={12} />
+                  </button>
+                </div>
+              ) : (
+                <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '10px', border: '2px dashed var(--border)', borderRadius: 10, fontSize: 12, fontWeight: 600, color: 'var(--text-2)', cursor: 'pointer', transition: 'all 0.15s' }}>
+                  <Image size={14} />
+                  ارفع صورة
+                  <input type="file" accept="image/*" onChange={handleImageUpload} style={{ display: 'none' }} />
+                </label>
+              )}
+              {!form.imageUrl && <p style={{ fontSize: 10, color: 'var(--text-3)', marginTop: 4 }}>بدون صورة سيُستخدم لون التدرج</p>}
+            </div>
             <div>
               <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: 'var(--text-2)', marginBottom: 5 }}>العنوان</label>
               <input value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} style={inputStyle} placeholder="🔥 عرض اليوم"
@@ -245,14 +292,16 @@ function BannersTab() {
               <input value={form.subtitle} onChange={e => setForm({ ...form, subtitle: e.target.value })} style={inputStyle} placeholder="تفاصيل العرض..."
                 onFocus={e => e.target.style.borderColor = 'var(--accent)'} onBlur={e => e.target.style.borderColor = 'var(--border)'} />
             </div>
-            <div>
-              <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: 'var(--text-2)', marginBottom: 8 }}>لون التدرج</label>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
-                {gradientPresets.map((g, i) => (
-                  <button key={i} onClick={() => setForm({ ...form, color: g })} style={{ height: 40, borderRadius: 10, background: `linear-gradient(135deg, ${g[0]}, ${g[1]})`, border: 'none', cursor: 'pointer', outline: JSON.stringify(form.color) === JSON.stringify(g) ? `2.5px solid var(--text)` : '2.5px solid transparent', outlineOffset: 2, transition: 'all 0.15s' }} />
-                ))}
+            {!form.imageUrl && (
+              <div>
+                <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: 'var(--text-2)', marginBottom: 8 }}>لون التدرج</label>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
+                  {gradientPresets.map((g, i) => (
+                    <button key={i} onClick={() => setForm({ ...form, color: g })} style={{ height: 40, borderRadius: 10, background: `linear-gradient(135deg, ${g[0]}, ${g[1]})`, border: 'none', cursor: 'pointer', outline: JSON.stringify(form.color) === JSON.stringify(g) ? `2.5px solid var(--text)` : '2.5px solid transparent', outlineOffset: 2, transition: 'all 0.15s' }} />
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
             <button onClick={save} disabled={!form.title} style={{ padding: '11px', background: form.title ? 'var(--accent)' : 'var(--surface-3)', color: form.title ? 'white' : 'var(--text-3)', borderRadius: 10, fontWeight: 700, fontSize: 13, border: 'none', cursor: form.title ? 'pointer' : 'not-allowed', marginTop: 4 }}>
               حفظ البانر
             </button>
