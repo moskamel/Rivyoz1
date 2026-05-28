@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Sun, Moon, Search } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import NotificationBell from '../NotificationBell'
 
 const roleLabels = {
@@ -10,6 +11,7 @@ const roleLabels = {
 }
 
 export default function TopBar({ title }) {
+  const navigate = useNavigate()
   const role = localStorage.getItem('auth_role') || 'owner'
   const roleLabel = roleLabels[role] || 'صاحب المطعم'
   const userInitial = roleLabel.charAt(0)
@@ -84,8 +86,9 @@ export default function TopBar({ title }) {
         {/* Separator */}
         <div style={{ width: 1, height: 20, background: 'var(--border)', margin: '0 2px' }} />
 
-        {/* Avatar */}
+        {/* Avatar — navigates to /profile */}
         <div
+          onClick={() => navigate('/profile')}
           style={{
             width: 32,
             height: 32,
@@ -100,8 +103,11 @@ export default function TopBar({ title }) {
             fontWeight: 700,
             cursor: 'pointer',
             flexShrink: 0,
+            transition: 'border-color 0.15s, box-shadow 0.15s',
           }}
-          title={roleLabel}
+          title={`${roleLabel} — الملف الشخصي`}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.boxShadow = '0 0 0 2px rgba(249,115,22,0.2)' }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border-accent)'; e.currentTarget.style.boxShadow = 'none' }}
         >
           {userInitial}
         </div>
