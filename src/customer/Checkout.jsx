@@ -275,27 +275,9 @@ export default function Checkout() {
   return (
     <div style={{ minHeight: '100vh', background: '#F9FAFB', fontFamily: 'Cairo, sans-serif', direction: 'rtl' }}>
 
-      {/* Sticky header */}
-      <div style={{ background: 'white', borderBottom: '1px solid #F3F4F6', position: 'sticky', top: 0, zIndex: 20, boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 16px 0' }}>
-            <button
-              onClick={() => step === 1 ? navigate('/cart') : goToStep(step - 1)}
-              style={{ width: 36, height: 36, borderRadius: 10, background: '#F9FAFB', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
-            >
-              <ArrowRight size={18} color="#374151" />
-            </button>
-            <div style={{ flex: 1 }}>
-              <p style={{ fontWeight: 800, fontSize: 16, color: '#1a1a1a' }}>{config.name}</p>
-              <p style={{ fontSize: 11, color: '#9CA3AF', marginTop: 1 }}>إتمام الطلب</p>
-            </div>
-          </div>
-          <StepIndicator step={step} color={accentColor} />
-        </div>
-      </div>
-
       {/* Step content */}
       <div style={{ padding: '16px 14px 100px', opacity: animating ? 0 : 1, transition: 'opacity 0.18s ease' }}>
+        <StepIndicator step={step} color={accentColor} />
 
         {/* ── STEP 1: Delivery details ── */}
         {step === 1 && (

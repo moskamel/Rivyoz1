@@ -5,6 +5,7 @@ import {
   getCustomerProfile, getCustomerPoints, redeemPoints, getConfig,
 } from '../lib/restaurantStore'
 import CustomerNav from './CustomerNav'
+import CustomerFooter from './CustomerFooter'
 
 const REWARDS = [
   { id: 1, icon: '🎁', title: 'خصم 10% على طلبك القادم', points: 500 },
@@ -237,6 +238,7 @@ export default function Loyalty() {
         )}
       </div>
 
+      <CustomerFooter />
       <CustomerNav />
 
       {/* Confirm redeem bottom sheet */}

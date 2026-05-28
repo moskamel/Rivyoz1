@@ -6,6 +6,7 @@ import {
   getCustomerPoints, getCustomerOrders, getConfig,
 } from '../lib/restaurantStore'
 import CustomerNav from './CustomerNav'
+import CustomerFooter from './CustomerFooter'
 
 export default function CustomerProfile() {
   const navigate = useNavigate()
@@ -291,6 +292,7 @@ export default function CustomerProfile() {
         </div>
       )}
 
+      <CustomerFooter />
       <CustomerNav />
     </div>
   )

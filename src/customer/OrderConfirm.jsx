@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { getConfig } from '../lib/restaurantStore'
 import { MapPin, Clock, UtensilsCrossed } from 'lucide-react'
+import CustomerNav from './CustomerNav'
+import CustomerFooter from './CustomerFooter'
 
 export default function OrderConfirm() {
   const navigate = useNavigate()
@@ -258,6 +260,8 @@ export default function OrderConfirm() {
           </button>
         </div>
       </div>
+      <CustomerFooter />
+      <CustomerNav />
     </div>
   )
 }

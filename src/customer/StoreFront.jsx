@@ -1,20 +1,10 @@
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ShoppingCart, Menu, X, Search, Star, ChevronLeft, ChevronRight, Smartphone, Tag, Flame } from 'lucide-react'
-import { getConfig, getMenuItems, getCategories, getBanners, getCombos, getFooterSettings, getCustomerProfile, clearCustomerProfile } from '../lib/restaurantStore'
+import { ShoppingCart, X, Search, ChevronLeft, ChevronRight, Tag, Flame } from 'lucide-react'
+import { getConfig, getMenuItems, getCategories, getBanners, getCombos } from '../lib/restaurantStore'
 import { useCart } from './CartContext'
 import CustomerNav from './CustomerNav'
-
-/* ─── Nearby restaurants ────────────────────────────────────── */
-const mockNearbyRestaurants = [
-  { id: 1, name: 'بيتزا بلازا', category: 'بيتزا', rating: 4.7, deliveryTime: 25, color: '#ef4444', slug: 'pizza-plaza' },
-  { id: 2, name: 'كافيه ميترو', category: 'كافيه', rating: 4.5, deliveryTime: 20, color: '#8b5cf6', slug: 'metro-cafe' },
-  { id: 3, name: 'شاورما كينج', category: 'مشويات', rating: 4.8, deliveryTime: 30, color: '#f59e0b', slug: 'shawarma-king' },
-  { id: 4, name: 'سوشي هاوس', category: 'سوشي', rating: 4.6, deliveryTime: 40, color: '#10b981', slug: 'sushi-house' },
-  { id: 5, name: 'برجر فاكتوري', category: 'مشويات', rating: 4.4, deliveryTime: 35, color: '#f97316', slug: 'burger-factory' },
-]
-
-const categoryFilters = ['الكل', 'مشويات', 'بيتزا', 'كافيه']
+import CustomerFooter from './CustomerFooter'
 
 /* ─── Banner Carousel ───────────────────────────────────────── */
 function BannerCarousel({ accentColor }) {
@@ -196,51 +186,6 @@ function OffersSection({ accentColor, onAddCombo }) {
   )
 }
 
-/* ─── Footer ────────────────────────────────────────────────── */
-function Footer({ accentColor }) {
-  const navigate = useNavigate()
-  const f = getFooterSettings()
-  return (
-    <div style={{ background: '#1a1a1a', color: 'white', padding: '32px 20px', direction: 'rtl' }}>
-      <div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
-          <div style={{ width: 36, height: 36, borderRadius: 10, background: accentColor, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, fontWeight: 900 }}>ر</div>
-          <div>
-            <p style={{ fontWeight: 900, fontSize: 16 }}>ريڤيو</p>
-            <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', marginTop: 1 }}>{f.tagline}</p>
-          </div>
-        </div>
-
-        {f.showAppButtons && (
-          <>
-            <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', marginBottom: 14 }}>حمّل التطبيق واطلب بسهولة أكبر</p>
-            <div style={{ display: 'flex', gap: 10, marginBottom: 24 }}>
-              <a href={f.iosUrl} target="_blank" rel="noopener noreferrer" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '11px 16px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 12, color: 'white', fontSize: 13, fontWeight: 700, cursor: 'pointer', backdropFilter: 'blur(4px)', textDecoration: 'none' }}>
-                <span style={{ fontSize: 20 }}>🍎</span> App Store
-              </a>
-              <a href={f.androidUrl} target="_blank" rel="noopener noreferrer" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '11px 16px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 12, color: 'white', fontSize: 13, fontWeight: 700, cursor: 'pointer', backdropFilter: 'blur(4px)', textDecoration: 'none' }}>
-                <span style={{ fontSize: 20 }}>🤖</span> Google Play
-              </a>
-            </div>
-          </>
-        )}
-
-        <div style={{ display: 'flex', gap: 20, marginBottom: 20, borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 20 }}>
-          {f.showExploreLink && (
-            <button onClick={() => navigate('/explore')} style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>
-              🗺️ قائمة المطاعم
-            </button>
-          )}
-          <button style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>📞 تواصل معنا</button>
-          <button style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>❓ المساعدة</button>
-        </div>
-
-        <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', textAlign: 'center' }}>{f.copyright}</p>
-      </div>
-    </div>
-  )
-}
-
 /* ─── Main StoreFront ───────────────────────────────────────── */
 export default function StoreFront() {
   const navigate = useNavigate()
@@ -248,7 +193,6 @@ export default function StoreFront() {
   const menuItems = getMenuItems()
   const categories = getCategories()
   const { addItem, itemCount, total } = useCart()
-  const customerProfile = getCustomerProfile()
 
   const popularItems = menuItems.filter(i => i.active && i.bestseller)
   const activeCombos = getCombos().filter(c => c.active)
@@ -263,11 +207,8 @@ export default function StoreFront() {
   const [sheetOpen, setSheetOpen] = useState(false)
   const [qty, setQty] = useState(1)
   const [note, setNote] = useState('')
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [searchQuery, setSearchQuery] = useState('')
   const [searchOpen, setSearchOpen] = useState(false)
   const [searchMenuQuery, setSearchMenuQuery] = useState('')
-  const [activeCategoryFilter, setActiveCategoryFilter] = useState('الكل')
   const [activeTab, setActiveTab] = useState(allTabs[0]?.id)
 
   // Modifier state
@@ -345,14 +286,6 @@ export default function StoreFront() {
     addItem({ itemId: combo.id, name: combo.name, price: combo.price, qty: 1, note: combo.items })
   }
 
-  const filteredNearby = activeCategoryFilter === 'الكل'
-    ? mockNearbyRestaurants
-    : mockNearbyRestaurants.filter(r => r.category === activeCategoryFilter)
-
-  const filteredNearbyBySearch = searchQuery
-    ? filteredNearby.filter(r => r.name.includes(searchQuery))
-    : filteredNearby
-
   const searchedMenuItems = searchMenuQuery.trim()
     ? menuItems.filter(i => i.active && i.name.includes(searchMenuQuery.trim()))
     : []
@@ -378,12 +311,11 @@ export default function StoreFront() {
 
           {/* Actions */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
-            {/* Sidebar */}
             <button
-              onClick={() => setSidebarOpen(true)}
+              onClick={() => { setSearchOpen(true); setSearchMenuQuery('') }}
               style={{ width: 36, height: 36, borderRadius: 10, background: '#f3f4f6', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6b7280' }}
             >
-              <Menu size={17} />
+              <Search size={17} />
             </button>
           </div>
         </div>
@@ -534,7 +466,7 @@ export default function StoreFront() {
       })()}
 
       {/* ─── Footer ─── */}
-      <Footer accentColor={config.color} />
+      <CustomerFooter />
 
       {/* ─── Floating Cart Button ─── */}
       {itemCount > 0 && (
@@ -742,83 +674,6 @@ export default function StoreFront() {
         </>
       )}
 
-      {/* ─── Profile Sidebar ─── */}
-      {sidebarOpen && (
-        <>
-          <div onClick={() => setSidebarOpen(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 110 }} />
-          <div style={{ position: 'fixed', top: 0, left: 0, bottom: 0, zIndex: 111, background: 'white', width: 280, boxShadow: '4px 0 24px rgba(0,0,0,0.15)', display: 'flex', flexDirection: 'column' }} dir="rtl">
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px', borderBottom: '1px solid #f3f4f6' }}>
-              <h2 style={{ fontWeight: 800, color: '#1a1a1a', fontSize: 15 }}>حسابي</h2>
-              <button onClick={() => setSidebarOpen(false)} style={{ padding: 6, borderRadius: 8, background: '#f3f4f6', border: 'none', cursor: 'pointer', display: 'flex' }}>
-                <X size={16} />
-              </button>
-            </div>
-
-            {customerProfile ? (
-              <div style={{ padding: '20px 16px', borderBottom: '1px solid #f3f4f6', background: config.color + '0D' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                  <div style={{ width: 48, height: 48, borderRadius: '50%', background: config.color, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 900, fontSize: 20, flexShrink: 0 }}>
-                    {customerProfile.name?.charAt(0) || '؟'}
-                  </div>
-                  <div>
-                    <p style={{ fontWeight: 800, fontSize: 14, color: '#1a1a1a' }}>{customerProfile.name}</p>
-                    <p style={{ fontSize: 12, color: '#6b7280', marginTop: 2, direction: 'ltr', textAlign: 'right' }}>{customerProfile.phone}</p>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div style={{ padding: '20px 16px', borderBottom: '1px solid #f3f4f6', textAlign: 'center' }}>
-                <p style={{ fontSize: 13, color: '#6b7280', marginBottom: 12 }}>سجّل دخولك للاستمتاع بالمميزات</p>
-                <button
-                  onClick={() => { setSidebarOpen(false); navigate('/customer-login') }}
-                  style={{ padding: '10px 24px', borderRadius: 12, background: config.color, color: 'white', fontWeight: 700, fontSize: 13, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}
-                >
-                  تسجيل الدخول
-                </button>
-              </div>
-            )}
-
-            <div style={{ flex: 1, overflowY: 'auto', padding: '8px 0' }}>
-              {[
-                { icon: '🛵', label: 'طلباتي', path: '/my-orders' },
-                { icon: '🎁', label: 'مكافآتي', path: '/loyalty' },
-                { icon: '🗺️', label: 'استكشف المطاعم', path: '/explore' },
-                { icon: '👤', label: 'ملفي الشخصي', path: '/my-profile' },
-              ].map(link => (
-                <button
-                  key={link.path}
-                  onClick={() => { setSidebarOpen(false); navigate(link.path) }}
-                  style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, padding: '13px 16px', background: 'transparent', border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif', textAlign: 'right', transition: 'background 0.15s' }}
-                  onMouseEnter={e => e.currentTarget.style.background = '#f9fafb'}
-                  onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-                >
-                  <span style={{ fontSize: 18 }}>{link.icon}</span>
-                  <span style={{ fontSize: 14, fontWeight: 600, color: '#1a1a1a' }}>{link.label}</span>
-                </button>
-              ))}
-
-              <div style={{ height: 1, background: '#f3f4f6', margin: '8px 16px' }} />
-
-              <div style={{ padding: '12px 16px' }}>
-                <p style={{ fontSize: 11, fontWeight: 700, color: '#9ca3af', marginBottom: 8, letterSpacing: '0.05em' }}>معلومات المطعم</p>
-                {config.phone && <p style={{ fontSize: 13, color: '#374151', marginBottom: 4 }}>📞 {config.phone}</p>}
-                <p style={{ fontSize: 13, color: '#374151' }}>🕐 {config.isOpen ? 'مفتوح الآن' : `يفتح ${config.opensAt}`}</p>
-              </div>
-            </div>
-
-            {customerProfile && (
-              <div style={{ padding: '12px 16px', borderTop: '1px solid #f3f4f6' }}>
-                <button
-                  onClick={() => { clearCustomerProfile(); setSidebarOpen(false) }}
-                  style={{ width: '100%', padding: '11px', borderRadius: 12, background: '#FEF2F2', color: '#DC2626', fontWeight: 700, fontSize: 13, border: '1px solid #FECACA', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}
-                >
-                  تسجيل الخروج
-                </button>
-              </div>
-            )}
-          </div>
-        </>
-      )}
       <CustomerNav />
     </div>
   )

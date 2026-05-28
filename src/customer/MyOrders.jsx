@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import { getCustomerOrders, getCustomerProfile, getConfig } from '../lib/restaurantStore'
 import CustomerNav from './CustomerNav'
+import CustomerFooter from './CustomerFooter'
 
 const STATUS_LABEL = {
   new: 'جديد 🔔', preparing: 'جاري التحضير 👨‍🍳',
@@ -160,6 +161,7 @@ export default function MyOrders() {
         )}
       </div>
 
+      <CustomerFooter />
       <CustomerNav />
     </div>
   )

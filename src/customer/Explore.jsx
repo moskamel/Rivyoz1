@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Search, Star, Clock, MapPin, List, Map } from 'lucide-react'
 import CustomerNav from './CustomerNav'
+import CustomerFooter from './CustomerFooter'
 
 const mockRestaurants = [
   { id: 1, name: 'مطعم الشيف أحمد', category: 'مشويات', rating: 4.9, reviews: 312, deliveryTime: 30, deliveryFee: 15, color: '#f97316', emoji: '🍖', slug: 'chef-ahmed', isOpen: true, tags: ['مشهور', 'طازج'], x: 62, y: 38 },
@@ -506,6 +507,7 @@ export default function Explore() {
         </div>
       )}
 
+      <CustomerFooter />
       <CustomerNav />
     </div>
   )

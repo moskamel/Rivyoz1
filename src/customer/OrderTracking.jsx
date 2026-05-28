@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { getConfig, getOrders, rateOrder } from '../lib/restaurantStore'
 import { ArrowRight, MessageCircle, Compass } from 'lucide-react'
+import CustomerNav from './CustomerNav'
+import CustomerFooter from './CustomerFooter'
 
 const steps = [
   { key: 'new', label: 'استلام الطلب', sub: 'المطعم راجع طلبك', icon: '📋' },
@@ -366,6 +368,8 @@ export default function OrderTracking() {
           </button>
         </div>
       </div>
+      <CustomerFooter />
+      <CustomerNav />
     </div>
   )
 }
