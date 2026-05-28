@@ -78,7 +78,7 @@ function CustomerDrawer({ customer, onClose }) {
             <Send size={15} />
             إرسال كوبون
           </button>
-          <button style={{ width: '100%', padding: '12px', background: 'var(--green-muted)', color: 'var(--green)', fontWeight: 700, borderRadius: 12, border: '1px solid rgba(34,197,94,0.2)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, fontSize: 14 }}>
+          <button onClick={() => window.open(`https://wa.me/2${customer.phone}`, '_blank')} style={{ width: '100%', padding: '12px', background: 'var(--green-muted)', color: 'var(--green)', fontWeight: 700, borderRadius: 12, border: '1px solid rgba(34,197,94,0.2)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, fontSize: 14 }}>
             <MessageCircle size={15} />
             رسالة واتساب
           </button>
@@ -181,7 +181,7 @@ export default function Customers() {
                           <Eye size={12} />
                           عرض
                         </button>
-                        <button style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '5px 10px', background: 'var(--green-muted)', color: 'var(--green)', borderRadius: 8, fontSize: 11, fontWeight: 700, border: 'none', cursor: 'pointer' }}>
+                        <button onClick={() => window.open(`https://wa.me/2${c.phone}`, '_blank')} style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '5px 10px', background: 'var(--green-muted)', color: 'var(--green)', borderRadius: 8, fontSize: 11, fontWeight: 700, border: 'none', cursor: 'pointer' }}>
                           <MessageCircle size={12} />
                           واتساب
                         </button>

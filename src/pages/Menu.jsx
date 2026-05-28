@@ -48,7 +48,7 @@ export default function Menu() {
   }
 
   const openEdit = (item) => {
-    setForm({ name: item.name, price: item.price, categoryId: item.categoryId, description: '', active: item.active, bestseller: item.bestseller })
+    setForm({ name: item.name, price: item.price, categoryId: item.categoryId, description: item.description || '', active: item.active, bestseller: item.bestseller || false })
     setEditItem(item.id)
     setShowForm(true)
   }
@@ -235,6 +235,15 @@ export default function Menu() {
                   style={{ position: 'relative', width: 44, height: 24, borderRadius: 12, background: form.active ? 'var(--green)' : 'var(--surface-3)', border: 'none', cursor: 'pointer', transition: 'all 0.2s' }}
                 >
                   <span style={{ position: 'absolute', top: 4, width: 16, height: 16, background: 'white', borderRadius: '50%', transition: 'all 0.2s', right: form.active ? 4 : 'auto', left: form.active ? 'auto' : 4 }} />
+                </button>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>الأكثر مبيعاً ⭐</span>
+                <button
+                  onClick={() => setForm({ ...form, bestseller: !form.bestseller })}
+                  style={{ position: 'relative', width: 44, height: 24, borderRadius: 12, background: form.bestseller ? 'var(--yellow)' : 'var(--surface-3)', border: 'none', cursor: 'pointer', transition: 'all 0.2s' }}
+                >
+                  <span style={{ position: 'absolute', top: 4, width: 16, height: 16, background: 'white', borderRadius: '50%', transition: 'all 0.2s', right: form.bestseller ? 4 : 'auto', left: form.bestseller ? 'auto' : 4 }} />
                 </button>
               </div>
               <button

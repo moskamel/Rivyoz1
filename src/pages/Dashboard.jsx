@@ -4,7 +4,7 @@ import { TrendingUp, TrendingDown, ShoppingBag, Users, DollarSign, ArrowLeft, Po
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
 import Layout from '../components/layout/Layout'
 import { mockStats, mockSalesData, mockTopItems, statusMap } from '../lib/mock'
-import { getOrders } from '../lib/restaurantStore'
+import { getOrders, getConfig, setConfig } from '../lib/restaurantStore'
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload?.length) {
@@ -43,7 +43,7 @@ function StatCard({ label, value, change, icon: Icon, color }) {
 }
 
 export default function Dashboard() {
-  const [isOpen, setIsOpen] = useState(true)
+  const [isOpen, setIsOpen] = useState(() => getConfig().isOpen)
   const orders = getOrders()
   const newOrders = orders.filter(o => o.status === 'new')
   const recentOrders = orders.slice(0, 4)
@@ -55,10 +55,10 @@ export default function Dashboard() {
         <div className="glass flex items-center gap-3" style={{ padding: '12px 16px', flex: 1, minWidth: 240 }}>
           <div style={{ width: 8, height: 8, borderRadius: '50%', background: isOpen ? 'var(--green)' : 'var(--text-3)', boxShadow: isOpen ? '0 0 8px var(--green)' : 'none' }} />
           <div style={{ flex: 1 }}>
-            <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>مطعم الشيف أحمد</p>
+            <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>{getConfig().name}</p>
             <p style={{ fontSize: 11, color: isOpen ? 'var(--green)' : 'var(--text-3)', fontWeight: 500 }}>{isOpen ? 'مفتوح · حتى 11 مساءً' : 'مغلق مؤقتاً'}</p>
           </div>
-          <button onClick={() => setIsOpen(!isOpen)} style={{ fontSize: 12, fontWeight: 600, padding: '6px 12px', borderRadius: 8, cursor: 'pointer', border: 'none', background: isOpen ? 'var(--red-muted)' : 'var(--green-muted)', color: isOpen ? 'var(--red)' : 'var(--green)', display: 'flex', alignItems: 'center', gap: 5, transition: 'all 0.15s' }}>
+          <button onClick={() => { setIsOpen(prev => { const next = !prev; setConfig({ isOpen: next }); return next }) }} style={{ fontSize: 12, fontWeight: 600, padding: '6px 12px', borderRadius: 8, cursor: 'pointer', border: 'none', background: isOpen ? 'var(--red-muted)' : 'var(--green-muted)', color: isOpen ? 'var(--red)' : 'var(--green)', display: 'flex', alignItems: 'center', gap: 5, transition: 'all 0.15s' }}>
             <Power size={13} />
             {isOpen ? 'إغلاق مؤقت' : 'فتح المطعم'}
           </button>

@@ -1,33 +1,44 @@
 import { useState, useRef, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Bell, ShoppingBag, XCircle, AlertTriangle, Megaphone, UserPlus } from 'lucide-react'
+import { getNotifications, setNotifications } from '../lib/restaurantStore'
 
-const mockNotifications = [
-  { id: 1, icon: ShoppingBag, iconBg: 'var(--accent-muted)', iconColor: 'var(--accent)', text: 'طلب جديد #43 من طاولة 5', time: 'منذ دقيقة', read: false },
-  { id: 2, icon: XCircle, iconBg: 'var(--red-muted)', iconColor: 'var(--red)', text: 'طلب #41 تم إلغاؤه من العميل', time: 'منذ 5 دقائق', read: false },
-  { id: 3, icon: AlertTriangle, iconBg: 'var(--yellow-muted)', iconColor: 'var(--yellow)', text: 'صنف "الدجاج" على وشك النفاد (3 وحدات)', time: 'منذ 15 دقيقة', read: false },
-  { id: 4, icon: Megaphone, iconBg: 'var(--blue-muted)', iconColor: 'var(--blue)', text: 'حملة "عروض رمضان" تم إرسالها بنجاح', time: 'منذ ساعة', read: true },
-  { id: 5, icon: UserPlus, iconBg: 'var(--green-muted)', iconColor: 'var(--green)', text: 'زبون جديد مسجل: منى محمد', time: 'منذ ساعتين', read: true },
-]
+const typeIconMap = {
+  order: { icon: ShoppingBag, iconBg: 'var(--accent-muted)', iconColor: 'var(--accent)' },
+  cancel: { icon: XCircle, iconBg: 'var(--red-muted)', iconColor: 'var(--red)' },
+  inventory: { icon: AlertTriangle, iconBg: 'var(--yellow-muted)', iconColor: 'var(--yellow)' },
+  campaign: { icon: Megaphone, iconBg: 'var(--blue-muted)', iconColor: 'var(--blue)' },
+  customer: { icon: UserPlus, iconBg: 'var(--green-muted)', iconColor: 'var(--green)' },
+}
 
 export default function NotificationBell() {
   const [open, setOpen] = useState(false)
-  const [notifications, setNotifications] = useState(mockNotifications)
+  const [notifications, setNotifState] = useState(getNotifications)
   const ref = useRef(null)
+  const navigate = useNavigate()
 
   const unreadCount = notifications.filter(n => !n.read).length
 
   useEffect(() => {
     function handleClick(e) {
-      if (ref.current && !ref.current.contains(e.target)) {
-        setOpen(false)
-      }
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false)
     }
     document.addEventListener('mousedown', handleClick)
     return () => document.removeEventListener('mousedown', handleClick)
   }, [])
 
   function markAllRead() {
-    setNotifications(notifications.map(n => ({ ...n, read: true })))
+    const updated = notifications.map(n => ({ ...n, read: true }))
+    setNotifState(updated)
+    setNotifications(updated)
+  }
+
+  function handleNotifClick(n) {
+    const updated = notifications.map(x => x.id === n.id ? { ...x, read: true } : x)
+    setNotifState(updated)
+    setNotifications(updated)
+    setOpen(false)
+    if (n.link) navigate(n.link)
   }
 
   return (
@@ -51,26 +62,25 @@ export default function NotificationBell() {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', borderBottom: '1px solid var(--border)' }}>
             <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 13 }}>الإشعارات</p>
             {unreadCount > 0 && (
-              <button
-                onClick={markAllRead}
-                style={{ fontSize: 11, color: 'var(--accent)', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer' }}
-              >
+              <button onClick={markAllRead} style={{ fontSize: 11, color: 'var(--accent)', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer' }}>
                 تحديد الكل كمقروء
               </button>
             )}
           </div>
           <div style={{ maxHeight: 320, overflowY: 'auto' }}>
             {notifications.map(n => {
-              const Icon = n.icon
+              const iconCfg = typeIconMap[n.type] || typeIconMap.order
+              const Icon = iconCfg.icon
               return (
                 <div
                   key={n.id}
-                  style={{ display: 'flex', alignItems: 'flex-start', gap: 12, padding: '10px 16px', borderBottom: '1px solid var(--border)', background: !n.read ? 'rgba(249,115,22,0.04)' : 'transparent', transition: 'background 0.15s', cursor: 'default' }}
+                  onClick={() => handleNotifClick(n)}
+                  style={{ display: 'flex', alignItems: 'flex-start', gap: 12, padding: '10px 16px', borderBottom: '1px solid var(--border)', background: !n.read ? 'rgba(249,115,22,0.04)' : 'transparent', transition: 'background 0.15s', cursor: 'pointer' }}
                   onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-3)'}
                   onMouseLeave={e => e.currentTarget.style.background = !n.read ? 'rgba(249,115,22,0.04)' : 'transparent'}
                 >
-                  <div style={{ width: 32, height: 32, borderRadius: 9, background: n.iconBg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 2 }}>
-                    <Icon size={14} color={n.iconColor} />
+                  <div style={{ width: 32, height: 32, borderRadius: 9, background: iconCfg.iconBg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 2 }}>
+                    <Icon size={14} color={iconCfg.iconColor} />
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <p style={{ fontSize: 12, color: 'var(--text)', lineHeight: 1.5 }}>{n.text}</p>

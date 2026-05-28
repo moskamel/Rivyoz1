@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Download, QrCode, Store, Bike, CreditCard } from 'lucide-react'
+import QRCode from 'react-qr-code'
 import Layout from '../components/layout/Layout'
 import { getConfig, setConfig } from '../lib/restaurantStore'
 
@@ -118,8 +119,25 @@ function Toggle({ value, onChange }) {
 }
 
 function DeliveryTab() {
-  const [opts, setOpts] = useState({ delivery: true, pickup: true, table: false })
+  const stored = getConfig()
+  const [opts, setOpts] = useState({ delivery: stored.allowDelivery, pickup: stored.allowPickup, table: stored.allowTable })
+  const [deliveryFee, setDeliveryFee] = useState(stored.deliveryFee)
+  const [minOrder, setMinOrder] = useState(stored.minOrder)
+  const [deliveryTime, setDeliveryTime] = useState(stored.deliveryTime)
+  const { toast, showToast } = useToast()
   const toggle = (k) => setOpts(p => ({ ...p, [k]: !p[k] }))
+
+  const save = () => {
+    setConfig({
+      allowDelivery: opts.delivery,
+      allowPickup: opts.pickup,
+      allowTable: opts.table,
+      deliveryFee: Number(deliveryFee),
+      minOrder: Number(minOrder),
+      deliveryTime: Number(deliveryTime),
+    })
+    showToast('تم الحفظ ✓')
+  }
 
   return (
     <div>
@@ -144,43 +162,59 @@ function DeliveryTab() {
         <div className="glass" style={{ padding: 20 }}>
           <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 16 }}>إعدادات التوصيل</p>
           {[
-            { label: 'رسوم التوصيل', placeholder: '15', unit: 'ج' },
-            { label: 'الحد الأدنى للطلب', placeholder: '50', unit: 'ج' },
-            { label: 'وقت التوصيل المتوقع', placeholder: '30', unit: 'دقيقة' },
+            { label: 'رسوم التوصيل', value: deliveryFee, setValue: setDeliveryFee, unit: 'ج' },
+            { label: 'الحد الأدنى للطلب', value: minOrder, setValue: setMinOrder, unit: 'ج' },
+            { label: 'وقت التوصيل المتوقع', value: deliveryTime, setValue: setDeliveryTime, unit: 'دقيقة' },
           ].map(f => (
             <div key={f.label} style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
               <label style={{ flex: 1, fontSize: 13, color: 'var(--text-2)' }}>{f.label}</label>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <input type="number" defaultValue={f.placeholder} style={{ ...inputStyle, width: 80, textAlign: 'center', padding: '8px' }} />
+                <input type="number" value={f.value} onChange={e => f.setValue(e.target.value)} style={{ ...inputStyle, width: 80, textAlign: 'center', padding: '8px' }}
+                  onFocus={e => e.target.style.borderColor = 'var(--accent)'}
+                  onBlur={e => e.target.style.borderColor = 'var(--border)'}
+                />
                 <span style={{ fontSize: 12, color: 'var(--text-3)', minWidth: 36 }}>{f.unit}</span>
               </div>
             </div>
           ))}
         </div>
       </div>
-      <button style={{ padding: '11px 28px', background: 'var(--accent)', color: 'white', borderRadius: 10, fontWeight: 600, fontSize: 14, border: 'none', cursor: 'pointer' }}>
+      <button onClick={save} style={{ padding: '11px 28px', background: 'var(--accent)', color: 'white', borderRadius: 10, fontWeight: 600, fontSize: 14, border: 'none', cursor: 'pointer' }}>
         حفظ
       </button>
+      {toast && <Toast message={toast} />}
     </div>
   )
 }
 
 function QRTab() {
+  const config = getConfig()
+  const slug = config.slug || 'chef-ahmed'
+  const url = `${window.location.origin}/${slug}`
+  const { toast, showToast } = useToast()
+
+  const handleDownload = (label) => {
+    showToast(`${label} قريباً ✓`)
+  }
+
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
       <div className="glass" style={{ padding: 32, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <div style={{ width: 180, height: 180, background: 'var(--surface-2)', borderRadius: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--border)', marginBottom: 16 }}>
-          <QrCode size={96} style={{ color: 'var(--text-3)' }} />
+        <div style={{ background: 'white', padding: 16, borderRadius: 18, marginBottom: 16, boxShadow: '0 4px 16px rgba(0,0,0,0.2)' }}>
+          <QRCode value={url} size={148} />
         </div>
         <p style={{ fontSize: 12, color: 'var(--text-3)', marginBottom: 4 }}>رابط الصفحة</p>
-        <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--accent)' }}>منصة.com/مطعم-الشيف-أحمد</p>
+        <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--accent)', wordBreak: 'break-all', textAlign: 'center' }}>{url}</p>
       </div>
 
       <div className="glass" style={{ padding: 20 }}>
         <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 16 }}>تحميل الكود</p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 20 }}>
           {['تحميل PNG عالي الدقة', 'تحميل PDF جاهز للطباعة A4', 'تحميل ملصق جاهز 10×10 سم'].map(label => (
-            <button key={label} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '11px 14px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 13, fontWeight: 500, color: 'var(--text-2)', background: 'transparent', cursor: 'pointer', width: '100%' }}>
+            <button key={label} onClick={() => handleDownload(label)} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '11px 14px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 13, fontWeight: 500, color: 'var(--text-2)', background: 'transparent', cursor: 'pointer', width: '100%', transition: 'all 0.15s' }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.color = 'var(--accent)' }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-2)' }}
+            >
               <Download size={14} />
               {label}
             </button>
@@ -192,6 +226,7 @@ function QRTab() {
           <p style={{ fontSize: 12, color: 'var(--text-3)' }}>✓ تأكد المسافة بين الكود والحافة 5مم</p>
         </div>
       </div>
+      {toast && <Toast message={toast} />}
     </div>
   )
 }

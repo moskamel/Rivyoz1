@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { TrendingUp, TrendingDown, Download, FileText } from 'lucide-react'
+import { TrendingUp, TrendingDown, Download, FileText, Check } from 'lucide-react'
 import {
   LineChart, Line, BarChart, Bar, XAxis, YAxis,
   Tooltip, ResponsiveContainer, PieChart, Pie, Cell
@@ -50,8 +50,22 @@ const SalesCustomTooltip = ({ active, payload, label }) => {
   return null
 }
 
+function Toast({ message }) {
+  return (
+    <div style={{ position: 'fixed', bottom: 24, left: 24, zIndex: 50, background: 'var(--green)', color: 'white', padding: '10px 18px', borderRadius: 12, fontWeight: 600, fontSize: 13, boxShadow: '0 8px 24px rgba(34,197,94,0.3)', display: 'flex', alignItems: 'center', gap: 8 }}>
+      <Check size={14} /> {message}
+    </div>
+  )
+}
+
 export default function Reports() {
   const [period, setPeriod] = useState('7 أيام')
+  const [exportToast, setExportToast] = useState(null)
+
+  const handleExport = (type) => {
+    setExportToast(`جاري تصدير ${type}...`)
+    setTimeout(() => setExportToast(null), 2000)
+  }
 
   const stats = [
     { label: 'الإيراد الكلي', value: '45,600', unit: 'ج', change: 15 },
@@ -187,15 +201,16 @@ export default function Reports() {
 
       {/* Export buttons */}
       <div className="flex gap-3">
-        <button className="btn-ghost" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+        <button onClick={() => handleExport('PDF')} className="btn-ghost" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <FileText size={14} />
           تصدير PDF
         </button>
-        <button className="btn-ghost" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+        <button onClick={() => handleExport('Excel')} className="btn-ghost" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <Download size={14} />
           تصدير Excel
         </button>
       </div>
+      {exportToast && <Toast message={exportToast} />}
     </Layout>
   )
 }

@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import Dashboard from './pages/Dashboard'
 import Orders from './pages/Orders'
 import Menu from './pages/Menu'
@@ -17,22 +17,28 @@ import OrderConfirm from './customer/OrderConfirm'
 import OrderTracking from './customer/OrderTracking'
 import Explore from './customer/Explore'
 
+function ProtectedRoute({ children }) {
+  if (!localStorage.getItem('auth_role')) return <Navigate to="/login" replace />
+  return children
+}
+
 export default function App() {
   return (
     <Routes>
-      {/* Dashboard routes */}
       <Route path="/login" element={<Login />} />
       <Route path="/kds" element={<KDS />} />
-      <Route path="/" element={<Dashboard />} />
-      <Route path="/orders" element={<Orders />} />
-      <Route path="/menu" element={<Menu />} />
-      <Route path="/marketing" element={<Marketing />} />
-      <Route path="/reports" element={<Reports />} />
-      <Route path="/settings" element={<Settings />} />
-      <Route path="/design" element={<Design />} />
-      <Route path="/customers" element={<Customers />} />
-      <Route path="/staff" element={<Staff />} />
-      <Route path="/inventory" element={<Inventory />} />
+
+      {/* Protected admin routes */}
+      <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+      <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
+      <Route path="/menu" element={<ProtectedRoute><Menu /></ProtectedRoute>} />
+      <Route path="/marketing" element={<ProtectedRoute><Marketing /></ProtectedRoute>} />
+      <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
+      <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+      <Route path="/design" element={<ProtectedRoute><Design /></ProtectedRoute>} />
+      <Route path="/customers" element={<ProtectedRoute><Customers /></ProtectedRoute>} />
+      <Route path="/staff" element={<ProtectedRoute><Staff /></ProtectedRoute>} />
+      <Route path="/inventory" element={<ProtectedRoute><Inventory /></ProtectedRoute>} />
 
       {/* Customer-facing routes */}
       <Route path="/chef-ahmed" element={<StoreFront />} />
@@ -40,6 +46,12 @@ export default function App() {
       <Route path="/order-confirm" element={<OrderConfirm />} />
       <Route path="/track/:orderId" element={<OrderTracking />} />
       <Route path="/explore" element={<Explore />} />
+      {/* Redirect unregistered restaurant slugs to explore */}
+      <Route path="/pizza-plaza" element={<Navigate to="/explore" replace />} />
+      <Route path="/metro-cafe" element={<Navigate to="/explore" replace />} />
+      <Route path="/shawarma-king" element={<Navigate to="/explore" replace />} />
+      <Route path="/sushi-house" element={<Navigate to="/explore" replace />} />
+      <Route path="/burger-factory" element={<Navigate to="/explore" replace />} />
     </Routes>
   )
 }

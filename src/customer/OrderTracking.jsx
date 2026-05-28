@@ -211,7 +211,7 @@ export default function OrderTracking() {
         {/* Action buttons */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           <a
-            href={`https://wa.me/${config.phone}`}
+            href={`https://wa.me/2${config.phone.replace(/^0/, '')}`}
             target="_blank"
             rel="noopener noreferrer"
             style={{

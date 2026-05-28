@@ -124,3 +124,43 @@ export function getFooterSettings() {
   return defaultFooter
 }
 export function setFooterSettings(s) { localStorage.setItem('store_footer', JSON.stringify(s)) }
+
+/* ─── Coupons ─────────────────────────────────────────────── */
+const defaultCoupons = [
+  { id: 1, code: 'WELCOME20', discount: '20%', type: 'percent', value: 20, used: 12, max: 50, minOrder: null, expiry: null },
+  { id: 2, code: 'SUMMER10', discount: '10 ج', type: 'fixed', value: 10, used: 5, max: null, minOrder: null, expiry: null },
+]
+export function getCoupons() {
+  try { const r = localStorage.getItem('store_coupons'); if (r) return JSON.parse(r) } catch (e) {}
+  return defaultCoupons
+}
+export function setCoupons(coupons) { localStorage.setItem('store_coupons', JSON.stringify(coupons)) }
+
+/* ─── Staff ───────────────────────────────────────────────── */
+const defaultStaff = [
+  { id: 1, name: 'أحمد رضا', role: 'admin', status: 'on_shift', phone: '01012345678', initials: 'أر' },
+  { id: 2, name: 'محمد حسين', role: 'manager', status: 'on_shift', phone: '01098765432', initials: 'مح' },
+  { id: 3, name: 'سارة علي', role: 'cashier', status: 'available', phone: '01155443322', initials: 'سع' },
+  { id: 4, name: 'كريم عبد الله', role: 'kitchen', status: 'on_shift', phone: '01234567890', initials: 'كع' },
+  { id: 5, name: 'منى السيد', role: 'kitchen', status: 'available', phone: '01567891234', initials: 'من' },
+  { id: 6, name: 'عمر خالد', role: 'delivery', status: 'vacation', phone: '01099887766', initials: 'عخ' },
+]
+export function getStaff() {
+  try { const r = localStorage.getItem('restaurant_staff'); if (r) return JSON.parse(r) } catch (e) {}
+  return defaultStaff
+}
+export function setStaff(staff) { localStorage.setItem('restaurant_staff', JSON.stringify(staff)) }
+
+/* ─── Notifications ───────────────────────────────────────── */
+const defaultNotifications = [
+  { id: 1, type: 'order', text: 'طلب جديد #43 من طاولة 5', time: 'منذ دقيقة', read: false, link: '/orders' },
+  { id: 2, type: 'cancel', text: 'طلب #41 تم إلغاؤه من العميل', time: 'منذ 5 دقائق', read: false, link: '/orders' },
+  { id: 3, type: 'inventory', text: 'صنف "الدجاج" على وشك النفاد (3 وحدات)', time: 'منذ 15 دقيقة', read: false, link: '/inventory' },
+  { id: 4, type: 'campaign', text: 'حملة "عروض رمضان" تم إرسالها بنجاح', time: 'منذ ساعة', read: true, link: '/marketing' },
+  { id: 5, type: 'customer', text: 'زبون جديد مسجل: منى محمد', time: 'منذ ساعتين', read: true, link: '/customers' },
+]
+export function getNotifications() {
+  try { const r = localStorage.getItem('app_notifications'); if (r) return JSON.parse(r) } catch (e) {}
+  return defaultNotifications
+}
+export function setNotifications(n) { localStorage.setItem('app_notifications', JSON.stringify(n)) }

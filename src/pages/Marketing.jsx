@@ -1,7 +1,21 @@
 import { useState } from 'react'
 import { Plus, Copy, Tag, Users, TrendingUp, Zap, MessageSquare, Gift, Check, Trash2 } from 'lucide-react'
 import Layout from '../components/layout/Layout'
-import { mockCoupons } from '../lib/mock'
+import { getCoupons, setCoupons } from '../lib/restaurantStore'
+
+function Toast({ message }) {
+  return (
+    <div style={{ position: 'fixed', bottom: 24, left: 24, zIndex: 50, background: 'var(--green)', color: 'white', padding: '10px 18px', borderRadius: 12, fontWeight: 600, fontSize: 13, boxShadow: '0 8px 24px rgba(34,197,94,0.3)' }}>
+      {message}
+    </div>
+  )
+}
+
+function useToast() {
+  const [toast, setToast] = useState(null)
+  const showToast = (msg) => { setToast(msg); setTimeout(() => setToast(null), 2000) }
+  return { toast, showToast }
+}
 
 const tabs = [
   { label: 'برنامج الولاء', icon: Gift },
@@ -32,6 +46,7 @@ function LoyaltyTab() {
   const [pointsPer, setPointsPer] = useState(1)
   const [redeemAt, setRedeemAt] = useState(100)
   const [discountVal, setDiscountVal] = useState(10)
+  const { toast, showToast } = useToast()
 
   const tiers = [
     { name: 'مبتدئ', color: '#9CA3AF', min: 0, max: 500, icon: '🥉' },
@@ -95,9 +110,10 @@ function LoyaltyTab() {
           </div>
         )}
 
-        <button style={{ padding: '11px 24px', background: 'var(--accent)', color: 'white', borderRadius: 10, fontWeight: 600, fontSize: 13, border: 'none', cursor: 'pointer' }}>
+        <button onClick={() => showToast('تم حفظ إعدادات الولاء ✓')} style={{ padding: '11px 24px', background: 'var(--accent)', color: 'white', borderRadius: 10, fontWeight: 600, fontSize: 13, border: 'none', cursor: 'pointer' }}>
           حفظ الإعدادات
         </button>
+        {toast && <Toast message={toast} />}
       </div>
 
       {/* Right col: stats */}
@@ -150,7 +166,13 @@ function LoyaltyTab() {
 function WhatsappTab() {
   const [target, setTarget] = useState('all')
   const [message, setMessage] = useState('عزيزي {الاسم}،\nعندنا عرض خاص النهارده! 🍖')
+  const [sent, setSent] = useState(false)
   const preview = message.replace('{الاسم}', 'أحمد')
+
+  const handleSend = () => {
+    setSent(true)
+    setTimeout(() => setSent(false), 3000)
+  }
 
   const targets = [
     { key: 'all', label: 'كل الزبائن', count: 234, icon: '👥' },
@@ -237,9 +259,9 @@ function WhatsappTab() {
           <button style={{ flex: 1, padding: '11px', border: '1px solid var(--border)', color: 'var(--text-2)', borderRadius: 10, fontWeight: 600, fontSize: 13, background: 'transparent', cursor: 'pointer' }}>
             جدولة لوقت معين
           </button>
-          <button style={{ flex: 1, padding: '11px', background: '#25D366', color: 'white', borderRadius: 10, fontWeight: 600, fontSize: 13, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
-            <MessageSquare size={14} />
-            إرسال الآن
+          <button onClick={handleSend} style={{ flex: 1, padding: '11px', background: sent ? 'var(--green)' : '#25D366', color: 'white', borderRadius: 10, fontWeight: 600, fontSize: 13, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, transition: 'background 0.2s' }}>
+            {sent ? <Check size={14} /> : <MessageSquare size={14} />}
+            {sent ? 'تم الإرسال ✓' : 'إرسال الآن'}
           </button>
         </div>
       </div>
@@ -248,7 +270,7 @@ function WhatsappTab() {
 }
 
 function CouponsTab() {
-  const [coupons, setCoupons] = useState(mockCoupons)
+  const [coupons, setCouponsState] = useState(getCoupons)
   const [showForm, setShowForm] = useState(false)
   const [form, setForm] = useState({ code: '', type: 'percent', value: '', maxUses: '', minOrder: '', expiry: '' })
 
@@ -259,18 +281,25 @@ function CouponsTab() {
 
   const save = () => {
     if (!form.code || !form.value) return
-    setCoupons(prev => [...prev, {
-      id: Date.now(), code: form.code,
+    const updated = [...coupons, {
+      id: Date.now(), code: form.code, type: form.type,
+      value: +form.value,
       discount: form.type === 'percent' ? `${form.value}%` : `${form.value} ج`,
       used: 0, max: form.maxUses ? +form.maxUses : null,
       minOrder: form.minOrder ? +form.minOrder : null,
       expiry: form.expiry || null,
-    }])
+    }]
+    setCouponsState(updated)
+    setCoupons(updated)
     setShowForm(false)
     setForm({ code: '', type: 'percent', value: '', maxUses: '', minOrder: '', expiry: '' })
   }
 
-  const remove = (id) => setCoupons(prev => prev.filter(c => c.id !== id))
+  const remove = (id) => {
+    const updated = coupons.filter(c => c.id !== id)
+    setCouponsState(updated)
+    setCoupons(updated)
+  }
 
   const copyCode = (code) => navigator.clipboard?.writeText(code)
 

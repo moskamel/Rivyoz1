@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ArrowLeft, Trash2, MapPin, MessageSquare, Tag, CheckCircle } from 'lucide-react'
-import { getConfig, addOrder } from '../lib/restaurantStore'
+import { getConfig, addOrder, getCoupons } from '../lib/restaurantStore'
 import { useCart } from './CartContext'
 
 const inputStyle = {
@@ -32,15 +32,35 @@ export default function Cart() {
   useEffect(() => { localStorage.setItem('customer_phone', phone) }, [phone])
 
   const applyCoupon = () => {
-    if (coupon.trim().toUpperCase() === 'WELCOME20') {
-      setCouponApplied(true); setCouponDiscount(20); setCouponError('')
-    } else {
+    const code = coupon.trim().toUpperCase()
+    const coupons = getCoupons()
+    const match = coupons.find(c => c.code === code)
+    if (!match) {
       setCouponError('كود غير صحيح'); setCouponApplied(false); setCouponDiscount(0)
+      return
     }
+    if (match.max && match.used >= match.max) {
+      setCouponError('هذا الكوبون وصل لأقصى عدد استخدامات'); setCouponApplied(false); setCouponDiscount(0)
+      return
+    }
+    if (match.expiry && new Date(match.expiry) < new Date()) {
+      setCouponError('هذا الكوبون منتهي الصلاحية'); setCouponApplied(false); setCouponDiscount(0)
+      return
+    }
+    if (match.minOrder && total < match.minOrder) {
+      setCouponError(`الحد الأدنى للطلب ${match.minOrder} ج لاستخدام هذا الكوبون`); setCouponApplied(false); setCouponDiscount(0)
+      return
+    }
+    const discount = match.type === 'percent' ? Math.round(total * match.value / 100) : match.value
+    setCouponApplied(true); setCouponDiscount(discount); setCouponError('')
   }
 
   const deliveryFee = orderType === 'delivery' ? config.deliveryFee : 0
-  const finalTotal = total + deliveryFee - couponDiscount
+  const finalTotal = Math.max(0, total + deliveryFee - couponDiscount)
+  const canOrder = !!(name && phone &&
+    (orderType !== 'delivery' || address.trim()) &&
+    (orderType !== 'table' || tableNumber) &&
+    !(config.minOrder && total < config.minOrder && orderType === 'delivery'))
 
   const handleQtyChange = (cartId, newQty) => {
     if (newQty <= 0) setConfirmDelete(cartId)
@@ -48,7 +68,7 @@ export default function Cart() {
   }
 
   const handleConfirmOrder = () => {
-    if (!name || !phone) return
+    if (!canOrder) return
     const paymentLabels = { cash: 'كاش عند الاستلام', card: 'بطاقة بنكية', fawry: 'فوري' }
     const order = {
       customer: name, phone,
@@ -233,7 +253,7 @@ export default function Cart() {
               </button>
             </div>
             {couponError && <p style={{ color: '#ef4444', fontSize: 12, marginTop: 6 }}>{couponError}</p>}
-            {couponApplied && <p style={{ color: '#22c55e', fontSize: 12, fontWeight: 600, marginTop: 6, display: 'flex', alignItems: 'center', gap: 5 }}><CheckCircle size={13} /> تم تطبيق خصم 20 ج</p>}
+            {couponApplied && <p style={{ color: '#22c55e', fontSize: 12, fontWeight: 600, marginTop: 6, display: 'flex', alignItems: 'center', gap: 5 }}><CheckCircle size={13} /> تم تطبيق خصم {couponDiscount} ج</p>}
           </div>
         </Card>
 
@@ -283,8 +303,8 @@ export default function Cart() {
       {/* Sticky confirm */}
       <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: 'white', borderTop: '1px solid #f3f4f6', padding: '14px 16px', zIndex: 20 }}>
         <div style={{ maxWidth: 480, margin: '0 auto' }}>
-          <button onClick={handleConfirmOrder} disabled={!name || !phone}
-            style={{ width: '100%', padding: '16px', borderRadius: 16, background: name && phone ? config.color : '#e5e7eb', color: name && phone ? 'white' : '#9ca3af', fontWeight: 800, fontSize: 15, border: 'none', cursor: name && phone ? 'pointer' : 'not-allowed', fontFamily: 'Cairo, sans-serif', boxShadow: name && phone ? `0 6px 24px ${config.color}40` : 'none', transition: 'all 0.2s' }}
+          <button onClick={handleConfirmOrder} disabled={!canOrder}
+            style={{ width: '100%', padding: '16px', borderRadius: 16, background: canOrder ? config.color : '#e5e7eb', color: canOrder ? 'white' : '#9ca3af', fontWeight: 800, fontSize: 15, border: 'none', cursor: canOrder ? 'pointer' : 'not-allowed', fontFamily: 'Cairo, sans-serif', boxShadow: canOrder ? `0 6px 24px ${config.color}40` : 'none', transition: 'all 0.2s' }}
           >
             تأكيد الطلب · {finalTotal} ج
           </button>

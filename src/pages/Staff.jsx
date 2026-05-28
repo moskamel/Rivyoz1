@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { UserPlus, X, MoreHorizontal, Edit, Phone } from 'lucide-react'
 import Layout from '../components/layout/Layout'
+import { getStaff, setStaff } from '../lib/restaurantStore'
 
 const roleConfig = {
   admin: { label: 'أدمن', bg: 'rgba(168,85,247,0.12)', color: '#A855F7' },
@@ -104,8 +105,14 @@ function AddStaffModal({ onClose, onAdd }) {
 }
 
 export default function Staff() {
-  const [staff, setStaff] = useState(initialStaff)
+  const [staff, setStaffState] = useState(getStaff)
   const [showModal, setShowModal] = useState(false)
+
+  const handleAdd = (member) => {
+    const updated = [...staff, member]
+    setStaffState(updated)
+    setStaff(updated)
+  }
 
   return (
     <Layout title="الموظفون">
@@ -170,7 +177,7 @@ export default function Staff() {
         })}
       </div>
 
-      {showModal && <AddStaffModal onClose={() => setShowModal(false)} onAdd={(m) => setStaff(prev => [...prev, m])} />}
+      {showModal && <AddStaffModal onClose={() => setShowModal(false)} onAdd={handleAdd} />}
     </Layout>
   )
 }

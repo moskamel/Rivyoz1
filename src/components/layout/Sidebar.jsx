@@ -1,19 +1,13 @@
-import { useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { NavLink, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, ClipboardList, UtensilsCrossed,
   Megaphone, BarChart3, Settings, ExternalLink,
   Users, UserCheck, Package, Monitor, ChevronDown,
-  Check, Zap, ArrowUpRight, Palette
+  Check, Zap, ArrowUpRight, Palette, LogOut
 } from 'lucide-react'
-import { getConfig } from '../../lib/restaurantStore'
+import { getConfig, getOrders } from '../../lib/restaurantStore'
 
-const navMain = [
-  { to: '/', label: 'الرئيسية', icon: LayoutDashboard, exact: true },
-  { to: '/orders', label: 'الطلبات', icon: ClipboardList, badge: 3 },
-  { to: '/menu', label: 'القائمة', icon: UtensilsCrossed },
-  { to: '/inventory', label: 'المخزون', icon: Package },
-]
 const navGrowth = [
   { to: '/customers', label: 'الزبائن', icon: Users },
   { to: '/marketing', label: 'التسويق', icon: Megaphone },
@@ -60,7 +54,29 @@ function NavGroup({ label, items }) {
 export default function Sidebar() {
   const [selectedBranch, setSelectedBranch] = useState(branches[0])
   const [branchOpen, setBranchOpen] = useState(false)
-  const config = getConfig()
+  const [config, setConfigState] = useState(getConfig)
+  const [newOrderCount, setNewOrderCount] = useState(() => getOrders().filter(o => o.status === 'new').length)
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setNewOrderCount(getOrders().filter(o => o.status === 'new').length)
+      setConfigState(getConfig())
+    }, 5000)
+    return () => clearInterval(id)
+  }, [])
+
+  const handleLogout = () => {
+    localStorage.removeItem('auth_role')
+    navigate('/login')
+  }
+
+  const navMain = [
+    { to: '/', label: 'الرئيسية', icon: LayoutDashboard, exact: true },
+    { to: '/orders', label: 'الطلبات', icon: ClipboardList, badge: newOrderCount },
+    { to: '/menu', label: 'القائمة', icon: UtensilsCrossed },
+    { to: '/inventory', label: 'المخزون', icon: Package },
+  ]
 
   return (
     <aside style={{ width: 220, background: 'var(--surface)', borderLeft: '1px solid var(--border)', display: 'flex', flexDirection: 'column', minHeight: '100vh', position: 'fixed', right: 0, top: 0, zIndex: 30 }}>
@@ -72,8 +88,10 @@ export default function Sidebar() {
             <Zap size={16} color="white" strokeWidth={2.5} />
           </div>
           <div>
-            <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', lineHeight: 1.2 }}>منصة المطعم</p>
-            <p style={{ fontSize: 11, color: 'var(--green)', fontWeight: 500, marginTop: 1 }}>● مفتوح الآن</p>
+            <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', lineHeight: 1.2 }}>{config.name || 'منصة المطعم'}</p>
+            <p style={{ fontSize: 11, color: config.isOpen ? 'var(--green)' : 'var(--text-3)', fontWeight: 500, marginTop: 1 }}>
+              {config.isOpen ? '● مفتوح الآن' : '● مغلق مؤقتاً'}
+            </p>
           </div>
         </div>
       </div>
@@ -141,6 +159,15 @@ export default function Sidebar() {
           <span style={{ fontSize: 12, fontWeight: 600 }}>معاينة صفحتي</span>
           <ArrowUpRight size={11} style={{ marginRight: 'auto' }} />
         </a>
+        <button
+          onClick={handleLogout}
+          style={{ display: 'flex', alignItems: 'center', gap: 8, width: '100%', padding: '9px 12px', borderRadius: 10, background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-3)', fontSize: 12, fontWeight: 600, marginTop: 6, transition: 'all 0.15s', fontFamily: 'Cairo, sans-serif' }}
+          onMouseEnter={e => { e.currentTarget.style.background = 'var(--red-muted)'; e.currentTarget.style.color = 'var(--red)' }}
+          onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--text-3)' }}
+        >
+          <LogOut size={14} />
+          <span>تسجيل الخروج</span>
+        </button>
       </div>
     </aside>
   )

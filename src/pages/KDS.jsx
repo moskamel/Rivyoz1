@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Monitor, ChefHat } from 'lucide-react'
-import { mockOrders } from '../lib/mock'
+import { getOrders, updateOrderStatus } from '../lib/restaurantStore'
 
 // Generate a fake createdAt timestamp based on the time string in mock data
 function parseFakeCreatedAt(timeStr) {
@@ -101,19 +101,21 @@ function OrderCard({ order, onAction }) {
 
 export default function KDS() {
   const [activeFilter, setActiveFilter] = useState('الكل')
-  const [orders, setOrders] = useState(
-    mockOrders
-      .filter(o => o.status === 'new' || o.status === 'preparing')
-      .map(o => ({ ...o }))
+  const [orders, setOrders] = useState(() =>
+    getOrders().filter(o => o.status === 'new' || o.status === 'preparing').map(o => ({ ...o }))
   )
   const [time, setTime] = useState(new Date())
 
   useEffect(() => {
-    const id = setInterval(() => setTime(new Date()), 1000)
-    return () => clearInterval(id)
+    const clockId = setInterval(() => setTime(new Date()), 1000)
+    const pollId = setInterval(() => {
+      setOrders(getOrders().filter(o => o.status === 'new' || o.status === 'preparing').map(o => ({ ...o })))
+    }, 5000)
+    return () => { clearInterval(clockId); clearInterval(pollId) }
   }, [])
 
   function handleAction(orderId, newStatus) {
+    updateOrderStatus(orderId, newStatus)
     if (newStatus === 'ready') {
       setOrders(prev => prev.filter(o => o.id !== orderId))
     } else {

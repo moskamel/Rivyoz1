@@ -190,7 +190,7 @@ export default function OrderConfirm() {
           </button>
 
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => navigate(`/${config.slug || 'chef-ahmed'}`)}
             style={{ background: 'none', border: 'none', color: '#9CA3AF', fontSize: 13, cursor: 'pointer', padding: '8px', textDecoration: 'underline' }}
           >
             رجوع للقائمة
