@@ -29,22 +29,23 @@ function useToast() {
 }
 
 const inputStyle = {
-  width: '100%', padding: '10px 14px', borderRadius: 10, border: '1px solid var(--border)',
-  background: 'var(--surface-2)', color: 'var(--text)', fontSize: 13, outline: 'none',
-  fontFamily: 'Cairo, sans-serif', boxSizing: 'border-box', transition: 'border-color 0.15s',
+  width: '100%', padding: '10px 14px', borderRadius: 'var(--radius-md)',
+  border: '1px solid var(--border)', background: 'var(--surface-2)', color: 'var(--text)',
+  fontSize: 13, outline: 'none', fontFamily: 'Cairo, sans-serif', boxSizing: 'border-box',
+  transition: 'border-color var(--dur-normal) ease, box-shadow var(--dur-normal) ease',
 }
 
 function Field({ label, value, onChange, type = 'text' }) {
   return (
     <div>
-      <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: 'var(--text-2)', marginBottom: 6 }}>{label}</label>
+      <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: 'var(--text-2)', letterSpacing: '0.04em', marginBottom: 6 }}>{label}</label>
       <input
         type={type}
         value={value}
         onChange={onChange}
         style={inputStyle}
-        onFocus={e => e.target.style.borderColor = 'var(--accent)'}
-        onBlur={e => e.target.style.borderColor = 'var(--border)'}
+        onFocus={e => { e.target.style.borderColor = 'var(--accent)'; e.target.style.boxShadow = '0 0 0 3px var(--accent-muted)' }}
+        onBlur={e => { e.target.style.borderColor = 'var(--border)'; e.target.style.boxShadow = 'none' }}
       />
     </div>
   )
@@ -62,24 +63,20 @@ function RestaurantTab() {
   const { toast, showToast } = useToast()
 
   return (
-    <div>
+    <div className="animate-fade-in">
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
-        <div className="glass" style={{ padding: 20 }}>
-          <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 16 }}>معلومات المطعم</p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-            <Field label="اسم المطعم" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
-            <Field label="الوصف" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} />
-            <Field label="العنوان" value={form.address} onChange={e => setForm({ ...form, address: e.target.value })} />
-          </div>
+        <div className="glass" style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 0 }}>معلومات المطعم</p>
+          <Field label="اسم المطعم" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
+          <Field label="الوصف" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} />
+          <Field label="العنوان" value={form.address} onChange={e => setForm({ ...form, address: e.target.value })} />
         </div>
-        <div className="glass" style={{ padding: 20 }}>
-          <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 16 }}>بيانات التواصل</p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-            <Field label="رقم الموبايل" value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} />
-            <Field label="البريد الإلكتروني" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} />
-          </div>
-          <div style={{ marginTop: 20 }}>
-            <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: 'var(--text-2)', marginBottom: 10 }}>ساعات العمل</label>
+        <div className="glass" style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 0 }}>بيانات التواصل</p>
+          <Field label="رقم الموبايل" value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} />
+          <Field label="البريد الإلكتروني" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} />
+          <div>
+            <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: 'var(--text-2)', letterSpacing: '0.04em', marginBottom: 10 }}>ساعات العمل</label>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {[
                 { days: 'السبت – الخميس', from: '12:00', to: '23:00' },
@@ -87,9 +84,15 @@ function RestaurantTab() {
               ].map((row, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13 }}>
                   <span style={{ width: 100, color: 'var(--text-2)', flexShrink: 0, fontSize: 12 }}>{row.days}</span>
-                  <input type="time" defaultValue={row.from} style={{ ...inputStyle, flex: 1, padding: '6px 8px' }} />
+                  <input type="time" defaultValue={row.from} style={{ ...inputStyle, flex: 1, padding: '6px 8px' }}
+                    onFocus={e => { e.target.style.borderColor = 'var(--accent)'; e.target.style.boxShadow = '0 0 0 3px var(--accent-muted)' }}
+                    onBlur={e => { e.target.style.borderColor = 'var(--border)'; e.target.style.boxShadow = 'none' }}
+                  />
                   <span style={{ color: 'var(--text-3)', fontSize: 12 }}>–</span>
-                  <input type="time" defaultValue={row.to} style={{ ...inputStyle, flex: 1, padding: '6px 8px' }} />
+                  <input type="time" defaultValue={row.to} style={{ ...inputStyle, flex: 1, padding: '6px 8px' }}
+                    onFocus={e => { e.target.style.borderColor = 'var(--accent)'; e.target.style.boxShadow = '0 0 0 3px var(--accent-muted)' }}
+                    onBlur={e => { e.target.style.borderColor = 'var(--border)'; e.target.style.boxShadow = 'none' }}
+                  />
                 </div>
               ))}
             </div>
@@ -97,8 +100,8 @@ function RestaurantTab() {
         </div>
       </div>
       <button
+        className="btn-primary"
         onClick={() => { setConfig(form); showToast('تم الحفظ ✓') }}
-        style={{ padding: '11px 28px', background: 'var(--accent)', color: 'white', borderRadius: 10, fontWeight: 600, fontSize: 14, border: 'none', cursor: 'pointer' }}
       >
         حفظ التغييرات
       </button>
@@ -140,7 +143,7 @@ function DeliveryTab() {
   }
 
   return (
-    <div>
+    <div className="animate-fade-in">
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
         <div className="glass" style={{ padding: 20 }}>
           <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 16 }}>خيارات الطلب</p>
@@ -170,8 +173,8 @@ function DeliveryTab() {
               <label style={{ flex: 1, fontSize: 13, color: 'var(--text-2)' }}>{f.label}</label>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <input type="number" value={f.value} onChange={e => f.setValue(e.target.value)} style={{ ...inputStyle, width: 80, textAlign: 'center', padding: '8px' }}
-                  onFocus={e => e.target.style.borderColor = 'var(--accent)'}
-                  onBlur={e => e.target.style.borderColor = 'var(--border)'}
+                  onFocus={e => { e.target.style.borderColor = 'var(--accent)'; e.target.style.boxShadow = '0 0 0 3px var(--accent-muted)' }}
+                  onBlur={e => { e.target.style.borderColor = 'var(--border)'; e.target.style.boxShadow = 'none' }}
                 />
                 <span style={{ fontSize: 12, color: 'var(--text-3)', minWidth: 36 }}>{f.unit}</span>
               </div>
@@ -179,9 +182,7 @@ function DeliveryTab() {
           ))}
         </div>
       </div>
-      <button onClick={save} style={{ padding: '11px 28px', background: 'var(--accent)', color: 'white', borderRadius: 10, fontWeight: 600, fontSize: 14, border: 'none', cursor: 'pointer' }}>
-        حفظ
-      </button>
+      <button className="btn-primary" onClick={save}>حفظ</button>
       {toast && <Toast message={toast} />}
     </div>
   )
@@ -198,29 +199,26 @@ function QRTab() {
   }
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+    <div className="animate-fade-in" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
       <div className="glass" style={{ padding: 32, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <div style={{ background: 'white', padding: 16, borderRadius: 18, marginBottom: 16, boxShadow: '0 4px 16px rgba(0,0,0,0.2)' }}>
+        <div style={{ background: 'white', padding: 20, borderRadius: 'var(--radius-xl)', marginBottom: 20, boxShadow: '0 4px 24px rgba(0,0,0,0.25)', display: 'inline-flex' }}>
           <QRCode value={url} size={148} />
         </div>
-        <p style={{ fontSize: 12, color: 'var(--text-3)', marginBottom: 4 }}>رابط الصفحة</p>
-        <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--accent)', wordBreak: 'break-all', textAlign: 'center' }}>{url}</p>
+        <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-3)', letterSpacing: '0.04em', textTransform: 'uppercase', marginBottom: 6 }}>رابط الصفحة</p>
+        <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-2)', fontFamily: 'Inter, monospace', wordBreak: 'break-all', textAlign: 'center', letterSpacing: '0.02em' }}>{url}</p>
       </div>
 
       <div className="glass" style={{ padding: 20 }}>
-        <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 16 }}>تحميل الكود</p>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 20 }}>
+        <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 16 }}>تحميل الكود</p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 20 }}>
           {['تحميل PNG عالي الدقة', 'تحميل PDF جاهز للطباعة A4', 'تحميل ملصق جاهز 10×10 سم'].map(label => (
-            <button key={label} onClick={() => handleDownload(label)} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '11px 14px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 13, fontWeight: 500, color: 'var(--text-2)', background: 'transparent', cursor: 'pointer', width: '100%', transition: 'all 0.15s' }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.color = 'var(--accent)' }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-2)' }}
-            >
+            <button key={label} className="btn-ghost" onClick={() => handleDownload(label)} style={{ justifyContent: 'flex-start', gap: 10, width: '100%' }}>
               <Download size={14} />
               {label}
             </button>
           ))}
         </div>
-        <div style={{ background: 'var(--surface-2)', borderRadius: 10, padding: 14 }}>
+        <div style={{ background: 'var(--surface-2)', borderRadius: 'var(--radius-md)', padding: 14, border: '1px solid var(--border)' }}>
           <p style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-2)', marginBottom: 8 }}>تعليمات الطباعة</p>
           <p style={{ fontSize: 12, color: 'var(--text-3)', marginBottom: 4 }}>✓ اطبع بدقة 300 DPI على الأقل</p>
           <p style={{ fontSize: 12, color: 'var(--text-3)' }}>✓ تأكد المسافة بين الكود والحافة 5مم</p>
@@ -233,7 +231,7 @@ function QRTab() {
 
 function SubscriptionTab() {
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+    <div className="animate-fade-in" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
         <div className="glass" style={{ padding: 20 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
@@ -241,15 +239,15 @@ function SubscriptionTab() {
               <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>اشتراكك الحالي</p>
               <p style={{ fontSize: 12, color: 'var(--text-2)', marginTop: 3 }}>تجدد في: 15 يوليو 2026</p>
             </div>
-            <span style={{ background: 'var(--accent-muted)', color: 'var(--accent)', fontWeight: 700, fontSize: 13, padding: '5px 12px', borderRadius: 10, border: '1px solid rgba(249,115,22,0.2)' }}>Pro ✓</span>
+            <span className="badge badge-accent badge-pill badge-md">Pro ✓</span>
           </div>
-          <div style={{ padding: '12px 14px', background: 'var(--surface-2)', borderRadius: 10, marginBottom: 16 }}>
+          <div style={{ padding: '12px 14px', background: 'var(--surface-2)', borderRadius: 'var(--radius-md)', marginBottom: 16, border: '1px solid var(--border)' }}>
             <p style={{ fontSize: 11, color: 'var(--text-3)', marginBottom: 3 }}>طريقة الدفع</p>
             <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>فيزا ****4242</p>
           </div>
           <div style={{ display: 'flex', gap: 8 }}>
-            <button style={{ flex: 1, padding: '10px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 13, fontWeight: 600, color: 'var(--text-2)', background: 'transparent', cursor: 'pointer' }}>تغيير طريقة الدفع</button>
-            <button style={{ flex: 1, padding: '10px', border: '1px solid var(--red-muted)', borderRadius: 10, fontSize: 13, fontWeight: 600, color: 'var(--red)', background: 'transparent', cursor: 'pointer' }}>إلغاء الاشتراك</button>
+            <button className="btn-subtle" style={{ flex: 1 }}>تغيير طريقة الدفع</button>
+            <button className="btn-danger" style={{ flex: 1 }}>إلغاء الاشتراك</button>
           </div>
         </div>
       </div>
@@ -283,7 +281,7 @@ export default function Settings() {
   return (
     <Layout title="الإعدادات">
       {/* Horizontal tab bar */}
-      <div style={{ display: 'flex', gap: 6, marginBottom: 20, borderBottom: '1px solid var(--border)', paddingBottom: 0 }}>
+      <div style={{ display: 'flex', gap: 4, borderBottom: '1px solid var(--border)', marginBottom: 20 }}>
         {tabs.map((t, i) => {
           const Icon = t.icon
           const active = activeTab === i
@@ -292,16 +290,19 @@ export default function Settings() {
               key={i}
               onClick={() => setActiveTab(i)}
               style={{
-                display: 'flex', alignItems: 'center', gap: 7, padding: '9px 16px',
-                fontSize: 13, fontWeight: 600, cursor: 'pointer', border: 'none', background: 'none',
-                color: active ? 'var(--accent)' : 'var(--text-2)', transition: 'all 0.15s',
+                display: 'flex', alignItems: 'center', gap: 7,
+                height: 40, padding: '0 16px',
+                fontSize: 13, fontWeight: active ? 700 : 500,
+                cursor: 'pointer', border: 'none', background: 'transparent',
+                color: active ? 'var(--accent)' : 'var(--text-2)',
                 borderBottom: `2px solid ${active ? 'var(--accent)' : 'transparent'}`,
                 marginBottom: -1,
+                transition: 'all 150ms var(--ease-default)',
               }}
               onMouseEnter={e => { if (!active) e.currentTarget.style.color = 'var(--text)' }}
               onMouseLeave={e => { if (!active) e.currentTarget.style.color = 'var(--text-2)' }}
             >
-              <Icon size={14} />
+              <Icon size={14} strokeWidth={active ? 2 : 1.5} />
               {t.label}
             </button>
           )

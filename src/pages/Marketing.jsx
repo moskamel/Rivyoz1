@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Plus, Copy, Tag, Users, TrendingUp, Zap, MessageSquare, Gift, Check, Trash2 } from 'lucide-react'
+import { Plus, Copy, Tag, Users, TrendingUp, Zap, MessageSquare, Gift, Check, Trash2, Star } from 'lucide-react'
 import Layout from '../components/layout/Layout'
 import { getCoupons, setCoupons } from '../lib/restaurantStore'
 
@@ -24,9 +24,10 @@ const tabs = [
 ]
 
 const inputStyle = {
-  width: '100%', padding: '9px 12px', borderRadius: 10, border: '1px solid var(--border)',
-  background: 'var(--surface-2)', color: 'var(--text)', fontSize: 13, outline: 'none',
-  fontFamily: 'Cairo, sans-serif', boxSizing: 'border-box',
+  width: '100%', padding: '10px 14px', borderRadius: 'var(--radius-md)',
+  border: '1px solid var(--border)', background: 'var(--surface-2)', color: 'var(--text)',
+  fontSize: 13, outline: 'none', fontFamily: 'Cairo, sans-serif', boxSizing: 'border-box',
+  transition: 'border-color var(--dur-normal) ease, box-shadow var(--dur-normal) ease',
 }
 
 function Toggle({ value, onChange }) {
@@ -56,14 +57,17 @@ function LoyaltyTab() {
   ]
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+    <div className="animate-fade-in" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
       {/* Left col */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-        <div className="glass" style={{ padding: 20 }}>
+        <div className="glass-accent" style={{ padding: 20 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-            <div>
-              <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>برنامج النقاط</p>
-              <p style={{ fontSize: 12, color: 'var(--text-2)', marginTop: 3 }}>اكسب ولاء زبائنك بنظام مكافآت</p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <span style={{ fontSize: 28 }}>🎁</span>
+              <div>
+                <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>برنامج النقاط</p>
+                <p style={{ fontSize: 12, color: 'var(--text-2)', marginTop: 3 }}>اكسب ولاء زبائنك بنظام مكافآت</p>
+              </div>
             </div>
             <Toggle value={enabled} onChange={setEnabled} />
           </div>
@@ -73,16 +77,28 @@ function LoyaltyTab() {
               <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-2)', marginBottom: 10 }}>معادلة الكسب</p>
               <div className="flex items-center gap-3" style={{ marginBottom: 12, flexWrap: 'wrap' }}>
                 <span style={{ fontSize: 13, color: 'var(--text-2)', whiteSpace: 'nowrap' }}>كل</span>
-                <input type="number" value={spendPer} onChange={e => setSpendPer(e.target.value)} style={{ ...inputStyle, width: 64, textAlign: 'center' }} />
+                <input type="number" value={spendPer} onChange={e => setSpendPer(e.target.value)} style={{ ...inputStyle, width: 64, textAlign: 'center' }}
+                  onFocus={e => { e.target.style.borderColor = 'var(--accent)'; e.target.style.boxShadow = '0 0 0 3px var(--accent-muted)' }}
+                  onBlur={e => { e.target.style.borderColor = 'var(--border)'; e.target.style.boxShadow = 'none' }}
+                />
                 <span style={{ fontSize: 13, color: 'var(--text-2)', whiteSpace: 'nowrap' }}>ج =</span>
-                <input type="number" value={pointsPer} onChange={e => setPointsPer(e.target.value)} style={{ ...inputStyle, width: 64, textAlign: 'center' }} />
+                <input type="number" value={pointsPer} onChange={e => setPointsPer(e.target.value)} style={{ ...inputStyle, width: 64, textAlign: 'center' }}
+                  onFocus={e => { e.target.style.borderColor = 'var(--accent)'; e.target.style.boxShadow = '0 0 0 3px var(--accent-muted)' }}
+                  onBlur={e => { e.target.style.borderColor = 'var(--border)'; e.target.style.boxShadow = 'none' }}
+                />
                 <span style={{ fontSize: 13, color: 'var(--text-2)', whiteSpace: 'nowrap' }}>نقطة</span>
               </div>
               <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-2)', marginBottom: 10 }}>معادلة الاسترداد</p>
               <div className="flex items-center gap-3" style={{ flexWrap: 'wrap' }}>
-                <input type="number" value={redeemAt} onChange={e => setRedeemAt(e.target.value)} style={{ ...inputStyle, width: 80, textAlign: 'center' }} />
+                <input type="number" value={redeemAt} onChange={e => setRedeemAt(e.target.value)} style={{ ...inputStyle, width: 80, textAlign: 'center' }}
+                  onFocus={e => { e.target.style.borderColor = 'var(--accent)'; e.target.style.boxShadow = '0 0 0 3px var(--accent-muted)' }}
+                  onBlur={e => { e.target.style.borderColor = 'var(--border)'; e.target.style.boxShadow = 'none' }}
+                />
                 <span style={{ fontSize: 13, color: 'var(--text-2)', whiteSpace: 'nowrap' }}>نقطة = خصم</span>
-                <input type="number" value={discountVal} onChange={e => setDiscountVal(e.target.value)} style={{ ...inputStyle, width: 64, textAlign: 'center' }} />
+                <input type="number" value={discountVal} onChange={e => setDiscountVal(e.target.value)} style={{ ...inputStyle, width: 64, textAlign: 'center' }}
+                  onFocus={e => { e.target.style.borderColor = 'var(--accent)'; e.target.style.boxShadow = '0 0 0 3px var(--accent-muted)' }}
+                  onBlur={e => { e.target.style.borderColor = 'var(--border)'; e.target.style.boxShadow = 'none' }}
+                />
                 <span style={{ fontSize: 13, color: 'var(--text-2)' }}>ج</span>
               </div>
             </div>
@@ -110,7 +126,7 @@ function LoyaltyTab() {
           </div>
         )}
 
-        <button onClick={() => showToast('تم حفظ إعدادات الولاء ✓')} style={{ padding: '11px 24px', background: 'var(--accent)', color: 'white', borderRadius: 10, fontWeight: 600, fontSize: 13, border: 'none', cursor: 'pointer' }}>
+        <button onClick={() => showToast('تم حفظ إعدادات الولاء ✓')} className="btn-primary" style={{ transition: 'all var(--dur-normal) var(--ease-default)' }}>
           حفظ الإعدادات
         </button>
         {toast && <Toast message={toast} />}
@@ -189,7 +205,7 @@ function WhatsappTab() {
   ]
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+    <div className="animate-fade-in" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
       {/* Left: targeting + stats */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
         <div className="glass" style={{ padding: 20 }}>
@@ -237,11 +253,11 @@ function WhatsappTab() {
           <textarea
             value={message}
             onChange={e => setMessage(e.target.value)}
-            style={{ ...inputStyle, resize: 'none', marginBottom: 8 }}
+            style={{ ...inputStyle, resize: 'none', marginBottom: 8, borderRadius: 'var(--radius-lg)', padding: 12, lineHeight: 1.6 }}
             rows={5}
             placeholder="اكتب رسالتك..."
-            onFocus={e => e.target.style.borderColor = 'var(--accent)'}
-            onBlur={e => e.target.style.borderColor = 'var(--border)'}
+            onFocus={e => { e.target.style.borderColor = 'var(--accent)'; e.target.style.boxShadow = '0 0 0 3px var(--accent-muted)' }}
+            onBlur={e => { e.target.style.borderColor = 'var(--border)'; e.target.style.boxShadow = 'none' }}
           />
           <p style={{ fontSize: 11, color: 'var(--text-3)', marginBottom: 14 }}>المتغيرات المتاحة: &#123;الاسم&#125; &#123;آخر_طلب&#125;</p>
 
@@ -256,10 +272,10 @@ function WhatsappTab() {
         </div>
 
         <div className="flex gap-3">
-          <button style={{ flex: 1, padding: '11px', border: '1px solid var(--border)', color: 'var(--text-2)', borderRadius: 10, fontWeight: 600, fontSize: 13, background: 'transparent', cursor: 'pointer' }}>
+          <button className="btn-ghost" style={{ flex: 1 }}>
             جدولة لوقت معين
           </button>
-          <button onClick={handleSend} style={{ flex: 1, padding: '11px', background: sent ? 'var(--green)' : '#25D366', color: 'white', borderRadius: 10, fontWeight: 600, fontSize: 13, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, transition: 'background 0.2s' }}>
+          <button onClick={handleSend} style={{ flex: 1, height: 40, background: sent ? 'var(--green)' : '#25D366', color: 'white', borderRadius: 'var(--radius-lg)', fontWeight: 600, fontSize: 13, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, transition: 'all var(--dur-normal) var(--ease-default)' }}>
             {sent ? <Check size={14} /> : <MessageSquare size={14} />}
             {sent ? 'تم الإرسال ✓' : 'إرسال الآن'}
           </button>
@@ -304,12 +320,12 @@ function CouponsTab() {
   const copyCode = (code) => navigator.clipboard?.writeText(code)
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+    <div className="animate-fade-in" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
       {/* Left: list */}
       <div className="glass" style={{ overflow: 'hidden' }}>
         <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>الكوبونات ({coupons.length})</p>
-          <button onClick={() => setShowForm(!showForm)} style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'var(--accent)', color: 'white', padding: '7px 14px', borderRadius: 10, fontSize: 13, fontWeight: 600, border: 'none', cursor: 'pointer' }}>
+          <button onClick={() => setShowForm(!showForm)} className="btn-primary" style={{ height: 36, padding: '0 14px', fontSize: 13, display: 'flex', alignItems: 'center', gap: 6 }}>
             <Plus size={14} /> كوبون جديد
           </button>
         </div>
@@ -323,12 +339,12 @@ function CouponsTab() {
               onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
             >
               <div className="flex items-center gap-3" style={{ marginBottom: c.max ? 8 : 0 }}>
-                <button className="flex items-center gap-2" onClick={() => copyCode(c.code)} style={{ fontFamily: 'Inter, monospace', fontWeight: 700, fontSize: 14, color: 'var(--text)', background: 'none', border: 'none', cursor: 'pointer', letterSpacing: '0.05em' }}>
+                <button className="flex items-center gap-2" onClick={() => copyCode(c.code)} style={{ fontFamily: 'Inter, monospace', fontWeight: 800, fontSize: 16, color: 'var(--accent)', background: 'none', border: 'none', cursor: 'pointer', letterSpacing: '0.06em' }}>
                   {c.code}
                   <Copy size={11} style={{ color: 'var(--text-3)' }} />
                 </button>
-                <span style={{ fontSize: 11, fontWeight: 700, padding: '3px 8px', borderRadius: 6, background: 'var(--accent-muted)', color: 'var(--accent)' }}>{c.discount}</span>
-                {isExpired && <span style={{ fontSize: 10, padding: '2px 6px', borderRadius: 4, background: 'var(--red-muted)', color: 'var(--red)' }}>منتهي</span>}
+                <span className="badge badge-green badge-pill badge-lg">{c.discount}</span>
+                {isExpired && <span className="badge badge-red badge-pill badge-sm">منتهي</span>}
                 <div style={{ marginRight: 'auto', display: 'flex', alignItems: 'center', gap: 6 }}>
                   {c.minOrder && <span style={{ fontSize: 11, color: 'var(--text-3)' }}>حد أدنى {c.minOrder} ج</span>}
                   <button onClick={() => remove(c.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 2 }}>
@@ -371,7 +387,7 @@ function CouponsTab() {
                   <p className="num" style={{ fontSize: 18, fontWeight: 800, color: s.color }}>{s.value}</p>
                 </div>
               ))}
-              <button onClick={() => setShowForm(true)} style={{ marginTop: 8, width: '100%', padding: '11px', background: 'var(--accent)', color: 'white', borderRadius: 10, fontWeight: 600, fontSize: 13, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+              <button onClick={() => setShowForm(true)} className="btn-primary" style={{ marginTop: 8, width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
                 <Plus size={14} /> إضافة كوبون
               </button>
             </div>
@@ -433,11 +449,10 @@ function CouponsTab() {
               </div>
 
               <div className="flex gap-3">
-                <button onClick={() => setShowForm(false)} style={{ flex: 1, padding: '10px', border: '1px solid var(--border)', color: 'var(--text-2)', borderRadius: 10, fontWeight: 600, fontSize: 13, background: 'transparent', cursor: 'pointer' }}>
+                <button onClick={() => setShowForm(false)} className="btn-ghost" style={{ flex: 1 }}>
                   إلغاء
                 </button>
-                <button onClick={save} disabled={!form.code || !form.value}
-                  style={{ flex: 1, padding: '10px', background: form.code && form.value ? 'var(--accent)' : 'var(--surface-3)', color: form.code && form.value ? 'white' : 'var(--text-3)', borderRadius: 10, fontSize: 13, fontWeight: 600, border: 'none', cursor: form.code && form.value ? 'pointer' : 'not-allowed' }}>
+                <button onClick={save} disabled={!form.code || !form.value} className="btn-primary" style={{ flex: 1 }}>
                   حفظ
                 </button>
               </div>
@@ -453,42 +468,56 @@ export default function Marketing() {
   const [activeTab, setActiveTab] = useState(0)
 
   const topStats = [
-    { label: 'أعضاء الولاء', value: '234', color: 'var(--accent)' },
-    { label: 'رسائل واتساب', value: '1,240', color: '#25D366' },
-    { label: 'كوبونات نشطة', value: '6', color: 'var(--blue)' },
-    { label: 'عائد التسويق', value: '8,400 ج', color: 'var(--yellow)' },
+    { label: 'أعضاء الولاء', value: '234', color: 'var(--accent)', mutedBg: 'var(--accent-muted)', icon: Users },
+    { label: 'رسائل واتساب', value: '1,240', color: '#25D366', mutedBg: 'rgba(37,211,102,0.12)', icon: MessageSquare },
+    { label: 'كوبونات نشطة', value: '6', color: 'var(--blue)', mutedBg: 'var(--blue-muted)', icon: Tag },
+    { label: 'عائد التسويق', value: '8,400 ج', color: 'var(--yellow)', mutedBg: 'var(--yellow-muted)', icon: TrendingUp },
   ]
 
   return (
     <Layout title="التسويق">
       {/* Stats row */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 20 }}>
-        {topStats.map(s => (
-          <div key={s.label} className="glass" style={{ padding: '16px 20px' }}>
-            <p className="num" style={{ fontSize: 22, fontWeight: 800, color: s.color }}>{s.value}</p>
-            <p style={{ fontSize: 12, color: 'var(--text-2)', marginTop: 4 }}>{s.label}</p>
-          </div>
-        ))}
+        {topStats.map(s => {
+          const Icon = s.icon
+          return (
+            <div key={s.label} className="glass glass-interactive animate-fade-in" style={{ padding: '20px' }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 12 }}>
+                <div style={{ width: 36, height: 36, borderRadius: 'var(--radius-lg)', background: s.mutedBg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <Icon size={16} style={{ color: s.color }} />
+                </div>
+              </div>
+              <p className="num" style={{ fontSize: 26, fontWeight: 800, color: 'var(--text)', lineHeight: 1, letterSpacing: '-0.02em' }}>{s.value}</p>
+              <p style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-3)', marginTop: 6, letterSpacing: '0.04em', textTransform: 'uppercase' }}>{s.label}</p>
+            </div>
+          )
+        })}
       </div>
 
-      {/* Underline tab bar */}
-      <div style={{ borderBottom: '1px solid var(--border)', marginBottom: 20, display: 'flex', gap: 0 }}>
-        {tabs.map(({ label, icon: Icon }, i) => (
-          <button
-            key={i}
-            onClick={() => setActiveTab(i)}
-            style={{
-              display: 'flex', alignItems: 'center', gap: 6,
-              padding: '10px 20px', fontSize: 13, fontWeight: 600, cursor: 'pointer',
-              background: 'none', border: 'none', borderBottom: activeTab === i ? '2px solid var(--accent)' : '2px solid transparent',
-              color: activeTab === i ? 'var(--accent)' : 'var(--text-2)', marginBottom: -1,
-              transition: 'color 0.15s',
-            }}
-          >
-            <Icon size={14} />
-            {label}
-          </button>
-        ))}
+      {/* Pill-style tab bar */}
+      <div style={{ display: 'flex', gap: 6, padding: 4, background: 'var(--surface-2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)', marginBottom: 20, width: 'fit-content' }}>
+        {tabs.map(({ label, icon: Icon }, i) => {
+          const active = activeTab === i
+          return (
+            <button
+              key={i}
+              onClick={() => setActiveTab(i)}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 6,
+                height: 36, padding: '0 16px', fontSize: 13, fontWeight: 600, cursor: 'pointer',
+                border: 'none', borderRadius: 'var(--radius-md)',
+                background: active ? 'var(--accent)' : 'transparent',
+                color: active ? 'white' : 'var(--text-2)',
+                transition: 'all 150ms var(--ease-default)',
+              }}
+              onMouseEnter={e => { if (!active) e.currentTarget.style.background = 'var(--surface-3)' }}
+              onMouseLeave={e => { if (!active) e.currentTarget.style.background = 'transparent' }}
+            >
+              <Icon size={14} strokeWidth={active ? 2 : 1.5} />
+              {label}
+            </button>
+          )
+        })}
       </div>
 
       {activeTab === 0 && <LoyaltyTab />}
