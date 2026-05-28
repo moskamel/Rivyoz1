@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Sun, Moon } from 'lucide-react'
+import { Sun, Moon, Search } from 'lucide-react'
 import NotificationBell from '../NotificationBell'
 
 const roleLabels = {
@@ -12,6 +12,7 @@ const roleLabels = {
 export default function TopBar({ title }) {
   const role = localStorage.getItem('auth_role') || 'owner'
   const roleLabel = roleLabels[role] || 'صاحب المطعم'
+  const userInitial = roleLabel.charAt(0)
 
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark')
 
@@ -20,38 +21,89 @@ export default function TopBar({ title }) {
     localStorage.setItem('theme', theme)
   }, [theme])
 
-  const toggleTheme = () => setTheme(t => t === 'dark' ? 'light' : 'dark')
+  const toggleTheme = () => setTheme(t => (t === 'dark' ? 'light' : 'dark'))
   const isLight = theme === 'light'
 
   return (
-    <header style={{ height: 56, background: 'var(--surface)', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px', position: 'sticky', top: 0, zIndex: 20, backdropFilter: 'blur(8px)' }}>
-      <h1 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.01em' }}>{title}</h1>
+    <header
+      style={{
+        height: 56,
+        background: 'rgba(8,8,8,0.85)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        borderBottom: '1px solid var(--border)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '0 24px',
+        position: 'sticky',
+        top: 0,
+        zIndex: 50,
+      }}
+    >
+      {/* Page title — left side in RTL = visual left */}
+      <h1
+        style={{
+          fontSize: 16,
+          fontWeight: 700,
+          color: 'var(--text)',
+          letterSpacing: '-0.01em',
+          margin: 0,
+        }}
+      >
+        {title}
+      </h1>
+
+      {/* Right controls */}
       <div className="flex items-center gap-2">
+        {/* Search */}
+        <button
+          className="btn-icon md"
+          title="بحث"
+          style={{ cursor: 'pointer' }}
+        >
+          <Search size={15} strokeWidth={2} />
+        </button>
+
+        {/* Notification bell */}
+        <NotificationBell />
+
         {/* Theme toggle */}
         <button
           onClick={toggleTheme}
+          className="btn-icon md"
           title={isLight ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح'}
           style={{
-            width: 34, height: 34, borderRadius: 10, border: '1px solid var(--border)',
-            background: isLight ? 'var(--surface-2)' : 'var(--surface-3)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            cursor: 'pointer', transition: 'all 0.2s', color: isLight ? '#F59E0B' : '#60A5FA',
+            cursor: 'pointer',
+            color: isLight ? '#F59E0B' : '#60A5FA',
           }}
-          onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--border-strong)'}
-          onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
         >
           {isLight ? <Sun size={15} strokeWidth={2} /> : <Moon size={15} strokeWidth={2} />}
         </button>
 
-        <NotificationBell />
-        <div style={{ width: 1, height: 20, background: 'var(--border)', margin: '0 4px' }} />
-        <div className="flex items-center gap-2">
-          <span style={{ fontSize: 11, fontWeight: 600, padding: '3px 8px', borderRadius: 6, background: 'var(--surface-2)', color: 'var(--text-2)', border: '1px solid var(--border)' }}>
-            {roleLabel}
-          </span>
-          <div style={{ width: 30, height: 30, borderRadius: '50%', background: 'linear-gradient(135deg, #F97316, #EA6C10)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: 12, fontWeight: 700, cursor: 'pointer', boxShadow: '0 0 10px rgba(249,115,22,0.2)' }}>
-            م
-          </div>
+        {/* Separator */}
+        <div style={{ width: 1, height: 20, background: 'var(--border)', margin: '0 2px' }} />
+
+        {/* Avatar */}
+        <div
+          style={{
+            width: 32,
+            height: 32,
+            borderRadius: '50%',
+            background: 'var(--accent-muted)',
+            border: '1px solid var(--border-accent)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'var(--accent)',
+            fontSize: 13,
+            fontWeight: 700,
+            cursor: 'pointer',
+            flexShrink: 0,
+          }}
+          title={roleLabel}
+        >
+          {userInitial}
         </div>
       </div>
     </header>

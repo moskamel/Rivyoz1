@@ -24,22 +24,86 @@ const branches = ['الفرع الرئيسي', 'فرع المعادي', 'فرع 
 function NavGroup({ label, items }) {
   return (
     <div className="mb-1">
-      <p style={{ color: 'var(--text-3)', fontSize: 10, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase' }} className="px-3 py-2">{label}</p>
+      <p
+        style={{
+          color: 'var(--text-3)',
+          fontSize: 10,
+          fontWeight: 600,
+          letterSpacing: '0.06em',
+          textTransform: 'uppercase',
+        }}
+        className="px-2 pt-2 pb-1"
+      >
+        {label}
+      </p>
       {items.map(({ to, label, icon: Icon, badge, exact }) => (
-        <NavLink key={to} to={to} end={exact}
-          className={({ isActive }) => `flex items-center gap-2.5 px-3 py-2 rounded-[10px] text-sm font-medium transition-all mb-0.5 relative group ${isActive ? '' : ''}`}
-          style={({ isActive }) => isActive
-            ? { background: 'var(--accent-muted)', color: 'var(--accent)' }
-            : { color: 'var(--text-2)' }
-          }
+        <NavLink
+          key={to}
+          to={to}
+          end={exact}
+          className="flex items-center gap-2.5 relative mb-px"
+          style={({ isActive }) => ({
+            height: 38,
+            borderRadius: 10,
+            padding: '0 10px',
+            fontSize: 13,
+            fontWeight: isActive ? 600 : 500,
+            background: isActive ? 'var(--accent-muted)' : 'transparent',
+            color: isActive ? 'var(--accent)' : 'var(--text-2)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 10,
+            transition: 'background var(--dur-normal) var(--ease-default), color var(--dur-normal) var(--ease-default)',
+            textDecoration: 'none',
+          })}
+          onMouseEnter={e => {
+            if (!e.currentTarget.classList.contains('active')) {
+              e.currentTarget.style.background = 'var(--surface-2)'
+              e.currentTarget.style.color = 'var(--text)'
+            }
+          }}
+          onMouseLeave={e => {
+            if (!e.currentTarget.classList.contains('active')) {
+              e.currentTarget.style.background = 'transparent'
+              e.currentTarget.style.color = 'var(--text-2)'
+            }
+          }}
         >
           {({ isActive }) => (
             <>
-              {isActive && <span style={{ position: 'absolute', right: 0, top: '50%', transform: 'translateY(-50%)', width: 3, height: 16, background: 'var(--accent)', borderRadius: 4 }} />}
-              <Icon size={16} strokeWidth={isActive ? 2.5 : 1.8} />
+              {isActive && (
+                <span
+                  style={{
+                    position: 'absolute',
+                    right: 0,
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    width: 3,
+                    height: '60%',
+                    background: 'var(--accent)',
+                    borderRadius: '0 0 0 var(--radius-full)',
+                  }}
+                />
+              )}
+              <Icon size={15} strokeWidth={isActive ? 2.2 : 1.6} />
               <span>{label}</span>
               {badge > 0 && (
-                <span style={{ background: 'var(--red)', color: 'white', fontSize: 10, fontWeight: 700, minWidth: 18, height: 18, borderRadius: 9, display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: 'auto', padding: '0 5px' }}>
+                <span
+                  style={{
+                    background: 'var(--red)',
+                    color: 'white',
+                    fontSize: 10,
+                    fontWeight: 700,
+                    minWidth: 18,
+                    height: 18,
+                    borderRadius: 9,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginRight: 'auto',
+                    padding: '0 5px',
+                  }}
+                >
                   {badge}
                 </span>
               )}
@@ -78,42 +142,144 @@ export default function Sidebar() {
     { to: '/inventory', label: 'المخزون', icon: Package },
   ]
 
-  return (
-    <aside style={{ width: 220, background: 'var(--surface)', borderLeft: '1px solid var(--border)', display: 'flex', flexDirection: 'column', minHeight: '100vh', position: 'fixed', right: 0, top: 0, zIndex: 30 }}>
+  const restaurantInitial = (config.name || 'م').charAt(0)
 
-      {/* Logo */}
-      <div style={{ padding: '20px 16px 16px', borderBottom: '1px solid var(--border)' }}>
+  return (
+    <aside
+      style={{
+        width: 232,
+        background: 'var(--surface)',
+        borderLeft: '1px solid var(--border)',
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '100vh',
+        position: 'fixed',
+        right: 0,
+        top: 0,
+        zIndex: 30,
+      }}
+    >
+      {/* Brand area */}
+      <div style={{ padding: '16px 16px 12px' }}>
         <div className="flex items-center gap-2.5">
-          <div style={{ width: 32, height: 32, borderRadius: 10, background: 'linear-gradient(135deg, #F97316, #EA6C10)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 12px rgba(249,115,22,0.3)' }}>
-            <Zap size={16} color="white" strokeWidth={2.5} />
+          {/* Restaurant initial circle */}
+          <div
+            style={{
+              width: 36,
+              height: 36,
+              borderRadius: 10,
+              background: 'var(--accent-muted)',
+              border: '1px solid var(--border-accent)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+            }}
+          >
+            <span style={{ fontSize: 15, fontWeight: 800, color: 'var(--accent)' }}>
+              {restaurantInitial}
+            </span>
           </div>
-          <div>
-            <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', lineHeight: 1.2 }}>{config.name || 'منصة المطعم'}</p>
-            <p style={{ fontSize: 11, color: config.isOpen ? 'var(--green)' : 'var(--text-3)', fontWeight: 500, marginTop: 1 }}>
-              {config.isOpen ? '● مفتوح الآن' : '● مغلق مؤقتاً'}
+          <div style={{ minWidth: 0 }}>
+            <p
+              style={{
+                fontSize: 14,
+                fontWeight: 700,
+                color: 'var(--text)',
+                lineHeight: 1.2,
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+              }}
+            >
+              {config.name || 'منصة المطعم'}
             </p>
+            <div className="flex items-center gap-1" style={{ marginTop: 3 }}>
+              <span
+                className={`status-dot ${config.isOpen ? 'live' : 'idle'}`}
+                style={{ width: 6, height: 6, borderRadius: '50%', flexShrink: 0 }}
+              />
+              <span
+                style={{
+                  fontSize: 11,
+                  color: config.isOpen ? 'var(--green)' : 'var(--red)',
+                  fontWeight: 500,
+                }}
+              >
+                {config.isOpen ? 'مفتوح' : 'مغلق'}
+              </span>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Branch selector */}
-      <div style={{ padding: '10px 12px 0' }}>
-        <div className="relative">
-          <button onClick={() => setBranchOpen(!branchOpen)}
-            style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 10px', borderRadius: 8, background: 'var(--surface-2)', border: '1px solid var(--border)', cursor: 'pointer', transition: 'all 0.15s' }}
-            onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--border-strong)'}
-            onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
+        {/* Branch selector */}
+        <div style={{ marginTop: 10, position: 'relative' }}>
+          <button
+            onClick={() => setBranchOpen(!branchOpen)}
+            style={{
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '7px 10px',
+              borderRadius: 8,
+              background: 'var(--surface-2)',
+              border: '1px solid var(--border)',
+              cursor: 'pointer',
+              transition: 'border-color var(--dur-normal) var(--ease-default)',
+              fontFamily: 'Cairo, sans-serif',
+            }}
+            onMouseEnter={e => (e.currentTarget.style.borderColor = 'var(--border-strong)')}
+            onMouseLeave={e => (e.currentTarget.style.borderColor = 'var(--border)')}
           >
-            <span style={{ fontSize: 12, color: 'var(--text-2)', fontWeight: 500 }}>{selectedBranch}</span>
-            <ChevronDown size={13} style={{ color: 'var(--text-3)', transform: branchOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }} />
+            <span style={{ fontSize: 12, color: 'var(--text-2)', fontWeight: 500 }}>
+              {selectedBranch}
+            </span>
+            <ChevronDown
+              size={13}
+              style={{
+                color: 'var(--text-3)',
+                transform: branchOpen ? 'rotate(180deg)' : 'none',
+                transition: 'transform var(--dur-normal) var(--ease-default)',
+              }}
+            />
           </button>
           {branchOpen && (
-            <div style={{ position: 'absolute', top: 'calc(100% + 4px)', right: 0, left: 0, background: 'var(--surface-3)', border: '1px solid var(--border-strong)', borderRadius: 10, overflow: 'hidden', zIndex: 10, boxShadow: '0 8px 24px rgba(0,0,0,0.4)' }}>
+            <div
+              style={{
+                position: 'absolute',
+                top: 'calc(100% + 4px)',
+                right: 0,
+                left: 0,
+                background: 'var(--surface-3)',
+                border: '1px solid var(--border-strong)',
+                borderRadius: 10,
+                overflow: 'hidden',
+                zIndex: 10,
+                boxShadow: 'var(--shadow-lg)',
+              }}
+            >
               {branches.map(b => (
-                <button key={b} onClick={() => { setSelectedBranch(b); setBranchOpen(false) }}
-                  style={{ width: '100%', textAlign: 'right', padding: '9px 12px', fontSize: 12, display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', color: selectedBranch === b ? 'var(--accent)' : 'var(--text-2)', background: 'transparent', border: 'none', transition: 'background 0.1s' }}
-                  onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-2)'}
-                  onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                <button
+                  key={b}
+                  onClick={() => { setSelectedBranch(b); setBranchOpen(false) }}
+                  style={{
+                    width: '100%',
+                    textAlign: 'right',
+                    padding: '9px 12px',
+                    fontSize: 12,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    cursor: 'pointer',
+                    color: selectedBranch === b ? 'var(--accent)' : 'var(--text-2)',
+                    background: 'transparent',
+                    border: 'none',
+                    transition: 'background var(--dur-normal) var(--ease-default)',
+                    fontFamily: 'Cairo, sans-serif',
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.background = 'var(--surface-2)')}
+                  onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
                 >
                   <span>{b}</span>
                   {selectedBranch === b && <Check size={13} color="var(--accent)" />}
@@ -124,50 +290,157 @@ export default function Sidebar() {
         </div>
       </div>
 
-      {/* Nav */}
-      <nav style={{ flex: 1, padding: '12px 8px', overflowY: 'auto' }}>
-        <NavGroup label="التشغيل" items={navMain} />
-        <div style={{ height: 1, background: 'var(--border)', margin: '8px 4px' }} />
-        <NavGroup label="النمو" items={navGrowth} />
-        <div style={{ height: 1, background: 'var(--border)', margin: '8px 4px' }} />
-        <NavGroup label="الإدارة" items={navSystem} />
+      {/* Divider */}
+      <div style={{ height: 1, background: 'var(--border)', margin: '0 16px 4px' }} />
 
-        {/* KDS link */}
-        <div style={{ marginTop: 4 }}>
-          <a href="/kds" target="_blank" rel="noopener noreferrer"
-            className="flex items-center gap-2.5 px-3 py-2 rounded-[10px] text-sm font-medium transition-all"
-            style={{ color: 'var(--text-2)' }}
-            onMouseEnter={e => { e.currentTarget.style.background = 'var(--surface-2)'; e.currentTarget.style.color = 'var(--text)' }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--text-2)' }}
-          >
-            <Monitor size={16} strokeWidth={1.8} />
-            <span>شاشة المطبخ</span>
-            <ArrowUpRight size={12} style={{ marginRight: 'auto', opacity: 0.5 }} />
-          </a>
-        </div>
+      {/* Nav */}
+      <nav
+        className="no-scrollbar"
+        style={{ flex: 1, padding: '4px 8px', overflowY: 'auto' }}
+      >
+        <NavGroup label="التشغيل" items={navMain} />
+        <div style={{ height: 1, background: 'var(--border)', margin: '6px 4px' }} />
+        <NavGroup label="النمو" items={navGrowth} />
+        <div style={{ height: 1, background: 'var(--border)', margin: '6px 4px' }} />
+        <NavGroup label="الإدارة" items={navSystem} />
       </nav>
 
-      {/* Bottom */}
-      <div style={{ padding: '12px', borderTop: '1px solid var(--border)' }}>
-        <a href={`/${config.slug || 'chef-ahmed'}`} target="_blank" rel="noopener noreferrer"
-          className="flex items-center gap-2.5 px-3 py-2 rounded-[10px] text-sm font-medium w-full transition-all"
-          style={{ color: 'var(--text-2)', background: 'var(--accent-muted)', border: '1px solid rgba(249,115,22,0.15)' }}
-          onMouseEnter={e => { e.currentTarget.style.color = 'var(--accent)' }}
-          onMouseLeave={e => { e.currentTarget.style.color = 'var(--text-2)' }}
+      {/* Bottom section */}
+      <div
+        style={{
+          marginTop: 'auto',
+          padding: '8px 8px 16px',
+          borderTop: '1px solid var(--border)',
+        }}
+      >
+        {/* View restaurant website */}
+        <a
+          href={`/${config.slug || 'chef-ahmed'}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-2"
+          style={{
+            height: 32,
+            borderRadius: 8,
+            padding: '0 10px',
+            fontSize: 12,
+            fontWeight: 600,
+            color: 'var(--text-2)',
+            background: 'transparent',
+            border: '1px solid var(--border)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+            textDecoration: 'none',
+            transition: 'background var(--dur-normal) var(--ease-default), color var(--dur-normal) var(--ease-default), border-color var(--dur-normal) var(--ease-default)',
+            marginBottom: 4,
+          }}
+          onMouseEnter={e => {
+            e.currentTarget.style.background = 'var(--surface-2)'
+            e.currentTarget.style.color = 'var(--text)'
+            e.currentTarget.style.borderColor = 'var(--border-strong)'
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.background = 'transparent'
+            e.currentTarget.style.color = 'var(--text-2)'
+            e.currentTarget.style.borderColor = 'var(--border)'
+          }}
         >
-          <ExternalLink size={14} />
-          <span style={{ fontSize: 12, fontWeight: 600 }}>معاينة صفحتي</span>
-          <ArrowUpRight size={11} style={{ marginRight: 'auto' }} />
+          <ExternalLink size={13} />
+          <span>عرض موقع المطعم</span>
+          <ArrowUpRight size={11} style={{ marginRight: 'auto', opacity: 0.5 }} />
         </a>
+
+        {/* KDS link */}
+        <a
+          href="/kds"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-2"
+          style={{
+            height: 32,
+            borderRadius: 8,
+            padding: '0 10px',
+            fontSize: 12,
+            fontWeight: 600,
+            color: 'var(--text-2)',
+            background: 'transparent',
+            border: '1px solid var(--border)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+            textDecoration: 'none',
+            transition: 'background var(--dur-normal) var(--ease-default), color var(--dur-normal) var(--ease-default), border-color var(--dur-normal) var(--ease-default)',
+            marginBottom: 4,
+          }}
+          onMouseEnter={e => {
+            e.currentTarget.style.background = 'var(--surface-2)'
+            e.currentTarget.style.color = 'var(--text)'
+            e.currentTarget.style.borderColor = 'var(--border-strong)'
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.background = 'transparent'
+            e.currentTarget.style.color = 'var(--text-2)'
+            e.currentTarget.style.borderColor = 'var(--border)'
+          }}
+        >
+          <Monitor size={13} />
+          <span>KDS شاشة المطبخ</span>
+          <ArrowUpRight size={11} style={{ marginRight: 'auto', opacity: 0.5 }} />
+        </a>
+
+        {/* Logout */}
         <button
           onClick={handleLogout}
-          style={{ display: 'flex', alignItems: 'center', gap: 8, width: '100%', padding: '9px 12px', borderRadius: 10, background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-3)', fontSize: 12, fontWeight: 600, marginTop: 6, transition: 'all 0.15s', fontFamily: 'Cairo, sans-serif' }}
-          onMouseEnter={e => { e.currentTarget.style.background = 'var(--red-muted)'; e.currentTarget.style.color = 'var(--red)' }}
-          onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--text-3)' }}
+          className="btn-danger flex items-center gap-2 w-full"
+          style={{
+            height: 32,
+            fontSize: 12,
+            fontWeight: 600,
+            borderRadius: 8,
+            padding: '0 10px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+            fontFamily: 'Cairo, sans-serif',
+            marginBottom: 8,
+          }}
         >
-          <LogOut size={14} />
+          <LogOut size={13} />
           <span>تسجيل الخروج</span>
         </button>
+
+        {/* User row */}
+        <div
+          className="flex items-center gap-2"
+          style={{ paddingTop: 4 }}
+        >
+          <div
+            style={{
+              width: 28,
+              height: 28,
+              borderRadius: '50%',
+              background: 'var(--surface-3)',
+              border: '1px solid var(--border)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+              fontSize: 11,
+              fontWeight: 700,
+              color: 'var(--text-2)',
+            }}
+          >
+            {restaurantInitial}
+          </div>
+          <div style={{ minWidth: 0 }}>
+            <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--text)', lineHeight: 1.2 }}>
+              {config.name || 'المطعم'}
+            </p>
+            <p style={{ fontSize: 10, color: 'var(--text-3)', marginTop: 1 }}>صاحب المطعم</p>
+          </div>
+        </div>
       </div>
     </aside>
   )

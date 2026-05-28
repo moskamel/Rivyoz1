@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { TrendingUp, TrendingDown, ShoppingBag, Users, DollarSign, ArrowLeft, Power, ArrowUpRight } from 'lucide-react'
-import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import Layout from '../components/layout/Layout'
 import { mockStats, mockSalesData, mockTopItems, statusMap } from '../lib/mock'
 import { getOrders, getConfig, setConfig } from '../lib/restaurantStore'
@@ -21,143 +21,274 @@ const CustomTooltip = ({ active, payload, label }) => {
 function StatCard({ label, value, change, icon: Icon, color }) {
   const positive = change >= 0
   return (
-    <div className="glass animate-fade-in" style={{ padding: '20px', cursor: 'pointer', transition: 'all 0.2s' }}
-      onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--border-strong)'; e.currentTarget.style.transform = 'translateY(-2px)' }}
-      onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.transform = 'translateY(0)' }}
-    >
-      <div className="flex items-start justify-between mb-4">
-        <div style={{ width: 36, height: 36, borderRadius: 10, background: color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <Icon size={17} color="white" strokeWidth={2} />
+    <div className="glass glass-interactive" style={{ padding: '20px' }}>
+      <div className="flex items-start justify-between" style={{ marginBottom: 16 }}>
+        <div style={{
+          width: 38, height: 38, borderRadius: 10,
+          background: color + '26',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          flexShrink: 0
+        }}>
+          <Icon size={17} color={color} strokeWidth={2.2} />
         </div>
         {change !== undefined && (
-          <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 600, color: positive ? 'var(--green)' : 'var(--red)', background: positive ? 'var(--green-muted)' : 'var(--red-muted)', padding: '3px 8px', borderRadius: 6 }}>
-            {positive ? <TrendingUp size={11} /> : <TrendingDown size={11} />}
+          <span className={`badge badge-pill badge-sm ${positive ? 'badge-green' : 'badge-red'}`}
+            style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+            {positive ? <TrendingUp size={10} /> : <TrendingDown size={10} />}
             {Math.abs(change)}%
           </span>
         )}
       </div>
-      <p className="num" style={{ fontSize: 26, fontWeight: 800, color: 'var(--text)', letterSpacing: '-0.02em', lineHeight: 1 }}>{value.toLocaleString()}</p>
-      <p style={{ fontSize: 11, color: 'var(--text-2)', marginTop: 6, fontWeight: 500 }}>{label}</p>
+      <p className="num" style={{ fontSize: 28, fontWeight: 800, color: 'var(--text)', letterSpacing: '-0.02em', lineHeight: 1, marginBottom: 6 }}>
+        {value.toLocaleString()}
+      </p>
+      <p style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-3)', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+        {label}
+      </p>
     </div>
   )
 }
 
+const periodOptions = ['7 أيام', '30 يوم', '3 أشهر']
+
 export default function Dashboard() {
   const [isOpen, setIsOpen] = useState(() => getConfig().isOpen)
+  const [period, setPeriod] = useState('7 أيام')
   const orders = getOrders()
   const newOrders = orders.filter(o => o.status === 'new')
   const recentOrders = orders.slice(0, 4)
 
+  const statusBadgeClass = {
+    new:        'badge-yellow',
+    preparing:  'badge-accent',
+    ready:      'badge-green',
+    delivering: 'badge-accent',
+    done:       'badge-green',
+    cancelled:  'badge-red',
+  }
+
   return (
     <Layout title="الرئيسية">
-      {/* Status + alert row */}
-      <div className="flex gap-3 mb-6" style={{ flexWrap: 'wrap' }}>
-        <div className="glass flex items-center gap-3" style={{ padding: '12px 16px', flex: 1, minWidth: 240 }}>
-          <div style={{ width: 8, height: 8, borderRadius: '50%', background: isOpen ? 'var(--green)' : 'var(--text-3)', boxShadow: isOpen ? '0 0 8px var(--green)' : 'none' }} />
+
+      {/* ── HERO ROW ── */}
+      <div className="flex gap-3 animate-fade-in" style={{ flexWrap: 'wrap', marginBottom: 20 }}>
+
+        {/* Status card */}
+        <div className="glass flex items-center gap-3"
+          style={{
+            padding: '14px 18px', flex: 1, minWidth: 260,
+            background: isOpen ? 'rgba(34,197,94,0.06)' : 'var(--surface)',
+            border: isOpen ? '1px solid rgba(34,197,94,0.20)' : '1px solid var(--border)',
+            transition: 'all 0.25s var(--ease-default)'
+          }}>
+          <span className={`status-dot ${isOpen ? 'live' : 'idle'}`} />
           <div style={{ flex: 1 }}>
-            <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>{getConfig().name}</p>
-            <p style={{ fontSize: 11, color: isOpen ? 'var(--green)' : 'var(--text-3)', fontWeight: 500 }}>{isOpen ? 'مفتوح · حتى 11 مساءً' : 'مغلق مؤقتاً'}</p>
+            <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', lineHeight: 1.3 }}>{getConfig().name}</p>
+            <p style={{ fontSize: 11, fontWeight: 500, color: isOpen ? 'var(--green)' : 'var(--text-3)', marginTop: 2 }}>
+              {isOpen ? 'مفتوح · حتى 11 مساءً' : 'مغلق مؤقتاً'}
+            </p>
           </div>
-          <button onClick={() => { setIsOpen(prev => { const next = !prev; setConfig({ isOpen: next }); return next }) }} style={{ fontSize: 12, fontWeight: 600, padding: '6px 12px', borderRadius: 8, cursor: 'pointer', border: 'none', background: isOpen ? 'var(--red-muted)' : 'var(--green-muted)', color: isOpen ? 'var(--red)' : 'var(--green)', display: 'flex', alignItems: 'center', gap: 5, transition: 'all 0.15s' }}>
-            <Power size={13} />
+          <button
+            onClick={() => {
+              setIsOpen(prev => {
+                const next = !prev
+                setConfig({ isOpen: next })
+                return next
+              })
+            }}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 6,
+              fontSize: 12, fontWeight: 700, padding: '7px 16px',
+              borderRadius: 'var(--radius-full)', cursor: 'pointer',
+              border: isOpen ? 'none' : '1px solid var(--border)',
+              background: isOpen ? 'rgba(34,197,94,0.15)' : 'var(--surface-2)',
+              color: isOpen ? 'var(--green)' : 'var(--text-2)',
+              transition: 'all 0.2s var(--ease-default)',
+              whiteSpace: 'nowrap'
+            }}
+          >
+            <span style={{ width: 6, height: 6, borderRadius: '50%', background: isOpen ? 'var(--green)' : 'var(--text-3)', flexShrink: 0 }} />
+            {isOpen ? 'مفتوح' : 'مغلق'}
+          </button>
+          <button
+            onClick={() => {
+              setIsOpen(prev => {
+                const next = !prev
+                setConfig({ isOpen: next })
+                return next
+              })
+            }}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 5,
+              fontSize: 11, fontWeight: 600, padding: '5px 10px',
+              borderRadius: 'var(--radius)',
+              cursor: 'pointer',
+              border: 'none',
+              background: isOpen ? 'var(--red-muted)' : 'var(--green-muted)',
+              color: isOpen ? 'var(--red)' : 'var(--green)',
+              transition: 'all 0.15s'
+            }}
+          >
+            <Power size={12} />
             {isOpen ? 'إغلاق مؤقت' : 'فتح المطعم'}
           </button>
         </div>
 
+        {/* New orders alert */}
         {newOrders.length > 0 && (
-          <Link to="/orders" className="flex items-center gap-3 pulse-accent" style={{ padding: '12px 16px', borderRadius: 16, background: 'var(--red-muted)', border: '1px solid rgba(248,113,113,0.2)', textDecoration: 'none', flexShrink: 0 }}>
-            <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--red)', display: 'block' }} />
-            <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--red)' }}>{newOrders.length} طلب جديد</span>
-            <ArrowLeft size={14} style={{ color: 'var(--red)' }} />
+          <Link to="/orders" className="glass-accent flex items-center gap-3 pulse-accent"
+            style={{ padding: '14px 18px', textDecoration: 'none', flexShrink: 0, display: 'flex', alignItems: 'center' }}>
+            <span className="badge badge-pill badge-accent" style={{ fontSize: 13, padding: '4px 10px' }}>
+              {newOrders.length}
+            </span>
+            <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--accent)' }}>طلب جديد</span>
+            <ArrowLeft size={14} style={{ color: 'var(--accent)' }} />
           </Link>
         )}
       </div>
 
-      {/* Stats grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 20 }}>
-        <StatCard label="مبيعات اليوم" value={mockStats.revenue} change={mockStats.revenueChange} icon={DollarSign} color="var(--accent)" />
-        <StatCard label="طلبات اليوم" value={mockStats.orders} change={mockStats.ordersChange} icon={ShoppingBag} color="#3B82F6" />
-        <StatCard label="متوسط الطلب" value={mockStats.avgOrder} icon={ArrowUpRight} color="#8B5CF6" />
-        <StatCard label="زبائن جدد" value={mockStats.newCustomers} icon={Users} color="#22C55E" />
+      {/* ── STAT CARDS ── */}
+      <div className="stagger" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 20 }}>
+        <StatCard label="مبيعات اليوم"  value={mockStats.revenue}      change={mockStats.revenueChange} icon={DollarSign}   color="#F97316" />
+        <StatCard label="طلبات اليوم"   value={mockStats.orders}       change={mockStats.ordersChange}  icon={ShoppingBag}  color="#3B82F6" />
+        <StatCard label="متوسط الطلب"   value={mockStats.avgOrder}                                      icon={ArrowUpRight}  color="#8B5CF6" />
+        <StatCard label="زبائن جدد"     value={mockStats.newCustomers}                                  icon={Users}         color="#22C55E" />
       </div>
 
-      {/* Chart + Top items */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: 12, marginBottom: 20 }}>
+      {/* ── CHART + TOP ITEMS ── */}
+      <div className="animate-slide-up" style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 12, marginBottom: 20 }}>
+
+        {/* Area chart */}
         <div className="glass" style={{ padding: '20px' }}>
-          <div className="flex items-center justify-between mb-5">
-            <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>المبيعات — آخر 7 أيام</p>
-            <span style={{ fontSize: 11, color: 'var(--text-2)', background: 'var(--surface-2)', padding: '4px 10px', borderRadius: 6, border: '1px solid var(--border)' }}>هذا الأسبوع</span>
+          <div className="flex items-center justify-between" style={{ marginBottom: 20 }}>
+            <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>المبيعات</p>
+            <div className="flex items-center gap-1" style={{ background: 'var(--surface-2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-full)', padding: 3 }}>
+              {periodOptions.map(opt => (
+                <button key={opt} onClick={() => setPeriod(opt)}
+                  style={{
+                    fontSize: 11, fontWeight: 600, padding: '4px 12px',
+                    borderRadius: 'var(--radius-full)', border: 'none', cursor: 'pointer',
+                    transition: 'all 0.15s',
+                    background: period === opt ? 'var(--accent)' : 'transparent',
+                    color: period === opt ? 'white' : 'var(--text-3)',
+                  }}>
+                  {opt}
+                </button>
+              ))}
+            </div>
           </div>
           <ResponsiveContainer width="100%" height={160}>
             <AreaChart data={mockSalesData}>
               <defs>
-                <linearGradient id="grad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#F97316" stopOpacity={0.15} />
-                  <stop offset="100%" stopColor="#F97316" stopOpacity={0} />
+                <linearGradient id="salesGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%"   stopColor="var(--accent)" stopOpacity={0.20} />
+                  <stop offset="100%" stopColor="var(--accent)" stopOpacity={0} />
                 </linearGradient>
               </defs>
+              <CartesianGrid strokeDasharray="4 4" stroke="var(--border)" vertical={false} />
               <XAxis dataKey="day" tick={{ fontSize: 11, fill: 'var(--text-3)', fontFamily: 'Cairo' }} axisLine={false} tickLine={false} />
               <YAxis hide />
               <Tooltip content={<CustomTooltip />} />
-              <Area type="monotone" dataKey="amount" stroke="#F97316" strokeWidth={2} fill="url(#grad)" dot={false} activeDot={{ r: 4, fill: '#F97316', stroke: 'var(--bg)', strokeWidth: 2 }} />
+              <Area
+                type="monotone" dataKey="amount"
+                stroke="var(--accent)" strokeWidth={2}
+                fill="url(#salesGrad)" dot={false}
+                activeDot={{ r: 4, fill: 'var(--accent)', stroke: 'var(--bg)', strokeWidth: 2 }}
+              />
             </AreaChart>
           </ResponsiveContainer>
         </div>
 
+        {/* Top items */}
         <div className="glass" style={{ padding: '20px' }}>
-          <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 16 }}>الأكثر مبيعاً</p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 18 }}>الأكثر مبيعاً</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             {mockTopItems.map((item, i) => (
               <div key={i} className="flex items-center gap-3">
-                <span style={{ width: 22, height: 22, borderRadius: 6, background: 'var(--surface-2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 700, color: 'var(--accent)', flexShrink: 0, fontFamily: 'Inter' }}>{i + 1}</span>
+                <span style={{
+                  width: 22, height: 22, borderRadius: 6,
+                  background: i === 0 ? 'var(--accent-muted)' : 'var(--surface-2)',
+                  border: i === 0 ? '1px solid var(--border-accent)' : '1px solid var(--border)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 10, fontWeight: 800, color: i === 0 ? 'var(--accent)' : 'var(--text-2)',
+                  flexShrink: 0, fontFamily: 'Inter'
+                }}>{i + 1}</span>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--text)', marginBottom: 4, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.name}</p>
+                  <p className="truncate-1" style={{ fontSize: 12, fontWeight: 600, color: 'var(--text)', marginBottom: 5 }}>{item.name}</p>
                   <div style={{ height: 3, background: 'var(--surface-3)', borderRadius: 2 }}>
-                    <div style={{ height: 3, borderRadius: 2, background: 'var(--accent)', width: `${(item.orders / mockTopItems[0].orders) * 100}%`, transition: 'width 0.5s ease' }} />
+                    <div style={{
+                      height: 3, borderRadius: 2,
+                      background: i === 0 ? 'var(--accent)' : 'var(--surface-4)',
+                      width: `${(item.orders / mockTopItems[0].orders) * 100}%`,
+                      transition: 'width 0.6s var(--ease-default)'
+                    }} />
                   </div>
                 </div>
-                <span className="num" style={{ fontSize: 11, color: 'var(--text-2)', flexShrink: 0 }}>{item.orders}</span>
+                <span className="num" style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-2)', flexShrink: 0 }}>{item.orders}</span>
               </div>
             ))}
           </div>
         </div>
       </div>
 
-      {/* Recent orders */}
-      <div className="glass" style={{ overflow: 'hidden' }}>
+      {/* ── RECENT ORDERS ── */}
+      <div className="glass animate-fade-in" style={{ overflow: 'hidden' }}>
         <div className="flex items-center justify-between" style={{ padding: '16px 20px', borderBottom: '1px solid var(--border)' }}>
           <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>آخر الطلبات</p>
-          <Link to="/orders" style={{ fontSize: 12, color: 'var(--accent)', fontWeight: 600, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4 }}>
+          <Link to="/orders" style={{ fontSize: 12, fontWeight: 600, color: 'var(--accent)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4 }}>
             عرض الكل <ArrowLeft size={13} />
           </Link>
         </div>
+
         <div>
           {recentOrders.map((order, i) => (
-            <div key={order.id} style={{ display: 'flex', alignItems: 'center', padding: '12px 20px', borderBottom: i < recentOrders.length - 1 ? '1px solid var(--border)' : 'none', transition: 'background 0.15s' }}
+            <div
+              key={order.id}
+              className="flex items-center"
+              style={{
+                padding: '12px 20px',
+                borderBottom: i < recentOrders.length - 1 ? '1px solid var(--border)' : 'none',
+                transition: 'background var(--dur-fast) ease',
+                gap: 12
+              }}
               onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-2)'}
               onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
             >
-              <div style={{ width: 32, height: 32, borderRadius: 8, background: 'var(--surface-2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700, color: 'var(--text-2)', fontFamily: 'Inter', border: '1px solid var(--border)', flexShrink: 0 }}>
-                {order.id}
+              {/* Order # */}
+              <div style={{
+                width: 34, height: 34, borderRadius: 8, flexShrink: 0,
+                background: 'var(--surface-2)', border: '1px solid var(--border)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 11, fontWeight: 800, color: 'var(--text-2)', fontFamily: 'Inter'
+              }}>
+                #{order.id}
               </div>
-              <div style={{ flex: 1, marginRight: 12, marginLeft: 12 }}>
-                <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>{order.items}</p>
-                <p style={{ fontSize: 11, color: 'var(--text-2)', marginTop: 1 }}>{order.table} · {order.time}</p>
+
+              {/* Customer & table */}
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <p className="truncate-1" style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>{order.items}</p>
+                <p style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 2 }}>{order.table} · {order.time}</p>
               </div>
-              <div className="flex items-center gap-3">
-                <p className="num" style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>{order.total} ج</p>
-                <span style={{
-                  fontSize: 11, fontWeight: 600, padding: '3px 8px', borderRadius: 6,
-                  background: order.status === 'new' ? 'var(--red-muted)' : order.status === 'preparing' ? 'var(--blue-muted)' : order.status === 'ready' ? 'var(--yellow-muted)' : order.status === 'delivering' ? 'var(--accent-muted)' : 'var(--surface-2)',
-                  color: order.status === 'new' ? 'var(--red)' : order.status === 'preparing' ? 'var(--blue)' : order.status === 'ready' ? 'var(--yellow)' : order.status === 'delivering' ? 'var(--accent)' : 'var(--text-3)'
-                }}>
-                  {statusMap[order.status]?.label}
-                </span>
-              </div>
+
+              {/* Items count */}
+              <span style={{ fontSize: 11, color: 'var(--text-3)', flexShrink: 0 }}>
+                {order.details?.length ?? '—'} أصناف
+              </span>
+
+              {/* Total */}
+              <p className="num" style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', flexShrink: 0 }}>
+                {order.total} ج
+              </p>
+
+              {/* Status badge */}
+              <span className={`badge badge-pill ${statusBadgeClass[order.status] ?? 'badge-default'}`}>
+                {statusMap[order.status]?.label}
+              </span>
             </div>
           ))}
         </div>
       </div>
+
     </Layout>
   )
 }
