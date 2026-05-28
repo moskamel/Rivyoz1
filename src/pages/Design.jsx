@@ -161,33 +161,73 @@ function BannersTab() {
     setEditing('new')
   }
 
+  const activeBanners = banners.filter(b => b.active)
+  const previewBanner = editing && editing !== 'new'
+    ? banners.find(b => b.id === editing)
+    : editing === 'new' ? { title: form.title, subtitle: form.subtitle, color: form.color }
+    : activeBanners[0] || banners[0]
+
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
-      {/* List */}
-      <div>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-          <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>البانرات ({banners.length})</p>
-          <button onClick={startNew} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '7px 14px', background: 'var(--accent)', color: 'white', borderRadius: 10, fontSize: 13, fontWeight: 600, border: 'none', cursor: 'pointer' }}>
-            <Plus size={13} /> بانر جديد
-          </button>
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          {banners.map(b => (
-            <div key={b.id} className="glass" style={{ padding: 14, display: 'flex', gap: 12, alignItems: 'center', opacity: b.active ? 1 : 0.5 }}>
-              <div style={{ width: 48, height: 48, borderRadius: 12, background: `linear-gradient(135deg, ${b.color[0]}, ${b.color[1]})`, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>📢</div>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{b.title}</p>
-                <p style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{b.subtitle}</p>
+      {/* Left: storefront preview */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+        {/* Hero banner preview (storefront style) */}
+        {previewBanner && (
+          <div style={{ borderRadius: 16, overflow: 'hidden', background: `linear-gradient(135deg, ${(editing === 'new' ? form.color : previewBanner.color)[0]}, ${(editing === 'new' ? form.color : previewBanner.color)[1]})`, padding: '28px 24px', position: 'relative', minHeight: 140 }}>
+            <div style={{ position: 'absolute', top: 12, left: 14, right: 14, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.6)', fontWeight: 600, letterSpacing: '0.05em' }}>معاينة البانر</span>
+              <div style={{ display: 'flex', gap: 5 }}>
+                {banners.filter(b => b.active).map((b, i) => (
+                  <span key={b.id} style={{ width: editing !== 'new' && b.id === editing ? 16 : 6, height: 6, borderRadius: 3, background: editing !== 'new' && b.id === editing ? 'white' : 'rgba(255,255,255,0.4)', transition: 'width 0.2s' }} />
+                ))}
               </div>
-              <Toggle value={b.active} onChange={() => toggle(b.id)} />
-              <button onClick={() => startEdit(b)} style={{ padding: 6, borderRadius: 8, background: 'var(--surface-2)', border: 'none', cursor: 'pointer', color: 'var(--text-2)', display: 'flex' }}><Edit3 size={13} /></button>
-              <button onClick={() => remove(b.id)} style={{ padding: 6, borderRadius: 8, background: 'var(--red-muted)', border: 'none', cursor: 'pointer', color: 'var(--red)', display: 'flex' }}><Trash2 size={13} /></button>
+            </div>
+            <p style={{ color: 'white', fontWeight: 800, fontSize: 22, lineHeight: 1.2, marginTop: 16 }}>
+              {editing === 'new' ? (form.title || 'عنوان البانر') : previewBanner.title}
+            </p>
+            <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: 13, marginTop: 8, lineHeight: 1.5 }}>
+              {editing === 'new' ? (form.subtitle || 'وصف العرض...') : previewBanner.subtitle}
+            </p>
+            <button style={{ marginTop: 16, padding: '8px 20px', background: 'white', color: (editing === 'new' ? form.color : previewBanner.color)[0], borderRadius: 20, fontSize: 12, fontWeight: 700, border: 'none', cursor: 'pointer' }}>اطلب الآن</button>
+          </div>
+        )}
+
+        {/* All banners as mini cards */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {banners.map(b => (
+            <div
+              key={b.id}
+              onClick={() => startEdit(b)}
+              style={{
+                borderRadius: 14, overflow: 'hidden', cursor: 'pointer', opacity: b.active ? 1 : 0.45,
+                outline: editing === b.id ? `2px solid var(--accent)` : '2px solid transparent',
+                outlineOffset: 2, transition: 'all 0.15s',
+              }}
+            >
+              <div style={{ background: `linear-gradient(135deg, ${b.color[0]}, ${b.color[1]})`, padding: '14px 18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div style={{ flex: 1, minWidth: 0, marginLeft: 10 }}>
+                  <p style={{ color: 'white', fontWeight: 700, fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{b.title}</p>
+                  <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: 11, marginTop: 3, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{b.subtitle}</p>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+                  <div onClick={e => { e.stopPropagation(); toggle(b.id) }}>
+                    <Toggle value={b.active} onChange={() => toggle(b.id)} />
+                  </div>
+                  <button onClick={e => { e.stopPropagation(); remove(b.id) }} style={{ padding: 5, borderRadius: 7, background: 'rgba(0,0,0,0.25)', border: 'none', cursor: 'pointer', color: 'white', display: 'flex' }}><Trash2 size={12} /></button>
+                </div>
+              </div>
             </div>
           ))}
+          <button onClick={startNew} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '10px', border: '2px dashed var(--border)', borderRadius: 12, fontSize: 13, fontWeight: 600, color: 'var(--text-2)', background: 'transparent', cursor: 'pointer', transition: 'all 0.15s' }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.color = 'var(--accent)' }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-2)' }}
+          >
+            <Plus size={14} /> بانر جديد
+          </button>
         </div>
       </div>
 
-      {/* Form */}
+      {/* Right: edit form */}
       {editing !== null ? (
         <div className="glass" style={{ padding: 20 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
@@ -209,26 +249,18 @@ function BannersTab() {
               <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: 'var(--text-2)', marginBottom: 8 }}>لون التدرج</label>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
                 {gradientPresets.map((g, i) => (
-                  <button key={i} onClick={() => setForm({ ...form, color: g })} style={{ height: 36, borderRadius: 10, background: `linear-gradient(135deg, ${g[0]}, ${g[1]})`, border: 'none', cursor: 'pointer', outline: JSON.stringify(form.color) === JSON.stringify(g) ? `2.5px solid var(--text)` : '2.5px solid transparent', outlineOffset: 2, transition: 'all 0.15s' }} />
+                  <button key={i} onClick={() => setForm({ ...form, color: g })} style={{ height: 40, borderRadius: 10, background: `linear-gradient(135deg, ${g[0]}, ${g[1]})`, border: 'none', cursor: 'pointer', outline: JSON.stringify(form.color) === JSON.stringify(g) ? `2.5px solid var(--text)` : '2.5px solid transparent', outlineOffset: 2, transition: 'all 0.15s' }} />
                 ))}
               </div>
             </div>
-
-            {/* Preview */}
-            <div style={{ borderRadius: 12, overflow: 'hidden', height: 90, background: `linear-gradient(135deg, ${form.color[0]}, ${form.color[1]})`, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-              <p style={{ color: 'white', fontWeight: 800, fontSize: 15 }}>{form.title || 'العنوان'}</p>
-              <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: 12, marginTop: 4 }}>{form.subtitle || 'الوصف'}</p>
-            </div>
-
-            <button onClick={save} disabled={!form.title} style={{ padding: '11px', background: form.title ? 'var(--accent)' : 'var(--surface-3)', color: form.title ? 'white' : 'var(--text-3)', borderRadius: 10, fontWeight: 700, fontSize: 13, border: 'none', cursor: form.title ? 'pointer' : 'not-allowed' }}>
+            <button onClick={save} disabled={!form.title} style={{ padding: '11px', background: form.title ? 'var(--accent)' : 'var(--surface-3)', color: form.title ? 'white' : 'var(--text-3)', borderRadius: 10, fontWeight: 700, fontSize: 13, border: 'none', cursor: form.title ? 'pointer' : 'not-allowed', marginTop: 4 }}>
               حفظ البانر
             </button>
           </div>
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 10, padding: 40, border: '2px dashed var(--border)', borderRadius: 16 }}>
-          <Image size={28} style={{ color: 'var(--text-3)' }} />
-          <p style={{ fontSize: 13, color: 'var(--text-3)' }}>اختر بانر للتعديل أو أضف جديداً</p>
+          <p style={{ fontSize: 13, color: 'var(--text-3)' }}>اضغط على بانر للتعديل</p>
         </div>
       )}
       {toast && <Toast message={toast} />}
