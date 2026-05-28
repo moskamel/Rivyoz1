@@ -417,8 +417,8 @@ export default function StoreFront() {
       {/* ─── Search Overlay ─── */}
       {searchOpen && (
         <>
-          <div onClick={() => setSearchOpen(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', zIndex: 60 }} />
-          <div style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 61, background: 'white', maxWidth: 480, margin: '0 auto', borderRadius: '0 0 20px 20px', boxShadow: '0 8px 32px rgba(0,0,0,0.15)', maxHeight: '90vh', display: 'flex', flexDirection: 'column' }}>
+          <div onClick={() => setSearchOpen(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', zIndex: 110 }} />
+          <div style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 111, background: 'white', maxWidth: 480, margin: '0 auto', borderRadius: '0 0 20px 20px', boxShadow: '0 8px 32px rgba(0,0,0,0.15)', maxHeight: '90vh', display: 'flex', flexDirection: 'column' }}>
             {/* Search input row */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '14px 16px', borderBottom: '1px solid #f3f4f6' }}>
               <div style={{ flex: 1, position: 'relative' }}>
@@ -571,8 +571,8 @@ export default function StoreFront() {
       {/* ─── Premium Item Detail Bottom Sheet ─── */}
       {selectedItem && (
         <>
-          <div onClick={closeSheet} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 50, opacity: sheetOpen ? 1 : 0, transition: 'opacity 0.3s' }} />
-          <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 51, background: 'white', borderRadius: '24px 24px 0 0', maxWidth: 480, margin: '0 auto', maxHeight: '90vh', overflowY: 'auto', transform: sheetOpen ? 'translateY(0)' : 'translateY(100%)', transition: 'transform 0.3s ease' }}>
+          <div onClick={closeSheet} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 110, opacity: sheetOpen ? 1 : 0, transition: 'opacity 0.3s' }} />
+          <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 111, background: 'white', borderRadius: '24px 24px 0 0', maxWidth: 480, margin: '0 auto', maxHeight: '90vh', overflowY: 'auto', transform: sheetOpen ? 'translateY(0)' : 'translateY(100%)', transition: 'transform 0.3s ease' }}>
 
             {/* Drag handle */}
             <div style={{ display: 'flex', justifyContent: 'center', paddingTop: 12, paddingBottom: 4, cursor: 'pointer' }} onClick={closeSheet}>
@@ -764,8 +764,8 @@ export default function StoreFront() {
       {/* ─── Profile Sidebar ─── */}
       {sidebarOpen && (
         <>
-          <div onClick={() => setSidebarOpen(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 50 }} />
-          <div style={{ position: 'fixed', top: 0, left: 0, bottom: 0, zIndex: 51, background: 'white', width: 280, boxShadow: '4px 0 24px rgba(0,0,0,0.15)', display: 'flex', flexDirection: 'column' }} dir="rtl">
+          <div onClick={() => setSidebarOpen(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 110 }} />
+          <div style={{ position: 'fixed', top: 0, left: 0, bottom: 0, zIndex: 111, background: 'white', width: 280, boxShadow: '4px 0 24px rgba(0,0,0,0.15)', display: 'flex', flexDirection: 'column' }} dir="rtl">
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px', borderBottom: '1px solid #f3f4f6' }}>
               <h2 style={{ fontWeight: 800, color: '#1a1a1a', fontSize: 15 }}>حسابي</h2>
               <button onClick={() => setSidebarOpen(false)} style={{ padding: 6, borderRadius: 8, background: '#f3f4f6', border: 'none', cursor: 'pointer', display: 'flex' }}>

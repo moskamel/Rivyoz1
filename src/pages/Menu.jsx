@@ -262,7 +262,7 @@ export default function Menu() {
                       <MoreVertical size={15} />
                     </button>
                     {openMenuId === item.id && (
-                      <div style={{ position: 'absolute', left: 0, top: 36, background: 'var(--surface-3)', border: '1px solid var(--border-strong)', borderRadius: 10, overflow: 'hidden', zIndex: 20, minWidth: 120, boxShadow: 'var(--shadow-lg)' }}>
+                      <div style={{ position: 'absolute', left: 0, top: 36, background: 'var(--surface-3)', border: '1px solid var(--border-strong)', borderRadius: 10, overflow: 'hidden', zIndex: 200, minWidth: 120, boxShadow: 'var(--shadow-lg)' }}>
                         <button onClick={() => { openEdit(item); setOpenMenuId(null) }}
                           style={{ width: '100%', textAlign: 'right', padding: '9px 14px', fontSize: 13, color: 'var(--text-2)', background: 'transparent', border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}
                           onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-2)'}
