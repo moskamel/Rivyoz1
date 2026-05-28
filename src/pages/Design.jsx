@@ -511,17 +511,127 @@ function CombosTab() {
 /* ─── Tab 4: Categories & Popular ──────────────────────────── */
 function CategoriesTab() {
   const [categories] = useState(getCategories)
-  const [items, setItemsState] = useState(getMenuItems)
+  const [allItems, setAllItems] = useState(getMenuItems)
+  const [dragIdx, setDragIdx] = useState(null)
+  const [dragOverIdx, setDragOverIdx] = useState(null)
+  const [addOpen, setAddOpen] = useState(false)
+  const [addSearch, setAddSearch] = useState('')
   const { toast, showToast } = useToast()
 
-  const toggleBestseller = (id) => {
-    const next = items.map(i => i.id === id ? { ...i, bestseller: !i.bestseller } : i)
-    setItemsState(next); setMenuItems(next)
+  const sliderItems = allItems.filter(i => i.bestseller)
+  const availableToAdd = allItems.filter(i => !i.bestseller && i.active !== false)
+
+  const updateItems = (next) => { setAllItems(next); setMenuItems(next) }
+
+  const removeFromSlider = (id) => updateItems(allItems.map(i => i.id === id ? { ...i, bestseller: false } : i))
+  const addToSlider = (item) => { updateItems(allItems.map(i => i.id === item.id ? { ...i, bestseller: true } : i)); setAddOpen(false); setAddSearch('') }
+
+  const handleDrop = (dropIdx) => {
+    if (dragIdx === null || dragIdx === dropIdx) return
+    const reordered = [...sliderItems]
+    const [moved] = reordered.splice(dragIdx, 1)
+    reordered.splice(dropIdx, 0, moved)
+    const nonSlider = allItems.filter(i => !i.bestseller)
+    const next = [...reordered, ...nonSlider]
+    updateItems(next)
+    setDragIdx(null); setDragOverIdx(null)
+    showToast('تم الترتيب ✓')
   }
 
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
-      {/* Categories */}
+
+      {/* Left: Slider items only */}
+      <div>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+          <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>
+            الأكثر طلباً (سلايدر)
+            <span style={{ fontSize: 11, color: 'var(--text-3)', fontWeight: 400, marginRight: 6 }}>{sliderItems.length} منتج</span>
+          </p>
+          <span style={{ fontSize: 11, color: 'var(--text-3)' }}>اسحب لإعادة الترتيب</span>
+        </div>
+
+        <div className="glass" style={{ overflow: 'hidden', marginBottom: 10 }}>
+          {sliderItems.length === 0 && (
+            <p style={{ padding: '24px', textAlign: 'center', fontSize: 13, color: 'var(--text-3)' }}>لا توجد منتجات في السلايدر بعد</p>
+          )}
+          {sliderItems.map((item, i) => (
+            <div
+              key={item.id}
+              draggable
+              onDragStart={() => { setDragIdx(i); setDragOverIdx(i) }}
+              onDragOver={e => { e.preventDefault(); setDragOverIdx(i) }}
+              onDrop={() => handleDrop(i)}
+              onDragEnd={() => { setDragIdx(null); setDragOverIdx(null) }}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px',
+                borderBottom: i < sliderItems.length - 1 ? '1px solid var(--border)' : 'none',
+                background: dragOverIdx === i && dragIdx !== i ? 'var(--accent-muted)' : 'transparent',
+                opacity: dragIdx === i ? 0.4 : 1,
+                cursor: 'grab', userSelect: 'none', transition: 'background 0.1s',
+              }}
+            >
+              {/* Drag handle */}
+              <span style={{ color: 'var(--text-3)', fontSize: 16, lineHeight: 1, flexShrink: 0, cursor: 'grab' }}>⠿</span>
+              {/* Position */}
+              <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-3)', fontFamily: 'Inter', minWidth: 18, flexShrink: 0 }}>#{i + 1}</span>
+              {/* Thumb */}
+              <div style={{ width: 36, height: 36, borderRadius: 10, background: 'var(--surface-2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, flexShrink: 0, border: '1px solid var(--border)', overflow: 'hidden' }}>
+                {item.image ? <img src={item.image} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : '🍽️'}
+              </div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.name}</p>
+                <p style={{ fontSize: 11, color: 'var(--accent)', fontWeight: 700, fontFamily: 'Inter' }}>{item.price} ج</p>
+              </div>
+              <button onClick={() => removeFromSlider(item.id)} style={{ padding: 5, borderRadius: 7, background: 'var(--red-muted)', border: 'none', cursor: 'pointer', color: 'var(--red)', display: 'flex', flexShrink: 0 }}>
+                <X size={12} />
+              </button>
+            </div>
+          ))}
+        </div>
+
+        {/* Add product picker */}
+        <div style={{ position: 'relative' }}>
+          <button
+            onClick={() => setAddOpen(o => !o)}
+            style={{ width: '100%', padding: '10px', border: '2px dashed var(--border)', borderRadius: 12, fontSize: 13, fontWeight: 600, color: 'var(--text-2)', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, transition: 'all 0.15s' }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.color = 'var(--accent)' }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-2)' }}
+          >
+            <Plus size={14} /> أضف منتج للسلايدر
+          </button>
+          {addOpen && (
+            <>
+              <div onClick={() => setAddOpen(false)} style={{ position: 'fixed', inset: 0, zIndex: 10 }} />
+              <div style={{ position: 'absolute', bottom: 'calc(100% + 6px)', left: 0, right: 0, zIndex: 20, background: 'var(--surface-3)', border: '1px solid var(--border-strong)', borderRadius: 12, boxShadow: '0 -8px 24px rgba(0,0,0,0.5)', overflow: 'hidden', maxHeight: 260, display: 'flex', flexDirection: 'column' }}>
+                <div style={{ padding: '8px 10px', borderBottom: '1px solid var(--border)' }}>
+                  <input autoFocus value={addSearch} onChange={e => setAddSearch(e.target.value)} placeholder="ابحث في المنتجات..."
+                    style={{ ...inputStyle, padding: '7px 10px', fontSize: 12 }}
+                    onFocus={e => e.target.style.borderColor = 'var(--accent)'} onBlur={e => e.target.style.borderColor = 'var(--border)'} />
+                </div>
+                <div style={{ overflowY: 'auto' }}>
+                  {availableToAdd.filter(i => !addSearch || i.name.includes(addSearch)).map(item => (
+                    <div key={item.id} onClick={() => addToSlider(item)}
+                      style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '9px 14px', cursor: 'pointer', transition: 'background 0.1s' }}
+                      onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-2)'}
+                      onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                    >
+                      <span style={{ flex: 1, fontSize: 13, color: 'var(--text)' }}>{item.name}</span>
+                      <span style={{ fontSize: 11, color: 'var(--text-3)', fontFamily: 'Inter' }}>{item.price} ج</span>
+                      <Plus size={13} style={{ color: 'var(--accent)', flexShrink: 0 }} />
+                    </div>
+                  ))}
+                  {availableToAdd.filter(i => !addSearch || i.name.includes(addSearch)).length === 0 && (
+                    <p style={{ padding: '14px', textAlign: 'center', fontSize: 12, color: 'var(--text-3)' }}>لا توجد منتجات متاحة</p>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* Right: Categories */}
       <div>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
           <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>الأقسام (التبويبات)</p>
@@ -534,37 +644,13 @@ function CategoriesTab() {
                 <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--accent)' }} />
                 <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>{cat.name}</p>
               </div>
-              <span style={{ fontSize: 11, color: 'var(--text-3)' }}>{items.filter(it => it.categoryId === cat.id).length} أكلة</span>
+              <span style={{ fontSize: 11, color: 'var(--text-3)' }}>{allItems.filter(it => it.categoryId === cat.id).length} أكلة</span>
             </div>
           ))}
         </div>
         <p style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 10 }}>لإضافة أو حذف أقسام، اذهب لصفحة إدارة القائمة</p>
       </div>
 
-      {/* Popular slider items */}
-      <div>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-          <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>الأكثر طلباً (سلايدر)</p>
-          <span style={{ fontSize: 11, color: 'var(--text-3)' }}>{items.filter(i => i.bestseller).length} محدد</span>
-        </div>
-        <div className="glass" style={{ overflow: 'hidden', maxHeight: 420, overflowY: 'auto' }}>
-          {items.map((item, i, arr) => (
-            <div key={item.id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', borderBottom: i < arr.length - 1 ? '1px solid var(--border)' : 'none' }}>
-              <div style={{ width: 36, height: 36, borderRadius: 10, background: 'var(--surface-2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, flexShrink: 0, border: '1px solid var(--border)' }}>🍽️</div>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.name}</p>
-                <p style={{ fontSize: 11, color: 'var(--accent)', fontWeight: 700, fontFamily: 'Inter' }}>{item.price} ج</p>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                {item.bestseller && <span style={{ fontSize: 10, padding: '2px 7px', borderRadius: 6, background: 'var(--yellow-muted)', color: 'var(--yellow)', fontWeight: 700 }}>🔥 بيستر</span>}
-                <Toggle value={!!item.bestseller} onChange={() => toggleBestseller(item.id)} />
-              </div>
-            </div>
-          ))}
-        </div>
-        <p style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 10 }}>الأصناف المفعّلة تظهر في سلايدر "الأكثر طلباً"</p>
-        <button onClick={() => showToast('تم الحفظ ✓')} style={{ marginTop: 10, padding: '10px 20px', background: 'var(--accent)', color: 'white', borderRadius: 10, fontWeight: 600, fontSize: 13, border: 'none', cursor: 'pointer' }}>حفظ التغييرات</button>
-      </div>
       {toast && <Toast message={toast} />}
     </div>
   )
