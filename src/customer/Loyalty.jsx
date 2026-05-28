@@ -88,7 +88,7 @@ export default function Loyalty() {
         </div>
       )}
 
-      <div style={{ maxWidth: 480, margin: '0 auto', padding: '16px 14px 88px', display: 'flex', flexDirection: 'column', gap: 14 }}>
+      <div style={{ padding: '16px 14px 88px', display: 'flex', flexDirection: 'column', gap: 14 }}>
 
         {/* Points hero card */}
         <div style={{ background: 'white', borderRadius: 20, boxShadow: '0 4px 16px rgba(0,0,0,0.08)', padding: '28px 20px 24px', textAlign: 'center' }}>

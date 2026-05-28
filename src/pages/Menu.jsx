@@ -21,7 +21,7 @@ export default function Menu() {
   const [activeCategory, setActiveCategory] = useState(1)
   const [showForm, setShowForm] = useState(false)
   const [editItem, setEditItem] = useState(null)
-  const [form, setForm] = useState({ name: '', price: '', categoryId: 1, description: '', active: true, bestseller: false })
+  const [form, setForm] = useState({ name: '', price: '', categoryId: 1, description: '', active: true, bestseller: false, discountTag: '' })
   const [openMenuId, setOpenMenuId] = useState(null)
   const menuRef = useRef(null)
 
@@ -63,13 +63,13 @@ export default function Menu() {
   }
 
   const openAdd = () => {
-    setForm({ name: '', price: '', categoryId: activeCategory, description: '', active: true, bestseller: false })
+    setForm({ name: '', price: '', categoryId: activeCategory, description: '', active: true, bestseller: false, discountTag: '' })
     setEditItem(null)
     setShowForm(true)
   }
 
   const openEdit = (item) => {
-    setForm({ name: item.name, price: item.price, categoryId: item.categoryId, description: item.description || '', active: item.active, bestseller: item.bestseller || false })
+    setForm({ name: item.name, price: item.price, categoryId: item.categoryId, description: item.description || '', active: item.active, bestseller: item.bestseller || false, discountTag: item.discountTag || '' })
     setEditItem(item.id)
     setShowForm(true)
   }
@@ -335,6 +335,15 @@ export default function Menu() {
                   onFocus={e => { e.target.style.borderColor = 'var(--accent)'; e.target.style.boxShadow = '0 0 0 3px var(--accent-muted)' }}
                   onBlur={e => { e.target.style.borderColor = 'var(--border)'; e.target.style.boxShadow = 'none' }}
                 />
+              </div>
+
+              <div>
+                <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: 'var(--text-2)', marginBottom: 6, letterSpacing: '0.04em', textTransform: 'uppercase' }}>بادج الخصم (اختياري)</label>
+                <input type="text" value={form.discountTag} onChange={e => setForm({ ...form, discountTag: e.target.value })} style={inputStyle} placeholder="مثال: خصم 20٪ أو عرض محدود"
+                  onFocus={e => { e.target.style.borderColor = 'var(--accent)'; e.target.style.boxShadow = '0 0 0 3px var(--accent-muted)' }}
+                  onBlur={e => { e.target.style.borderColor = 'var(--border)'; e.target.style.boxShadow = 'none' }}
+                />
+                <p style={{ fontSize: 10, color: 'var(--text-3)', marginTop: 4 }}>يظهر كبادج أخضر على الكارت في صفحة العميل</p>
               </div>
 
               <div style={{ height: 1, background: 'var(--border)' }} />

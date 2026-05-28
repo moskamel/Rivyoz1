@@ -105,7 +105,7 @@ export default function Cart() {
         </button>
       </div>
 
-      <div style={{ maxWidth: 480, margin: '0 auto', padding: '16px 14px 88px', display: 'flex', flexDirection: 'column', gap: 12 }}>
+      <div style={{ padding: '16px 14px 88px', display: 'flex', flexDirection: 'column', gap: 12 }}>
 
         {/* ── SECTION A: Items list ── */}
         <div style={{ background: 'white', borderRadius: 16, overflow: 'hidden', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>

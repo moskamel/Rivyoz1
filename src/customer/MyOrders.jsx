@@ -114,7 +114,7 @@ export default function MyOrders() {
         )}
       </div>
 
-      <div style={{ maxWidth: 480, margin: '0 auto', padding: '12px 14px 88px', display: 'flex', flexDirection: 'column', gap: 8 }}>
+      <div style={{ padding: '12px 14px 88px', display: 'flex', flexDirection: 'column', gap: 8 }}>
         {orders.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '72px 20px' }}>
             <p style={{ fontSize: 56, marginBottom: 16 }}>🍽️</p>

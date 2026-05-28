@@ -214,10 +214,16 @@ function Navbar({ isDark, onToggle }) {
           <MessageCircle size={14} />واتساب
         </a>
 
+        <button onClick={() => navigate('/explore')}
+          style={{ background: T.surface2, border: `1px solid ${T.border}`, borderRadius: 8, padding: '8px 16px', fontFamily: 'Cairo, sans-serif', fontWeight: 700, fontSize: 14, color: T.text, cursor: 'pointer', transition: 'background 0.2s, border-color 0.2s, transform 0.15s' }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = T.accent; e.currentTarget.style.transform = 'translateY(-1px)' }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.transform = 'translateY(0)' }}
+        >اكتشف المطاعم</button>
+
         <button onClick={() => navigate('/login')}
           style={{ background: T.accent, border: 'none', borderRadius: 8, padding: '8px 20px', fontFamily: 'Cairo, sans-serif', fontWeight: 700, fontSize: 14, color: '#fff', cursor: 'pointer', boxShadow: T.accentGlow, transition: 'background 0.2s, transform 0.15s' }}
-          onMouseEnter={e => { e.target.style.background = T.accentHov; e.target.style.transform = 'translateY(-1px)' }}
-          onMouseLeave={e => { e.target.style.background = T.accent; e.target.style.transform = 'translateY(0)' }}
+          onMouseEnter={e => { e.currentTarget.style.background = T.accentHov; e.currentTarget.style.transform = 'translateY(-1px)' }}
+          onMouseLeave={e => { e.currentTarget.style.background = T.accent; e.currentTarget.style.transform = 'translateY(0)' }}
         >ابدأ مجاناً</button>
       </div>
     </nav>

@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ShoppingCart, Menu, X, Search, Star, ChevronLeft, ChevronRight, Smartphone, Tag, Flame } from 'lucide-react'
-import { getConfig, getMenuItems, getCategories, getBanners, getCombos, getFooterSettings } from '../lib/restaurantStore'
+import { getConfig, getMenuItems, getCategories, getBanners, getCombos, getFooterSettings, getCustomerProfile, clearCustomerProfile } from '../lib/restaurantStore'
 import { useCart } from './CartContext'
 import CustomerNav from './CustomerNav'
 
@@ -82,7 +82,7 @@ function BannerCarousel({ accentColor }) {
 }
 
 /* ─── Shared item card used by all sections ─────────────────── */
-function ItemCard({ accentColor, onClick, image, emoji = '🍽️', title, subtitle, price, originalPrice, badgeText, badgeColor = '#F97316', disabled, actionLabel = 'أضف +', onAction }) {
+function ItemCard({ accentColor, onClick, image, emoji = '🍽️', title, subtitle, price, originalPrice, badgeText, badgeColor = '#F97316', disabled, actionLabel = 'أضف للسلة', onAction }) {
   return (
     <div
       onClick={onClick}
@@ -129,13 +129,13 @@ function ItemCard({ accentColor, onClick, image, emoji = '🍽️', title, subti
 /* ─── Shared grid wrapper ───────────────────────────────────── */
 function ItemGrid({ title, icon: Icon, accentColor, children }) {
   return (
-    <div style={{ maxWidth: 480, margin: '8px auto 0', paddingBottom: 32 }}>
+    <div style={{ paddingBottom: 32 }}>
       <div style={{ background: 'white' }}>
         <h2 style={{ fontWeight: 800, color: '#1a1a1a', fontSize: 15, padding: '14px 16px 10px', borderBottom: '1px solid #f9fafb', display: 'flex', alignItems: 'center', gap: 6 }}>
           {Icon && <Icon size={16} style={{ color: accentColor }} />}
           {title}
         </h2>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, padding: 12 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 12, padding: 12 }}>
           {children}
         </div>
       </div>
@@ -160,8 +160,8 @@ function PopularSlider({ items, accentColor, onOpen }) {
           title={item.name}
           subtitle={item.description}
           price={item.price}
-          badgeText="🔥 بيستر"
-          badgeColor="#F97316"
+          badgeText={item.discountTag || '🔥 بيستر'}
+          badgeColor={item.discountTag ? '#22C55E' : '#F97316'}
         />
       ))}
     </ItemGrid>
@@ -248,6 +248,7 @@ export default function StoreFront() {
   const menuItems = getMenuItems()
   const categories = getCategories()
   const { addItem, itemCount, total } = useCart()
+  const customerProfile = getCustomerProfile()
 
   const popularItems = menuItems.filter(i => i.active && i.bestseller)
   const activeCombos = getCombos().filter(c => c.active)
@@ -361,7 +362,7 @@ export default function StoreFront() {
 
       {/* ─── Sticky Header ─── */}
       <div style={{ position: 'sticky', top: 0, zIndex: 50, background: 'white', borderBottom: '1px solid #f3f4f6' }}>
-        <div style={{ maxWidth: 480, margin: '0 auto', padding: '10px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
+        <div style={{ padding: '10px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
           {/* Logo + Name */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, flex: 1, minWidth: 0 }}>
             <div style={{ width: 36, height: 36, borderRadius: '50%', background: config.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: 16, color: 'white', flexShrink: 0 }}>
@@ -457,8 +458,8 @@ export default function StoreFront() {
                       title={item.name}
                       subtitle={item.description}
                       price={item.price}
-                      badgeText={item.bestseller ? '🔥' : null}
-                      badgeColor="#F97316"
+                      badgeText={item.discountTag || (item.bestseller ? '🔥' : null)}
+                      badgeColor={item.discountTag ? '#22C55E' : '#F97316'}
                     />
                   ))}
                 </div>
@@ -542,8 +543,8 @@ export default function StoreFront() {
                 title={item.name}
                 subtitle={item.description}
                 price={item.price}
-                badgeText={item.bestseller ? '🔥' : null}
-                badgeColor="#F97316"
+                badgeText={item.discountTag || (item.bestseller ? '🔥' : null)}
+                badgeColor={item.discountTag ? '#22C55E' : '#F97316'}
                 disabled={!item.active}
               />
             ))}
@@ -760,55 +761,80 @@ export default function StoreFront() {
         </>
       )}
 
-      {/* ─── Marketplace Sidebar ─── */}
+      {/* ─── Profile Sidebar ─── */}
       {sidebarOpen && (
         <>
           <div onClick={() => setSidebarOpen(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 50 }} />
-          <div style={{ position: 'fixed', top: 0, left: 0, bottom: 0, zIndex: 50, background: 'white', width: 300, boxShadow: '4px 0 24px rgba(0,0,0,0.15)', display: 'flex', flexDirection: 'column' }} dir="rtl">
+          <div style={{ position: 'fixed', top: 0, left: 0, bottom: 0, zIndex: 51, background: 'white', width: 280, boxShadow: '4px 0 24px rgba(0,0,0,0.15)', display: 'flex', flexDirection: 'column' }} dir="rtl">
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px', borderBottom: '1px solid #f3f4f6' }}>
-              <h2 style={{ fontWeight: 800, color: '#1a1a1a', fontSize: 15 }}>المطاعم القريبة</h2>
+              <h2 style={{ fontWeight: 800, color: '#1a1a1a', fontSize: 15 }}>حسابي</h2>
               <button onClick={() => setSidebarOpen(false)} style={{ padding: 6, borderRadius: 8, background: '#f3f4f6', border: 'none', cursor: 'pointer', display: 'flex' }}>
                 <X size={16} />
               </button>
             </div>
-            <div style={{ padding: 12, borderBottom: '1px solid #f9fafb' }}>
-              <div style={{ position: 'relative' }}>
-                <Search size={14} style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', color: '#9ca3af' }} />
-                <input type="text" placeholder="ابحث عن مطعم..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
-                  style={{ width: '100%', padding: '9px 34px 9px 12px', background: '#f9fafb', border: '1px solid #f3f4f6', borderRadius: 10, fontSize: 13, outline: 'none', fontFamily: 'Cairo, sans-serif', boxSizing: 'border-box' }}
-                />
+
+            {customerProfile ? (
+              <div style={{ padding: '20px 16px', borderBottom: '1px solid #f3f4f6', background: config.color + '0D' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <div style={{ width: 48, height: 48, borderRadius: '50%', background: config.color, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 900, fontSize: 20, flexShrink: 0 }}>
+                    {customerProfile.name?.charAt(0) || '؟'}
+                  </div>
+                  <div>
+                    <p style={{ fontWeight: 800, fontSize: 14, color: '#1a1a1a' }}>{customerProfile.name}</p>
+                    <p style={{ fontSize: 12, color: '#6b7280', marginTop: 2, direction: 'ltr', textAlign: 'right' }}>{customerProfile.phone}</p>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div style={{ display: 'flex', gap: 8, padding: '10px 12px', borderBottom: '1px solid #f9fafb', overflowX: 'auto', scrollbarWidth: 'none' }} className="no-scrollbar">
-              {categoryFilters.map(f => (
-                <button key={f} onClick={() => setActiveCategoryFilter(f)}
-                  style={{ flexShrink: 0, padding: '5px 12px', borderRadius: 20, fontSize: 12, fontWeight: 600, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif', background: activeCategoryFilter === f ? config.color : '#f3f4f6', color: activeCategoryFilter === f ? 'white' : '#6b7280' }}
+            ) : (
+              <div style={{ padding: '20px 16px', borderBottom: '1px solid #f3f4f6', textAlign: 'center' }}>
+                <p style={{ fontSize: 13, color: '#6b7280', marginBottom: 12 }}>سجّل دخولك للاستمتاع بالمميزات</p>
+                <button
+                  onClick={() => { setSidebarOpen(false); navigate('/customer-login') }}
+                  style={{ padding: '10px 24px', borderRadius: 12, background: config.color, color: 'white', fontWeight: 700, fontSize: 13, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}
                 >
-                  {f}
+                  تسجيل الدخول
                 </button>
-              ))}
-            </div>
-            <div style={{ flex: 1, overflowY: 'auto', padding: 12, display: 'flex', flexDirection: 'column', gap: 4 }}>
-              {filteredNearbyBySearch.map(r => (
-                <div key={r.id} onClick={() => { setSidebarOpen(false); navigate(`/${r.slug}`) }}
-                  style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 12px', borderRadius: 12, cursor: 'pointer', transition: 'background 0.15s' }}
+              </div>
+            )}
+
+            <div style={{ flex: 1, overflowY: 'auto', padding: '8px 0' }}>
+              {[
+                { icon: '🛵', label: 'طلباتي', path: '/my-orders' },
+                { icon: '🎁', label: 'مكافآتي', path: '/loyalty' },
+                { icon: '🗺️', label: 'استكشف المطاعم', path: '/explore' },
+                { icon: '👤', label: 'ملفي الشخصي', path: '/my-profile' },
+              ].map(link => (
+                <button
+                  key={link.path}
+                  onClick={() => { setSidebarOpen(false); navigate(link.path) }}
+                  style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, padding: '13px 16px', background: 'transparent', border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif', textAlign: 'right', transition: 'background 0.15s' }}
                   onMouseEnter={e => e.currentTarget.style.background = '#f9fafb'}
                   onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                 >
-                  <div style={{ width: 42, height: 42, borderRadius: 12, background: r.color, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 900, fontSize: 16, flexShrink: 0 }}>
-                    {r.name.charAt(0)}
-                  </div>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{ fontWeight: 700, fontSize: 13, color: '#1a1a1a' }}>{r.name}</p>
-                    <p style={{ fontSize: 11, color: '#9ca3af' }}>{r.category} · {r.deliveryTime} دقيقة</p>
-                    <p style={{ fontSize: 11, color: '#F59E0B', fontWeight: 600 }}>⭐ {r.rating}</p>
-                  </div>
-                  {r.slug === config.slug && (
-                    <span style={{ fontSize: 10, fontWeight: 800, padding: '3px 8px', borderRadius: 8, background: config.color, color: 'white', flexShrink: 0 }}>أنت هنا</span>
-                  )}
-                </div>
+                  <span style={{ fontSize: 18 }}>{link.icon}</span>
+                  <span style={{ fontSize: 14, fontWeight: 600, color: '#1a1a1a' }}>{link.label}</span>
+                </button>
               ))}
+
+              <div style={{ height: 1, background: '#f3f4f6', margin: '8px 16px' }} />
+
+              <div style={{ padding: '12px 16px' }}>
+                <p style={{ fontSize: 11, fontWeight: 700, color: '#9ca3af', marginBottom: 8, letterSpacing: '0.05em' }}>معلومات المطعم</p>
+                {config.phone && <p style={{ fontSize: 13, color: '#374151', marginBottom: 4 }}>📞 {config.phone}</p>}
+                <p style={{ fontSize: 13, color: '#374151' }}>🕐 {config.isOpen ? 'مفتوح الآن' : `يفتح ${config.opensAt}`}</p>
+              </div>
             </div>
+
+            {customerProfile && (
+              <div style={{ padding: '12px 16px', borderTop: '1px solid #f3f4f6' }}>
+                <button
+                  onClick={() => { clearCustomerProfile(); setSidebarOpen(false) }}
+                  style={{ width: '100%', padding: '11px', borderRadius: 12, background: '#FEF2F2', color: '#DC2626', fontWeight: 700, fontSize: 13, border: '1px solid #FECACA', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}
+                >
+                  تسجيل الخروج
+                </button>
+              </div>
+            )}
           </div>
         </>
       )}

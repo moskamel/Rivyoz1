@@ -148,7 +148,7 @@ export default function OrderTracking() {
         )}
       </div>
 
-      <div style={{ maxWidth: 480, margin: '0 auto', padding: '16px 16px 40px', display: 'flex', flexDirection: 'column', gap: 14 }}>
+      <div style={{ padding: '16px 16px 40px', display: 'flex', flexDirection: 'column', gap: 14 }}>
 
         {/* ── CANCELLED STATE ── */}
         {isCancelled && (
