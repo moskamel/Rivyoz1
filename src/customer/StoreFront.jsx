@@ -39,7 +39,6 @@ function BannerCarousel({ accentColor }) {
 
   return (
     <div style={{ position: 'relative', overflow: 'hidden', height: 200 }}>
-      {/* Slide */}
       <div
         key={b.id}
         style={{
@@ -50,7 +49,6 @@ function BannerCarousel({ accentColor }) {
           transition: 'opacity 0.4s ease',
         }}
       >
-        {/* Overlay (always shown for images, transparent for gradients) */}
         <div style={{
           position: 'absolute', inset: 0,
           background: hasImage ? 'rgba(0,0,0,0.38)' : 'transparent',
@@ -66,7 +64,6 @@ function BannerCarousel({ accentColor }) {
         </div>
       </div>
 
-      {/* Arrows */}
       <button onClick={() => go(-1)} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', width: 32, height: 32, borderRadius: '50%', background: 'rgba(0,0,0,0.25)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', backdropFilter: 'blur(4px)' }}>
         <ChevronRight size={18} />
       </button>
@@ -74,7 +71,6 @@ function BannerCarousel({ accentColor }) {
         <ChevronLeft size={18} />
       </button>
 
-      {/* Dots */}
       <div style={{ position: 'absolute', bottom: 12, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 6 }}>
         {banners.map((_, i) => (
           <button key={i} onClick={() => setCurrent(i)} style={{ width: i === current ? 20 : 6, height: 6, borderRadius: 3, background: 'white', opacity: i === current ? 1 : 0.5, border: 'none', cursor: 'pointer', padding: 0, transition: 'all 0.3s' }} />
@@ -267,14 +263,20 @@ export default function StoreFront() {
   const [note, setNote] = useState('')
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
+  const [searchOpen, setSearchOpen] = useState(false)
+  const [searchMenuQuery, setSearchMenuQuery] = useState('')
   const [activeCategoryFilter, setActiveCategoryFilter] = useState('الكل')
   const [activeTab, setActiveTab] = useState(allTabs[0]?.id)
+
+  // Modifier state
+  const [selectedModifiers, setSelectedModifiers] = useState({})
 
   const openItem = (item) => {
     if (!item.active) return
     setSelectedItem(item)
     setQty(1)
     setNote('')
+    setSelectedModifiers({})
     setSheetOpen(true)
   }
 
@@ -283,9 +285,57 @@ export default function StoreFront() {
     setTimeout(() => setSelectedItem(null), 300)
   }
 
+  // Calculate modifier extra cost
+  const modifierExtra = selectedItem ? Object.entries(selectedModifiers).reduce((sum, [groupId, val]) => {
+    const group = selectedItem?.modifiers?.find(g => g.id === groupId)
+    if (!group) return sum
+    if (group.type === 'single') {
+      const opt = group.options.find(o => o.id === val)
+      return sum + (opt?.price || 0)
+    } else {
+      return sum + group.options.filter(o => val[o.id]).reduce((s, o) => s + o.price, 0)
+    }
+  }, 0) : 0
+
+  const sheetTotal = selectedItem ? (selectedItem.price + modifierExtra) * qty : 0
+
+  // Check if all required modifier groups are satisfied
+  const requiredGroupsMissing = selectedItem?.modifiers?.filter(g => g.required && !selectedModifiers[g.id]) || []
+  const canAddToCart = requiredGroupsMissing.length === 0
+
+  const handleModifierSingle = (groupId, optId) => {
+    setSelectedModifiers(prev => ({ ...prev, [groupId]: optId }))
+  }
+
+  const handleModifierMulti = (groupId, optId) => {
+    setSelectedModifiers(prev => {
+      const current = prev[groupId] || {}
+      return { ...prev, [groupId]: { ...current, [optId]: !current[optId] } }
+    })
+  }
+
   const handleAddToCart = () => {
-    if (!selectedItem) return
-    addItem({ itemId: selectedItem.id, name: selectedItem.name, price: selectedItem.price, qty, note })
+    if (!selectedItem || !canAddToCart) return
+
+    const flatModifiers = selectedItem?.modifiers?.flatMap(group => {
+      const sel = selectedModifiers[group.id]
+      if (!sel) return []
+      if (group.type === 'single') {
+        const opt = group.options.find(o => o.id === sel)
+        return opt ? [{ groupName: group.name, name: opt.name, price: opt.price }] : []
+      } else {
+        return group.options.filter(o => sel[o.id]).map(o => ({ groupName: group.name, name: o.name, price: o.price }))
+      }
+    }) || []
+
+    addItem({
+      itemId: selectedItem.id,
+      name: selectedItem.name,
+      price: selectedItem.price,
+      qty,
+      note,
+      modifiers: flatModifiers,
+    })
     closeSheet()
   }
 
@@ -301,34 +351,56 @@ export default function StoreFront() {
     ? filteredNearby.filter(r => r.name.includes(searchQuery))
     : filteredNearby
 
+  const searchedMenuItems = searchMenuQuery.trim()
+    ? menuItems.filter(i => i.active && i.name.includes(searchMenuQuery.trim()))
+    : []
+
   return (
-    <div style={{ minHeight: '100vh', background: '#f9fafb', fontFamily: 'Cairo, sans-serif' }} dir="rtl">
+    <div style={{ minHeight: '100vh', background: '#F9FAFB', fontFamily: 'Cairo, sans-serif' }} dir="rtl">
 
       {/* ─── Sticky Header ─── */}
-      <div style={{ position: 'sticky', top: 0, zIndex: 40 }}>
-        <div style={{ background: config.color, padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: 16, color: 'white', flexShrink: 0 }}>
+      <div style={{ position: 'sticky', top: 0, zIndex: 50, background: 'white', borderBottom: '1px solid #f3f4f6' }}>
+        <div style={{ maxWidth: 480, margin: '0 auto', padding: '10px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
+          {/* Logo + Name */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, flex: 1, minWidth: 0 }}>
+            <div style={{ width: 36, height: 36, borderRadius: '50%', background: config.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: 16, color: 'white', flexShrink: 0 }}>
               {config.name.charAt(0)}
             </div>
-            <div>
-              <p style={{ fontWeight: 700, fontSize: 14, color: 'white', lineHeight: 1.2 }}>{config.name}</p>
-              <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.85)' }}>
-                {config.isOpen ? '● مفتوح · يغلق ' + config.closesAt : '● مغلق · يفتح ' + config.opensAt}
+            <div style={{ minWidth: 0 }}>
+              <p style={{ fontWeight: 900, fontSize: 14, color: '#1a1a1a', lineHeight: 1.2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{config.name}</p>
+              <p style={{ fontSize: 11, color: '#6b7280', marginTop: 1 }}>
+                ⭐ 4.9 · 30 دقيقة · توصيل 15ج
               </p>
             </div>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-            <button onClick={() => setSidebarOpen(true)} style={{ padding: '8px', borderRadius: 10, background: 'rgba(255,255,255,0.15)', border: 'none', cursor: 'pointer', color: 'white', display: 'flex' }}>
-              <Menu size={19} />
+
+          {/* Actions */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+            {/* Search */}
+            <button
+              onClick={() => { setSearchOpen(true); setSearchMenuQuery('') }}
+              style={{ width: 36, height: 36, borderRadius: 10, background: '#f3f4f6', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6b7280' }}
+            >
+              <Search size={17} />
             </button>
-            <button onClick={() => navigate('/cart')} style={{ padding: '8px', borderRadius: 10, background: 'rgba(255,255,255,0.15)', border: 'none', cursor: 'pointer', color: 'white', display: 'flex', position: 'relative' }}>
-              <ShoppingCart size={19} />
+            {/* Cart */}
+            <button
+              onClick={() => navigate('/cart')}
+              style={{ width: 36, height: 36, borderRadius: 10, background: itemCount > 0 ? config.color : '#f3f4f6', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: itemCount > 0 ? 'white' : '#6b7280', position: 'relative' }}
+            >
+              <ShoppingCart size={17} />
               {itemCount > 0 && (
-                <span style={{ position: 'absolute', top: -4, left: -4, background: 'white', fontSize: 9, fontWeight: 800, borderRadius: '50%', width: 16, height: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', color: config.color }}>
+                <span style={{ position: 'absolute', top: -4, left: -4, background: 'white', fontSize: 9, fontWeight: 800, borderRadius: '50%', width: 16, height: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', color: config.color, border: `1.5px solid ${config.color}` }}>
                   {itemCount}
                 </span>
               )}
+            </button>
+            {/* Sidebar */}
+            <button
+              onClick={() => setSidebarOpen(true)}
+              style={{ width: 36, height: 36, borderRadius: 10, background: '#f3f4f6', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6b7280' }}
+            >
+              <Menu size={17} />
             </button>
           </div>
         </div>
@@ -340,25 +412,101 @@ export default function StoreFront() {
         )}
       </div>
 
+      {/* ─── Search Overlay ─── */}
+      {searchOpen && (
+        <>
+          <div onClick={() => setSearchOpen(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', zIndex: 60 }} />
+          <div style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 61, background: 'white', maxWidth: 480, margin: '0 auto', borderRadius: '0 0 20px 20px', boxShadow: '0 8px 32px rgba(0,0,0,0.15)', maxHeight: '90vh', display: 'flex', flexDirection: 'column' }}>
+            {/* Search input row */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '14px 16px', borderBottom: '1px solid #f3f4f6' }}>
+              <div style={{ flex: 1, position: 'relative' }}>
+                <Search size={15} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', color: config.color }} />
+                <input
+                  autoFocus
+                  type="text"
+                  placeholder="ابحث في القائمة..."
+                  value={searchMenuQuery}
+                  onChange={e => setSearchMenuQuery(e.target.value)}
+                  style={{ width: '100%', padding: '10px 36px 10px 12px', borderRadius: 12, border: `1.5px solid ${config.color}`, fontSize: 14, outline: 'none', fontFamily: 'Cairo, sans-serif', boxSizing: 'border-box', color: '#1a1a1a' }}
+                />
+              </div>
+              <button
+                onClick={() => setSearchOpen(false)}
+                style={{ width: 36, height: 36, borderRadius: 10, background: '#f3f4f6', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
+              >
+                <X size={17} />
+              </button>
+            </div>
+
+            {/* Results */}
+            <div style={{ overflowY: 'auto', padding: 12 }}>
+              {searchMenuQuery.trim() === '' ? (
+                <p style={{ textAlign: 'center', color: '#9ca3af', fontSize: 13, padding: '32px 0' }}>ابدأ الكتابة للبحث في القائمة</p>
+              ) : searchedMenuItems.length === 0 ? (
+                <p style={{ textAlign: 'center', color: '#9ca3af', fontSize: 13, padding: '32px 0' }}>لا توجد نتائج لـ "{searchMenuQuery}"</p>
+              ) : (
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                  {searchedMenuItems.map(item => (
+                    <ItemCard
+                      key={item.id}
+                      accentColor={config.color}
+                      onClick={() => { setSearchOpen(false); openItem(item) }}
+                      onAction={() => { setSearchOpen(false); openItem(item) }}
+                      image={item.image}
+                      title={item.name}
+                      subtitle={item.description}
+                      price={item.price}
+                      badgeText={item.bestseller ? '🔥' : null}
+                      badgeColor="#F97316"
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </>
+      )}
+
       {/* ─── Banner Carousel ─── */}
       <BannerCarousel accentColor={config.color} />
 
-      {/* ─── Category Tabs (below banner) ─── */}
-      <div style={{ position: 'sticky', top: 56, zIndex: 30, background: 'white', borderBottom: '1px solid #f3f4f6', display: 'flex', overflowX: 'auto', scrollbarWidth: 'none' }} className="no-scrollbar">
-        {allTabs.map(tab => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            style={{
-              flexShrink: 0, padding: '12px 16px', fontSize: 14, fontWeight: 600, cursor: 'pointer', background: 'none', border: 'none', whiteSpace: 'nowrap', transition: 'all 0.15s',
-              color: activeTab === tab.id ? config.color : '#6b7280',
-              borderBottom: `2px solid ${activeTab === tab.id ? config.color : 'transparent'}`,
-              fontFamily: 'Cairo, sans-serif',
-            }}
-          >
-            {tab.name}
-          </button>
-        ))}
+      {/* ─── Category Tabs (sticky below header ~57px) ─── */}
+      <div style={{ position: 'sticky', top: 57, zIndex: 30, background: 'white', borderBottom: '1px solid #f3f4f6', display: 'flex', overflowX: 'auto', scrollbarWidth: 'none', padding: '0 8px' }} className="no-scrollbar">
+        {allTabs.map(tab => {
+          const isActive = activeTab === tab.id
+          const itemsInTab = tab.count
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              style={{
+                flexShrink: 0,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 5,
+                margin: '8px 4px',
+                padding: '6px 14px',
+                borderRadius: 20,
+                fontSize: 13,
+                fontWeight: 700,
+                cursor: 'pointer',
+                border: 'none',
+                whiteSpace: 'nowrap',
+                transition: 'all 0.2s',
+                background: isActive ? config.color : '#f3f4f6',
+                color: isActive ? 'white' : '#6b7280',
+                fontFamily: 'Cairo, sans-serif',
+              }}
+            >
+              {tab.name}
+              {itemsInTab != null && (
+                <span style={{ fontSize: 10, fontWeight: 800, background: isActive ? 'rgba(255,255,255,0.25)' : '#e5e7eb', color: isActive ? 'white' : '#9ca3af', padding: '1px 5px', borderRadius: 8 }}>
+                  {itemsInTab}
+                </span>
+              )}
+            </button>
+          )
+        })}
       </div>
 
       {/* ─── Tab Content ─── */}
@@ -418,49 +566,193 @@ export default function StoreFront() {
         </div>
       )}
 
-      {/* ─── Item Detail Bottom Sheet ─── */}
+      {/* ─── Premium Item Detail Bottom Sheet ─── */}
       {selectedItem && (
         <>
           <div onClick={closeSheet} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 50, opacity: sheetOpen ? 1 : 0, transition: 'opacity 0.3s' }} />
-          <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 50, background: 'white', borderRadius: '24px 24px 0 0', maxWidth: 480, margin: '0 auto', transform: sheetOpen ? 'translateY(0)' : 'translateY(100%)', transition: 'transform 0.3s ease' }}>
-            <div onClick={closeSheet} style={{ display: 'flex', justifyContent: 'center', paddingTop: 12, paddingBottom: 4, cursor: 'pointer' }}>
+          <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 51, background: 'white', borderRadius: '24px 24px 0 0', maxWidth: 480, margin: '0 auto', maxHeight: '90vh', overflowY: 'auto', transform: sheetOpen ? 'translateY(0)' : 'translateY(100%)', transition: 'transform 0.3s ease' }}>
+
+            {/* Drag handle */}
+            <div style={{ display: 'flex', justifyContent: 'center', paddingTop: 12, paddingBottom: 4, cursor: 'pointer' }} onClick={closeSheet}>
               <div style={{ width: 40, height: 4, background: '#e5e7eb', borderRadius: 2 }} />
             </div>
-            <div style={{ padding: '8px 20px 32px' }}>
-              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 16 }}>
-                <div>
-                  <h3 style={{ fontWeight: 800, color: '#1a1a1a', fontSize: 18 }}>{selectedItem.name}</h3>
-                  {selectedItem.description && <p style={{ fontSize: 13, color: '#6b7280', marginTop: 4 }}>{selectedItem.description}</p>}
-                  <p style={{ fontWeight: 800, fontSize: 18, color: config.color, marginTop: 8 }}>{selectedItem.price} ج</p>
+
+            {/* Product image / emoji area */}
+            <div style={{ height: 200, background: `linear-gradient(135deg, ${config.color}22, ${config.color}44)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 72, position: 'relative' }}>
+              {selectedItem.image
+                ? <img src={selectedItem.image} alt={selectedItem.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                : '🍽️'}
+              {/* Close button overlay */}
+              <button
+                onClick={closeSheet}
+                style={{ position: 'absolute', top: 12, left: 12, width: 32, height: 32, borderRadius: '50%', background: 'rgba(0,0,0,0.25)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', backdropFilter: 'blur(4px)' }}
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            {/* Content */}
+            <div style={{ padding: '16px 20px 120px' }}>
+
+              {/* Name + description */}
+              <h3 style={{ fontWeight: 800, color: '#1a1a1a', fontSize: 18, marginBottom: 6 }}>{selectedItem.name}</h3>
+              {selectedItem.description && (
+                <p style={{ fontSize: 13, color: '#6b7280', marginBottom: 12, lineHeight: 1.5 }}>{selectedItem.description}</p>
+              )}
+
+              {/* Base price */}
+              <p style={{ fontWeight: 800, fontSize: 16, color: config.color, marginBottom: 20 }}>{selectedItem.price} ج</p>
+
+              {/* ─── Modifier Groups ─── */}
+              {selectedItem.modifiers && selectedItem.modifiers.length > 0 && (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                  {selectedItem.modifiers.map(group => {
+                    const isSingle = group.type === 'single'
+                    const groupSel = selectedModifiers[group.id]
+                    const isMissing = group.required && !groupSel
+                    return (
+                      <div key={group.id}>
+                        {/* Group header */}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+                          <span style={{ fontSize: 12, fontWeight: 800, color: '#6b7280', textTransform: 'uppercase', letterSpacing: 0.5 }}>{group.name}</span>
+                          {group.required && (
+                            <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 8, background: isMissing ? '#FEF3C7' : '#DCFCE7', color: isMissing ? '#92400E' : '#166534' }}>
+                              {isMissing ? 'مطلوب' : 'تم الاختيار ✓'}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Single-select pills */}
+                        {isSingle && (
+                          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                            {group.options.map(opt => {
+                              const isSelected = groupSel === opt.id
+                              return (
+                                <button
+                                  key={opt.id}
+                                  onClick={() => handleModifierSingle(group.id, opt.id)}
+                                  style={{
+                                    padding: '8px 16px',
+                                    borderRadius: 20,
+                                    border: `2px solid ${isSelected ? config.color : '#e5e7eb'}`,
+                                    background: isSelected ? config.color + '15' : 'white',
+                                    color: isSelected ? config.color : '#374151',
+                                    fontWeight: isSelected ? 700 : 500,
+                                    fontSize: 13,
+                                    cursor: 'pointer',
+                                    fontFamily: 'Cairo, sans-serif',
+                                    transition: 'all 0.15s',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 6,
+                                  }}
+                                >
+                                  {opt.name}
+                                  {opt.price > 0 && (
+                                    <span style={{ fontSize: 11, fontWeight: 600, color: isSelected ? config.color : '#9ca3af' }}>+{opt.price}ج</span>
+                                  )}
+                                </button>
+                              )
+                            })}
+                          </div>
+                        )}
+
+                        {/* Multi-select checkbox pills */}
+                        {!isSingle && (
+                          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                            {group.options.map(opt => {
+                              const multiSel = groupSel || {}
+                              const isChecked = !!multiSel[opt.id]
+                              return (
+                                <button
+                                  key={opt.id}
+                                  onClick={() => handleModifierMulti(group.id, opt.id)}
+                                  style={{
+                                    padding: '8px 16px',
+                                    borderRadius: 20,
+                                    border: `2px solid ${isChecked ? config.color : '#e5e7eb'}`,
+                                    background: isChecked ? config.color + '15' : 'white',
+                                    color: isChecked ? config.color : '#374151',
+                                    fontWeight: isChecked ? 700 : 500,
+                                    fontSize: 13,
+                                    cursor: 'pointer',
+                                    fontFamily: 'Cairo, sans-serif',
+                                    transition: 'all 0.15s',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 6,
+                                  }}
+                                >
+                                  <span style={{ width: 16, height: 16, borderRadius: 4, border: `2px solid ${isChecked ? config.color : '#d1d5db'}`, background: isChecked ? config.color : 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                    {isChecked && <span style={{ color: 'white', fontSize: 10, fontWeight: 900 }}>✓</span>}
+                                  </span>
+                                  {opt.name}
+                                  {opt.price > 0 && (
+                                    <span style={{ fontSize: 11, fontWeight: 600, color: isChecked ? config.color : '#9ca3af' }}>+{opt.price}ج</span>
+                                  )}
+                                </button>
+                              )
+                            })}
+                          </div>
+                        )}
+                      </div>
+                    )
+                  })}
                 </div>
-                <button onClick={closeSheet} style={{ padding: 8, borderRadius: 10, background: '#f3f4f6', border: 'none', cursor: 'pointer', display: 'flex' }}>
-                  <X size={17} />
-                </button>
+              )}
+
+              {/* Notes textarea */}
+              <div style={{ marginTop: 24 }}>
+                <p style={{ fontSize: 12, fontWeight: 700, color: '#6b7280', marginBottom: 8, textTransform: 'uppercase', letterSpacing: 0.5 }}>ملاحظات خاصة</p>
+                <textarea
+                  value={note}
+                  onChange={e => setNote(e.target.value)}
+                  placeholder="ملاحظات خاصة (اختياري)..."
+                  rows={2}
+                  style={{ width: '100%', padding: '12px 14px', borderRadius: 12, border: '1.5px solid #e5e7eb', fontSize: 13, outline: 'none', resize: 'none', fontFamily: 'Cairo, sans-serif', boxSizing: 'border-box', color: '#1a1a1a', background: '#fafafa' }}
+                  onFocus={e => e.target.style.borderColor = config.color}
+                  onBlur={e => e.target.style.borderColor = '#e5e7eb'}
+                />
               </div>
 
+              {/* Validation warning */}
+              {!canAddToCart && sheetOpen && (
+                <div style={{ marginTop: 12, padding: '10px 14px', borderRadius: 10, background: '#FEF3C7', display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ fontSize: 15 }}>⚠️</span>
+                  <span style={{ fontSize: 12, fontWeight: 600, color: '#92400E' }}>
+                    يرجى اختيار: {requiredGroupsMissing.map(g => g.name).join('، ')}
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {/* ─── Sticky bottom bar: Qty + Add button ─── */}
+            <div style={{ position: 'sticky', bottom: 0, background: 'white', borderTop: '1px solid #f3f4f6', padding: '12px 20px 24px', display: 'flex', alignItems: 'center', gap: 12 }}>
               {/* Qty stepper */}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 20, margin: '20px 0' }}>
-                <button onClick={() => setQty(q => Math.max(1, q - 1))} style={{ width: 40, height: 40, borderRadius: '50%', border: '2px solid #e5e7eb', background: 'none', cursor: 'pointer', fontSize: 20, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
+                <button
+                  onClick={() => setQty(q => Math.max(1, q - 1))}
+                  style={{ width: 36, height: 36, borderRadius: '50%', border: '2px solid #e5e7eb', background: 'none', cursor: 'pointer', fontSize: 18, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#374151' }}
+                >
                   −
                 </button>
-                <span style={{ fontWeight: 800, fontSize: 22, color: '#1a1a1a', minWidth: 28, textAlign: 'center' }}>{qty}</span>
-                <button onClick={() => setQty(q => q + 1)} style={{ width: 40, height: 40, borderRadius: '50%', background: config.color, border: 'none', cursor: 'pointer', fontSize: 20, fontWeight: 700, color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ fontWeight: 800, fontSize: 18, color: '#1a1a1a', minWidth: 22, textAlign: 'center', fontFamily: 'Inter, Cairo, sans-serif' }}>{qty}</span>
+                <button
+                  onClick={() => setQty(q => q + 1)}
+                  style={{ width: 36, height: 36, borderRadius: '50%', background: config.color, border: 'none', cursor: 'pointer', fontSize: 18, fontWeight: 700, color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                >
                   +
                 </button>
               </div>
 
-              <textarea
-                value={note}
-                onChange={e => setNote(e.target.value)}
-                placeholder="ملاحظات... (اختياري)"
-                rows={2}
-                style={{ width: '100%', padding: '12px 14px', borderRadius: 12, border: '1px solid #e5e7eb', fontSize: 13, outline: 'none', resize: 'none', marginBottom: 16, fontFamily: 'Cairo, sans-serif', boxSizing: 'border-box' }}
-              />
+              {/* Add to cart button */}
               <button
                 onClick={handleAddToCart}
-                style={{ width: '100%', padding: '14px', background: config.color, color: 'white', fontWeight: 800, fontSize: 14, borderRadius: 14, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}
+                disabled={!canAddToCart}
+                style={{ flex: 1, padding: '13px 16px', background: canAddToCart ? config.color : '#d1d5db', color: 'white', fontWeight: 800, fontSize: 14, borderRadius: 14, border: 'none', cursor: canAddToCart ? 'pointer' : 'not-allowed', fontFamily: 'Cairo, sans-serif', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'all 0.2s' }}
               >
-                أضف للسلة · {selectedItem.price * qty} ج
+                <ShoppingCart size={16} />
+                إضافة للسلة · {sheetTotal} ج
               </button>
             </div>
           </div>

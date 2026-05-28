@@ -15,17 +15,21 @@ export function CartProvider({ children }) {
     localStorage.setItem('cart_items', JSON.stringify(cartItems))
   }, [cartItems])
 
-  const addItem = (item) => {
+  const addItem = ({ itemId, name, price, qty, note = '', modifiers = [] }) => {
+    const extraCost = modifiers.reduce((s, m) => s + (m.price || 0), 0)
+    const totalPrice = price + extraCost
+    const modifierKey = JSON.stringify(modifiers)
+    const modifierLabel = modifiers.map(m => m.name).filter(Boolean).join('، ')
     setCartItems(prev => {
-      const existing = prev.find(i => i.itemId === item.itemId && i.note === item.note)
+      const existing = prev.find(i => i.itemId === itemId && i.note === note && JSON.stringify(i.modifiers) === modifierKey)
       if (existing) {
         return prev.map(i =>
-          i.itemId === item.itemId && i.note === item.note
-            ? { ...i, qty: i.qty + item.qty }
+          i.itemId === itemId && i.note === note && JSON.stringify(i.modifiers) === modifierKey
+            ? { ...i, qty: i.qty + qty }
             : i
         )
       }
-      return [...prev, { ...item, cartId: Date.now() + Math.random() }]
+      return [...prev, { itemId, name, price: totalPrice, basePrice: price, qty, note, modifiers, modifierLabel, cartId: Date.now() + Math.random() }]
     })
   }
 

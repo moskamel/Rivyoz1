@@ -30,17 +30,42 @@ export const mockMenuCategories = [
   { id: 4, name: 'سلطات', count: 3 },
 ]
 
+const grillModifiers = [
+  {
+    id: 'size',
+    name: 'الحجم',
+    type: 'single',
+    required: true,
+    options: [
+      { id: 's', name: 'صغير', price: 0 },
+      { id: 'm', name: 'وسط', price: 10 },
+      { id: 'l', name: 'كبير', price: 20 },
+    ]
+  },
+  {
+    id: 'extras',
+    name: 'إضافات',
+    type: 'multi',
+    required: false,
+    options: [
+      { id: 'cheese', name: 'جبنة إضافية', price: 5 },
+      { id: 'sauce', name: 'صوص حار', price: 3 },
+      { id: 'pickles', name: 'مخلل', price: 0 },
+    ]
+  }
+]
+
 export const mockMenuItems = [
-  { id: 1, categoryId: 1, name: 'كفتة مشوية', price: 85, active: true, image: null, bestseller: true },
-  { id: 2, categoryId: 1, name: 'فراخ مشوية', price: 70, active: true, image: null, bestseller: false },
-  { id: 3, categoryId: 1, name: 'لحم مشوي', price: 110, active: true, image: null, bestseller: false },
-  { id: 4, categoryId: 1, name: 'سلطة خضراء', price: 35, active: false, image: null, bestseller: false },
-  { id: 5, categoryId: 1, name: 'شاورما دجاج', price: 55, active: true, image: null, bestseller: true },
-  { id: 6, categoryId: 2, name: 'عصير قصب', price: 25, active: true, image: null, bestseller: false },
-  { id: 7, categoryId: 2, name: 'عصير برتقال', price: 30, active: true, image: null, bestseller: false },
-  { id: 8, categoryId: 2, name: 'مياه معدنية', price: 10, active: true, image: null, bestseller: false },
-  { id: 9, categoryId: 2, name: 'كولا', price: 15, active: true, image: null, bestseller: false },
-  { id: 10, categoryId: 3, name: 'أم علي', price: 45, active: true, image: null, bestseller: false },
+  { id: 1, categoryId: 1, name: 'كفتة مشوية', price: 85, active: true, image: null, bestseller: true, modifiers: grillModifiers },
+  { id: 2, categoryId: 1, name: 'فراخ مشوية', price: 70, active: true, image: null, bestseller: false, modifiers: grillModifiers },
+  { id: 3, categoryId: 1, name: 'لحم مشوي', price: 110, active: true, image: null, bestseller: false, modifiers: grillModifiers },
+  { id: 4, categoryId: 1, name: 'سلطة خضراء', price: 35, active: false, image: null, bestseller: false, modifiers: grillModifiers },
+  { id: 5, categoryId: 1, name: 'شاورما دجاج', price: 55, active: true, image: null, bestseller: true, modifiers: [] },
+  { id: 6, categoryId: 2, name: 'عصير قصب', price: 25, active: true, image: null, bestseller: false, modifiers: [] },
+  { id: 7, categoryId: 2, name: 'عصير برتقال', price: 30, active: true, image: null, bestseller: false, modifiers: [] },
+  { id: 8, categoryId: 2, name: 'مياه معدنية', price: 10, active: true, image: null, bestseller: false, modifiers: [] },
+  { id: 9, categoryId: 2, name: 'كولا', price: 15, active: true, image: null, bestseller: false, modifiers: [] },
+  { id: 10, categoryId: 3, name: 'أم علي', price: 45, active: true, image: null, bestseller: false, modifiers: [] },
 ]
 
 export const mockSalesData = [
