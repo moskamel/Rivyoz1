@@ -205,6 +205,15 @@ export default function StoreFront() {
   const categories = getCategories()
   const { addItem, itemCount, total } = useCart()
 
+  const popularItems = menuItems.filter(i => i.active && i.bestseller)
+  const activeCombos = getCombos().filter(c => c.active)
+
+  const specialTabs = [
+    ...(popularItems.length > 0 ? [{ id: 'popular', name: '🔥 الأكثر طلباً' }] : []),
+    ...(activeCombos.length > 0 ? [{ id: 'combos', name: '🏷️ العروض والكومبو' }] : []),
+  ]
+  const allTabs = [...specialTabs, ...categories]
+
   const [selectedItem, setSelectedItem] = useState(null)
   const [sheetOpen, setSheetOpen] = useState(false)
   const [qty, setQty] = useState(1)
@@ -212,7 +221,7 @@ export default function StoreFront() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [activeCategoryFilter, setActiveCategoryFilter] = useState('الكل')
-  const [activeTab, setActiveTab] = useState(categories[0]?.id)
+  const [activeTab, setActiveTab] = useState(allTabs[0]?.id)
 
   const sectionRefs = useRef({})
 
@@ -296,18 +305,18 @@ export default function StoreFront() {
 
         {/* Category Tabs */}
         <div style={{ background: 'white', borderBottom: '1px solid #f3f4f6', display: 'flex', overflowX: 'auto', scrollbarWidth: 'none' }} className="no-scrollbar">
-          {categories.map(cat => (
+          {allTabs.map(tab => (
             <button
-              key={cat.id}
-              onClick={() => scrollToSection(cat.id)}
+              key={tab.id}
+              onClick={() => scrollToSection(tab.id)}
               style={{
                 flexShrink: 0, padding: '12px 16px', fontSize: 14, fontWeight: 600, cursor: 'pointer', background: 'none', border: 'none', whiteSpace: 'nowrap', transition: 'all 0.15s',
-                color: activeTab === cat.id ? config.color : '#6b7280',
-                borderBottom: `2px solid ${activeTab === cat.id ? config.color : 'transparent'}`,
+                color: activeTab === tab.id ? config.color : '#6b7280',
+                borderBottom: `2px solid ${activeTab === tab.id ? config.color : 'transparent'}`,
                 fontFamily: 'Cairo, sans-serif',
               }}
             >
-              {cat.name}
+              {tab.name}
             </button>
           ))}
         </div>
@@ -317,14 +326,18 @@ export default function StoreFront() {
       <BannerCarousel accentColor={config.color} />
 
       {/* ─── Popular Slider ─── */}
-      <div style={{ background: 'white', marginTop: 8, borderRadius: '0 0 16px 16px' }}>
-        <PopularSlider items={menuItems} accentColor={config.color} onOpen={openItem} />
-      </div>
+      {popularItems.length > 0 && (
+        <div ref={el => sectionRefs.current['popular'] = el} style={{ background: 'white', marginTop: 8 }}>
+          <PopularSlider items={menuItems} accentColor={config.color} onOpen={openItem} />
+        </div>
+      )}
 
       {/* ─── Offers / Combos ─── */}
-      <div style={{ background: 'white', marginTop: 8 }}>
-        <OffersSection accentColor={config.color} onAddCombo={handleAddCombo} />
-      </div>
+      {activeCombos.length > 0 && (
+        <div ref={el => sectionRefs.current['combos'] = el} style={{ background: 'white', marginTop: 8 }}>
+          <OffersSection accentColor={config.color} onAddCombo={handleAddCombo} />
+        </div>
+      )}
 
       {/* ─── Menu Sections ─── */}
       <div style={{ maxWidth: 480, margin: '8px auto 0', paddingBottom: 32 }}>
