@@ -84,6 +84,7 @@ export default function Cart() {
             تصفح القائمة
           </button>
         </div>
+        <CustomerNav />
       </div>
     )
   }

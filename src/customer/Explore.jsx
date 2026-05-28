@@ -237,7 +237,7 @@ export default function Explore() {
 
       {/* ── Sticky header ── */}
       <div style={{ background: 'white', borderBottom: '1px solid #F3F4F6', flexShrink: 0 }}>
-        <div style={{ maxWidth: 480, margin: '0 auto', padding: '14px 16px 0' }}>
+        <div style={{ padding: '14px 16px 0' }}>
 
           {/* Top bar */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
@@ -370,7 +370,7 @@ export default function Explore() {
       ) : (
         /* ── List view ── */
         <div style={{ flex: 1, overflowY: 'auto' }}>
-          <div style={{ maxWidth: 480, margin: '0 auto', padding: '16px 16px 88px' }}>
+          <div style={{ padding: '16px 16px 88px' }}>
 
             {/* Filter tabs */}
             <div style={{ display: 'flex', gap: 8, overflowX: 'auto', scrollbarWidth: 'none', marginBottom: 16, paddingBottom: 2 }}>
