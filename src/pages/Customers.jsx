@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Search, Users, TrendingUp, ShoppingBag, Star, X, MessageCircle, Eye, Send } from 'lucide-react'
+import { Search, Users, Activity, ShoppingBag, X, MessageCircle, Send, Download } from 'lucide-react'
 import Layout from '../components/layout/Layout'
 
 const mockCustomers = [
@@ -14,71 +14,127 @@ const mockCustomers = [
 ]
 
 const levelConfig = {
-  beginner: { label: 'مبتدئ', bg: 'var(--surface-2)', color: 'var(--text-2)' },
-  contributor: { label: 'مساهم', bg: 'var(--blue-muted)', color: 'var(--blue)' },
-  trusted: { label: 'موثوق', bg: 'var(--green-muted)', color: 'var(--green)' },
-  expert: { label: 'خبير', bg: 'var(--yellow-muted)', color: 'var(--yellow)' },
+  beginner:    { label: 'مبتدئ',  bg: 'var(--surface-2)',  color: 'var(--text-2)',  badgeClass: 'badge-default' },
+  contributor: { label: 'مساهم',  bg: 'var(--blue-muted)', color: 'var(--blue)',    badgeClass: 'badge-blue'    },
+  trusted:     { label: 'موثوق',  bg: 'var(--green-muted)',color: 'var(--green)',   badgeClass: 'badge-green'   },
+  expert:      { label: 'خبير',   bg: 'var(--yellow-muted)',color: 'var(--yellow)', badgeClass: 'badge-yellow'  },
 }
 
 function CustomerDrawer({ customer, onClose }) {
   const lvl = levelConfig[customer.level]
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex' }} dir="rtl">
-      <div style={{ flex: 1, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)' }} onClick={onClose} />
-      <div style={{ width: 380, background: 'var(--surface)', borderRight: '1px solid var(--border)', display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
-        <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
-          <div className="flex items-center gap-3">
-            <div style={{ width: 44, height: 44, background: 'var(--accent-muted)', borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)', fontWeight: 900, fontSize: 17, border: '1px solid rgba(249,115,22,0.2)' }}>
-              {customer.name[0]}
-            </div>
-            <div>
-              <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>{customer.name}</p>
-              <p className="num" style={{ fontSize: 12, color: 'var(--text-2)', marginTop: 2 }}>{customer.phone}</p>
-              <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 6, background: lvl.bg, color: lvl.color, display: 'inline-block', marginTop: 4 }}>
-                {lvl.label}
-              </span>
-            </div>
-          </div>
-          <button onClick={onClose} style={{ width: 28, height: 28, borderRadius: 8, border: 'none', background: 'var(--surface-2)', color: 'var(--text-2)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <X size={14} />
+    <div style={{ position: 'fixed', inset: 0, zIndex: 50 }} dir="rtl" className="animate-fade-in">
+      {/* Backdrop */}
+      <div
+        style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(6px)' }}
+        onClick={onClose}
+      />
+      {/* Panel */}
+      <div
+        className="animate-slide-up"
+        style={{
+          position: 'absolute', right: 0, top: 0,
+          height: '100vh', width: 360,
+          background: 'var(--surface)',
+          borderLeft: '1px solid var(--border)',
+          display: 'flex', flexDirection: 'column',
+          boxShadow: 'var(--shadow-xl)',
+          zIndex: 1,
+        }}
+      >
+        {/* Header */}
+        <div style={{
+          padding: '20px 20px 16px',
+          borderBottom: '1px solid var(--border)',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          flexShrink: 0,
+        }}>
+          <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 16 }}>{customer.name}</p>
+          <button className="btn-icon md" onClick={onClose}>
+            <X size={15} />
           </button>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, padding: 16 }}>
-          {[
-            { label: 'إجمالي الطلبات', value: customer.orders },
-            { label: 'إجمالي الإنفاق', value: `${customer.spent} ج` },
-            { label: 'متوسط الطلب', value: `${customer.avgOrder} ج` },
-            { label: 'النقاط المكتسبة', value: customer.points },
-          ].map((s, i) => (
-            <div key={i} style={{ background: 'var(--surface-2)', borderRadius: 12, padding: '12px 14px', border: '1px solid var(--border)' }}>
-              <p style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)', fontFamily: 'Inter' }}>{s.value}</p>
-              <p style={{ fontSize: 11, color: 'var(--text-2)', marginTop: 2 }}>{s.label}</p>
+        {/* Body */}
+        <div style={{ flex: 1, overflowY: 'auto', padding: 20 }} className="no-scrollbar">
+          {/* Avatar + name centered */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 20 }}>
+            <div style={{
+              width: 64, height: 64, borderRadius: '50%',
+              background: 'var(--accent-muted)', border: '2px solid var(--border-accent)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: 'var(--accent)', fontWeight: 800, fontSize: 24, marginBottom: 10,
+            }}>
+              {customer.name[0]}
             </div>
-          ))}
-        </div>
+            <p className="num" style={{ fontSize: 12, color: 'var(--text-3)', marginBottom: 8 }}>{customer.phone}</p>
+            <span className={`badge badge-pill badge-sm ${lvl.badgeClass}`}>{lvl.label}</span>
+          </div>
 
-        <div style={{ padding: '0 16px 16px' }}>
-          <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 13, marginBottom: 10 }}>آخر الطلبات</p>
+          {/* Stats grid */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 20 }}>
+            {[
+              { label: 'إجمالي الطلبات', value: customer.orders },
+              { label: 'إجمالي الإنفاق', value: `${customer.spent} ج` },
+              { label: 'متوسط الطلب', value: `${customer.avgOrder} ج` },
+              { label: 'النقاط المكتسبة', value: customer.points },
+            ].map((s, i) => (
+              <div key={i} className="glass-2" style={{ padding: '12px 14px' }}>
+                <p className="num" style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)', lineHeight: 1 }}>{s.value}</p>
+                <p style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 4 }}>{s.label}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Recent orders */}
+          <p style={{ fontWeight: 600, fontSize: 11, color: 'var(--text-3)', marginBottom: 10, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+            آخر الطلبات
+          </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {customer.recentOrders.map((order, i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', background: 'var(--surface-2)', borderRadius: 10, border: '1px solid var(--border)' }}>
+              <div key={i} className="glass-2" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px' }}>
                 <div>
                   <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>#{order.id} · {order.items}</p>
                   <p style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 2 }}>{order.date}</p>
                 </div>
-                <p className="num" style={{ fontWeight: 700, color: 'var(--text)', fontSize: 13 }}>{order.total} ج</p>
+                <p className="num" style={{ fontWeight: 700, color: 'var(--accent)', fontSize: 13 }}>{order.total} ج</p>
               </div>
             ))}
           </div>
         </div>
 
-        <div style={{ padding: 16, borderTop: '1px solid var(--border)', marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <button style={{ width: '100%', padding: '12px', background: 'var(--accent)', color: 'white', fontWeight: 700, borderRadius: 12, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, fontSize: 14 }}>
+        {/* Footer */}
+        <div style={{ padding: '16px 20px', borderTop: '1px solid var(--border)', display: 'flex', flexDirection: 'column', gap: 8, flexShrink: 0 }}>
+          <button
+            style={{
+              width: '100%', height: 44,
+              background: 'var(--accent)', color: 'white',
+              fontWeight: 700, borderRadius: 'var(--radius-lg)',
+              border: 'none', cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+              fontSize: 14, fontFamily: 'Cairo, sans-serif',
+              transition: 'all var(--dur-normal) var(--ease-default)',
+            }}
+            onMouseEnter={e => e.currentTarget.style.background = 'var(--accent-hover)'}
+            onMouseLeave={e => e.currentTarget.style.background = 'var(--accent)'}
+          >
             <Send size={15} />
             إرسال كوبون
           </button>
-          <button onClick={() => window.open(`https://wa.me/2${customer.phone}`, '_blank')} style={{ width: '100%', padding: '12px', background: 'var(--green-muted)', color: 'var(--green)', fontWeight: 700, borderRadius: 12, border: '1px solid rgba(34,197,94,0.2)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, fontSize: 14 }}>
+          <button
+            onClick={() => window.open(`https://wa.me/2${customer.phone}`, '_blank')}
+            style={{
+              width: '100%', height: 44,
+              background: '#25D366', color: 'white',
+              fontWeight: 700, borderRadius: 'var(--radius-lg)',
+              border: 'none', cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+              fontSize: 14, fontFamily: 'Cairo, sans-serif',
+              transition: 'opacity var(--dur-normal) ease',
+            }}
+            onMouseEnter={e => e.currentTarget.style.opacity = '0.88'}
+            onMouseLeave={e => e.currentTarget.style.opacity = '1'}
+          >
             <MessageCircle size={15} />
             رسالة واتساب
           </button>
@@ -96,103 +152,179 @@ export default function Customers() {
     c.name.includes(search) || c.phone.includes(search)
   )
 
+  const activeCustomers = mockCustomers.filter(c => c.orders >= 5).length
+  const avgOrders = (mockCustomers.reduce((s, c) => s + c.orders, 0) / mockCustomers.length).toFixed(1)
+
   return (
-    <Layout title="زبائني">
-      {/* Stats */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 20 }}>
+    <Layout title="الزبائن">
+      {/* Page header */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+        <p style={{ fontSize: 13, color: 'var(--text-2)' }}>
+          إجمالي{' '}
+          <span className="num" style={{ color: 'var(--text)', fontWeight: 700 }}>
+            {mockCustomers.length}
+          </span>{' '}
+          زبون
+        </p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          {/* Search */}
+          <div style={{ position: 'relative' }}>
+            <Search
+              size={14}
+              style={{
+                position: 'absolute', right: 13, top: '50%',
+                transform: 'translateY(-50%)',
+                color: 'var(--text-3)', pointerEvents: 'none',
+              }}
+            />
+            <input
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder="ابحث بالاسم أو الهاتف..."
+              style={{
+                height: 40, width: 240,
+                background: 'var(--surface-2)',
+                border: '1px solid var(--border)',
+                borderRadius: 'var(--radius-lg)',
+                padding: '0 40px 0 14px',
+                fontSize: 13, color: 'var(--text)', outline: 'none',
+                fontFamily: 'Cairo, sans-serif',
+                transition: 'border-color var(--dur-normal) ease, box-shadow var(--dur-normal) ease',
+              }}
+              onFocus={e => {
+                e.target.style.borderColor = 'var(--accent)'
+                e.target.style.boxShadow = '0 0 0 3px var(--accent-muted)'
+              }}
+              onBlur={e => {
+                e.target.style.borderColor = 'var(--border)'
+                e.target.style.boxShadow = 'none'
+              }}
+            />
+          </div>
+          <button className="btn-ghost" style={{ gap: 6 }}>
+            <Download size={14} />
+            تصدير
+          </button>
+        </div>
+      </div>
+
+      {/* Stats row */}
+      <div style={{ display: 'flex', gap: 12, marginBottom: 20 }}>
         {[
-          { label: 'إجمالي الزبائن', value: '234', icon: Users, color: 'var(--accent)' },
-          { label: 'زبائن جدد هذا الشهر', value: '45', icon: TrendingUp, color: 'var(--green)' },
-          { label: 'متوسط الطلبات', value: '3.2', icon: ShoppingBag, color: 'var(--blue)' },
-          { label: 'أعلى قيمة عميل', value: '580 ج', icon: Star, color: 'var(--yellow)' },
+          { label: 'إجمالي الزبائن', value: mockCustomers.length, icon: Users,       color: 'var(--blue)',   muted: 'var(--blue-muted)'   },
+          { label: 'زبائن نشطون',    value: activeCustomers,      icon: Activity,    color: 'var(--green)',  muted: 'var(--green-muted)'  },
+          { label: 'متوسط الطلبات',  value: avgOrders,            icon: ShoppingBag, color: 'var(--accent)', muted: 'var(--accent-muted)' },
         ].map((s, i) => (
-          <div key={i} className="glass" style={{ padding: 20 }}>
-            <div style={{ width: 34, height: 34, borderRadius: 10, background: s.color + '18', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>
-              <s.icon size={17} style={{ color: s.color }} />
+          <div key={i} className="glass" style={{ flex: 1, padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{
+              width: 36, height: 36, borderRadius: '50%',
+              background: s.muted,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              flexShrink: 0,
+            }}>
+              <s.icon size={16} style={{ color: s.color }} />
             </div>
-            <p className="num" style={{ fontSize: 22, fontWeight: 800, color: 'var(--text)', lineHeight: 1 }}>{s.value}</p>
-            <p style={{ fontSize: 11, color: 'var(--text-2)', marginTop: 5 }}>{s.label}</p>
+            <div>
+              <p className="num" style={{ fontSize: 22, fontWeight: 800, color: 'var(--text)', lineHeight: 1 }}>{s.value}</p>
+              <p style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 4, textTransform: 'uppercase', letterSpacing: '0.04em' }}>{s.label}</p>
+            </div>
           </div>
         ))}
       </div>
 
-      {/* Table */}
+      {/* Customers table */}
       <div className="glass" style={{ overflow: 'hidden' }}>
-        <div style={{ padding: 14, borderBottom: '1px solid var(--border)' }}>
-          <div style={{ position: 'relative' }}>
-            <Search size={15} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-3)' }} />
-            <input
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-              placeholder="ابحث بالاسم أو رقم الهاتف..."
-              style={{ width: '100%', padding: '9px 38px 9px 14px', background: 'var(--surface-2)', border: '1px solid var(--border)', borderRadius: 10, color: 'var(--text)', fontSize: 13, outline: 'none', boxSizing: 'border-box', fontFamily: 'Cairo, sans-serif' }}
-              onFocus={e => e.target.style.borderColor = 'var(--accent)'}
-              onBlur={e => e.target.style.borderColor = 'var(--border)'}
-            />
+        {filtered.length === 0 ? (
+          <div className="empty-state">
+            <div className="empty-icon">👥</div>
+            <p className="empty-title">لا يوجد زبائن</p>
+            <p className="empty-desc">لم يتم العثور على أي زبون يطابق بحثك</p>
           </div>
-        </div>
-
-        <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-            <thead>
-              <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                {['الاسم', 'الهاتف', 'عدد الطلبات', 'إجمالي الإنفاق', 'آخر طلب', 'المستوى', 'الإجراءات'].map(h => (
-                  <th key={h} style={{ textAlign: 'right', padding: '10px 16px', fontSize: 11, fontWeight: 700, color: 'var(--text-3)', letterSpacing: '0.05em', background: 'var(--surface-2)' }}>{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map((c, idx) => {
-                const lvl = levelConfig[c.level]
-                return (
-                  <tr key={c.id} style={{ borderBottom: '1px solid var(--border)', transition: 'background 0.15s' }}
-                    onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-2)'}
-                    onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-                  >
-                    <td style={{ padding: '12px 16px' }}>
-                      <div className="flex items-center gap-2.5">
-                        <div style={{ width: 30, height: 30, background: 'var(--accent-muted)', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)', fontWeight: 800, fontSize: 12, flexShrink: 0 }}>
-                          {c.name[0]}
+        ) : (
+          <div style={{ overflowX: 'auto' }}>
+            <table className="table-base">
+              <thead>
+                <tr>
+                  {['الزبون', 'الهاتف', 'الطلبات', 'الإجمالي', 'آخر طلب', 'تواصل'].map(h => (
+                    <th key={h}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="stagger">
+                {filtered.map((c) => {
+                  const lvl = levelConfig[c.level]
+                  return (
+                    <tr
+                      key={c.id}
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => setSelected(c)}
+                    >
+                      {/* Customer col */}
+                      <td style={{ padding: '12px 16px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                          <div style={{
+                            width: 36, height: 36, borderRadius: '50%',
+                            background: 'var(--accent-muted)',
+                            border: '1px solid var(--border-accent)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            color: 'var(--accent)', fontWeight: 700, fontSize: 13,
+                            flexShrink: 0,
+                          }}>
+                            {c.name[0]}
+                          </div>
+                          <div>
+                            <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', lineHeight: 1.3 }}>{c.name}</p>
+                            <span className={`badge badge-pill badge-sm ${lvl.badgeClass}`} style={{ marginTop: 3 }}>{lvl.label}</span>
+                          </div>
                         </div>
-                        <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>{c.name}</p>
-                      </div>
-                    </td>
-                    <td style={{ padding: '12px 16px' }}>
-                      <span className="num" style={{ fontSize: 12, color: 'var(--text-2)' }}>{c.phone}</span>
-                    </td>
-                    <td style={{ padding: '12px 16px' }}>
-                      <span className="num" style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>{c.orders}</span>
-                    </td>
-                    <td style={{ padding: '12px 16px' }}>
-                      <span className="num" style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>{c.spent.toLocaleString('ar-EG')} ج</span>
-                    </td>
-                    <td style={{ padding: '12px 16px', fontSize: 12, color: 'var(--text-2)' }}>{c.lastOrder}</td>
-                    <td style={{ padding: '12px 16px' }}>
-                      <span style={{ fontSize: 11, fontWeight: 700, padding: '3px 10px', borderRadius: 6, background: lvl.bg, color: lvl.color }}>
-                        {lvl.label}
-                      </span>
-                    </td>
-                    <td style={{ padding: '12px 16px' }}>
-                      <div className="flex items-center gap-2">
+                      </td>
+
+                      {/* Phone col */}
+                      <td style={{ padding: '12px 16px' }}>
+                        <span className="num" style={{ fontSize: 12, color: 'var(--text-2)' }}>{c.phone}</span>
+                      </td>
+
+                      {/* Orders col */}
+                      <td style={{ padding: '12px 16px' }}>
+                        <span className="badge badge-default">{c.orders} طلب</span>
+                      </td>
+
+                      {/* Spent col */}
+                      <td style={{ padding: '12px 16px' }}>
+                        <span className="num" style={{ fontSize: 13, fontWeight: 700, color: 'var(--accent)' }}>
+                          {c.spent.toLocaleString('ar-EG')} ج
+                        </span>
+                      </td>
+
+                      {/* Last order col */}
+                      <td style={{ padding: '12px 16px', fontSize: 11, color: 'var(--text-3)' }}>{c.lastOrder}</td>
+
+                      {/* WhatsApp col */}
+                      <td style={{ padding: '12px 16px' }}>
                         <button
-                          onClick={() => setSelected(c)}
-                          style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '5px 10px', background: 'var(--accent-muted)', color: 'var(--accent)', borderRadius: 8, fontSize: 11, fontWeight: 700, border: 'none', cursor: 'pointer' }}
+                          className="btn-icon sm"
+                          onClick={e => { e.stopPropagation(); window.open(`https://wa.me/2${c.phone}`, '_blank') }}
+                          title="واتساب"
+                          style={{ color: '#25D366', borderColor: 'rgba(37,211,102,0.20)', background: 'rgba(37,211,102,0.07)' }}
+                          onMouseEnter={e => {
+                            e.currentTarget.style.background = 'rgba(37,211,102,0.15)'
+                            e.currentTarget.style.borderColor = 'rgba(37,211,102,0.35)'
+                          }}
+                          onMouseLeave={e => {
+                            e.currentTarget.style.background = 'rgba(37,211,102,0.07)'
+                            e.currentTarget.style.borderColor = 'rgba(37,211,102,0.20)'
+                          }}
                         >
-                          <Eye size={12} />
-                          عرض
+                          <MessageCircle size={13} />
                         </button>
-                        <button onClick={() => window.open(`https://wa.me/2${c.phone}`, '_blank')} style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '5px 10px', background: 'var(--green-muted)', color: 'var(--green)', borderRadius: 8, fontSize: 11, fontWeight: 700, border: 'none', cursor: 'pointer' }}>
-                          <MessageCircle size={12} />
-                          واتساب
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
-        </div>
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
 
       {selected && <CustomerDrawer customer={selected} onClose={() => setSelected(null)} />}

@@ -1,34 +1,155 @@
 import { useState } from 'react'
-import { AlertTriangle, Package, TrendingDown, ShoppingCart, Download, Check, X, Edit3 } from 'lucide-react'
+import { AlertTriangle, Package, TrendingDown, XCircle, Search, Plus, X, Check, Edit3 } from 'lucide-react'
 import Layout from '../components/layout/Layout'
 
 const initialItems = [
-  { id: 1, name: 'دقيق', unit: 'كجم', qty: 45, min: 20, lastUpdated: 'اليوم' },
-  { id: 2, name: 'زيت طهي', unit: 'لتر', qty: 8, min: 10, lastUpdated: 'أمس' },
-  { id: 3, name: 'دجاج طازج', unit: 'كجم', qty: 12, min: 15, lastUpdated: 'اليوم' },
-  { id: 4, name: 'لحم بقري', unit: 'كجم', qty: 7, min: 10, lastUpdated: 'أمس' },
-  { id: 5, name: 'طماطم', unit: 'كجم', qty: 20, min: 10, lastUpdated: 'اليوم' },
-  { id: 6, name: 'بصل', unit: 'كجم', qty: 30, min: 10, lastUpdated: 'منذ يومين' },
-  { id: 7, name: 'أرز', unit: 'كجم', qty: 3, min: 15, lastUpdated: 'منذ 3 أيام' },
-  { id: 8, name: 'زبدة', unit: 'علبة', qty: 6, min: 5, lastUpdated: 'أمس' },
-  { id: 9, name: 'ملح وبهارات', unit: 'كجم', qty: 15, min: 5, lastUpdated: 'منذ أسبوع' },
-  { id: 10, name: 'مياه معدنية', unit: 'كرتون', qty: 4, min: 8, lastUpdated: 'اليوم' },
+  { id: 1,  name: 'دقيق',         unit: 'كجم',    qty: 45, min: 20, lastUpdated: 'اليوم'       },
+  { id: 2,  name: 'زيت طهي',      unit: 'لتر',    qty: 8,  min: 10, lastUpdated: 'أمس'         },
+  { id: 3,  name: 'دجاج طازج',    unit: 'كجم',    qty: 12, min: 15, lastUpdated: 'اليوم'       },
+  { id: 4,  name: 'لحم بقري',     unit: 'كجم',    qty: 7,  min: 10, lastUpdated: 'أمس'         },
+  { id: 5,  name: 'طماطم',        unit: 'كجم',    qty: 20, min: 10, lastUpdated: 'اليوم'       },
+  { id: 6,  name: 'بصل',          unit: 'كجم',    qty: 30, min: 10, lastUpdated: 'منذ يومين'   },
+  { id: 7,  name: 'أرز',          unit: 'كجم',    qty: 3,  min: 15, lastUpdated: 'منذ 3 أيام'  },
+  { id: 8,  name: 'زبدة',         unit: 'علبة',   qty: 6,  min: 5,  lastUpdated: 'أمس'         },
+  { id: 9,  name: 'ملح وبهارات',  unit: 'كجم',    qty: 15, min: 5,  lastUpdated: 'منذ أسبوع'   },
+  { id: 10, name: 'مياه معدنية',  unit: 'كرتون',  qty: 4,  min: 8,  lastUpdated: 'اليوم'       },
 ]
 
 function getStatus(qty, min) {
-  if (qty === 0) return { label: 'نفد', bg: 'var(--red-muted)', color: 'var(--red)' }
-  if (qty < min) return { label: 'منخفض', bg: 'var(--yellow-muted)', color: 'var(--yellow)' }
-  return { label: 'متوفر', bg: 'var(--green-muted)', color: 'var(--green)' }
+  if (qty === 0)    return { label: 'نفذ',    badgeClass: 'badge-red',    qtyColor: 'var(--red)'    }
+  if (qty < min)    return { label: 'منخفض',  badgeClass: 'badge-yellow', qtyColor: 'var(--yellow)' }
+  return              { label: 'متاح',   badgeClass: 'badge-green',  qtyColor: qty > 20 ? 'var(--green)' : 'var(--text)' }
+}
+
+const modalInputStyle = {
+  width: '100%', height: 42, padding: '0 12px',
+  borderRadius: 'var(--radius-md)', border: '1px solid var(--border)',
+  background: 'var(--surface-2)', color: 'var(--text)',
+  fontSize: 13, outline: 'none',
+  fontFamily: 'Cairo, sans-serif', boxSizing: 'border-box',
+  transition: 'border-color var(--dur-normal) ease, box-shadow var(--dur-normal) ease',
+}
+
+function ItemModal({ item, onClose, onSave }) {
+  const [form, setForm] = useState(
+    item
+      ? { name: item.name, unit: item.unit, qty: String(item.qty), min: String(item.min) }
+      : { name: '', unit: 'كجم', qty: '', min: '' }
+  )
+
+  function handleSubmit(e) {
+    e.preventDefault()
+    const qty = parseInt(form.qty)
+    const min = parseInt(form.min)
+    if (isNaN(qty) || isNaN(min) || qty < 0 || min < 0) return
+    onSave({
+      id: item ? item.id : Date.now(),
+      name: form.name,
+      unit: form.unit,
+      qty,
+      min,
+      lastUpdated: 'الآن',
+    })
+    onClose()
+  }
+
+  return (
+    <div
+      style={{
+        position: 'fixed', inset: 0,
+        background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(6px)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        zIndex: 50, padding: 16,
+      }}
+      dir="rtl"
+      className="animate-fade-in"
+    >
+      <div
+        className="glass animate-scale-in"
+        style={{
+          width: '100%', maxWidth: 400,
+          borderRadius: 'var(--radius-2xl)',
+          border: '1px solid var(--border-strong)',
+          overflow: 'hidden',
+        }}
+      >
+        {/* Header */}
+        <div style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          padding: '18px 20px', borderBottom: '1px solid var(--border)',
+        }}>
+          <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 16 }}>
+            {item ? 'تعديل الصنف' : 'إضافة صنف جديد'}
+          </p>
+          <button className="btn-icon md" onClick={onClose}>
+            <X size={14} />
+          </button>
+        </div>
+
+        {/* Form */}
+        <form onSubmit={handleSubmit} style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: 14 }}>
+          {[
+            { label: 'اسم الصنف',   key: 'name', type: 'text',   placeholder: 'مثال: دقيق'  },
+            { label: 'الوحدة',      key: 'unit', type: 'text',   placeholder: 'كجم / لتر / علبة' },
+            { label: 'الكمية الحالية', key: 'qty', type: 'number', placeholder: '0' },
+            { label: 'الحد الأدنى', key: 'min', type: 'number', placeholder: '0' },
+          ].map(f => (
+            <div key={f.key}>
+              <label style={{
+                display: 'block', fontSize: 11, fontWeight: 600,
+                color: 'var(--text-2)', marginBottom: 6,
+                textTransform: 'uppercase', letterSpacing: '0.04em',
+              }}>
+                {f.label}
+              </label>
+              <input
+                required
+                type={f.type}
+                value={form[f.key]}
+                onChange={e => setForm({ ...form, [f.key]: e.target.value })}
+                placeholder={f.placeholder}
+                min={f.type === 'number' ? '0' : undefined}
+                style={modalInputStyle}
+                onFocus={e => {
+                  e.target.style.borderColor = 'var(--accent)'
+                  e.target.style.boxShadow = '0 0 0 3px var(--accent-muted)'
+                }}
+                onBlur={e => {
+                  e.target.style.borderColor = 'var(--border)'
+                  e.target.style.boxShadow = 'none'
+                }}
+              />
+            </div>
+          ))}
+
+          <div style={{ display: 'flex', gap: 10, paddingTop: 4 }}>
+            <button type="button" onClick={onClose} className="btn-ghost" style={{ flex: 1, height: 44 }}>
+              إلغاء
+            </button>
+            <button type="submit" className="btn-primary" style={{ flex: 1, height: 44 }}>
+              {item ? 'حفظ التعديلات' : 'إضافة الصنف'}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  )
 }
 
 export default function Inventory() {
   const [items, setItems] = useState(initialItems)
+  const [search, setSearch]       = useState('')
   const [editingId, setEditingId] = useState(null)
-  const [editQty, setEditQty] = useState('')
+  const [editQty, setEditQty]     = useState('')
+  const [showModal, setShowModal] = useState(false)
+  const [editItem, setEditItem]   = useState(null)
 
-  const lowItems = items.filter(i => i.qty < i.min)
-  const totalValue = items.reduce((sum, i) => sum + i.qty * 10, 0)
-  const outOfStock = items.filter(i => i.qty === 0).length
+  const lowItems   = items.filter(i => i.qty > 0 && i.qty < i.min)
+  const outItems   = items.filter(i => i.qty === 0)
+
+  const filtered = items.filter(i =>
+    i.name.includes(search) || i.unit.includes(search)
+  )
 
   function startEdit(item) {
     setEditingId(item.id)
@@ -49,132 +170,272 @@ export default function Inventory() {
     setEditQty('')
   }
 
+  function handleSaveModal(saved) {
+    setItems(prev => {
+      const exists = prev.find(i => i.id === saved.id)
+      return exists
+        ? prev.map(i => i.id === saved.id ? saved : i)
+        : [...prev, saved]
+    })
+  }
+
   return (
     <Layout title="المخزون">
-      {/* Low stock alert */}
-      {lowItems.length > 0 && (
-        <div style={{ background: 'var(--red-muted)', border: '1px solid rgba(248,113,113,0.2)', borderRadius: 14, padding: '12px 16px', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 10 }}>
-          <AlertTriangle size={18} style={{ color: 'var(--red)', flexShrink: 0 }} />
-          <p style={{ fontWeight: 700, color: 'var(--red)', fontSize: 13 }}>
-            {lowItems.length} {lowItems.length === 1 ? 'صنف على وشك النفاد' : 'أصناف على وشك النفاد'} —{' '}
-            <span style={{ fontWeight: 400 }}>{lowItems.map(i => i.name).join('، ')}</span>
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+        <p style={{ fontSize: 13, color: 'var(--text-2)' }}>
+          إجمالي{' '}
+          <span className="num" style={{ color: 'var(--text)', fontWeight: 700 }}>{items.length}</span>{' '}
+          صنف
+        </p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          {/* Search */}
+          <div style={{ position: 'relative' }}>
+            <Search
+              size={14}
+              style={{
+                position: 'absolute', right: 13, top: '50%',
+                transform: 'translateY(-50%)',
+                color: 'var(--text-3)', pointerEvents: 'none',
+              }}
+            />
+            <input
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder="ابحث في المخزون..."
+              style={{
+                height: 40, width: 220,
+                background: 'var(--surface-2)', border: '1px solid var(--border)',
+                borderRadius: 'var(--radius-lg)', padding: '0 40px 0 14px',
+                fontSize: 13, color: 'var(--text)', outline: 'none',
+                fontFamily: 'Cairo, sans-serif',
+                transition: 'border-color var(--dur-normal) ease, box-shadow var(--dur-normal) ease',
+              }}
+              onFocus={e => {
+                e.target.style.borderColor = 'var(--accent)'
+                e.target.style.boxShadow = '0 0 0 3px var(--accent-muted)'
+              }}
+              onBlur={e => {
+                e.target.style.borderColor = 'var(--border)'
+                e.target.style.boxShadow = 'none'
+              }}
+            />
+          </div>
+          <button className="btn-primary" onClick={() => { setEditItem(null); setShowModal(true) }}>
+            <Plus size={15} />
+            إضافة صنف
+          </button>
+        </div>
+      </div>
+
+      {/* Low stock alert banner */}
+      {(lowItems.length > 0 || outItems.length > 0) && (
+        <div style={{
+          background: 'rgba(248,113,113,0.08)',
+          border: '1px solid rgba(248,113,113,0.20)',
+          borderRadius: 'var(--radius-lg)',
+          padding: '12px 16px', marginBottom: 16,
+          display: 'flex', alignItems: 'center', gap: 10,
+        }}>
+          <AlertTriangle size={17} style={{ color: 'var(--red)', flexShrink: 0 }} />
+          <p style={{ fontSize: 13, color: 'var(--text-2)', flex: 1 }}>
+            <span style={{ fontWeight: 700, color: 'var(--red)' }}>
+              {lowItems.length + outItems.length}
+            </span>
+            {' '}
+            {lowItems.length + outItems.length === 1 ? 'صنف' : 'أصناف'} تحتاج انتباهاً —{' '}
+            <span style={{ color: 'var(--text-3)', fontSize: 12 }}>
+              {[...lowItems, ...outItems].map(i => i.name).join('، ')}
+            </span>
           </p>
         </div>
       )}
 
-      {/* Stats */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 20 }}>
+      {/* Summary cards */}
+      <div style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
         {[
-          { label: 'إجمالي الأصناف', value: items.length, icon: Package, color: 'var(--accent)' },
-          { label: 'قيمة المخزون (تقريبي)', value: `${totalValue.toLocaleString('ar-EG')} ج`, icon: ShoppingCart, color: 'var(--blue)' },
-          { label: 'أصناف منخفضة', value: lowItems.length, icon: TrendingDown, color: 'var(--red)' },
-          { label: 'طلبات اليوم', value: 3, icon: ShoppingCart, color: 'var(--green)' },
+          { label: 'إجمالي الأصناف',   value: items.length,              icon: Package,      color: 'var(--accent)', muted: 'var(--accent-muted)' },
+          { label: 'مخزون منخفض',      value: lowItems.length,           icon: TrendingDown, color: 'var(--yellow)', muted: 'var(--yellow-muted)' },
+          { label: 'نفذ المخزون',      value: outItems.length,           icon: XCircle,      color: 'var(--red)',    muted: 'var(--red-muted)'    },
         ].map((s, i) => (
-          <div key={i} className="glass" style={{ padding: 20 }}>
-            <div style={{ width: 34, height: 34, borderRadius: 10, background: s.color + '18', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>
-              <s.icon size={17} style={{ color: s.color }} />
+          <div key={i} className="glass" style={{ flex: 1, padding: '14px 18px', display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{
+              width: 32, height: 32, borderRadius: '50%',
+              background: s.muted,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              flexShrink: 0,
+            }}>
+              <s.icon size={15} style={{ color: s.color }} />
             </div>
-            <p className="num" style={{ fontSize: 22, fontWeight: 800, color: 'var(--text)', lineHeight: 1 }}>{s.value}</p>
-            <p style={{ fontSize: 11, color: 'var(--text-2)', marginTop: 5 }}>{s.label}</p>
+            <div>
+              <p className="num" style={{ fontSize: 20, fontWeight: 800, color: 'var(--text)', lineHeight: 1 }}>{s.value}</p>
+              <p style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 3, textTransform: 'uppercase', letterSpacing: '0.04em' }}>{s.label}</p>
+            </div>
           </div>
         ))}
       </div>
 
-      {/* Table */}
+      {/* Inventory table */}
       <div className="glass" style={{ overflow: 'hidden' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 20px', borderBottom: '1px solid var(--border)' }}>
-          <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>قائمة المخزون</p>
-          <button style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '7px 14px', background: 'var(--surface-2)', color: 'var(--text-2)', border: '1px solid var(--border)', borderRadius: 10, fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
-            <Download size={13} />
-            تصدير
-          </button>
-        </div>
-        <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-            <thead>
-              <tr style={{ borderBottom: '1px solid var(--border)', background: 'var(--surface-2)' }}>
-                {['الصنف', 'الوحدة', 'الكمية الحالية', 'الحد الأدنى', 'الحالة', 'آخر تحديث', 'الإجراءات'].map(h => (
-                  <th key={h} style={{ textAlign: 'right', padding: '10px 16px', fontSize: 11, fontWeight: 700, color: 'var(--text-3)', letterSpacing: '0.05em' }}>{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {items.map(item => {
-                const status = getStatus(item.qty, item.min)
-                const isEditing = editingId === item.id
-                const isLow = item.qty < item.min
+        {filtered.length === 0 ? (
+          <div className="empty-state">
+            <div className="empty-icon">📦</div>
+            <p className="empty-title">المخزون فارغ</p>
+            <p className="empty-desc">لم يتم العثور على أصناف تطابق بحثك، أو أضف أول صنف للبدء</p>
+          </div>
+        ) : (
+          <div style={{ overflowX: 'auto' }}>
+            <table className="table-base">
+              <thead>
+                <tr>
+                  {['الصنف', 'الكمية', 'الوحدة', 'الحد الأدنى', 'الحالة', 'آخر تحديث', 'إجراء'].map(h => (
+                    <th key={h}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="stagger">
+                {filtered.map(item => {
+                  const status    = getStatus(item.qty, item.min)
+                  const isEditing = editingId === item.id
+                  const isLow     = item.qty < item.min
 
-                return (
-                  <tr key={item.id}
-                    style={{ borderBottom: '1px solid var(--border)', background: isLow ? 'rgba(248,113,113,0.03)' : 'transparent', transition: 'background 0.15s' }}
-                    onMouseEnter={e => e.currentTarget.style.background = isLow ? 'rgba(248,113,113,0.06)' : 'var(--surface-2)'}
-                    onMouseLeave={e => e.currentTarget.style.background = isLow ? 'rgba(248,113,113,0.03)' : 'transparent'}
-                  >
-                    <td style={{ padding: '12px 16px' }}>
-                      <div className="flex items-center gap-2">
-                        {isLow && <AlertTriangle size={13} style={{ color: 'var(--yellow)', flexShrink: 0 }} />}
-                        <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>{item.name}</p>
-                      </div>
-                    </td>
-                    <td style={{ padding: '12px 16px', fontSize: 12, color: 'var(--text-2)' }}>{item.unit}</td>
-                    <td style={{ padding: '12px 16px' }}>
-                      {isEditing ? (
-                        <input
-                          type="number"
-                          value={editQty}
-                          onChange={e => setEditQty(e.target.value)}
-                          style={{ width: 70, padding: '5px 8px', border: '1px solid var(--accent)', borderRadius: 8, background: 'var(--surface-2)', color: 'var(--text)', fontSize: 13, outline: 'none' }}
-                          autoFocus
-                          min="0"
-                        />
-                      ) : (
-                        <p className="num" style={{ fontSize: 13, fontWeight: 700, color: item.qty < item.min ? 'var(--red)' : 'var(--text)' }}>
-                          {item.qty}
-                        </p>
-                      )}
-                    </td>
-                    <td style={{ padding: '12px 16px' }}>
-                      <span className="num" style={{ fontSize: 12, color: 'var(--text-3)' }}>{item.min}</span>
-                    </td>
-                    <td style={{ padding: '12px 16px' }}>
-                      <span style={{ fontSize: 11, fontWeight: 700, padding: '3px 10px', borderRadius: 6, background: status.bg, color: status.color }}>
-                        {status.label}
-                      </span>
-                    </td>
-                    <td style={{ padding: '12px 16px', fontSize: 12, color: 'var(--text-3)' }}>{item.lastUpdated}</td>
-                    <td style={{ padding: '12px 16px' }}>
-                      {isEditing ? (
-                        <div className="flex items-center gap-1.5">
-                          <button
-                            onClick={() => saveEdit(item.id)}
-                            style={{ width: 28, height: 28, background: 'var(--green)', color: 'white', borderRadius: 8, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                          >
-                            <Check size={13} />
-                          </button>
-                          <button
-                            onClick={cancelEdit}
-                            style={{ width: 28, height: 28, background: 'var(--surface-2)', color: 'var(--text-2)', borderRadius: 8, border: '1px solid var(--border)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                          >
-                            <X size={13} />
-                          </button>
+                  return (
+                    <tr
+                      key={item.id}
+                      style={{
+                        borderBottom: '1px solid var(--border)',
+                        background: isLow && item.qty > 0
+                          ? 'rgba(251,191,36,0.03)'
+                          : item.qty === 0
+                          ? 'rgba(248,113,113,0.03)'
+                          : 'transparent',
+                        transition: 'background var(--dur-fast) ease',
+                      }}
+                      onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-2)'}
+                      onMouseLeave={e => e.currentTarget.style.background =
+                        isLow && item.qty > 0
+                          ? 'rgba(251,191,36,0.03)'
+                          : item.qty === 0
+                          ? 'rgba(248,113,113,0.03)'
+                          : 'transparent'
+                      }
+                    >
+                      {/* Name */}
+                      <td style={{ padding: '12px 16px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+                          {isLow && (
+                            <AlertTriangle
+                              size={13}
+                              style={{ color: item.qty === 0 ? 'var(--red)' : 'var(--yellow)', flexShrink: 0 }}
+                            />
+                          )}
+                          <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>{item.name}</p>
                         </div>
-                      ) : (
-                        <button
-                          onClick={() => startEdit(item)}
-                          style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '5px 10px', background: 'var(--accent-muted)', color: 'var(--accent)', borderRadius: 8, fontSize: 11, fontWeight: 700, border: 'none', cursor: 'pointer' }}
-                        >
-                          <Edit3 size={12} />
-                          تحديث الكمية
-                        </button>
-                      )}
-                    </td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
-        </div>
+                      </td>
+
+                      {/* Qty */}
+                      <td style={{ padding: '12px 16px' }}>
+                        {isEditing ? (
+                          <input
+                            type="number"
+                            value={editQty}
+                            onChange={e => setEditQty(e.target.value)}
+                            style={{
+                              width: 70, padding: '5px 8px',
+                              border: '1px solid var(--accent)',
+                              borderRadius: 8, background: 'var(--surface-2)',
+                              color: 'var(--text)', fontSize: 13, outline: 'none',
+                            }}
+                            autoFocus
+                            min="0"
+                          />
+                        ) : (
+                          <span
+                            className="num"
+                            style={{ fontSize: 13, fontWeight: 700, color: status.qtyColor }}
+                          >
+                            {item.qty}
+                          </span>
+                        )}
+                      </td>
+
+                      {/* Unit */}
+                      <td style={{ padding: '12px 16px', fontSize: 12, color: 'var(--text-3)' }}>
+                        {item.unit}
+                      </td>
+
+                      {/* Min */}
+                      <td style={{ padding: '12px 16px' }}>
+                        <span className="num" style={{ fontSize: 12, color: 'var(--text-3)' }}>{item.min}</span>
+                      </td>
+
+                      {/* Status */}
+                      <td style={{ padding: '12px 16px' }}>
+                        <span className={`badge badge-pill ${status.badgeClass}`}>{status.label}</span>
+                      </td>
+
+                      {/* Last updated */}
+                      <td style={{ padding: '12px 16px', fontSize: 11, color: 'var(--text-3)' }}>
+                        {item.lastUpdated}
+                      </td>
+
+                      {/* Actions */}
+                      <td style={{ padding: '12px 16px' }}>
+                        {isEditing ? (
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                            <button
+                              onClick={() => saveEdit(item.id)}
+                              style={{
+                                width: 28, height: 28,
+                                background: 'var(--green-muted)', color: 'var(--green)',
+                                borderRadius: 8, border: '1px solid rgba(34,197,94,0.25)',
+                                cursor: 'pointer',
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                              }}
+                            >
+                              <Check size={13} />
+                            </button>
+                            <button
+                              onClick={cancelEdit}
+                              style={{
+                                width: 28, height: 28,
+                                background: 'var(--surface-2)', color: 'var(--text-2)',
+                                borderRadius: 8, border: '1px solid var(--border)',
+                                cursor: 'pointer',
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                              }}
+                            >
+                              <X size={13} />
+                            </button>
+                          </div>
+                        ) : (
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                            <button
+                              className="btn-icon sm"
+                              onClick={() => startEdit(item)}
+                              title="تحديث الكمية"
+                            >
+                              <Edit3 size={13} />
+                            </button>
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
+
+      {showModal && (
+        <ItemModal
+          item={editItem}
+          onClose={() => { setShowModal(false); setEditItem(null) }}
+          onSave={handleSaveModal}
+        />
+      )}
     </Layout>
   )
 }
