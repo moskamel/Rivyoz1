@@ -37,6 +37,18 @@ const statusStyle = {
   cancelled: { bg: 'var(--surface-2)', color: 'var(--text-3)' },
 }
 
+function statusBadge(status) {
+  switch (status) {
+    case 'new':       return <span className="badge badge-red badge-pill badge-md">جديد</span>
+    case 'preparing': return <span className="badge badge-blue badge-pill badge-md">تحضير</span>
+    case 'ready':     return <span className="badge badge-yellow badge-pill badge-md">جاهز</span>
+    case 'delivering':return <span className="badge badge-accent badge-pill badge-md">توصيل</span>
+    case 'done':      return <span className="badge badge-green badge-pill badge-md">مكتمل</span>
+    case 'cancelled': return <span className="badge badge-default badge-pill badge-md">ملغي</span>
+    default:          return <span className="badge badge-default badge-pill badge-md">{status}</span>
+  }
+}
+
 export default function Orders() {
   const [activeTab, setActiveTab] = useState('all')
   const [orders, setOrders] = useState(getOrders)
@@ -77,8 +89,38 @@ export default function Orders() {
 
   return (
     <Layout title="الطلبات">
-      {/* Tabs */}
-      <div className="flex gap-2 overflow-x-auto pb-1 mb-5" style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}>
+
+      {/* TOP BAR */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: 20,
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <span className="badge badge-accent badge-pill badge-lg num">{orders.length}</span>
+          <span style={{ fontSize: 12, color: 'var(--text-3)', fontWeight: 500 }}>طلب نشط</span>
+        </div>
+        <button
+          className="btn-primary"
+          style={{ height: 36, fontSize: 13, padding: '0 14px' }}
+        >
+          طلب جديد +
+        </button>
+      </div>
+
+      {/* FILTER TABS */}
+      <div
+        className="no-scrollbar"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 6,
+          overflowX: 'auto',
+          marginBottom: 16,
+          paddingBottom: 2,
+        }}
+      >
         {tabs.map(tab => {
           const isActive = activeTab === tab.key
           const cnt = count(tab.key)
@@ -88,158 +130,321 @@ export default function Orders() {
               onClick={() => setActiveTab(tab.key)}
               style={{
                 flexShrink: 0,
-                padding: '7px 14px',
-                borderRadius: 10,
-                fontSize: 13,
+                height: 34,
+                borderRadius: 'var(--radius-full)',
+                padding: '0 14px',
+                fontSize: 12,
                 fontWeight: 600,
                 cursor: 'pointer',
-                transition: 'all 0.15s',
-                display: 'flex',
+                border: isActive ? 'none' : '1px solid var(--border)',
+                background: isActive ? 'var(--accent)' : 'var(--surface-2)',
+                color: isActive ? 'white' : 'var(--text-2)',
+                transition: 'all 150ms',
+                display: 'inline-flex',
                 alignItems: 'center',
-                gap: 6,
-                border: isActive ? '1px solid rgba(249,115,22,0.25)' : '1px solid var(--border)',
-                background: isActive ? 'var(--accent-muted)' : 'var(--surface)',
-                color: isActive ? 'var(--accent)' : 'var(--text-2)',
+                gap: 5,
+                fontFamily: 'Cairo, sans-serif',
               }}
             >
               {tab.label}
-              <span style={{
-                fontSize: 10,
-                fontWeight: 700,
-                minWidth: 18,
-                height: 18,
-                borderRadius: 9,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: '0 5px',
-                fontFamily: 'Inter',
-                background: tab.key === 'new' && cnt > 0 ? 'var(--red)' : isActive ? 'rgba(249,115,22,0.2)' : 'var(--surface-2)',
-                color: tab.key === 'new' && cnt > 0 ? 'white' : isActive ? 'var(--accent)' : 'var(--text-3)',
-              }}>
-                {cnt}
-              </span>
+              {cnt > 0 && (
+                <span style={{
+                  fontSize: 10,
+                  fontWeight: 800,
+                  fontFamily: 'Inter, sans-serif',
+                  minWidth: 16,
+                  height: 16,
+                  borderRadius: 'var(--radius-full)',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '0 4px',
+                  background: tab.key === 'new' && cnt > 0
+                    ? 'var(--red)'
+                    : isActive
+                      ? 'rgba(255,255,255,0.25)'
+                      : 'var(--surface-3)',
+                  color: tab.key === 'new' && cnt > 0
+                    ? 'white'
+                    : isActive
+                      ? 'white'
+                      : 'var(--text-3)',
+                }}>
+                  {cnt}
+                </span>
+              )}
             </button>
           )
         })}
       </div>
 
-      {/* Orders list */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+      {/* ORDERS LIST */}
+      <div className="stagger" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         {filtered.length === 0 && (
-          <div className="glass" style={{ padding: '48px 24px', textAlign: 'center' }}>
-            <p style={{ color: 'var(--text-3)', fontWeight: 500, fontSize: 14 }}>لا توجد طلبات</p>
+          <div className="empty-state">
+            <div className="empty-icon">📦</div>
+            <p className="empty-title">لا توجد طلبات</p>
+            <p className="empty-desc">
+              {activeTab === 'all' ? 'في انتظار طلبات جديدة...' : `لا توجد طلبات بحالة "${tabs.find(t => t.key === activeTab)?.label || activeTab}"`}
+            </p>
           </div>
         )}
         {filtered.map(order => {
-          const ss = statusStyle[order.status] || statusStyle.done
+          const isNew = order.status === 'new'
+          const isPreparing = order.status === 'preparing'
+          const canCancel = isNew || isPreparing
           return (
             <div
               key={order.id}
-              onClick={() => setSelected(order)}
               className="glass"
               style={{
-                padding: '16px',
+                padding: 0,
+                overflow: 'hidden',
                 cursor: 'pointer',
-                transition: 'all 0.15s',
-                borderColor: order.status === 'new' ? 'rgba(248,113,113,0.3)' : 'var(--border)',
+                transition: 'all var(--dur-normal) var(--ease-default)',
+                borderColor: isNew ? 'rgba(248,113,113,0.3)' : 'var(--border)',
               }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = order.status === 'new' ? 'rgba(248,113,113,0.5)' : 'var(--border-strong)'; e.currentTarget.style.background = 'var(--surface-2)' }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = order.status === 'new' ? 'rgba(248,113,113,0.3)' : 'var(--border)'; e.currentTarget.style.background = 'var(--surface)' }}
+              onMouseEnter={e => {
+                e.currentTarget.style.borderColor = isNew ? 'rgba(248,113,113,0.5)' : 'var(--border-strong)'
+                e.currentTarget.style.transform = 'translateY(-1px)'
+                e.currentTarget.style.background = 'var(--surface-2)'
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.borderColor = isNew ? 'rgba(248,113,113,0.3)' : 'var(--border)'
+                e.currentTarget.style.transform = 'translateY(0)'
+                e.currentTarget.style.background = 'var(--surface)'
+              }}
+              onClick={() => setSelected(order)}
             >
-              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 10 }}>
-                <div className="flex items-center gap-2">
-                  <span style={{ fontWeight: 700, color: 'var(--text)', fontFamily: 'Inter', fontSize: 13 }}>#{order.id}</span>
-                  <span style={{ color: 'var(--text-3)', fontSize: 12 }}>·</span>
-                  <span style={{ fontSize: 13, color: 'var(--text-2)' }}>{order.table}</span>
-                  <span style={{ color: 'var(--text-3)', fontSize: 12 }}>·</span>
-                  <span style={{ fontSize: 11, color: 'var(--text-3)' }}>{order.time}</span>
+              {/* CARD HEADER */}
+              <div style={{
+                padding: '14px 16px 12px',
+                borderBottom: '1px solid var(--border)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 12,
+              }}>
+                {/* Order# box */}
+                <div style={{
+                  width: 36,
+                  height: 36,
+                  borderRadius: 8,
+                  background: 'var(--surface-2)',
+                  border: '1px solid var(--border)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                }}>
+                  <span className="num" style={{
+                    fontSize: 12,
+                    fontWeight: 800,
+                    color: 'var(--text-2)',
+                    fontFamily: 'Inter, sans-serif',
+                    direction: 'ltr',
+                  }}>
+                    #{order.id}
+                  </span>
                 </div>
-                <span style={{ fontSize: 11, fontWeight: 600, padding: '3px 8px', borderRadius: 6, background: ss.bg, color: ss.color }}>
-                  {statusMap[order.status]?.label}
-                </span>
+
+                {/* Middle: table + time */}
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', margin: 0, lineHeight: 1.3 }}>
+                    {order.table}
+                  </p>
+                  <p style={{ fontSize: 11, color: 'var(--text-3)', margin: 0, marginTop: 2, lineHeight: 1 }}>
+                    {order.time}
+                  </p>
+                </div>
+
+                {/* Right: total + badge */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
+                  <span className="num" style={{
+                    fontSize: 16,
+                    fontWeight: 800,
+                    color: 'var(--accent)',
+                    fontFamily: 'Inter, sans-serif',
+                  }}>
+                    {order.total} ج
+                  </span>
+                  {statusBadge(order.status)}
+                </div>
               </div>
-              <div className="flex items-center justify-between">
-                <p style={{ fontSize: 13, color: 'var(--text-2)' }}>{order.items}</p>
-                <p className="num" style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>{order.total} ج</p>
+
+              {/* CARD BODY */}
+              <div style={{ padding: '10px 16px 14px' }}>
+                {/* Item chips */}
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                  {order.details && order.details.length > 0
+                    ? order.details.map((item, i) => (
+                        <span key={i} style={{
+                          background: 'var(--surface-2)',
+                          border: '1px solid var(--border)',
+                          borderRadius: 6,
+                          padding: '3px 8px',
+                          fontSize: 11,
+                          color: 'var(--text-2)',
+                          fontWeight: 500,
+                          whiteSpace: 'nowrap',
+                        }}>
+                          ×{item.qty} {item.name}
+                        </span>
+                      ))
+                    : (
+                        <span style={{
+                          background: 'var(--surface-2)',
+                          border: '1px solid var(--border)',
+                          borderRadius: 6,
+                          padding: '3px 8px',
+                          fontSize: 11,
+                          color: 'var(--text-2)',
+                        }}>
+                          {order.items}
+                        </span>
+                      )
+                  }
+                </div>
+                {/* Notes */}
+                {order.notes && (
+                  <p style={{ fontSize: 11, fontStyle: 'italic', color: 'var(--text-3)', marginTop: 6, marginBottom: 0 }}>
+                    {order.notes}
+                  </p>
+                )}
               </div>
-              {order.status === 'new' && (
-                <div className="flex gap-2" style={{ marginTop: 12 }}>
+
+              {/* CARD FOOTER */}
+              <div
+                style={{
+                  padding: '10px 16px',
+                  borderTop: '1px solid var(--border)',
+                  display: 'flex',
+                  gap: 8,
+                }}
+                onClick={e => e.stopPropagation()}
+              >
+                {nextStatus[order.status] && (
                   <button
-                    onClick={(e) => { e.stopPropagation(); setRejectModal(order) }}
-                    style={{ flex: 1, padding: '8px', borderRadius: 8, border: '1px solid var(--border)', fontSize: 13, fontWeight: 600, color: 'var(--text-2)', background: 'transparent', cursor: 'pointer', transition: 'all 0.15s' }}
-                    onMouseEnter={e => { e.currentTarget.style.background = 'var(--red-muted)'; e.currentTarget.style.color = 'var(--red)'; e.currentTarget.style.borderColor = 'rgba(248,113,113,0.3)' }}
-                    onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--text-2)'; e.currentTarget.style.borderColor = 'var(--border)' }}
-                  >
-                    رفض
-                  </button>
-                  <button
-                    onClick={(e) => { e.stopPropagation(); advance(order.id) }}
+                    onClick={() => advance(order.id)}
                     className="btn-primary"
-                    style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}
+                    style={{ height: 34, fontSize: 12, flex: canCancel ? 1 : undefined, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 5 }}
                   >
-                    <Check size={14} />
-                    قبول الطلب
+                    <Check size={13} />
+                    {actionLabel[order.status]}
                   </button>
-                </div>
-              )}
+                )}
+                {canCancel && (
+                  <button
+                    onClick={() => setRejectModal(order)}
+                    className="btn-danger"
+                    style={{ height: 34, fontSize: 12, padding: '0 14px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontFamily: 'Cairo, sans-serif', fontWeight: 600, borderRadius: 'var(--radius)', transition: 'all var(--dur-normal) var(--ease-default)' }}
+                  >
+                    إلغاء
+                  </button>
+                )}
+                <button
+                  onClick={() => setSelected(order)}
+                  className="btn-ghost"
+                  style={{ height: 34, fontSize: 12, padding: '0 14px', marginRight: 'auto', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+                >
+                  التفاصيل
+                </button>
+              </div>
             </div>
           )
         })}
       </div>
 
-      {/* Order detail modal */}
+      {/* ORDER DETAIL MODAL */}
       {selected && (
         <div
-          style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(0,0,0,0.65)',
+            zIndex: 50,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 16,
+          }}
           onClick={() => setSelected(null)}
         >
           <div
-            style={{ background: 'var(--surface-2)', border: '1px solid var(--border-strong)', borderRadius: 20, width: '100%', maxWidth: 440, maxHeight: '85vh', overflowY: 'auto' }}
+            className="glass animate-fade-in"
+            style={{
+              background: 'var(--surface-2)',
+              border: '1px solid var(--border-strong)',
+              borderRadius: 20,
+              width: '100%',
+              maxWidth: 440,
+              maxHeight: '85vh',
+              overflowY: 'auto',
+            }}
             onClick={e => e.stopPropagation()}
-            className="animate-scale-in"
           >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', borderBottom: '1px solid var(--border)' }}>
-              <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 15 }}>طلب <span className="num">#{selected.id}</span></p>
+            {/* Modal Header */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '16px 20px',
+              borderBottom: '1px solid var(--border)',
+            }}>
+              <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 15, margin: 0 }}>
+                طلب <span className="num">#{selected.id}</span>
+              </p>
               <button
                 onClick={() => setSelected(null)}
-                style={{ width: 30, height: 30, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--surface-3)', border: '1px solid var(--border)', cursor: 'pointer', color: 'var(--text-2)', transition: 'all 0.15s' }}
-                onMouseEnter={e => { e.currentTarget.style.background = 'var(--surface)'; e.currentTarget.style.color = 'var(--text)' }}
-                onMouseLeave={e => { e.currentTarget.style.background = 'var(--surface-3)'; e.currentTarget.style.color = 'var(--text-2)' }}
+                className="btn-icon sm"
+                style={{ cursor: 'pointer' }}
               >
                 <X size={15} />
               </button>
             </div>
+
             <div style={{ padding: '16px 20px' }}>
-              {/* Customer info */}
+              {/* Customer info grid */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 16 }}>
-                <div style={{ background: 'var(--surface-3)', borderRadius: 10, padding: '10px 12px' }}>
-                  <p style={{ fontSize: 10, color: 'var(--text-3)', fontWeight: 600, marginBottom: 4 }}>الزبون</p>
-                  <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 600 }}>{selected.customer}</p>
-                </div>
-                <div style={{ background: 'var(--surface-3)', borderRadius: 10, padding: '10px 12px' }}>
-                  <p style={{ fontSize: 10, color: 'var(--text-3)', fontWeight: 600, marginBottom: 4 }}>الهاتف</p>
-                  <p className="num" style={{ fontSize: 13, color: 'var(--text)', fontWeight: 600, direction: 'ltr' }}>{selected.phone}</p>
-                </div>
-                <div style={{ background: 'var(--surface-3)', borderRadius: 10, padding: '10px 12px' }}>
-                  <p style={{ fontSize: 10, color: 'var(--text-3)', fontWeight: 600, marginBottom: 4 }}>الموقع</p>
-                  <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 600 }}>{selected.table}</p>
-                </div>
-                <div style={{ background: 'var(--surface-3)', borderRadius: 10, padding: '10px 12px' }}>
-                  <p style={{ fontSize: 10, color: 'var(--text-3)', fontWeight: 600, marginBottom: 4 }}>الدفع</p>
-                  <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 600 }}>{selected.payment}</p>
-                </div>
+                {[
+                  { label: 'الزبون', value: selected.customer, isNum: false },
+                  { label: 'الهاتف', value: selected.phone, isNum: true },
+                  { label: 'الموقع', value: selected.table, isNum: false },
+                  { label: 'الدفع', value: selected.payment, isNum: false },
+                ].map(({ label, value, isNum }) => (
+                  <div key={label} style={{ background: 'var(--surface-3)', borderRadius: 10, padding: '10px 12px' }}>
+                    <p style={{ fontSize: 10, color: 'var(--text-3)', fontWeight: 600, marginBottom: 4, margin: '0 0 4px 0' }}>{label}</p>
+                    <p
+                      className={isNum ? 'num' : ''}
+                      style={{ fontSize: 13, color: 'var(--text)', fontWeight: 600, margin: 0, direction: isNum ? 'ltr' : undefined }}
+                    >
+                      {value}
+                    </p>
+                  </div>
+                ))}
               </div>
 
               {/* Items */}
               <div style={{ borderTop: '1px solid var(--border)', paddingTop: 16, marginBottom: 16 }}>
-                <p style={{ fontSize: 11, color: 'var(--text-3)', fontWeight: 600, marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.06em' }}>الأصناف</p>
+                <p style={{
+                  fontSize: 11,
+                  color: 'var(--text-3)',
+                  fontWeight: 600,
+                  marginBottom: 10,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.06em',
+                }}>
+                  الأصناف
+                </p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                   {selected.details.map((item, i) => (
                     <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                       <div>
-                        <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>× {item.qty} {item.name}</p>
-                        {item.note && <p style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 2 }}>ملاحظة: {item.note}</p>}
+                        <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', margin: 0 }}>× {item.qty} {item.name}</p>
+                        {item.note && (
+                          <p style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 2, marginBottom: 0, fontStyle: 'italic' }}>
+                            ملاحظة: {item.note}
+                          </p>
+                        )}
                       </div>
                       <span className="num" style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>{item.price} ج</span>
                     </div>
@@ -248,14 +453,21 @@ export default function Orders() {
               </div>
 
               {/* Total */}
-              <div style={{ borderTop: '1px solid var(--border)', paddingTop: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+              <div style={{
+                borderTop: '1px solid var(--border)',
+                paddingTop: 12,
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: 16,
+              }}>
                 <span style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>الإجمالي</span>
                 <span className="num" style={{ fontWeight: 800, color: 'var(--accent)', fontSize: 18 }}>{selected.total} ج</span>
               </div>
 
               {/* Actions */}
               {nextStatus[selected.status] && (
-                <div className="flex gap-2">
+                <div style={{ display: 'flex', gap: 8 }}>
                   <button
                     onClick={() => setRejectModal(selected)}
                     className="btn-ghost"
@@ -277,16 +489,32 @@ export default function Orders() {
         </div>
       )}
 
-      {/* Reject modal */}
+      {/* REJECT MODAL */}
       {rejectModal && (
         <div
-          style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(0,0,0,0.65)',
+            zIndex: 50,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 16,
+          }}
           onClick={() => setRejectModal(null)}
         >
           <div
-            style={{ background: 'var(--surface-2)', border: '1px solid var(--border-strong)', borderRadius: 20, width: '100%', maxWidth: 360, padding: 24 }}
+            className="glass animate-fade-in"
+            style={{
+              background: 'var(--surface-2)',
+              border: '1px solid var(--border-strong)',
+              borderRadius: 20,
+              width: '100%',
+              maxWidth: 360,
+              padding: 24,
+            }}
             onClick={e => e.stopPropagation()}
-            className="animate-scale-in"
           >
             <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 15, marginBottom: 16 }}>سبب الرفض؟</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 16 }}>
@@ -306,6 +534,7 @@ export default function Orders() {
                     border: rejectReason === reason ? '1px solid rgba(249,115,22,0.4)' : '1px solid var(--border)',
                     background: rejectReason === reason ? 'var(--accent-muted)' : 'var(--surface-3)',
                     color: rejectReason === reason ? 'var(--accent)' : 'var(--text-2)',
+                    fontFamily: 'Cairo, sans-serif',
                   }}
                 >
                   {reason}
@@ -316,15 +545,39 @@ export default function Orders() {
                 placeholder="سبب تاني..."
                 value={['الأكلة دي خلصت', 'المطعم مش شغال دلوقتي', 'العنوان بعيد جداً'].includes(rejectReason) ? '' : rejectReason}
                 onChange={e => setRejectReason(e.target.value)}
-                style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--surface-3)', color: 'var(--text)', fontSize: 13, outline: 'none', fontFamily: 'Cairo', transition: 'border-color 0.15s' }}
-                onFocus={e => e.currentTarget.style.borderColor = 'var(--accent)'}
-                onBlur={e => e.currentTarget.style.borderColor = 'var(--border)'}
+                style={{
+                  width: '100%',
+                  padding: '10px 14px',
+                  borderRadius: 10,
+                  border: '1px solid var(--border)',
+                  background: 'var(--surface-3)',
+                  color: 'var(--text)',
+                  fontSize: 13,
+                  outline: 'none',
+                  fontFamily: 'Cairo, sans-serif',
+                  transition: 'border-color 0.15s',
+                  boxSizing: 'border-box',
+                }}
+                onFocus={e => { e.currentTarget.style.borderColor = 'var(--accent)' }}
+                onBlur={e => { e.currentTarget.style.borderColor = 'var(--border)' }}
               />
             </div>
             <button
               onClick={() => reject(rejectModal.id)}
               disabled={!rejectReason}
-              style={{ width: '100%', padding: '11px', background: rejectReason ? 'var(--red)' : 'var(--surface-3)', color: rejectReason ? 'white' : 'var(--text-3)', borderRadius: 10, fontWeight: 700, fontSize: 14, border: 'none', cursor: rejectReason ? 'pointer' : 'not-allowed', transition: 'all 0.15s', fontFamily: 'Cairo' }}
+              style={{
+                width: '100%',
+                padding: '11px',
+                background: rejectReason ? 'var(--red)' : 'var(--surface-3)',
+                color: rejectReason ? 'white' : 'var(--text-3)',
+                borderRadius: 10,
+                fontWeight: 700,
+                fontSize: 14,
+                border: 'none',
+                cursor: rejectReason ? 'pointer' : 'not-allowed',
+                transition: 'all 0.15s',
+                fontFamily: 'Cairo, sans-serif',
+              }}
             >
               تأكيد الرفض
             </button>
