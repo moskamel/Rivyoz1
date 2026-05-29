@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ShoppingCart, X, Search, ChevronLeft, ChevronRight, Tag, Flame, Menu, Moon, Sun } from 'lucide-react'
+import { ShoppingCart, X, Search, ChevronLeft, ChevronRight, Tag, Flame, Menu, Moon, Sun, MapPin } from 'lucide-react'
 import { getConfig, getMenuItems, getCategories, getBanners, getCombos, getCustomerProfile, clearCustomerProfile, getCustomerPoints } from '../lib/restaurantStore'
 import { useCart } from './CartContext'
 import { useTheme } from '../lib/ThemeContext'
@@ -419,9 +419,15 @@ export default function StoreFront() {
           </button>
 
           {/* Restaurant name — 15px from back button */}
-          <div style={{ marginRight: 15, flex: 1 }}>
+          <div style={{ marginRight: 15, flex: 1, minWidth: 0 }}>
             <p style={{ fontWeight: 900, fontSize: 15, color: 'var(--text)', lineHeight: 1.2 }}>{config.name}</p>
             <p style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 1 }}>⭐ 4.9 · {config.deliveryTime} دقيقة · توصيل 15ج</p>
+            {config.address && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 3, marginTop: 2 }}>
+                <MapPin size={10} color="var(--text-3)" />
+                <span style={{ fontSize: 10, color: 'var(--text-3)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{config.address}</span>
+              </div>
+            )}
           </div>
 
           {/* Cart */}

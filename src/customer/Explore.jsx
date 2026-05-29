@@ -6,12 +6,12 @@ import CustomerNav from './CustomerNav'
 import CustomerFooter from './CustomerFooter'
 
 const mockRestaurants = [
-  { id: 1, name: 'مطعم الشيف أحمد', category: 'مشويات', rating: 4.9, reviews: 312, deliveryTime: 30, deliveryFee: 15, color: '#f97316', emoji: '🍖', slug: 'chef-ahmed', isOpen: true, tags: ['مشهور', 'طازج'], x: 62, y: 38 },
-  { id: 2, name: 'بيتزا بلازا', category: 'بيتزا', rating: 4.7, reviews: 218, deliveryTime: 25, deliveryFee: 10, color: '#ef4444', emoji: '🍕', slug: 'pizza-plaza', isOpen: true, tags: ['أكثر طلباً'], x: 72, y: 58 },
-  { id: 3, name: 'كافيه ميترو', category: 'كافيه', rating: 4.5, reviews: 184, deliveryTime: 20, deliveryFee: 0, color: '#8b5cf6', emoji: '☕', slug: 'metro-cafe', isOpen: true, tags: ['توصيل مجاني'], x: 38, y: 28 },
-  { id: 4, name: 'شاورما كينج', category: 'مشويات', rating: 4.8, reviews: 267, deliveryTime: 30, deliveryFee: 12, color: '#f59e0b', emoji: '🌯', slug: 'shawarma-king', isOpen: false, tags: [], x: 80, y: 72 },
-  { id: 5, name: 'سوشي هاوس', category: 'سوشي', rating: 4.6, reviews: 143, deliveryTime: 40, deliveryFee: 20, color: '#10b981', emoji: '🍣', slug: 'sushi-house', isOpen: true, tags: ['جديد'], x: 25, y: 52 },
-  { id: 6, name: 'برجر فاكتوري', category: 'مشويات', rating: 4.4, reviews: 195, deliveryTime: 35, deliveryFee: 15, color: '#6366f1', emoji: '🍔', slug: 'burger-factory', isOpen: true, tags: [], x: 50, y: 70 },
+  { id: 1, name: 'مطعم الشيف أحمد', category: 'مشويات', rating: 4.9, reviews: 312, deliveryTime: 30, deliveryFee: 15, color: '#f97316', emoji: '🍖', slug: 'chef-ahmed', isOpen: true, tags: ['مشهور', 'طازج'], address: 'التجمع الخامس، القاهرة', x: 62, y: 38 },
+  { id: 2, name: 'بيتزا بلازا', category: 'بيتزا', rating: 4.7, reviews: 218, deliveryTime: 25, deliveryFee: 10, color: '#ef4444', emoji: '🍕', slug: 'pizza-plaza', isOpen: true, tags: ['أكثر طلباً'], address: 'مدينة نصر، القاهرة', x: 72, y: 58 },
+  { id: 3, name: 'كافيه ميترو', category: 'كافيه', rating: 4.5, reviews: 184, deliveryTime: 20, deliveryFee: 0, color: '#8b5cf6', emoji: '☕', slug: 'metro-cafe', isOpen: true, tags: ['توصيل مجاني'], address: 'وسط البلد، القاهرة', x: 38, y: 28 },
+  { id: 4, name: 'شاورما كينج', category: 'مشويات', rating: 4.8, reviews: 267, deliveryTime: 30, deliveryFee: 12, color: '#f59e0b', emoji: '🌯', slug: 'shawarma-king', isOpen: false, tags: [], address: 'المعادي، القاهرة', x: 80, y: 72 },
+  { id: 5, name: 'سوشي هاوس', category: 'سوشي', rating: 4.6, reviews: 143, deliveryTime: 40, deliveryFee: 20, color: '#10b981', emoji: '🍣', slug: 'sushi-house', isOpen: true, tags: ['جديد'], address: 'الزمالك، القاهرة', x: 25, y: 52 },
+  { id: 6, name: 'برجر فاكتوري', category: 'مشويات', rating: 4.4, reviews: 195, deliveryTime: 35, deliveryFee: 15, color: '#6366f1', emoji: '🍔', slug: 'burger-factory', isOpen: true, tags: [], address: 'الدقي، الجيزة', x: 50, y: 70 },
 ]
 
 const categoryFilters = [
@@ -477,7 +477,13 @@ export default function Explore() {
                       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 3 }}>
                         <div style={{ flex: 1, minWidth: 0 }}>
                           <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 1 }}>{r.name}</p>
-                          <p style={{ fontSize: 11, color: '#9CA3AF', marginBottom: 5 }}>{r.category}</p>
+                          <p style={{ fontSize: 11, color: '#9CA3AF', marginBottom: 3 }}>{r.category}</p>
+                          {r.address && (
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 3, marginBottom: 4 }}>
+                              <MapPin size={10} color="#9CA3AF" />
+                              <span style={{ fontSize: 10, color: '#9CA3AF' }}>{r.address}</span>
+                            </div>
+                          )}
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 3, flexShrink: 0, marginRight: 8 }}>
                           <Star size={12} color="#F59E0B" fill="#F59E0B" />
