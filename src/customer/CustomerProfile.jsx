@@ -19,8 +19,77 @@ export default function CustomerProfile() {
   const [newAddress, setNewAddress] = useState('')
 
   if (!profile) {
-    navigate('/customer-login', { state: { from: '/my-profile' } })
-    return null
+    return (
+      <div style={{ minHeight: '100vh', background: 'var(--bg)', fontFamily: 'Cairo, sans-serif', direction: 'rtl', display: 'flex', flexDirection: 'column' }}>
+        {/* Header */}
+        <div style={{ background: 'var(--surface)', borderBottom: '1px solid var(--border)', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 12, boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
+          <button
+            onClick={() => navigate(-1)}
+            style={{ width: 38, height: 38, borderRadius: 12, background: 'var(--surface-2)', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+          >
+            <ArrowRight size={18} color="var(--text-2)" />
+          </button>
+          <h1 style={{ fontWeight: 800, fontSize: 18, color: 'var(--text)', flex: 1, margin: 0 }}>حسابي</h1>
+        </div>
+
+        {/* Empty state body */}
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '32px 24px 100px', textAlign: 'center' }}>
+
+          {/* Avatar illustration */}
+          <div style={{ position: 'relative', marginBottom: 32 }}>
+            <div style={{ width: 120, height: 120, borderRadius: '50%', background: `linear-gradient(135deg, ${color}18, ${color}35)`, border: `3px dashed ${color}60`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto' }}>
+              <span style={{ fontSize: 52 }}>👤</span>
+            </div>
+            <div style={{ position: 'absolute', bottom: 0, right: 0, width: 36, height: 36, borderRadius: '50%', background: color, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: `0 4px 14px ${color}50` }}>
+              <span style={{ fontSize: 18 }}>✨</span>
+            </div>
+          </div>
+
+          <h2 style={{ fontSize: 24, fontWeight: 900, color: 'var(--text)', marginBottom: 10 }}>أهلاً بك في ريفيو!</h2>
+          <p style={{ fontSize: 14, color: 'var(--text-2)', lineHeight: 1.8, marginBottom: 36, maxWidth: 280 }}>
+            سجّل دخولك للاستمتاع بتتبع طلباتك، جمع نقاط المكافآت، وحفظ عناوينك المفضلة
+          </p>
+
+          {/* Benefits list */}
+          <div style={{ width: '100%', maxWidth: 320, display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 36 }}>
+            {[
+              { icon: '📋', title: 'تتبع طلباتك', desc: 'راقب كل طلب خطوة بخطوة' },
+              { icon: '🎁', title: 'اجمع نقاط المكافآت', desc: 'كل طلب يقرّبك من وجبة مجانية' },
+              { icon: '📍', title: 'احفظ عناوينك', desc: 'اطلب بدون إعادة كتابة العنوان كل مرة' },
+            ].map((b, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'var(--surface)', borderRadius: 14, padding: '12px 14px', border: '1px solid var(--border)', boxShadow: '0 1px 4px rgba(0,0,0,0.04)', textAlign: 'right' }}>
+                <div style={{ width: 40, height: 40, borderRadius: 12, background: `${color}14`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0 }}>
+                  {b.icon}
+                </div>
+                <div>
+                  <p style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)', marginBottom: 2 }}>{b.title}</p>
+                  <p style={{ fontSize: 11, color: 'var(--text-3)' }}>{b.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* CTAs */}
+          <div style={{ width: '100%', maxWidth: 320, display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <button
+              onClick={() => navigate('/customer-login', { state: { from: '/my-profile' } })}
+              style={{ width: '100%', padding: '15px', borderRadius: 16, background: color, color: 'white', fontWeight: 800, fontSize: 15, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif', boxShadow: `0 6px 22px ${color}45` }}
+            >
+              تسجيل الدخول
+            </button>
+            <button
+              onClick={() => navigate('/customer-login', { state: { from: '/my-profile' } })}
+              style={{ width: '100%', padding: '13px', borderRadius: 16, background: 'var(--surface)', color, fontWeight: 700, fontSize: 14, border: `2px solid ${color}`, cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}
+            >
+              إنشاء حساب جديد
+            </button>
+          </div>
+        </div>
+
+        <CustomerFooter />
+        <CustomerNav />
+      </div>
+    )
   }
 
   const pts = getCustomerPoints(profile.phone)
