@@ -533,6 +533,7 @@ export default function Cart() {
               <span style={{ fontSize: 18, fontWeight: 900, color, fontFamily: 'Inter, sans-serif' }}>{finalTotal} ج</span>
             </div>
 
+            <BackBtn to={1} />
             <NextBtn onClick={() => goToStep(3)} label="مراجعة الطلب" />
           </>
         )}
@@ -610,6 +611,7 @@ export default function Cart() {
               </div>
             </Card>
 
+            <BackBtn to={2} />
             <NextBtn onClick={handleConfirm} label={`تأكيد الطلب · ${finalTotal} ج`} />
           </>
         )}
