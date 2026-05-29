@@ -152,7 +152,7 @@ export default function Dashboard() {
     <Layout title="الرئيسية">
 
       {/* ── HERO ROW ── */}
-      <div className="flex gap-3 animate-fade-in" style={{ flexWrap: 'wrap', marginBottom: 20 }}>
+      <div className="flex gap-3 animate-fade-in" style={{ flexWrap: 'wrap', marginBottom: 20, direction: 'rtl' }}>
 
         {/* New orders alert — first (rightmost in RTL), full flex width */}
         {newOrders.length > 0 && (
