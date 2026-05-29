@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { Add, More, CloseCircle, Sort, Star1 } from 'iconsax-react'
 import Layout from '../components/layout/Layout'
-import { getMenuItems, setMenuItems, getCategories } from '../lib/restaurantStore'
+import { getMenuItems, setMenuItems, getCategories, setCategories as setCategories_store } from '../lib/restaurantStore'
 
 function Skel({ w = '100%', h = 16, r = 8, mb = 0 }) {
   return <div style={{ width: w, height: h, borderRadius: r, marginBottom: mb, background: 'var(--surface-3)', animation: 'skel-pulse 1.5s ease-in-out infinite' }} />
@@ -24,6 +24,9 @@ export default function HambergerMenu() {
   const [form, setForm] = useState({ name: '', price: '', categoryId: 1, description: '', active: true, bestseller: false, discountTag: '' })
   const [openMenuId, setOpenMenuId] = useState(null)
   const [formErrors, setFormErrors] = useState({})
+  const [showCatForm, setShowCatForm] = useState(false)
+  const [newCatName, setNewCatName] = useState('')
+  const [catNameError, setCatNameError] = useState('')
   const menuRef = useRef(null)
 
   useEffect(() => {
@@ -108,6 +111,21 @@ export default function HambergerMenu() {
     })
   }
 
+  const saveCategory = () => {
+    if (!newCatName.trim()) { setCatNameError('اسم القسم مطلوب'); return }
+    if (categories.some(c => c.name === newCatName.trim())) { setCatNameError('هذا القسم موجود بالفعل'); return }
+    const newCat = { id: Date.now(), name: newCatName.trim(), count: 0 }
+    setCategories(prev => {
+      const next = [...prev, newCat]
+      setCategories_store(next)
+      return next
+    })
+    setActiveCategory(newCat.id)
+    setShowCatForm(false)
+    setNewCatName('')
+    setCatNameError('')
+  }
+
   if (loading) {
     return (
       <Layout title="إدارة القائمة">
@@ -184,6 +202,7 @@ export default function HambergerMenu() {
             )
           })}
           <button
+            onClick={() => { setNewCatName(''); setCatNameError(''); setShowCatForm(true) }}
             style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '6px 12px', borderRadius: 'var(--radius-full)', fontSize: 12, fontWeight: 600, cursor: 'pointer', border: '1px dashed var(--border)', background: 'transparent', color: 'var(--text-3)', flexShrink: 0, transition: 'all 0.15s' }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.color = 'var(--accent)' }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-3)' }}
@@ -398,6 +417,38 @@ export default function HambergerMenu() {
               >
                 {editItem ? 'حفظ التعديلات' : 'إضافة الأكلة'}
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── NEW CATEGORY MODAL ── */}
+      {showCatForm && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(4px)', zIndex: 60, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }} onClick={() => setShowCatForm(false)}>
+          <div style={{ background: 'var(--surface)', borderRadius: 16, width: '100%', maxWidth: 380, boxShadow: '0 24px 60px rgba(0,0,0,0.5)' }} onClick={e => e.stopPropagation()}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 20px', borderBottom: '1px solid var(--border)' }}>
+              <p style={{ fontWeight: 800, fontSize: 16, color: 'var(--text)' }}>قسم جديد</p>
+              <button onClick={() => setShowCatForm(false)} style={{ border: 'none', background: 'var(--surface-2)', color: 'var(--text-2)', borderRadius: 8, width: 32, height: 32, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <CloseCircle size={18} />
+              </button>
+            </div>
+            <div style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>
+              <div>
+                <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-2)', marginBottom: 6 }}>اسم القسم</p>
+                <input
+                  autoFocus
+                  value={newCatName}
+                  onChange={e => { setNewCatName(e.target.value); if (catNameError) setCatNameError('') }}
+                  onKeyDown={e => e.key === 'Enter' && saveCategory()}
+                  placeholder="مثال: وجبات جانبية"
+                  style={{ ...inputStyle, ...(catNameError ? { borderColor: 'var(--red)' } : {}) }}
+                />
+                {catNameError && <p style={{ color: 'var(--red)', fontSize: 12, marginTop: 4 }}>{catNameError}</p>}
+              </div>
+              <div style={{ display: 'flex', gap: 10 }}>
+                <button onClick={() => setShowCatForm(false)} style={{ flex: 1, padding: '11px 0', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--surface-2)', color: 'var(--text-2)', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>إلغاء</button>
+                <button onClick={saveCategory} className="btn-primary" style={{ flex: 2, padding: '11px 0', fontSize: 14, fontWeight: 800 }}>إضافة القسم</button>
+              </div>
             </div>
           </div>
         </div>

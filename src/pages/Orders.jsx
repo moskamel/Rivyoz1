@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
-import { CloseCircle, Check } from 'iconsax-react'
+import { CloseCircle, Check, Add, Minus } from 'iconsax-react'
 import Layout from '../components/layout/Layout'
 import { statusMap } from '../lib/mock'
-import { getOrders, updateOrderStatus } from '../lib/restaurantStore'
+import { getOrders, updateOrderStatus, addOrder, getMenuItems, getCategories } from '../lib/restaurantStore'
 
 function Skel({ w = '100%', h = 16, r = 8, mb = 0 }) {
   return <div style={{ width: w, height: h, borderRadius: r, marginBottom: mb, background: 'var(--surface-3)', animation: 'skel-pulse 1.5s ease-in-out infinite' }} />
@@ -61,6 +61,12 @@ export default function Orders() {
   const [rejectModal, setRejectModal] = useState(null)
   const [rejectReason, setRejectReason] = useState('')
 
+  const emptyNO = { type: 'طاولة', table: '', customer: '', phone: '', payment: 'كاش عند الاستلام' }
+  const [showNewOrder, setShowNewOrder] = useState(false)
+  const [noForm, setNoForm] = useState(emptyNO)
+  const [noQtys, setNoQtys] = useState({})
+  const [noErrors, setNoErrors] = useState({})
+
   useEffect(() => {
     const t = setTimeout(() => setLoading(false), 1000)
     return () => clearTimeout(t)
@@ -95,6 +101,32 @@ export default function Orders() {
     })
     setRejectModal(null)
     setSelected(null)
+  }
+
+  const submitNewOrder = () => {
+    const errs = {}
+    if (noForm.type === 'طاولة' && !noForm.table.trim()) errs.table = 'رقم الطاولة مطلوب'
+    const allItems = getMenuItems()
+    const details = Object.entries(noQtys)
+      .filter(([, qty]) => qty > 0)
+      .map(([id, qty]) => {
+        const item = allItems.find(i => i.id === Number(id))
+        return item ? { name: item.name, qty, price: item.price, note: '' } : null
+      })
+      .filter(Boolean)
+    if (!details.length) errs.items = 'أضف صنفاً واحداً على الأقل'
+    setNoErrors(errs)
+    if (Object.keys(errs).length) return
+    const total = details.reduce((s, i) => s + i.price * i.qty, 0)
+    const itemsSummary = details.map(i => `${i.name}${i.qty > 1 ? ' ×' + i.qty : ''}`).join(' + ')
+    const tableLabel = noForm.type === 'طاولة' ? `طاولة ${noForm.table}` : noForm.type
+    const created = addOrder({ table: tableLabel, items: itemsSummary, total, customer: noForm.customer || 'زبون', phone: noForm.phone, payment: noForm.payment, details })
+    setOrders(getOrders())
+    setShowNewOrder(false)
+    setNoForm(emptyNO)
+    setNoQtys({})
+    setNoErrors({})
+    setActiveTab('new')
   }
 
   if (loading) {
@@ -170,6 +202,7 @@ export default function Orders() {
         <button
           className="btn-primary"
           style={{ height: 36, fontSize: 13, padding: '0 14px' }}
+          onClick={() => { setNoForm(emptyNO); setNoQtys({}); setNoErrors({}); setShowNewOrder(true) }}
         >
           طلب جديد +
         </button>
@@ -650,6 +683,139 @@ export default function Orders() {
           </div>
         </div>
       )}
+
+      {/* ── NEW ORDER MODAL ── */}
+      {showNewOrder && (() => {
+        const allMenuItems = getMenuItems().filter(i => i.active)
+        const cats = getCategories()
+        const orderTotal = Object.entries(noQtys)
+          .filter(([, q]) => q > 0)
+          .reduce((s, [id, q]) => {
+            const item = allMenuItems.find(i => i.id === Number(id))
+            return s + (item ? item.price * q : 0)
+          }, 0)
+        const F = { fontFamily: 'Zain, sans-serif' }
+        const inp = { ...F, width: '100%', padding: '10px 14px', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--surface-2)', color: 'var(--text)', fontSize: 14, outline: 'none', boxSizing: 'border-box' }
+        return (
+          <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(4px)', zIndex: 60, display: 'flex', alignItems: 'flex-start', justifyContent: 'center', padding: '24px 16px', overflowY: 'auto' }} onClick={() => setShowNewOrder(false)}>
+            <div style={{ background: 'var(--surface)', borderRadius: 16, width: '100%', maxWidth: 520, boxShadow: '0 24px 60px rgba(0,0,0,0.5)', overflow: 'hidden' }} onClick={e => e.stopPropagation()}>
+
+              {/* Header */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 20px', borderBottom: '1px solid var(--border)' }}>
+                <p style={{ ...F, fontWeight: 800, fontSize: 16, color: 'var(--text)' }}>طلب جديد</p>
+                <button onClick={() => setShowNewOrder(false)} style={{ border: 'none', background: 'var(--surface-2)', color: 'var(--text-2)', borderRadius: 8, width: 32, height: 32, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <CloseCircle size={18} />
+                </button>
+              </div>
+
+              <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: 20 }}>
+
+                {/* Order type */}
+                <div>
+                  <p style={{ ...F, fontSize: 13, fontWeight: 700, color: 'var(--text-2)', marginBottom: 8 }}>نوع الطلب</p>
+                  <div style={{ display: 'flex', gap: 8 }}>
+                    {['طاولة', 'استلام', 'توصيل'].map(t => (
+                      <button key={t} onClick={() => setNoForm(f => ({ ...f, type: t }))}
+                        style={{ ...F, flex: 1, padding: '9px 0', borderRadius: 10, border: '1.5px solid', fontSize: 13, fontWeight: 700, cursor: 'pointer', transition: 'all 0.15s', background: noForm.type === t ? 'var(--accent)' : 'var(--surface-2)', borderColor: noForm.type === t ? 'var(--accent)' : 'var(--border)', color: noForm.type === t ? 'white' : 'var(--text-2)' }}>
+                        {t}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Table number */}
+                {noForm.type === 'طاولة' && (
+                  <div>
+                    <p style={{ ...F, fontSize: 13, fontWeight: 700, color: 'var(--text-2)', marginBottom: 6 }}>رقم الطاولة</p>
+                    <input style={{ ...inp, ...(noErrors.table ? { borderColor: 'var(--red)' } : {}) }} placeholder="مثال: 5" value={noForm.table} onChange={e => setNoForm(f => ({ ...f, table: e.target.value }))} />
+                    {noErrors.table && <p style={{ ...F, color: 'var(--red)', fontSize: 12, marginTop: 4 }}>{noErrors.table}</p>}
+                  </div>
+                )}
+
+                {/* Customer info */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                  <div>
+                    <p style={{ ...F, fontSize: 13, fontWeight: 700, color: 'var(--text-2)', marginBottom: 6 }}>اسم الزبون <span style={{ color: 'var(--text-3)', fontWeight: 400 }}>(اختياري)</span></p>
+                    <input style={inp} placeholder="الاسم" value={noForm.customer} onChange={e => setNoForm(f => ({ ...f, customer: e.target.value }))} />
+                  </div>
+                  <div>
+                    <p style={{ ...F, fontSize: 13, fontWeight: 700, color: 'var(--text-2)', marginBottom: 6 }}>رقم الهاتف <span style={{ color: 'var(--text-3)', fontWeight: 400 }}>(اختياري)</span></p>
+                    <input style={inp} placeholder="01XXXXXXXXX" value={noForm.phone} onChange={e => setNoForm(f => ({ ...f, phone: e.target.value }))} />
+                  </div>
+                </div>
+
+                {/* Items */}
+                <div>
+                  <p style={{ ...F, fontSize: 13, fontWeight: 700, color: 'var(--text-2)', marginBottom: 8 }}>الأصناف</p>
+                  {noErrors.items && <p style={{ ...F, color: 'var(--red)', fontSize: 12, marginBottom: 8 }}>{noErrors.items}</p>}
+                  <div style={{ border: '1px solid var(--border)', borderRadius: 12, overflow: 'hidden' }}>
+                    {cats.map((cat, ci) => {
+                      const catItems = allMenuItems.filter(i => i.categoryId === cat.id)
+                      if (!catItems.length) return null
+                      return (
+                        <div key={cat.id}>
+                          <div style={{ padding: '8px 14px', background: 'var(--surface-2)', borderTop: ci > 0 ? '1px solid var(--border)' : 'none' }}>
+                            <span style={{ ...F, fontSize: 11, fontWeight: 700, color: 'var(--text-3)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{cat.name}</span>
+                          </div>
+                          {catItems.map((item, ii) => {
+                            const qty = noQtys[item.id] || 0
+                            return (
+                              <div key={item.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', borderTop: ii > 0 ? '1px solid var(--border)' : 'none', background: qty > 0 ? 'rgba(249,115,22,0.04)' : 'transparent', transition: 'background 0.15s' }}>
+                                <div style={{ flex: 1 }}>
+                                  <p style={{ ...F, fontSize: 13, fontWeight: qty > 0 ? 700 : 500, color: 'var(--text)', marginBottom: 1 }}>{item.name}</p>
+                                  <p style={{ ...F, fontSize: 12, color: 'var(--accent)', fontWeight: 600 }}>{item.price} ج</p>
+                                </div>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                                  {qty > 0 && (
+                                    <button onClick={() => setNoQtys(q => ({ ...q, [item.id]: Math.max(0, qty - 1) }))}
+                                      style={{ width: 28, height: 28, borderRadius: 8, border: '1px solid var(--border)', background: 'var(--surface-2)', color: 'var(--text-2)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                      <Minus size={13} />
+                                    </button>
+                                  )}
+                                  {qty > 0 && <span style={{ ...F, fontSize: 14, fontWeight: 700, color: 'var(--text)', minWidth: 20, textAlign: 'center' }}>{qty}</span>}
+                                  <button onClick={() => setNoQtys(q => ({ ...q, [item.id]: qty + 1 }))}
+                                    style={{ width: 28, height: 28, borderRadius: 8, border: 'none', background: qty > 0 ? 'var(--accent)' : 'var(--surface-2)', color: qty > 0 ? 'white' : 'var(--text-2)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s' }}>
+                                    <Add size={13} />
+                                  </button>
+                                </div>
+                              </div>
+                            )
+                          })}
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+
+                {/* Payment */}
+                <div>
+                  <p style={{ ...F, fontSize: 13, fontWeight: 700, color: 'var(--text-2)', marginBottom: 8 }}>طريقة الدفع</p>
+                  <div style={{ display: 'flex', gap: 8 }}>
+                    {['كاش عند الاستلام', 'بطاقة'].map(p => (
+                      <button key={p} onClick={() => setNoForm(f => ({ ...f, payment: p }))}
+                        style={{ ...F, flex: 1, padding: '9px 0', borderRadius: 10, border: '1.5px solid', fontSize: 13, fontWeight: 600, cursor: 'pointer', transition: 'all 0.15s', background: noForm.payment === p ? 'var(--accent)' : 'var(--surface-2)', borderColor: noForm.payment === p ? 'var(--accent)' : 'var(--border)', color: noForm.payment === p ? 'white' : 'var(--text-2)' }}>
+                        {p}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div style={{ padding: '16px 20px', borderTop: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 12 }}>
+                <div style={{ flex: 1 }}>
+                  <p style={{ ...F, fontSize: 11, color: 'var(--text-3)', fontWeight: 500 }}>الإجمالي</p>
+                  <p style={{ ...F, fontSize: 20, fontWeight: 800, color: 'var(--accent)', fontFamily: 'Inter, sans-serif' }}>{orderTotal} <span style={{ fontSize: 13, fontWeight: 600 }}>ج</span></p>
+                </div>
+                <button onClick={submitNewOrder} className="btn-primary" style={{ ...F, padding: '12px 28px', fontSize: 14, fontWeight: 800 }}>
+                  تأكيد الطلب
+                </button>
+              </div>
+
+            </div>
+          </div>
+        )
+      })()}
     </Layout>
   )
 }
