@@ -17,7 +17,6 @@ import Profile from './pages/Profile'
 import Reviews from './pages/Reviews'
 import StoreFront from './customer/StoreFront'
 import Cart from './customer/Cart'
-import Checkout from './customer/Checkout'
 import OrderConfirm from './customer/OrderConfirm'
 import OrderTracking from './customer/OrderTracking'
 import Explore from './customer/Explore'
@@ -105,7 +104,7 @@ export default function App() {
         <Route path="/loyalty" element={<Loyalty />} />
         <Route path="/chef-ahmed" element={<StoreFront />} />
         <Route path="/cart" element={<Cart />} />
-        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/checkout" element={<Navigate to="/cart" replace />} />
         <Route path="/order-confirm" element={<OrderConfirm />} />
         <Route path="/track/:orderId" element={<OrderTracking />} />
         <Route path="/explore" element={<Explore />} />
