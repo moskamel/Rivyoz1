@@ -11,15 +11,26 @@ export function CartProvider({ children }) {
     return []
   })
 
+  const [cartRestaurant, setCartRestaurant] = useState(() => {
+    try {
+      const raw = localStorage.getItem('cart_restaurant')
+      if (raw) return JSON.parse(raw)
+    } catch (e) { /* ignore */ }
+    return null // { id, name }
+  })
+
   useEffect(() => {
     localStorage.setItem('cart_items', JSON.stringify(cartItems))
   }, [cartItems])
 
-  const addItem = ({ itemId, name, price, qty, note = '', modifiers = [] }) => {
+  useEffect(() => {
+    localStorage.setItem('cart_restaurant', JSON.stringify(cartRestaurant))
+  }, [cartRestaurant])
+
+  const addItem = ({ itemId, name, price, qty, note = '', modifiers = [], restaurantId, restaurantName }) => {
     const extraCost = modifiers.reduce((s, m) => s + (m.price || 0), 0)
     const totalPrice = price + extraCost
     const modifierKey = JSON.stringify(modifiers)
-    const modifierLabel = modifiers.map(m => m.name).filter(Boolean).join('، ')
     setCartItems(prev => {
       const existing = prev.find(i => i.itemId === itemId && i.note === note && JSON.stringify(i.modifiers) === modifierKey)
       if (existing) {
@@ -29,29 +40,34 @@ export function CartProvider({ children }) {
             : i
         )
       }
-      return [...prev, { itemId, name, price: totalPrice, basePrice: price, qty, note, modifiers, modifierLabel, cartId: Date.now() + Math.random() }]
+      return [...prev, { itemId, name, price: totalPrice, basePrice: price, qty, note, modifiers, modifierLabel: modifiers.map(m => m.name).filter(Boolean).join('، '), cartId: Date.now() + Math.random() }]
     })
+    if (restaurantId) setCartRestaurant({ id: restaurantId, name: restaurantName || restaurantId })
   }
 
   const removeItem = (cartId) => {
-    setCartItems(prev => prev.filter(i => i.cartId !== cartId))
+    setCartItems(prev => {
+      const next = prev.filter(i => i.cartId !== cartId)
+      if (next.length === 0) setCartRestaurant(null)
+      return next
+    })
   }
 
   const updateQty = (cartId, qty) => {
-    if (qty <= 0) {
-      removeItem(cartId)
-      return
-    }
+    if (qty <= 0) { removeItem(cartId); return }
     setCartItems(prev => prev.map(i => i.cartId === cartId ? { ...i, qty } : i))
   }
 
-  const clearCart = () => setCartItems([])
+  const clearCart = () => {
+    setCartItems([])
+    setCartRestaurant(null)
+  }
 
   const total = cartItems.reduce((sum, i) => sum + i.price * i.qty, 0)
   const itemCount = cartItems.reduce((sum, i) => sum + i.qty, 0)
 
   return (
-    <CartContext.Provider value={{ cartItems, addItem, removeItem, updateQty, clearCart, total, itemCount }}>
+    <CartContext.Provider value={{ cartItems, addItem, removeItem, updateQty, clearCart, total, itemCount, cartRestaurant }}>
       {children}
     </CartContext.Provider>
   )

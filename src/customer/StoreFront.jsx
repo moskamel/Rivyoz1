@@ -193,7 +193,7 @@ export default function StoreFront() {
   const config = getConfig()
   const menuItems = getMenuItems()
   const categories = getCategories()
-  const { addItem, itemCount, total } = useCart()
+  const { addItem, clearCart, itemCount, total, cartRestaurant } = useCart()
 
   const customerProfile = getCustomerProfile()
   const pts = customerProfile ? getCustomerPoints(customerProfile.phone) : null
@@ -216,6 +216,26 @@ export default function StoreFront() {
   const [activeTab, setActiveTab] = useState(allTabs[0]?.id)
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [selectedModifiers, setSelectedModifiers] = useState({})
+  const [conflictPending, setConflictPending] = useState(null) // stores the addItem call to execute after confirm
+
+  const isDifferentRestaurant = cartRestaurant && cartRestaurant.id !== config.slug && itemCount > 0
+
+  const safeAddItem = (payload, onAdded) => {
+    if (isDifferentRestaurant) {
+      setConflictPending({ payload, onAdded })
+    } else {
+      addItem({ ...payload, restaurantId: config.slug, restaurantName: config.name })
+      onAdded?.()
+    }
+  }
+
+  const confirmConflict = () => {
+    if (!conflictPending) return
+    clearCart()
+    addItem({ ...conflictPending.payload, restaurantId: config.slug, restaurantName: config.name })
+    conflictPending.onAdded?.()
+    setConflictPending(null)
+  }
 
   const openItem = (item) => {
     if (!item.active) return
@@ -270,12 +290,14 @@ export default function StoreFront() {
       }
     }) || []
 
-    addItem({ itemId: selectedItem.id, name: selectedItem.name, price: selectedItem.price, qty, note, modifiers: flatModifiers })
-    closeSheet()
+    safeAddItem(
+      { itemId: selectedItem.id, name: selectedItem.name, price: selectedItem.price, qty, note, modifiers: flatModifiers },
+      closeSheet
+    )
   }
 
   const handleAddCombo = (combo) => {
-    addItem({ itemId: combo.id, name: combo.name, price: combo.price, qty: 1, note: combo.items })
+    safeAddItem({ itemId: combo.id, name: combo.name, price: combo.price, qty: 1, note: combo.items })
   }
 
   const searchedMenuItems = searchMenuQuery.trim()
@@ -684,6 +706,41 @@ export default function StoreFront() {
             </div>
           </div>
         </>
+      )}
+
+      {/* ─── Restaurant conflict dialog ─── */}
+      {conflictPending && (
+        <div
+          onClick={() => setConflictPending(null)}
+          style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.55)', zIndex: 250, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}
+        >
+          <div
+            onClick={e => e.stopPropagation()}
+            style={{ background: 'var(--surface)', borderRadius: '24px 24px 0 0', padding: '28px 20px 40px', width: '100%', maxWidth: 480, textAlign: 'center', fontFamily: 'Cairo, sans-serif' }}
+          >
+            <div style={{ fontSize: 48, marginBottom: 16 }}>🛒</div>
+            <p style={{ fontWeight: 900, fontSize: 17, color: 'var(--text)', marginBottom: 10 }}>سلتك من مطعم آخر</p>
+            <p style={{ fontSize: 13, color: 'var(--text-2)', lineHeight: 1.75, marginBottom: 24 }}>
+              لديك منتجات في السلة من{' '}
+              <span style={{ fontWeight: 800, color: 'var(--text)' }}>{cartRestaurant?.name}</span>.
+              <br />إضافة منتج من هذا المطعم ستمسح سلتك الحالية.
+            </p>
+            <div style={{ display: 'flex', gap: 10 }}>
+              <button
+                onClick={() => setConflictPending(null)}
+                style={{ flex: 1, padding: '14px', borderRadius: 14, border: '1.5px solid var(--border-strong)', fontSize: 14, fontWeight: 700, color: 'var(--text-2)', background: 'var(--surface)', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}
+              >
+                إلغاء
+              </button>
+              <button
+                onClick={confirmConflict}
+                style={{ flex: 1, padding: '14px', borderRadius: 14, border: 'none', fontSize: 14, fontWeight: 700, color: 'white', background: config.color, cursor: 'pointer', fontFamily: 'Cairo, sans-serif', boxShadow: `0 4px 14px ${config.color}44` }}
+              >
+                امسح وأضف
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   )
