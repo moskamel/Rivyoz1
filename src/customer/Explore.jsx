@@ -371,7 +371,7 @@ export default function Explore() {
       ) : (
         /* ── List view ── */
         <div style={{ flex: 1, overflowY: 'auto' }}>
-          <div style={{ padding: '16px 16px 88px' }}>
+          <div style={{ padding: '16px 16px 0' }}>
 
             {/* Filter tabs */}
             <div style={{ display: 'flex', gap: 8, overflowX: 'auto', scrollbarWidth: 'none', marginBottom: 16, paddingBottom: 2 }}>
@@ -504,10 +504,11 @@ export default function Explore() {
               </div>
             )}
           </div>
+          <CustomerFooter />
+          <div style={{ height: 80 }} />
         </div>
       )}
 
-      <CustomerFooter />
       <CustomerNav />
     </div>
   )
