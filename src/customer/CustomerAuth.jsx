@@ -49,7 +49,7 @@ export default function CustomerAuth() {
   const inputBase = {
     width: '100%', padding: '14px', borderRadius: 14,
     border: '1.5px solid #E5E7EB', fontSize: 15,
-    fontFamily: 'Cairo, sans-serif', outline: 'none',
+    fontFamily: 'Zain, sans-serif', outline: 'none',
     transition: 'border-color 0.2s, box-shadow 0.2s',
     boxSizing: 'border-box', background: 'white', color: '#111827',
   }
@@ -60,7 +60,7 @@ export default function CustomerAuth() {
       background: 'linear-gradient(180deg, #FFF7ED 0%, #F9FAFB 55%)',
       display: 'flex', flexDirection: 'column',
       alignItems: 'center', justifyContent: 'center',
-      padding: '24px 20px', fontFamily: 'Cairo, sans-serif', direction: 'rtl',
+      padding: '24px 20px', fontFamily: 'Zain, sans-serif', direction: 'rtl',
     }}>
       {/* Logo */}
       <div style={{ marginBottom: 36, textAlign: 'center' }}>
@@ -111,7 +111,7 @@ export default function CustomerAuth() {
                 width: '100%', marginTop: 18, padding: '15px',
                 borderRadius: 14, background: color, color: 'white',
                 fontWeight: 800, fontSize: 15, border: 'none', cursor: 'pointer',
-                fontFamily: 'Cairo, sans-serif', boxShadow: `0 6px 20px ${color}44`,
+                fontFamily: 'Zain, sans-serif', boxShadow: `0 6px 20px ${color}44`,
               }}
             >
               متابعة ←
@@ -149,7 +149,7 @@ export default function CustomerAuth() {
                 width: '100%', marginTop: 18, padding: '15px',
                 borderRadius: 14, background: color, color: 'white',
                 fontWeight: 800, fontSize: 15, border: 'none', cursor: 'pointer',
-                fontFamily: 'Cairo, sans-serif', boxShadow: `0 6px 20px ${color}44`,
+                fontFamily: 'Zain, sans-serif', boxShadow: `0 6px 20px ${color}44`,
               }}
             >
               ابدأ الطلب 🚀
@@ -160,7 +160,7 @@ export default function CustomerAuth() {
                 width: '100%', marginTop: 10, padding: '12px',
                 borderRadius: 14, background: 'transparent', color: '#9CA3AF',
                 fontWeight: 600, fontSize: 13, border: '1px solid #E5E7EB',
-                cursor: 'pointer', fontFamily: 'Cairo, sans-serif',
+                cursor: 'pointer', fontFamily: 'Zain, sans-serif',
               }}
             >
               تغيير الرقم

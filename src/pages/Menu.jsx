@@ -10,7 +10,7 @@ function Skel({ w = '100%', h = 16, r = 8, mb = 0 }) {
 const inputStyle = {
   width: '100%', padding: '10px 14px', borderRadius: 'var(--radius)', border: '1px solid var(--border)',
   background: 'var(--surface-2)', color: 'var(--text)', fontSize: 13, outline: 'none',
-  fontFamily: 'Cairo, sans-serif', boxSizing: 'border-box',
+  fontFamily: 'Zain, sans-serif', boxSizing: 'border-box',
   transition: 'border-color var(--dur-normal) var(--ease-default), box-shadow var(--dur-normal) var(--ease-default)',
 }
 
@@ -264,19 +264,19 @@ export default function Menu() {
                     {openMenuId === item.id && (
                       <div style={{ position: 'absolute', left: 0, top: 36, background: 'var(--surface-3)', border: '1px solid var(--border-strong)', borderRadius: 10, overflow: 'hidden', zIndex: 200, minWidth: 120, boxShadow: 'var(--shadow-lg)' }}>
                         <button onClick={() => { openEdit(item); setOpenMenuId(null) }}
-                          style={{ width: '100%', textAlign: 'right', padding: '9px 14px', fontSize: 13, color: 'var(--text-2)', background: 'transparent', border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}
+                          style={{ width: '100%', textAlign: 'right', padding: '9px 14px', fontSize: 13, color: 'var(--text-2)', background: 'transparent', border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}
                           onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-2)'}
                           onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                         >تعديل</button>
                         <button
                           onClick={() => { setItems(prev => { const next = [...prev, { ...item, id: Date.now(), name: item.name + ' (نسخة)' }]; setMenuItems(next); return next }); setOpenMenuId(null) }}
-                          style={{ width: '100%', textAlign: 'right', padding: '9px 14px', fontSize: 13, color: 'var(--text-2)', background: 'transparent', border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}
+                          style={{ width: '100%', textAlign: 'right', padding: '9px 14px', fontSize: 13, color: 'var(--text-2)', background: 'transparent', border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}
                           onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-2)'}
                           onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                         >نسخ</button>
                         <div style={{ height: 1, background: 'var(--border)', margin: '2px 0' }} />
                         <button onClick={() => { deleteItem(item.id); setOpenMenuId(null) }}
-                          style={{ width: '100%', textAlign: 'right', padding: '9px 14px', fontSize: 13, color: 'var(--red)', background: 'transparent', border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}
+                          style={{ width: '100%', textAlign: 'right', padding: '9px 14px', fontSize: 13, color: 'var(--red)', background: 'transparent', border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}
                           onMouseEnter={e => e.currentTarget.style.background = 'var(--red-muted)'}
                           onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                         >حذف</button>
@@ -381,7 +381,7 @@ export default function Menu() {
                 style={{
                   padding: '12px', borderRadius: 'var(--radius)',
                   fontWeight: 700, fontSize: 14, border: 'none', cursor: form.name && form.price ? 'pointer' : 'not-allowed',
-                  fontFamily: 'Cairo, sans-serif', transition: 'all 0.15s',
+                  fontFamily: 'Zain, sans-serif', transition: 'all 0.15s',
                   ...(!(form.name && form.price) ? { background: 'var(--surface-2)', color: 'var(--text-3)' } : {}),
                 }}
               >

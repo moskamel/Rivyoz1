@@ -290,7 +290,7 @@ export default function Login() {
                     border: `1px solid ${selectedRole === role.id ? 'var(--accent)' : 'var(--border)'}`,
                     background: selectedRole === role.id ? 'var(--accent-muted)' : 'var(--surface)',
                     color: selectedRole === role.id ? 'var(--accent)' : 'var(--text-2)',
-                    fontFamily: 'Cairo, sans-serif',
+                    fontFamily: 'Zain, sans-serif',
                   }}
                 >
                   {role.label}
@@ -367,7 +367,7 @@ export default function Login() {
                   transition: 'all 0.15s',
                   opacity: loading ? 0.75 : 1,
                   boxShadow: phoneValid ? '0 4px 20px rgba(249,115,22,0.25)' : 'none',
-                  fontFamily: 'Cairo, sans-serif',
+                  fontFamily: 'Zain, sans-serif',
                 }}
               >
                 {loading ? (
@@ -399,14 +399,14 @@ export default function Login() {
               {/* Timer */}
               <div style={{ textAlign: 'center', marginBottom: 20 }}>
                 {timerSecs > 0 ? (
-                  <p style={{ fontSize: 13, color: 'var(--text-2)', fontFamily: 'Cairo, sans-serif' }}>
+                  <p style={{ fontSize: 13, color: 'var(--text-2)', fontFamily: 'Zain, sans-serif' }}>
                     انتهاء صلاحية الرمز خلال{' '}
                     <span style={{ color: 'var(--accent)', fontFamily: 'Inter', fontWeight: 700 }}>
                       {formatTimer(timerSecs)}
                     </span>
                   </p>
                 ) : (
-                  <p style={{ fontSize: 13, color: 'var(--text-2)', fontFamily: 'Cairo, sans-serif' }}>
+                  <p style={{ fontSize: 13, color: 'var(--text-2)', fontFamily: 'Zain, sans-serif' }}>
                     لم تستلم الرمز؟{' '}
                     <button
                       type="button"
@@ -418,7 +418,7 @@ export default function Login() {
                         fontWeight: 700,
                         cursor: 'pointer',
                         fontSize: 13,
-                        fontFamily: 'Cairo, sans-serif',
+                        fontFamily: 'Zain, sans-serif',
                         textDecoration: 'underline',
                         padding: 0,
                       }}
@@ -451,7 +451,7 @@ export default function Login() {
                   transition: 'all 0.15s',
                   opacity: loading ? 0.75 : 1,
                   boxShadow: otpComplete ? '0 4px 20px rgba(249,115,22,0.25)' : 'none',
-                  fontFamily: 'Cairo, sans-serif',
+                  fontFamily: 'Zain, sans-serif',
                   marginBottom: 12,
                 }}
               >
@@ -474,7 +474,7 @@ export default function Login() {
                   color: 'var(--text-3)',
                   fontSize: 13,
                   cursor: 'pointer',
-                  fontFamily: 'Cairo, sans-serif',
+                  fontFamily: 'Zain, sans-serif',
                 }}
               >
                 ← تغيير رقم الجوال
@@ -503,7 +503,7 @@ export default function Login() {
               background: 'transparent',
               cursor: 'pointer',
               transition: 'all 0.15s',
-              fontFamily: 'Cairo, sans-serif',
+              fontFamily: 'Zain, sans-serif',
             }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.background = 'var(--accent-muted)' }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.background = 'transparent' }}

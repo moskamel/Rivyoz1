@@ -27,7 +27,7 @@ function useToast() {
 const inputStyle = {
   width: '100%', padding: '9px 12px', borderRadius: 10, border: '1px solid var(--border)',
   background: 'var(--surface-2)', color: 'var(--text)', fontSize: 13, outline: 'none',
-  fontFamily: 'Cairo, sans-serif', boxSizing: 'border-box', transition: 'border-color 0.15s',
+  fontFamily: 'Zain, sans-serif', boxSizing: 'border-box', transition: 'border-color 0.15s',
 }
 
 function Toggle({ value, onChange }) {

@@ -141,7 +141,7 @@ export default function Reports() {
         <ResponsiveContainer width="100%" height={220}>
           <LineChart data={mockSalesData} margin={{ top: 4, right: 4, left: 0, bottom: 0 }}>
             <CartesianGrid stroke="var(--border)" strokeDasharray="4 4" vertical={false} />
-            <XAxis dataKey="day" tick={{ fontSize: 11, fontFamily: 'Cairo', fill: 'var(--text-3)' }} axisLine={false} tickLine={false} />
+            <XAxis dataKey="day" tick={{ fontSize: 11, fontFamily: 'Zain', fill: 'var(--text-3)' }} axisLine={false} tickLine={false} />
             <YAxis tick={{ fontSize: 11, fill: 'var(--text-3)', fontFamily: 'Inter' }} axisLine={false} tickLine={false} width={40} />
             <Tooltip content={<SalesCustomTooltip />} />
             <Line type="monotone" dataKey="amount" stroke="#F97316" strokeWidth={2.5} dot={{ r: 4, fill: '#F97316', stroke: 'var(--bg)', strokeWidth: 2 }} activeDot={{ r: 6, fill: '#F97316', stroke: 'var(--bg)', strokeWidth: 2 }} />
@@ -178,7 +178,7 @@ export default function Reports() {
           <ResponsiveContainer width="100%" height={140}>
             <BarChart data={timeData} margin={{ top: 4, right: 4, left: 0, bottom: 0 }}>
               <CartesianGrid stroke="var(--border)" strokeDasharray="4 4" vertical={false} />
-              <XAxis dataKey="slot" tick={{ fontSize: 11, fontFamily: 'Cairo', fill: 'var(--text-3)' }} axisLine={false} tickLine={false} />
+              <XAxis dataKey="slot" tick={{ fontSize: 11, fontFamily: 'Zain', fill: 'var(--text-3)' }} axisLine={false} tickLine={false} />
               <YAxis hide />
               <Tooltip content={<CustomTooltip />} />
               <Bar dataKey="value" fill="#F97316" radius={[6, 6, 0, 0]} />

@@ -20,7 +20,7 @@ export default function CustomerProfile() {
 
   if (!profile) {
     return (
-      <div style={{ minHeight: '100vh', background: 'var(--bg)', fontFamily: 'Cairo, sans-serif', direction: 'rtl', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ minHeight: '100vh', background: 'var(--bg)', fontFamily: 'Zain, sans-serif', direction: 'rtl', display: 'flex', flexDirection: 'column' }}>
         {/* Header */}
         <div style={{ background: 'var(--surface)', borderBottom: '1px solid var(--border)', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 12, boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
           <button
@@ -73,13 +73,13 @@ export default function CustomerProfile() {
           <div style={{ width: '100%', maxWidth: 320, display: 'flex', flexDirection: 'column', gap: 10 }}>
             <button
               onClick={() => navigate('/customer-login', { state: { from: '/my-profile' } })}
-              style={{ width: '100%', padding: '15px', borderRadius: 16, background: color, color: 'white', fontWeight: 800, fontSize: 15, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif', boxShadow: `0 6px 22px ${color}45` }}
+              style={{ width: '100%', padding: '15px', borderRadius: 16, background: color, color: 'white', fontWeight: 800, fontSize: 15, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', boxShadow: `0 6px 22px ${color}45` }}
             >
               تسجيل الدخول
             </button>
             <button
               onClick={() => navigate('/customer-login', { state: { from: '/my-profile' } })}
-              style={{ width: '100%', padding: '13px', borderRadius: 16, background: 'var(--surface)', color, fontWeight: 700, fontSize: 14, border: `2px solid ${color}`, cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}
+              style={{ width: '100%', padding: '13px', borderRadius: 16, background: 'var(--surface)', color, fontWeight: 700, fontSize: 14, border: `2px solid ${color}`, cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}
             >
               إنشاء حساب جديد
             </button>
@@ -128,7 +128,7 @@ export default function CustomerProfile() {
     : { label: 'مبتدئ 🌟' }
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg)', fontFamily: 'Cairo, sans-serif', direction: 'rtl' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', fontFamily: 'Zain, sans-serif', direction: 'rtl' }}>
       {/* Gradient header */}
       <div style={{
         background: `linear-gradient(135deg, ${color} 0%, ${color}cc 100%)`,
@@ -243,7 +243,7 @@ export default function CustomerProfile() {
         <div style={{ background: 'var(--surface)', borderRadius: 18, overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', border: '1px solid var(--border)' }}>
           <button
             onClick={() => navigate('/my-orders')}
-            style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 14, padding: '17px 16px', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'right', fontFamily: 'Cairo, sans-serif' }}
+            style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 14, padding: '17px 16px', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'right', fontFamily: 'Zain, sans-serif' }}
           >
             <span style={{ fontSize: 22 }}>📋</span>
             <div style={{ flex: 1 }}>
@@ -265,7 +265,7 @@ export default function CustomerProfile() {
                 padding: '6px 12px', borderRadius: 10,
                 background: `${color}18`, color: color,
                 fontWeight: 700, fontSize: 12, border: 'none',
-                cursor: 'pointer', fontFamily: 'Cairo, sans-serif',
+                cursor: 'pointer', fontFamily: 'Zain, sans-serif',
               }}
             >
               <Plus size={13} /> إضافة
@@ -299,19 +299,19 @@ export default function CustomerProfile() {
                   style={{
                     width: '100%', padding: '11px 12px', borderRadius: 12,
                     border: `1.5px solid ${color}`, fontSize: 13,
-                    fontFamily: 'Cairo, sans-serif', boxSizing: 'border-box', outline: 'none',
+                    fontFamily: 'Zain, sans-serif', boxSizing: 'border-box', outline: 'none',
                   }}
                 />
                 <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
                   <button
                     onClick={() => { setAddingAddress(false); setNewAddress('') }}
-                    style={{ flex: 1, padding: '10px', borderRadius: 12, background: '#F9FAFB', border: '1px solid #E5E7EB', color: 'var(--text-2)', fontWeight: 600, fontSize: 13, cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}
+                    style={{ flex: 1, padding: '10px', borderRadius: 12, background: '#F9FAFB', border: '1px solid #E5E7EB', color: 'var(--text-2)', fontWeight: 600, fontSize: 13, cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}
                   >
                     إلغاء
                   </button>
                   <button
                     onClick={addAddress}
-                    style={{ flex: 1, padding: '10px', borderRadius: 12, background: color, color: 'white', fontWeight: 700, fontSize: 13, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}
+                    style={{ flex: 1, padding: '10px', borderRadius: 12, background: color, color: 'white', fontWeight: 700, fontSize: 13, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}
                   >
                     حفظ
                   </button>
@@ -328,7 +328,7 @@ export default function CustomerProfile() {
             width: '100%', padding: '14px', borderRadius: 14,
             background: '#FEF2F2', color: '#DC2626',
             fontWeight: 700, fontSize: 14, border: '1.5px solid #FECACA',
-            cursor: 'pointer', fontFamily: 'Cairo, sans-serif',
+            cursor: 'pointer', fontFamily: 'Zain, sans-serif',
           }}
         >
           تسجيل الخروج
@@ -351,11 +351,11 @@ export default function CustomerProfile() {
               value={newName}
               onChange={e => setNewName(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && saveNameEdit()}
-              style={{ width: '100%', padding: '13px 14px', borderRadius: 14, border: `1.5px solid ${color}`, fontSize: 15, fontFamily: 'Cairo, sans-serif', boxSizing: 'border-box', outline: 'none' }}
+              style={{ width: '100%', padding: '13px 14px', borderRadius: 14, border: `1.5px solid ${color}`, fontSize: 15, fontFamily: 'Zain, sans-serif', boxSizing: 'border-box', outline: 'none' }}
             />
             <div style={{ display: 'flex', gap: 10, marginTop: 14 }}>
-              <button onClick={() => setEditingName(false)} style={{ flex: 1, padding: '13px', borderRadius: 14, background: '#F9FAFB', border: '1px solid #E5E7EB', color: 'var(--text-2)', fontWeight: 600, fontSize: 14, cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>إلغاء</button>
-              <button onClick={saveNameEdit} style={{ flex: 1, padding: '13px', borderRadius: 14, background: color, color: 'white', fontWeight: 700, fontSize: 14, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>حفظ</button>
+              <button onClick={() => setEditingName(false)} style={{ flex: 1, padding: '13px', borderRadius: 14, background: '#F9FAFB', border: '1px solid #E5E7EB', color: 'var(--text-2)', fontWeight: 600, fontSize: 14, cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>إلغاء</button>
+              <button onClick={saveNameEdit} style={{ flex: 1, padding: '13px', borderRadius: 14, background: color, color: 'white', fontWeight: 700, fontSize: 14, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>حفظ</button>
             </div>
           </div>
         </div>

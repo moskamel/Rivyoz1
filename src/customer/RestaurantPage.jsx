@@ -25,7 +25,7 @@ export default function RestaurantPage() {
   const others = mockRestaurants.filter(r => r.slug !== slug)
 
   return (
-    <div style={{ minHeight: '100vh', background: '#F9FAFB', fontFamily: 'Cairo, sans-serif' }} dir="rtl">
+    <div style={{ minHeight: '100vh', background: '#F9FAFB', fontFamily: 'Zain, sans-serif' }} dir="rtl">
 
       {/* ── Header ── */}
       <div style={{
@@ -177,7 +177,7 @@ export default function RestaurantPage() {
           style={{
             width: '100%', padding: '14px 32px', background: restaurant.color, color: 'white',
             borderRadius: 14, fontWeight: 700, fontSize: 15, border: 'none', cursor: 'pointer',
-            fontFamily: 'Cairo, sans-serif', boxShadow: `0 8px 24px ${restaurant.color}44`,
+            fontFamily: 'Zain, sans-serif', boxShadow: `0 8px 24px ${restaurant.color}44`,
             marginBottom: 12,
           }}
         >
@@ -188,7 +188,7 @@ export default function RestaurantPage() {
           onClick={() => navigate('/explore')}
           style={{
             background: 'none', border: 'none', color: '#9CA3AF', fontSize: 13, cursor: 'pointer',
-            fontFamily: 'Cairo, sans-serif', padding: '8px',
+            fontFamily: 'Zain, sans-serif', padding: '8px',
           }}
         >
           العودة لاستكشاف المطاعم

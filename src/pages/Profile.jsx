@@ -32,7 +32,7 @@ const inputStyle = {
   background: 'var(--surface-2)',
   color: 'var(--text)',
   fontSize: 14,
-  fontFamily: 'Cairo, sans-serif',
+  fontFamily: 'Zain, sans-serif',
   outline: 'none',
   boxSizing: 'border-box',
   transition: 'border-color 0.15s',
@@ -191,7 +191,7 @@ export default function Profile() {
                 fontSize: 22,
                 fontWeight: 900,
                 color: accentColor,
-                fontFamily: 'Cairo, sans-serif',
+                fontFamily: 'Zain, sans-serif',
                 letterSpacing: '-0.02em',
               }}>
                 {initials}
@@ -234,7 +234,7 @@ export default function Profile() {
                   color: accentColor,
                   fontSize: 12,
                   fontWeight: 700,
-                  fontFamily: 'Cairo, sans-serif',
+                  fontFamily: 'Zain, sans-serif',
                 }}>
                   {roleLabel}
                 </span>
@@ -258,7 +258,7 @@ export default function Profile() {
                 display: 'flex',
                 alignItems: 'center',
                 gap: 6,
-                fontFamily: 'Cairo, sans-serif',
+                fontFamily: 'Zain, sans-serif',
                 transition: 'all 0.15s',
               }}
               onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.color = 'var(--accent)' }}
@@ -307,7 +307,7 @@ export default function Profile() {
               alignItems: 'center',
               gap: 6,
               transition: 'all 0.2s',
-              fontFamily: 'Cairo, sans-serif',
+              fontFamily: 'Zain, sans-serif',
               boxShadow: '0 4px 14px rgba(249,115,22,0.2)',
             }}
           >
@@ -352,7 +352,7 @@ export default function Profile() {
               alignItems: 'center',
               gap: 6,
               transition: 'all 0.2s',
-              fontFamily: 'Cairo, sans-serif',
+              fontFamily: 'Zain, sans-serif',
               boxShadow: '0 4px 14px rgba(249,115,22,0.2)',
             }}
           >
@@ -397,7 +397,7 @@ export default function Profile() {
               alignItems: 'center',
               gap: 6,
               transition: 'all 0.15s',
-              fontFamily: 'Cairo, sans-serif',
+              fontFamily: 'Zain, sans-serif',
             }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.color = 'var(--accent)' }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-2)' }}
@@ -437,7 +437,7 @@ export default function Profile() {
                     color: accentColor,
                     fontSize: 11,
                     fontWeight: 700,
-                    fontFamily: 'Cairo, sans-serif',
+                    fontFamily: 'Zain, sans-serif',
                   }}>
                     {roleLabel}
                   </span>
@@ -461,7 +461,7 @@ export default function Profile() {
                 alignItems: 'center',
                 gap: 6,
                 transition: 'all 0.15s',
-                fontFamily: 'Cairo, sans-serif',
+                fontFamily: 'Zain, sans-serif',
               }}
               onMouseEnter={e => { e.currentTarget.style.background = 'rgba(239,68,68,0.15)' }}
               onMouseLeave={e => { e.currentTarget.style.background = 'rgba(239,68,68,0.08)' }}

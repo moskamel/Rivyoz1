@@ -59,7 +59,7 @@ function OfflineBanner() {
       padding: '10px 16px',
       fontSize: 13,
       fontWeight: 700,
-      fontFamily: 'Cairo, sans-serif',
+      fontFamily: 'Zain, sans-serif',
       direction: 'rtl',
       boxShadow: '0 2px 8px rgba(0,0,0,0.25)',
       display: 'flex',

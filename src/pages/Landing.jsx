@@ -148,7 +148,7 @@ function ThemeToggle({ isDark, onToggle }) {
         ? <Sun size={15} color={T.yellow} strokeWidth={2.5} />
         : <Moon size={15} color={T.text2} strokeWidth={2.5} />
       }
-      <span style={{ fontFamily: 'Cairo, sans-serif', fontSize: 12, fontWeight: 600, color: isDark ? T.yellow : T.text2 }}>
+      <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 12, fontWeight: 600, color: isDark ? T.yellow : T.text2 }}>
         {isDark ? 'فاتح' : 'داكن'}
       </span>
     </button>
@@ -193,15 +193,15 @@ function Navbar({ isDark, onToggle }) {
         <div style={{ width: 36, height: 36, borderRadius: 10, background: T.accent, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: T.accentGlow }}>
           <Zap size={20} color="#fff" fill="#fff" />
         </div>
-        <span style={{ fontFamily: 'Cairo, sans-serif', fontWeight: 800, fontSize: 22, color: T.text, letterSpacing: '-0.5px' }}>ريڤيو</span>
-        <span style={{ background: T.accentMut, border: `1px solid ${T.borderAcc}`, borderRadius: 6, padding: '2px 8px', fontFamily: 'Cairo, sans-serif', fontSize: 11, fontWeight: 700, color: T.accent }}>مصر</span>
+        <span style={{ fontFamily: 'Zain, sans-serif', fontWeight: 800, fontSize: 22, color: T.text, letterSpacing: '-0.5px' }}>ريڤيو</span>
+        <span style={{ background: T.accentMut, border: `1px solid ${T.borderAcc}`, borderRadius: 6, padding: '2px 8px', fontFamily: 'Zain, sans-serif', fontSize: 11, fontWeight: 700, color: T.accent }}>مصر</span>
       </div>
 
       {/* Links + actions */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
         {navLinks.map(l => (
           <button key={l.id} onClick={() => scrollTo(l.id)}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif', fontWeight: 500, fontSize: 14, color: T.text2, padding: '4px 0', transition: 'color 0.2s' }}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', fontWeight: 500, fontSize: 14, color: T.text2, padding: '4px 0', transition: 'color 0.2s' }}
             onMouseEnter={e => e.target.style.color = T.text}
             onMouseLeave={e => e.target.style.color = T.text2}
           >{l.label}</button>
@@ -210,18 +210,18 @@ function Navbar({ isDark, onToggle }) {
         <ThemeToggle isDark={isDark} onToggle={onToggle} />
 
         <a href="https://wa.me/201000000000" target="_blank" rel="noopener noreferrer"
-          style={{ background: '#25D366', border: 'none', borderRadius: 8, padding: '7px 16px', fontFamily: 'Cairo, sans-serif', fontWeight: 700, fontSize: 13, color: '#fff', cursor: 'pointer', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6 }}>
+          style={{ background: '#25D366', border: 'none', borderRadius: 8, padding: '7px 16px', fontFamily: 'Zain, sans-serif', fontWeight: 700, fontSize: 13, color: '#fff', cursor: 'pointer', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6 }}>
           <MessageCircle size={14} />واتساب
         </a>
 
         <button onClick={() => navigate('/explore')}
-          style={{ background: T.surface2, border: `1px solid ${T.border}`, borderRadius: 8, padding: '8px 16px', fontFamily: 'Cairo, sans-serif', fontWeight: 700, fontSize: 14, color: T.text, cursor: 'pointer', transition: 'background 0.2s, border-color 0.2s, transform 0.15s' }}
+          style={{ background: T.surface2, border: `1px solid ${T.border}`, borderRadius: 8, padding: '8px 16px', fontFamily: 'Zain, sans-serif', fontWeight: 700, fontSize: 14, color: T.text, cursor: 'pointer', transition: 'background 0.2s, border-color 0.2s, transform 0.15s' }}
           onMouseEnter={e => { e.currentTarget.style.borderColor = T.accent; e.currentTarget.style.transform = 'translateY(-1px)' }}
           onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.transform = 'translateY(0)' }}
         >اكتشف المطاعم</button>
 
         <button onClick={() => navigate('/login')}
-          style={{ background: T.accent, border: 'none', borderRadius: 8, padding: '8px 20px', fontFamily: 'Cairo, sans-serif', fontWeight: 700, fontSize: 14, color: '#fff', cursor: 'pointer', boxShadow: T.accentGlow, transition: 'background 0.2s, transform 0.15s' }}
+          style={{ background: T.accent, border: 'none', borderRadius: 8, padding: '8px 20px', fontFamily: 'Zain, sans-serif', fontWeight: 700, fontSize: 14, color: '#fff', cursor: 'pointer', boxShadow: T.accentGlow, transition: 'background 0.2s, transform 0.15s' }}
           onMouseEnter={e => { e.currentTarget.style.background = T.accentHov; e.currentTarget.style.transform = 'translateY(-1px)' }}
           onMouseLeave={e => { e.currentTarget.style.background = T.accent; e.currentTarget.style.transform = 'translateY(0)' }}
         >ابدأ مجاناً</button>
@@ -247,7 +247,7 @@ function TrustBar() {
         {[...items, ...items].map((item, i) => (
           <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
             <span style={{ fontSize: 16 }}>{item.icon}</span>
-            <span style={{ fontFamily: 'Cairo, sans-serif', fontSize: 13, fontWeight: 600, color: T.text2 }}>{item.label}</span>
+            <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 13, fontWeight: 600, color: T.text2 }}>{item.label}</span>
             <span style={{ color: T.border, fontSize: 18, marginRight: 16 }}>•</span>
           </div>
         ))}
@@ -291,35 +291,35 @@ function Hero() {
 
       <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: T.greenMut, border: `1px solid ${T.greenBorder}`, borderRadius: 999, padding: '5px 16px', marginBottom: 20 }}>
         <span style={{ width: 8, height: 8, borderRadius: '50%', background: T.green, boxShadow: `0 0 8px ${T.green}99`, display: 'inline-block' }} />
-        <span style={{ fontFamily: 'Cairo, sans-serif', fontSize: 13, fontWeight: 600, color: T.green }}>+٢٣ مطعم انضموا هذا الأسبوع</span>
+        <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 13, fontWeight: 600, color: T.green }}>+٢٣ مطعم انضموا هذا الأسبوع</span>
       </div>
 
       <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: T.accentMut, border: `1px solid ${T.borderAcc}`, borderRadius: 999, padding: '5px 14px', marginBottom: 28 }}>
         <Zap size={14} color={T.accent} fill={T.accent} />
-        <span style={{ fontFamily: 'Cairo, sans-serif', fontSize: 13, fontWeight: 600, color: T.accent }}>نظام إدارة المطاعم #١ في مصر</span>
+        <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 13, fontWeight: 600, color: T.accent }}>نظام إدارة المطاعم #١ في مصر</span>
       </div>
 
-      <h1 style={{ fontFamily: 'Cairo, sans-serif', fontSize: 'clamp(34px,5.5vw,68px)', fontWeight: 900, color: T.text, lineHeight: 1.15, margin: '0 0 20px', maxWidth: 820, letterSpacing: '-1px' }}>
+      <h1 style={{ fontFamily: 'Zain, sans-serif', fontSize: 'clamp(34px,5.5vw,68px)', fontWeight: 900, color: T.text, lineHeight: 1.15, margin: '0 0 20px', maxWidth: 820, letterSpacing: '-1px' }}>
         خلّص من الفوضى وزوّد مبيعاتك مع{' '}
         <span style={{ color: T.accent, textShadow: `0 0 40px ${T.accent}66` }}>ريڤيو</span>
       </h1>
 
-      <p style={{ fontFamily: 'Cairo, sans-serif', fontSize: 'clamp(15px,2vw,19px)', color: T.text2, lineHeight: 1.85, maxWidth: 600, margin: '0 0 12px' }}>
+      <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 'clamp(15px,2vw,19px)', color: T.text2, lineHeight: 1.85, maxWidth: 600, margin: '0 0 12px' }}>
         نظام إدارة متكامل للمطاعم المصرية — طلبات، قائمة، مطبخ، تقارير، فريق عمل
       </p>
-      <p style={{ fontFamily: 'Cairo, sans-serif', fontSize: 14, color: T.accent, margin: '0 0 44px', fontWeight: 600 }}>
+      <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 14, color: T.accent, margin: '0 0 44px', fontWeight: 600 }}>
         يدعم الدفع بـ فوري • فودافون كاش • InstaPay • بطاقات بنكية
       </p>
 
       <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', justifyContent: 'center', marginBottom: 72 }}>
         <button onClick={() => navigate('/login')}
-          style={{ background: T.accent, border: 'none', borderRadius: 12, padding: '15px 36px', fontFamily: 'Cairo, sans-serif', fontWeight: 800, fontSize: 17, color: '#fff', cursor: 'pointer', boxShadow: `0 8px 32px ${T.accent}66`, display: 'flex', alignItems: 'center', gap: 8, transition: 'transform 0.2s, box-shadow 0.2s' }}
+          style={{ background: T.accent, border: 'none', borderRadius: 12, padding: '15px 36px', fontFamily: 'Zain, sans-serif', fontWeight: 800, fontSize: 17, color: '#fff', cursor: 'pointer', boxShadow: `0 8px 32px ${T.accent}66`, display: 'flex', alignItems: 'center', gap: 8, transition: 'transform 0.2s, box-shadow 0.2s' }}
           onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = `0 12px 40px ${T.accent}80` }}
           onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = `0 8px 32px ${T.accent}66` }}>
           ابدأ مجاناً — بدون كريدت كارد <ArrowLeft size={18} />
         </button>
         <button onClick={() => scrollTo('how')}
-          style={{ background: 'transparent', border: `1px solid ${T.borderStr}`, borderRadius: 12, padding: '15px 32px', fontFamily: 'Cairo, sans-serif', fontWeight: 600, fontSize: 17, color: T.text2, cursor: 'pointer', transition: 'border-color 0.2s, color 0.2s, transform 0.2s' }}
+          style={{ background: 'transparent', border: `1px solid ${T.borderStr}`, borderRadius: 12, padding: '15px 32px', fontFamily: 'Zain, sans-serif', fontWeight: 600, fontSize: 17, color: T.text2, cursor: 'pointer', transition: 'border-color 0.2s, color 0.2s, transform 0.2s' }}
           onMouseEnter={e => { e.currentTarget.style.borderColor = T.accent; e.currentTarget.style.color = T.text; e.currentTarget.style.transform = 'translateY(-2px)' }}
           onMouseLeave={e => { e.currentTarget.style.borderColor = T.borderStr; e.currentTarget.style.color = T.text2; e.currentTarget.style.transform = 'translateY(0)' }}>
           شاهد كيف يعمل
@@ -334,8 +334,8 @@ function Hero() {
           { value: `+${Math.round(c4)}٪`, label: 'زيادة في المبيعات', color: T.accent },
         ].map((s, i) => (
           <div key={i} style={{ textAlign: 'center', minWidth: 90 }}>
-            <div style={{ fontFamily: 'Inter, Cairo, sans-serif', fontWeight: 800, fontSize: 'clamp(22px,3vw,30px)', color: s.color, lineHeight: 1, marginBottom: 5 }}>{s.value}</div>
-            <div style={{ fontFamily: 'Cairo, sans-serif', fontSize: 12, color: T.text2, fontWeight: 500 }}>{s.label}</div>
+            <div style={{ fontFamily: 'Inter, Zain, sans-serif', fontWeight: 800, fontSize: 'clamp(22px,3vw,30px)', color: s.color, lineHeight: 1, marginBottom: 5 }}>{s.value}</div>
+            <div style={{ fontFamily: 'Zain, sans-serif', fontSize: 12, color: T.text2, fontWeight: 500 }}>{s.label}</div>
           </div>
         ))}
       </div>
@@ -356,8 +356,8 @@ function PainPoints() {
     <section style={{ padding: 'clamp(60px,8vw,100px) clamp(16px,6vw,80px)', background: T.painBg }} dir="rtl">
       <div style={{ maxWidth: 1100, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: 52 }}>
-          <h2 style={{ fontFamily: 'Cairo, sans-serif', fontSize: 'clamp(26px,4vw,42px)', fontWeight: 800, color: T.text, margin: '0 0 12px', letterSpacing: '-0.5px' }}>هل بتعاني من أي من دي؟</h2>
-          <p style={{ fontFamily: 'Cairo, sans-serif', fontSize: 16, color: T.text2 }}>معظم أصحاب المطاعم في مصر بيواجهوا نفس المشاكل دي كل يوم</p>
+          <h2 style={{ fontFamily: 'Zain, sans-serif', fontSize: 'clamp(26px,4vw,42px)', fontWeight: 800, color: T.text, margin: '0 0 12px', letterSpacing: '-0.5px' }}>هل بتعاني من أي من دي؟</h2>
+          <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 16, color: T.text2 }}>معظم أصحاب المطاعم في مصر بيواجهوا نفس المشاكل دي كل يوم</p>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 16 }}>
           {pains.map((p, i) => (
@@ -367,13 +367,13 @@ function PainPoints() {
               onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(239,68,68,0.15)'}
             >
               <span style={{ fontSize: 36, display: 'block', marginBottom: 14 }}>{p.emoji}</span>
-              <h3 style={{ fontFamily: 'Cairo, sans-serif', fontWeight: 700, fontSize: 17, color: T.text, margin: '0 0 8px' }}>{p.title}</h3>
-              <p style={{ fontFamily: 'Cairo, sans-serif', fontSize: 14, color: T.text2, lineHeight: 1.7, margin: 0 }}>{p.desc}</p>
+              <h3 style={{ fontFamily: 'Zain, sans-serif', fontWeight: 700, fontSize: 17, color: T.text, margin: '0 0 8px' }}>{p.title}</h3>
+              <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 14, color: T.text2, lineHeight: 1.7, margin: 0 }}>{p.desc}</p>
             </div>
           ))}
         </div>
         <div style={{ marginTop: 48, background: T.surface, border: `1px solid ${T.borderAcc}`, borderRadius: 20, padding: '28px 32px', textAlign: 'center', boxShadow: T.mode === 'light' ? '0 2px 16px rgba(0,0,0,0.06)' : 'none' }}>
-          <p style={{ fontFamily: 'Cairo, sans-serif', fontSize: 'clamp(17px,2.5vw,22px)', fontWeight: 700, color: T.text, margin: 0, lineHeight: 1.6 }}>
+          <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 'clamp(17px,2.5vw,22px)', fontWeight: 700, color: T.text, margin: 0, lineHeight: 1.6 }}>
             ريڤيو حل كل المشاكل دي لـ <span style={{ color: T.accent }}>+١٢٠٠ مطعم مصري</span> — وهيحلها لك كمان ⚡
           </p>
         </div>
@@ -405,8 +405,8 @@ function FeatureCard({ IconComp, title, desc }) {
       <div style={{ width: 48, height: 48, borderRadius: 12, background: T.accentMut, border: `1px solid ${T.borderAcc}`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
         <IconComp size={24} color={T.accent} />
       </div>
-      <h3 style={{ fontFamily: 'Cairo, sans-serif', fontWeight: 700, fontSize: 16, color: T.text, margin: '0 0 8px' }}>{title}</h3>
-      <p style={{ fontFamily: 'Cairo, sans-serif', fontSize: 14, color: T.text2, lineHeight: 1.7, margin: 0 }}>{desc}</p>
+      <h3 style={{ fontFamily: 'Zain, sans-serif', fontWeight: 700, fontSize: 16, color: T.text, margin: '0 0 8px' }}>{title}</h3>
+      <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 14, color: T.text2, lineHeight: 1.7, margin: 0 }}>{desc}</p>
     </div>
   )
 }
@@ -417,10 +417,10 @@ function Features() {
     <section id="features" dir="rtl" style={{ padding: 'clamp(60px,8vw,120px) clamp(16px,6vw,80px)', maxWidth: 1100, margin: '0 auto' }}>
       <div style={{ textAlign: 'center', marginBottom: 56 }}>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: T.accentMut, border: `1px solid ${T.borderAcc}`, borderRadius: 999, padding: '4px 14px', marginBottom: 16 }}>
-          <span style={{ fontFamily: 'Cairo, sans-serif', fontSize: 13, fontWeight: 600, color: T.accent }}>المميزات</span>
+          <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 13, fontWeight: 600, color: T.accent }}>المميزات</span>
         </div>
-        <h2 style={{ fontFamily: 'Cairo, sans-serif', fontSize: 'clamp(28px,4vw,44px)', fontWeight: 800, color: T.text, margin: '0 0 12px', letterSpacing: '-0.5px' }}>كل أدوات مطعمك في مكان واحد</h2>
-        <p style={{ fontFamily: 'Cairo, sans-serif', fontSize: 16, color: T.text2, margin: 0 }}>كل ما تحتاجه لتشغيل مطعمك باحترافية — بدون برامج متعددة وبدون تعقيد</p>
+        <h2 style={{ fontFamily: 'Zain, sans-serif', fontSize: 'clamp(28px,4vw,44px)', fontWeight: 800, color: T.text, margin: '0 0 12px', letterSpacing: '-0.5px' }}>كل أدوات مطعمك في مكان واحد</h2>
+        <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 16, color: T.text2, margin: 0 }}>كل ما تحتاجه لتشغيل مطعمك باحترافية — بدون برامج متعددة وبدون تعقيد</p>
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
         {FEATURES_DATA.map((f, i) => <FeatureCard key={i} IconComp={FEATURE_ICONS[i]} title={f.title} desc={f.desc} />)}
@@ -443,10 +443,10 @@ function HowItWorks() {
       <div style={{ maxWidth: 1100, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: 56 }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: T.accentMut, border: `1px solid ${T.borderAcc}`, borderRadius: 999, padding: '4px 14px', marginBottom: 16 }}>
-            <span style={{ fontFamily: 'Cairo, sans-serif', fontSize: 13, fontWeight: 600, color: T.accent }}>كيف يعمل</span>
+            <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 13, fontWeight: 600, color: T.accent }}>كيف يعمل</span>
           </div>
-          <h2 style={{ fontFamily: 'Cairo, sans-serif', fontSize: 'clamp(28px,4vw,44px)', fontWeight: 800, color: T.text, margin: '0 0 12px', letterSpacing: '-0.5px' }}>ابدأ في ٣ خطوات بسيطة</h2>
-          <p style={{ fontFamily: 'Cairo, sans-serif', fontSize: 16, color: T.text2, margin: 0 }}>بدون تعقيد ولا تدريب مطوّل — ريڤيو مصمم عشان تشتغل بيه من أول يوم</p>
+          <h2 style={{ fontFamily: 'Zain, sans-serif', fontSize: 'clamp(28px,4vw,44px)', fontWeight: 800, color: T.text, margin: '0 0 12px', letterSpacing: '-0.5px' }}>ابدأ في ٣ خطوات بسيطة</h2>
+          <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 16, color: T.text2, margin: 0 }}>بدون تعقيد ولا تدريب مطوّل — ريڤيو مصمم عشان تشتغل بيه من أول يوم</p>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 24 }}>
           {STEPS.map((s, i) => (
@@ -455,8 +455,8 @@ function HowItWorks() {
               <div style={{ width: 40, height: 40, borderRadius: '50%', background: T.accent, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16, fontFamily: 'Inter, sans-serif', fontWeight: 800, fontSize: 16, color: '#fff', boxShadow: T.accentGlow }}>
                 {i + 1}
               </div>
-              <h3 style={{ fontFamily: 'Cairo, sans-serif', fontWeight: 700, fontSize: 18, color: T.text, margin: '0 0 10px' }}>{s.title}</h3>
-              <p style={{ fontFamily: 'Cairo, sans-serif', fontSize: 14, color: T.text2, lineHeight: 1.75, margin: 0 }}>{s.desc}</p>
+              <h3 style={{ fontFamily: 'Zain, sans-serif', fontWeight: 700, fontSize: 18, color: T.text, margin: '0 0 10px' }}>{s.title}</h3>
+              <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 14, color: T.text2, lineHeight: 1.75, margin: 0 }}>{s.desc}</p>
             </div>
           ))}
         </div>
@@ -480,10 +480,10 @@ function ROICalc() {
         <div style={{ textAlign: 'center', marginBottom: 44 }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: T.accentMut, border: `1px solid ${T.borderAcc}`, borderRadius: 999, padding: '4px 14px', marginBottom: 16 }}>
             <TrendingUp size={13} color={T.accent} />
-            <span style={{ fontFamily: 'Cairo, sans-serif', fontSize: 13, fontWeight: 600, color: T.accent }}>احسب عائدك</span>
+            <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 13, fontWeight: 600, color: T.accent }}>احسب عائدك</span>
           </div>
-          <h2 style={{ fontFamily: 'Cairo, sans-serif', fontSize: 'clamp(26px,4vw,40px)', fontWeight: 800, color: T.text, margin: '0 0 10px', letterSpacing: '-0.5px' }}>ريڤيو هيوفرلك كام بالشهر؟</h2>
-          <p style={{ fontFamily: 'Cairo, sans-serif', fontSize: 15, color: T.text2 }}>حرّك المؤشرات عشان تحسب العائد المتوقع لمطعمك</p>
+          <h2 style={{ fontFamily: 'Zain, sans-serif', fontSize: 'clamp(26px,4vw,40px)', fontWeight: 800, color: T.text, margin: '0 0 10px', letterSpacing: '-0.5px' }}>ريڤيو هيوفرلك كام بالشهر؟</h2>
+          <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 15, color: T.text2 }}>حرّك المؤشرات عشان تحسب العائد المتوقع لمطعمك</p>
         </div>
         <div style={{ background: T.roiInner, border: `1px solid ${T.border}`, borderRadius: 24, padding: 'clamp(24px,4vw,44px)', boxShadow: T.mode === 'light' ? '0 2px 20px rgba(0,0,0,0.07)' : 'none' }}>
           {[
@@ -492,8 +492,8 @@ function ROICalc() {
           ].map((s, i) => (
             <div key={i} style={{ marginBottom: 32 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 12 }}>
-                <span style={{ fontFamily: 'Cairo, sans-serif', fontSize: 15, fontWeight: 600, color: T.text }}>{s.label}</span>
-                <span style={{ fontFamily: 'Cairo, sans-serif', fontSize: 16, fontWeight: 800, color: T.accent }}>{s.value.toLocaleString('ar-EG')} {s.unit}</span>
+                <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 15, fontWeight: 600, color: T.text }}>{s.label}</span>
+                <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 16, fontWeight: 800, color: T.accent }}>{s.value.toLocaleString('ar-EG')} {s.unit}</span>
               </div>
               <input type="range" min={s.min} max={s.max} value={s.value} onChange={e => s.setter(+e.target.value)}
                 style={{ width: '100%', accentColor: T.accent, height: 4, cursor: 'pointer' }} />
@@ -506,14 +506,14 @@ function ROICalc() {
               { label: 'تكلفة ريڤيو الاحترافي', value: `${cost} ج/شهر`,                           color: T.accent },
             ].map((r, i) => (
               <div key={i} style={{ background: T.surface2, borderRadius: 14, padding: '18px 20px', textAlign: 'center', border: `1px solid ${T.border}` }}>
-                <div style={{ fontFamily: 'Cairo, sans-serif', fontSize: 11, color: T.text2, marginBottom: 8, lineHeight: 1.4 }}>{r.label}</div>
-                <div style={{ fontFamily: 'Cairo, sans-serif', fontSize: 22, fontWeight: 800, color: r.color }}>{r.value}</div>
-                {r.sub && <div style={{ fontFamily: 'Cairo, sans-serif', fontSize: 11, color: T.text2, marginTop: 4 }}>{r.sub}</div>}
+                <div style={{ fontFamily: 'Zain, sans-serif', fontSize: 11, color: T.text2, marginBottom: 8, lineHeight: 1.4 }}>{r.label}</div>
+                <div style={{ fontFamily: 'Zain, sans-serif', fontSize: 22, fontWeight: 800, color: r.color }}>{r.value}</div>
+                {r.sub && <div style={{ fontFamily: 'Zain, sans-serif', fontSize: 11, color: T.text2, marginTop: 4 }}>{r.sub}</div>}
               </div>
             ))}
           </div>
           <div style={{ marginTop: 20, padding: '14px 20px', background: T.greenMut, border: `1px solid ${T.greenBorder}`, borderRadius: 12, textAlign: 'center' }}>
-            <span style={{ fontFamily: 'Cairo, sans-serif', fontSize: 14, fontWeight: 700, color: T.green }}>
+            <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 14, fontWeight: 700, color: T.green }}>
               🎯 ريڤيو بيوفر متوسط {Math.round(saved / cost).toLocaleString('ar-EG')}× قيمته الشهرية
             </span>
           </div>
@@ -538,14 +538,14 @@ function TestimonialCard({ name, role, quote, stars }) {
   return (
     <div style={{ background: T.surface, border: `1px solid ${T.border}`, borderRadius: 16, padding: '28px 24px', display: 'flex', flexDirection: 'column', gap: 16, boxShadow: T.mode === 'light' ? '0 1px 8px rgba(0,0,0,0.05)' : 'none' }}>
       <StarRow count={stars} />
-      <p style={{ fontFamily: 'Cairo, sans-serif', fontSize: 14, color: T.text, lineHeight: 1.85, margin: 0, flex: 1 }}>"{quote}"</p>
+      <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 14, color: T.text, lineHeight: 1.85, margin: 0, flex: 1 }}>"{quote}"</p>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-        <div style={{ width: 44, height: 44, borderRadius: '50%', background: `linear-gradient(135deg, ${T.accent}, #c25905)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Cairo, sans-serif', fontWeight: 800, fontSize: 18, color: '#fff', flexShrink: 0 }}>
+        <div style={{ width: 44, height: 44, borderRadius: '50%', background: `linear-gradient(135deg, ${T.accent}, #c25905)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Zain, sans-serif', fontWeight: 800, fontSize: 18, color: '#fff', flexShrink: 0 }}>
           {name[0]}
         </div>
         <div>
-          <div style={{ fontFamily: 'Cairo, sans-serif', fontWeight: 700, fontSize: 15, color: T.text }}>{name}</div>
-          <div style={{ fontFamily: 'Cairo, sans-serif', fontSize: 12, color: T.text2 }}>{role}</div>
+          <div style={{ fontFamily: 'Zain, sans-serif', fontWeight: 700, fontSize: 15, color: T.text }}>{name}</div>
+          <div style={{ fontFamily: 'Zain, sans-serif', fontSize: 12, color: T.text2 }}>{role}</div>
         </div>
       </div>
     </div>
@@ -559,10 +559,10 @@ function Testimonials() {
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: 56 }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: T.accentMut, border: `1px solid ${T.borderAcc}`, borderRadius: 999, padding: '4px 14px', marginBottom: 16 }}>
-            <span style={{ fontFamily: 'Cairo, sans-serif', fontSize: 13, fontWeight: 600, color: T.accent }}>آراء العملاء</span>
+            <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 13, fontWeight: 600, color: T.accent }}>آراء العملاء</span>
           </div>
-          <h2 style={{ fontFamily: 'Cairo, sans-serif', fontSize: 'clamp(28px,4vw,44px)', fontWeight: 800, color: T.text, margin: '0 0 12px', letterSpacing: '-0.5px' }}>ماذا يقول أصحاب المطاعم في مصر</h2>
-          <p style={{ fontFamily: 'Cairo, sans-serif', fontSize: 16, color: T.text2, margin: 0 }}>من القاهرة للإسكندرية للمنصورة — ريڤيو فرق حياة مطاعم حقيقية</p>
+          <h2 style={{ fontFamily: 'Zain, sans-serif', fontSize: 'clamp(28px,4vw,44px)', fontWeight: 800, color: T.text, margin: '0 0 12px', letterSpacing: '-0.5px' }}>ماذا يقول أصحاب المطاعم في مصر</h2>
+          <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 16, color: T.text2, margin: 0 }}>من القاهرة للإسكندرية للمنصورة — ريڤيو فرق حياة مطاعم حقيقية</p>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 20 }}>
           {TESTIMONIALS.map((t, i) => <TestimonialCard key={i} {...t} />)}
@@ -570,12 +570,12 @@ function Testimonials() {
         <div style={{ marginTop: 40, display: 'flex', justifyContent: 'center' }}>
           <div style={{ background: T.surface, border: `1px solid ${T.border}`, borderRadius: 16, padding: '18px 36px', display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap', justifyContent: 'center', boxShadow: T.mode === 'light' ? '0 2px 16px rgba(0,0,0,0.06)' : 'none' }}>
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontFamily: 'Cairo, sans-serif', fontSize: 40, fontWeight: 900, color: T.yellow, lineHeight: 1 }}>٤.٩</div>
+              <div style={{ fontFamily: 'Zain, sans-serif', fontSize: 40, fontWeight: 900, color: T.yellow, lineHeight: 1 }}>٤.٩</div>
               <StarRow count={5} />
-              <div style={{ fontFamily: 'Cairo, sans-serif', fontSize: 12, color: T.text2, marginTop: 4 }}>من ٥ نجوم</div>
+              <div style={{ fontFamily: 'Zain, sans-serif', fontSize: 12, color: T.text2, marginTop: 4 }}>من ٥ نجوم</div>
             </div>
             <div style={{ width: 1, height: 56, background: T.border }} />
-            <div style={{ fontFamily: 'Cairo, sans-serif', fontSize: 15, color: T.text2, lineHeight: 1.8 }}>
+            <div style={{ fontFamily: 'Zain, sans-serif', fontSize: 15, color: T.text2, lineHeight: 1.8 }}>
               <span style={{ color: T.text, fontWeight: 700 }}>+٩٨٪</span> من العملاء ينصحون بريڤيو<br />
               <span style={{ color: T.text, fontWeight: 700 }}>+١٢٠٠</span> مطعم نشط في مصر<br />
               <span style={{ color: T.text, fontWeight: 700 }}>٧ أيام</span> متوسط فترة الإعداد
@@ -604,10 +604,10 @@ function Integrations() {
         <div style={{ textAlign: 'center', marginBottom: 48 }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: T.accentMut, border: `1px solid ${T.borderAcc}`, borderRadius: 999, padding: '4px 14px', marginBottom: 16 }}>
             <Wifi size={13} color={T.accent} />
-            <span style={{ fontFamily: 'Cairo, sans-serif', fontSize: 13, fontWeight: 600, color: T.accent }}>التكاملات</span>
+            <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 13, fontWeight: 600, color: T.accent }}>التكاملات</span>
           </div>
-          <h2 style={{ fontFamily: 'Cairo, sans-serif', fontSize: 'clamp(26px,4vw,40px)', fontWeight: 800, color: T.text, margin: '0 0 10px', letterSpacing: '-0.5px' }}>يتكامل مع كل اللي بتستخدمه</h2>
-          <p style={{ fontFamily: 'Cairo, sans-serif', fontSize: 15, color: T.text2 }}>وسائل الدفع والتواصل الأكثر انتشاراً في مصر جاهزة من اليوم الأول</p>
+          <h2 style={{ fontFamily: 'Zain, sans-serif', fontSize: 'clamp(26px,4vw,40px)', fontWeight: 800, color: T.text, margin: '0 0 10px', letterSpacing: '-0.5px' }}>يتكامل مع كل اللي بتستخدمه</h2>
+          <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 15, color: T.text2 }}>وسائل الدفع والتواصل الأكثر انتشاراً في مصر جاهزة من اليوم الأول</p>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 16 }}>
           {items.map((item, i) => (
@@ -617,8 +617,8 @@ function Integrations() {
               onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = T.mode === 'light' ? '0 1px 6px rgba(0,0,0,0.05)' : 'none' }}
             >
               <div style={{ fontSize: 32, marginBottom: 10 }}>{item.emoji}</div>
-              <div style={{ fontFamily: 'Cairo, sans-serif', fontSize: 14, fontWeight: 700, color: T.text, marginBottom: 4 }}>{item.name}</div>
-              <div style={{ fontFamily: 'Cairo, sans-serif', fontSize: 12, color: T.text2 }}>{item.desc}</div>
+              <div style={{ fontFamily: 'Zain, sans-serif', fontSize: 14, fontWeight: 700, color: T.text, marginBottom: 4 }}>{item.name}</div>
+              <div style={{ fontFamily: 'Zain, sans-serif', fontSize: 12, color: T.text2 }}>{item.desc}</div>
             </div>
           ))}
         </div>
@@ -642,19 +642,19 @@ function PricingCard({ title, price, desc, features, highlighted, badge }) {
     <div onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
       style={{ background: highlighted ? (T.mode === 'dark' ? T.surface2 : '#FFF7ED') : T.surface, border: highlighted ? `2px solid ${T.accent}` : `1px solid ${hov ? T.borderStr : T.border}`, borderRadius: 20, padding: '36px 28px', position: 'relative', flex: 1, minWidth: 240, maxWidth: 360, transition: 'transform 0.25s, box-shadow 0.25s', transform: (highlighted || hov) ? 'translateY(-6px)' : 'none', boxShadow: highlighted ? T.accentGlow : (T.mode === 'light' && hov ? '0 4px 24px rgba(0,0,0,0.08)' : 'none') }}>
       {badge && (
-        <div style={{ position: 'absolute', top: -14, right: 24, background: highlighted ? T.accent : T.surface3, borderRadius: 999, padding: '4px 16px', fontFamily: 'Cairo, sans-serif', fontWeight: 700, fontSize: 12, color: highlighted ? '#fff' : T.text2 }}>{badge}</div>
+        <div style={{ position: 'absolute', top: -14, right: 24, background: highlighted ? T.accent : T.surface3, borderRadius: 999, padding: '4px 16px', fontFamily: 'Zain, sans-serif', fontWeight: 700, fontSize: 12, color: highlighted ? '#fff' : T.text2 }}>{badge}</div>
       )}
-      <h3 style={{ fontFamily: 'Cairo, sans-serif', fontWeight: 700, fontSize: 19, color: T.text, margin: '0 0 4px' }}>{title}</h3>
-      <p style={{ fontFamily: 'Cairo, sans-serif', fontSize: 13, color: T.text2, margin: '0 0 20px' }}>{desc}</p>
+      <h3 style={{ fontFamily: 'Zain, sans-serif', fontWeight: 700, fontSize: 19, color: T.text, margin: '0 0 4px' }}>{title}</h3>
+      <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 13, color: T.text2, margin: '0 0 20px' }}>{desc}</p>
       <div style={{ marginBottom: 28 }}>
         {price === 0
-          ? <span style={{ fontFamily: 'Cairo, sans-serif', fontWeight: 800, fontSize: 36, color: T.text }}>مجاني</span>
+          ? <span style={{ fontFamily: 'Zain, sans-serif', fontWeight: 800, fontSize: 36, color: T.text }}>مجاني</span>
           : <span style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
               <span style={{ fontFamily: 'Inter, sans-serif', fontWeight: 900, fontSize: 40, color: highlighted ? T.accent : T.text }}>{price}</span>
-              <span style={{ fontFamily: 'Cairo, sans-serif', fontSize: 15, color: T.text2 }}>ج/شهر</span>
+              <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 15, color: T.text2 }}>ج/شهر</span>
             </span>
         }
-        {price > 0 && <div style={{ fontFamily: 'Cairo, sans-serif', fontSize: 12, color: T.green, marginTop: 6 }}>✓ شامل ضريبة القيمة المضافة</div>}
+        {price > 0 && <div style={{ fontFamily: 'Zain, sans-serif', fontSize: 12, color: T.green, marginTop: 6 }}>✓ شامل ضريبة القيمة المضافة</div>}
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 11, marginBottom: 28 }}>
         {features.map((f, i) => (
@@ -662,12 +662,12 @@ function PricingCard({ title, price, desc, features, highlighted, badge }) {
             <div style={{ width: 20, height: 20, borderRadius: '50%', background: T.accentMut, border: `1px solid ${T.borderAcc}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               <Check size={11} color={T.accent} strokeWidth={3} />
             </div>
-            <span style={{ fontFamily: 'Cairo, sans-serif', fontSize: 13, color: T.text2 }}>{f}</span>
+            <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 13, color: T.text2 }}>{f}</span>
           </div>
         ))}
       </div>
       <button onClick={() => navigate('/login')}
-        style={{ width: '100%', background: highlighted ? T.accent : 'transparent', border: highlighted ? 'none' : `1px solid ${T.borderStr}`, borderRadius: 10, padding: '13px', fontFamily: 'Cairo, sans-serif', fontWeight: 700, fontSize: 14, color: highlighted ? '#fff' : T.text2, cursor: 'pointer', transition: 'background 0.2s, color 0.2s', boxShadow: highlighted ? `0 4px 20px ${T.accent}4d` : 'none' }}
+        style={{ width: '100%', background: highlighted ? T.accent : 'transparent', border: highlighted ? 'none' : `1px solid ${T.borderStr}`, borderRadius: 10, padding: '13px', fontFamily: 'Zain, sans-serif', fontWeight: 700, fontSize: 14, color: highlighted ? '#fff' : T.text2, cursor: 'pointer', transition: 'background 0.2s, color 0.2s', boxShadow: highlighted ? `0 4px 20px ${T.accent}4d` : 'none' }}
         onMouseEnter={e => { if (!highlighted) { e.currentTarget.style.background = T.accentMut; e.currentTarget.style.color = T.accent } }}
         onMouseLeave={e => { if (!highlighted) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = T.text2 } }}
       >{price === 0 ? 'ابدأ مجاناً' : price === 199 ? 'ابدأ الاحترافي ←' : 'تواصل معنا'}</button>
@@ -683,16 +683,16 @@ function Pricing() {
         <div style={{ textAlign: 'center', marginBottom: 56 }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: T.accentMut, border: `1px solid ${T.borderAcc}`, borderRadius: 999, padding: '4px 14px', marginBottom: 16 }}>
             <Banknote size={13} color={T.accent} />
-            <span style={{ fontFamily: 'Cairo, sans-serif', fontSize: 13, fontWeight: 600, color: T.accent }}>التسعير</span>
+            <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 13, fontWeight: 600, color: T.accent }}>التسعير</span>
           </div>
-          <h2 style={{ fontFamily: 'Cairo, sans-serif', fontSize: 'clamp(28px,4vw,44px)', fontWeight: 800, color: T.text, margin: '0 0 12px', letterSpacing: '-0.5px' }}>اختر الخطة المناسبة لمطعمك</h2>
-          <p style={{ fontFamily: 'Cairo, sans-serif', fontSize: 16, color: T.text2, margin: '0 0 8px' }}>ابدأ مجاناً — ادفع بالجنيه المصري — ألغِ وقتما تشاء</p>
-          <p style={{ fontFamily: 'Cairo, sans-serif', fontSize: 13, color: T.text2 }}>💳 الدفع بفوري، فودافون كاش، InstaPay، أو بطاقة بنكية</p>
+          <h2 style={{ fontFamily: 'Zain, sans-serif', fontSize: 'clamp(28px,4vw,44px)', fontWeight: 800, color: T.text, margin: '0 0 12px', letterSpacing: '-0.5px' }}>اختر الخطة المناسبة لمطعمك</h2>
+          <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 16, color: T.text2, margin: '0 0 8px' }}>ابدأ مجاناً — ادفع بالجنيه المصري — ألغِ وقتما تشاء</p>
+          <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 13, color: T.text2 }}>💳 الدفع بفوري، فودافون كاش، InstaPay، أو بطاقة بنكية</p>
         </div>
         <div style={{ display: 'flex', gap: 20, justifyContent: 'center', flexWrap: 'wrap', alignItems: 'stretch' }}>
           {PLANS.map((p, i) => <PricingCard key={i} {...p} />)}
         </div>
-        <p style={{ textAlign: 'center', fontFamily: 'Cairo, sans-serif', fontSize: 13, color: T.text2, marginTop: 28 }}>
+        <p style={{ textAlign: 'center', fontFamily: 'Zain, sans-serif', fontSize: 13, color: T.text2, marginTop: 28 }}>
           ✓ بدون رسوم خفية &nbsp;•&nbsp; ✓ إلغاء في أي وقت &nbsp;•&nbsp; ✓ لا يوجد التزام سنوي
         </p>
       </div>
@@ -720,10 +720,10 @@ function FAQ() {
       <div style={{ maxWidth: 780, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: 48 }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: T.accentMut, border: `1px solid ${T.borderAcc}`, borderRadius: 999, padding: '4px 14px', marginBottom: 16 }}>
-            <span style={{ fontFamily: 'Cairo, sans-serif', fontSize: 13, fontWeight: 600, color: T.accent }}>أسئلة شائعة</span>
+            <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 13, fontWeight: 600, color: T.accent }}>أسئلة شائعة</span>
           </div>
-          <h2 style={{ fontFamily: 'Cairo, sans-serif', fontSize: 'clamp(26px,4vw,40px)', fontWeight: 800, color: T.text, margin: '0 0 10px', letterSpacing: '-0.5px' }}>كل أسئلتك عندنا إجابة</h2>
-          <p style={{ fontFamily: 'Cairo, sans-serif', fontSize: 15, color: T.text2 }}>
+          <h2 style={{ fontFamily: 'Zain, sans-serif', fontSize: 'clamp(26px,4vw,40px)', fontWeight: 800, color: T.text, margin: '0 0 10px', letterSpacing: '-0.5px' }}>كل أسئلتك عندنا إجابة</h2>
+          <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 15, color: T.text2 }}>
             مش لاقي إجابتك؟ تواصل معنا على{' '}
             <a href="https://wa.me/201000000000" target="_blank" rel="noopener noreferrer" style={{ color: '#25D366', fontWeight: 700, textDecoration: 'none' }}>واتساب</a>
           </p>
@@ -733,12 +733,12 @@ function FAQ() {
             <div key={i} style={{ background: T.surface, border: `1px solid ${open === i ? T.borderAcc : T.border}`, borderRadius: 14, overflow: 'hidden', transition: 'border-color 0.2s', boxShadow: T.mode === 'light' ? '0 1px 4px rgba(0,0,0,0.04)' : 'none' }}>
               <button onClick={() => setOpen(open === i ? null : i)}
                 style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '18px 20px', background: 'none', border: 'none', cursor: 'pointer', gap: 12 }}>
-                <span style={{ fontFamily: 'Cairo, sans-serif', fontSize: 15, fontWeight: 700, color: T.text, textAlign: 'right', flex: 1 }}>{faq.q}</span>
+                <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 15, fontWeight: 700, color: T.text, textAlign: 'right', flex: 1 }}>{faq.q}</span>
                 <span style={{ color: T.accent, flexShrink: 0 }}>{open === i ? <ChevronUp size={18} /> : <ChevronDown size={18} />}</span>
               </button>
               {open === i && (
                 <div style={{ padding: '0 20px 18px' }}>
-                  <p style={{ fontFamily: 'Cairo, sans-serif', fontSize: 14, color: T.text2, lineHeight: 1.8, margin: 0 }}>{faq.a}</p>
+                  <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 14, color: T.text2, lineHeight: 1.8, margin: 0 }}>{faq.a}</p>
                 </div>
               )}
             </div>
@@ -757,24 +757,24 @@ function CTABanner() {
     <section id="cta" dir="rtl" style={{ padding: 'clamp(60px,8vw,100px) clamp(16px,6vw,80px)', textAlign: 'center', background: T.ctaBg, position: 'relative', overflow: 'hidden' }}>
       <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 600, height: 600, borderRadius: '50%', background: `radial-gradient(circle, ${T.orb1} 0%, transparent 65%)`, pointerEvents: 'none' }} />
       <div style={{ position: 'relative', zIndex: 1 }}>
-        <h2 style={{ fontFamily: 'Cairo, sans-serif', fontSize: 'clamp(28px,4.5vw,52px)', fontWeight: 900, color: T.ctaTextColor, margin: '0 0 16px', letterSpacing: '-0.5px', lineHeight: 1.2 }}>
+        <h2 style={{ fontFamily: 'Zain, sans-serif', fontSize: 'clamp(28px,4.5vw,52px)', fontWeight: 900, color: T.ctaTextColor, margin: '0 0 16px', letterSpacing: '-0.5px', lineHeight: 1.2 }}>
           جاهز تطور مطعمك من النهارده؟
         </h2>
-        <p style={{ fontFamily: 'Cairo, sans-serif', fontSize: 'clamp(15px,2vw,18px)', color: T.text2, margin: '0 0 12px', maxWidth: 520, marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.7 }}>
+        <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 'clamp(15px,2vw,18px)', color: T.text2, margin: '0 0 12px', maxWidth: 520, marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.7 }}>
           انضم لـ +١٢٠٠ مطعم مصري بيستخدموا ريڤيو كل يوم
         </p>
-        <p style={{ fontFamily: 'Cairo, sans-serif', fontSize: 14, color: T.accent, margin: '0 0 40px', fontWeight: 600 }}>
+        <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 14, color: T.accent, margin: '0 0 40px', fontWeight: 600 }}>
           ⚡ ابدأ في أقل من ١٠ دقائق — بدون كريدت كارد — بدون التزام
         </p>
         <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
           <button onClick={() => navigate('/login')}
-            style={{ background: T.accent, border: 'none', borderRadius: 14, padding: '16px 44px', fontFamily: 'Cairo, sans-serif', fontWeight: 800, fontSize: 18, color: '#fff', cursor: 'pointer', boxShadow: `0 12px 48px ${T.accent}73`, display: 'inline-flex', alignItems: 'center', gap: 10, transition: 'transform 0.2s, box-shadow 0.2s' }}
+            style={{ background: T.accent, border: 'none', borderRadius: 14, padding: '16px 44px', fontFamily: 'Zain, sans-serif', fontWeight: 800, fontSize: 18, color: '#fff', cursor: 'pointer', boxShadow: `0 12px 48px ${T.accent}73`, display: 'inline-flex', alignItems: 'center', gap: 10, transition: 'transform 0.2s, box-shadow 0.2s' }}
             onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = `0 16px 56px ${T.accent}8c` }}
             onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = `0 12px 48px ${T.accent}73` }}>
             ابدأ مجاناً الآن <ArrowLeft size={20} />
           </button>
           <a href="https://wa.me/201000000000?text=مرحبا،%20أريد%20demo%20مجاني%20لريڤيو" target="_blank" rel="noopener noreferrer"
-            style={{ background: 'transparent', border: '1px solid rgba(37,211,102,0.4)', borderRadius: 14, padding: '16px 36px', fontFamily: 'Cairo, sans-serif', fontWeight: 700, fontSize: 17, color: '#25D366', cursor: 'pointer', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 10, transition: 'background 0.2s, border-color 0.2s' }}
+            style={{ background: 'transparent', border: '1px solid rgba(37,211,102,0.4)', borderRadius: 14, padding: '16px 36px', fontFamily: 'Zain, sans-serif', fontWeight: 700, fontSize: 17, color: '#25D366', cursor: 'pointer', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 10, transition: 'background 0.2s, border-color 0.2s' }}
             onMouseEnter={e => { e.currentTarget.style.background = 'rgba(37,211,102,0.08)'; e.currentTarget.style.borderColor = '#25D366' }}
             onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(37,211,102,0.4)' }}>
             <MessageCircle size={18} /> Demo مجاني على واتساب
@@ -795,10 +795,10 @@ function Footer() {
         <div style={{ maxWidth: 280 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14, cursor: 'pointer' }} onClick={() => scrollTo('hero')}>
             <div style={{ width: 34, height: 34, borderRadius: 9, background: T.accent, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Zap size={18} color="#fff" fill="#fff" /></div>
-            <span style={{ fontFamily: 'Cairo, sans-serif', fontWeight: 800, fontSize: 20, color: T.text }}>ريڤيو</span>
-            <span style={{ background: T.accentMut, border: `1px solid ${T.borderAcc}`, borderRadius: 5, padding: '2px 7px', fontFamily: 'Cairo, sans-serif', fontSize: 10, fontWeight: 700, color: T.accent }}>مصر</span>
+            <span style={{ fontFamily: 'Zain, sans-serif', fontWeight: 800, fontSize: 20, color: T.text }}>ريڤيو</span>
+            <span style={{ background: T.accentMut, border: `1px solid ${T.borderAcc}`, borderRadius: 5, padding: '2px 7px', fontFamily: 'Zain, sans-serif', fontSize: 10, fontWeight: 700, color: T.accent }}>مصر</span>
           </div>
-          <p style={{ fontFamily: 'Cairo, sans-serif', fontSize: 14, color: T.text2, lineHeight: 1.75, margin: '0 0 18px' }}>نظام إدارة متكامل للمطاعم المصرية — مصمم بعناية لأصحاب المطاعم العرب</p>
+          <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 14, color: T.text2, lineHeight: 1.75, margin: '0 0 18px' }}>نظام إدارة متكامل للمطاعم المصرية — مصمم بعناية لأصحاب المطاعم العرب</p>
           <a href="https://wa.me/201000000000" target="_blank" rel="noopener noreferrer"
             style={{ width: 36, height: 36, borderRadius: 8, background: '#25D366', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none' }}>
             <MessageCircle size={18} color="#fff" />
@@ -806,26 +806,26 @@ function Footer() {
         </div>
         <div style={{ display: 'flex', gap: 48, flexWrap: 'wrap' }}>
           <div>
-            <div style={{ fontFamily: 'Cairo, sans-serif', fontWeight: 700, fontSize: 13, color: T.text, marginBottom: 16 }}>المنتج</div>
+            <div style={{ fontFamily: 'Zain, sans-serif', fontWeight: 700, fontSize: 13, color: T.text, marginBottom: 16 }}>المنتج</div>
             {[['المميزات','features'],['كيف يعمل','how'],['التسعير','pricing'],['أسئلة شائعة','faq']].map(([label, id]) => (
               <div key={id} style={{ marginBottom: 10 }}>
-                <button onClick={() => scrollTo(id)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif', fontSize: 14, color: T.text2, padding: 0, transition: 'color 0.2s' }}
+                <button onClick={() => scrollTo(id)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', fontSize: 14, color: T.text2, padding: 0, transition: 'color 0.2s' }}
                   onMouseEnter={e => e.target.style.color = T.text} onMouseLeave={e => e.target.style.color = T.text2}>{label}</button>
               </div>
             ))}
           </div>
           <div>
-            <div style={{ fontFamily: 'Cairo, sans-serif', fontWeight: 700, fontSize: 13, color: T.text, marginBottom: 16 }}>الحساب</div>
+            <div style={{ fontFamily: 'Zain, sans-serif', fontWeight: 700, fontSize: 13, color: T.text, marginBottom: 16 }}>الحساب</div>
             {['تسجيل الدخول','إنشاء حساب مجاني','الدعم الفني'].map(l => (
               <div key={l} style={{ marginBottom: 10 }}>
-                <button onClick={() => navigate('/login')} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif', fontSize: 14, color: T.text2, padding: 0, transition: 'color 0.2s' }}
+                <button onClick={() => navigate('/login')} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', fontSize: 14, color: T.text2, padding: 0, transition: 'color 0.2s' }}
                   onMouseEnter={e => e.target.style.color = T.text} onMouseLeave={e => e.target.style.color = T.text2}>{l}</button>
               </div>
             ))}
           </div>
           <div>
-            <div style={{ fontFamily: 'Cairo, sans-serif', fontWeight: 700, fontSize: 13, color: T.text, marginBottom: 16 }}>تواصل معنا</div>
-            <div style={{ fontFamily: 'Cairo, sans-serif', fontSize: 14, color: T.text2, lineHeight: 2 }}>
+            <div style={{ fontFamily: 'Zain, sans-serif', fontWeight: 700, fontSize: 13, color: T.text, marginBottom: 16 }}>تواصل معنا</div>
+            <div style={{ fontFamily: 'Zain, sans-serif', fontSize: 14, color: T.text2, lineHeight: 2 }}>
               <div>📞 ٠١٠٠٠٠٠٠٠٠٠</div>
               <div>📧 hello@rivyo.com</div>
               <div>🕐 ٩ ص – ١١ م يومياً</div>
@@ -835,8 +835,8 @@ function Footer() {
         </div>
       </div>
       <div style={{ maxWidth: 1100, margin: '0 auto', paddingTop: 20, borderTop: `1px solid ${T.border}`, display: 'flex', flexWrap: 'wrap', gap: 12, justifyContent: 'space-between', alignItems: 'center' }}>
-        <span style={{ fontFamily: 'Cairo, sans-serif', fontSize: 13, color: T.text2 }}>© 2025 ريڤيو. جميع الحقوق محفوظة • مصر</span>
-        <span style={{ fontFamily: 'Cairo, sans-serif', fontSize: 13, color: T.text2, display: 'flex', alignItems: 'center', gap: 6 }}>
+        <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 13, color: T.text2 }}>© 2025 ريڤيو. جميع الحقوق محفوظة • مصر</span>
+        <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 13, color: T.text2, display: 'flex', alignItems: 'center', gap: 6 }}>
           صُنع بـ <span style={{ color: T.accent }}>♥</span> للمطاعم المصرية
         </span>
       </div>
@@ -867,7 +867,7 @@ export default function Landing() {
 
   return (
     <ThemeCtx.Provider value={theme}>
-      <div dir="rtl" style={{ background: theme.bg, minHeight: '100vh', fontFamily: 'Cairo, sans-serif', overflowX: 'hidden', transition: 'background 0.3s, color 0.3s' }}>
+      <div dir="rtl" style={{ background: theme.bg, minHeight: '100vh', fontFamily: 'Zain, sans-serif', overflowX: 'hidden', transition: 'background 0.3s, color 0.3s' }}>
         <Navbar isDark={isDark} onToggle={toggleTheme} />
         <TrustBar />
         <Hero />

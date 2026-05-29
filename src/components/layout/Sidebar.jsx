@@ -228,7 +228,7 @@ export default function Sidebar() {
               border: '1px solid var(--border)',
               cursor: 'pointer',
               transition: 'border-color var(--dur-normal) var(--ease-default)',
-              fontFamily: 'Cairo, sans-serif',
+              fontFamily: 'Zain, sans-serif',
             }}
             onMouseEnter={e => (e.currentTarget.style.borderColor = 'var(--border-strong)')}
             onMouseLeave={e => (e.currentTarget.style.borderColor = 'var(--border)')}
@@ -277,7 +277,7 @@ export default function Sidebar() {
                     background: 'transparent',
                     border: 'none',
                     transition: 'background var(--dur-normal) var(--ease-default)',
-                    fontFamily: 'Cairo, sans-serif',
+                    fontFamily: 'Zain, sans-serif',
                   }}
                   onMouseEnter={e => (e.currentTarget.style.background = 'var(--surface-2)')}
                   onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
@@ -404,7 +404,7 @@ export default function Sidebar() {
             display: 'flex',
             alignItems: 'center',
             gap: 8,
-            fontFamily: 'Cairo, sans-serif',
+            fontFamily: 'Zain, sans-serif',
             marginBottom: 8,
           }}
         >

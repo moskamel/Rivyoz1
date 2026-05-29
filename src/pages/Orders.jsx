@@ -209,7 +209,7 @@ export default function Orders() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: 5,
-                fontFamily: 'Cairo, sans-serif',
+                fontFamily: 'Zain, sans-serif',
               }}
             >
               {tab.label}
@@ -402,7 +402,7 @@ export default function Orders() {
                   <button
                     onClick={() => setRejectModal(order)}
                     className="btn-danger"
-                    style={{ height: 34, fontSize: 12, padding: '0 14px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontFamily: 'Cairo, sans-serif', fontWeight: 600, borderRadius: 'var(--radius)', transition: 'all var(--dur-normal) var(--ease-default)' }}
+                    style={{ height: 34, fontSize: 12, padding: '0 14px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontFamily: 'Zain, sans-serif', fontWeight: 600, borderRadius: 'var(--radius)', transition: 'all var(--dur-normal) var(--ease-default)' }}
                   >
                     إلغاء
                   </button>
@@ -600,7 +600,7 @@ export default function Orders() {
                     border: rejectReason === reason ? '1px solid rgba(249,115,22,0.4)' : '1px solid var(--border)',
                     background: rejectReason === reason ? 'var(--accent-muted)' : 'var(--surface-3)',
                     color: rejectReason === reason ? 'var(--accent)' : 'var(--text-2)',
-                    fontFamily: 'Cairo, sans-serif',
+                    fontFamily: 'Zain, sans-serif',
                   }}
                 >
                   {reason}
@@ -620,7 +620,7 @@ export default function Orders() {
                   color: 'var(--text)',
                   fontSize: 13,
                   outline: 'none',
-                  fontFamily: 'Cairo, sans-serif',
+                  fontFamily: 'Zain, sans-serif',
                   transition: 'border-color 0.15s',
                   boxSizing: 'border-box',
                 }}
@@ -642,7 +642,7 @@ export default function Orders() {
                 border: 'none',
                 cursor: rejectReason ? 'pointer' : 'not-allowed',
                 transition: 'all 0.15s',
-                fontFamily: 'Cairo, sans-serif',
+                fontFamily: 'Zain, sans-serif',
               }}
             >
               تأكيد الرفض

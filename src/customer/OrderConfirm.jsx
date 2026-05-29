@@ -40,7 +40,7 @@ export default function OrderConfirm() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg)', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '40px 20px 60px', fontFamily: 'Cairo, sans-serif' }} dir="rtl">
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '40px 20px 60px', fontFamily: 'Zain, sans-serif' }} dir="rtl">
       <style>{`
         @keyframes spring-in {
           0% { transform: scale(0.3); opacity: 0; }
@@ -241,7 +241,7 @@ export default function OrderConfirm() {
               fontSize: 14, border: 'none', cursor: 'pointer', background: config.color,
               boxShadow: `0 6px 20px ${config.color}40`,
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-              fontFamily: 'Cairo, sans-serif',
+              fontFamily: 'Zain, sans-serif',
             }}
           >
             📍 تتبع طلبك
@@ -253,7 +253,7 @@ export default function OrderConfirm() {
               width: '100%', padding: '13px', borderRadius: 14, fontWeight: 700, fontSize: 14, cursor: 'pointer',
               background: 'white', border: `2px solid ${config.color}`, color: config.color,
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-              fontFamily: 'Cairo, sans-serif',
+              fontFamily: 'Zain, sans-serif',
             }}
           >
             العودة للقائمة

@@ -181,7 +181,7 @@ function OrderCard({ order, onAction }) {
             borderRadius: 'var(--radius-lg)',
             cursor: 'pointer',
             transition: 'all var(--dur-normal) var(--ease-default)',
-            fontFamily: 'Cairo, sans-serif',
+            fontFamily: 'Zain, sans-serif',
             ...(isNew
               ? { background: 'var(--accent)', color: 'white' }
               : { background: 'var(--green)', color: 'white' }
@@ -246,7 +246,7 @@ export default function KDS() {
       style={{
         minHeight: '100vh',
         background: 'var(--bg)',
-        fontFamily: "'Cairo', sans-serif",
+        fontFamily: "'Zain', sans-serif",
         color: 'var(--text)',
       }}
     >
@@ -341,7 +341,7 @@ export default function KDS() {
               borderRadius: 'var(--radius)',
               textDecoration: 'none',
               transition: 'all var(--dur-normal) var(--ease-default)',
-              fontFamily: 'Cairo, sans-serif',
+              fontFamily: 'Zain, sans-serif',
               whiteSpace: 'nowrap',
             }}
             onMouseEnter={e => {
@@ -386,7 +386,7 @@ export default function KDS() {
                 fontSize: 12,
                 fontWeight: 600,
                 cursor: 'pointer',
-                fontFamily: 'Cairo, sans-serif',
+                fontFamily: 'Zain, sans-serif',
                 transition: 'all var(--dur-normal) var(--ease-default)',
                 border: isActive ? 'none' : '1px solid var(--border)',
                 background: isActive ? 'var(--accent)' : 'var(--surface-2)',

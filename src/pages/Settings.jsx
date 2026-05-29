@@ -31,7 +31,7 @@ function useToast() {
 const inputStyle = {
   width: '100%', padding: '10px 14px', borderRadius: 'var(--radius-md)',
   border: '1px solid var(--border)', background: 'var(--surface-2)', color: 'var(--text)',
-  fontSize: 13, outline: 'none', fontFamily: 'Cairo, sans-serif', boxSizing: 'border-box',
+  fontSize: 13, outline: 'none', fontFamily: 'Zain, sans-serif', boxSizing: 'border-box',
   transition: 'border-color var(--dur-normal) ease, box-shadow var(--dur-normal) ease',
 }
 

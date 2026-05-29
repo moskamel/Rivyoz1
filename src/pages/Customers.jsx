@@ -112,7 +112,7 @@ function CustomerDrawer({ customer, onClose }) {
               fontWeight: 700, borderRadius: 'var(--radius-lg)',
               border: 'none', cursor: 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-              fontSize: 14, fontFamily: 'Cairo, sans-serif',
+              fontSize: 14, fontFamily: 'Zain, sans-serif',
               transition: 'all var(--dur-normal) var(--ease-default)',
             }}
             onMouseEnter={e => e.currentTarget.style.background = 'var(--accent-hover)'}
@@ -129,7 +129,7 @@ function CustomerDrawer({ customer, onClose }) {
               fontWeight: 700, borderRadius: 'var(--radius-lg)',
               border: 'none', cursor: 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-              fontSize: 14, fontFamily: 'Cairo, sans-serif',
+              fontSize: 14, fontFamily: 'Zain, sans-serif',
               transition: 'opacity var(--dur-normal) ease',
             }}
             onMouseEnter={e => e.currentTarget.style.opacity = '0.88'}
@@ -188,7 +188,7 @@ export default function Customers() {
                 borderRadius: 'var(--radius-lg)',
                 padding: '0 40px 0 14px',
                 fontSize: 13, color: 'var(--text)', outline: 'none',
-                fontFamily: 'Cairo, sans-serif',
+                fontFamily: 'Zain, sans-serif',
                 transition: 'border-color var(--dur-normal) ease, box-shadow var(--dur-normal) ease',
               }}
               onFocus={e => {

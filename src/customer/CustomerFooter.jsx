@@ -8,7 +8,7 @@ export default function CustomerFooter({ noNav = false }) {
   const accentColor = config.color
 
   return (
-    <div style={{ background: '#1a1a1a', color: 'white', padding: `32px 20px ${noNav ? '32px' : '100px'}`, direction: 'rtl', fontFamily: 'Cairo, sans-serif' }}>
+    <div style={{ background: '#1a1a1a', color: 'white', padding: `32px 20px ${noNav ? '32px' : '100px'}`, direction: 'rtl', fontFamily: 'Zain, sans-serif' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
         <div style={{ width: 36, height: 36, borderRadius: 10, background: accentColor, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, fontWeight: 900 }}>ر</div>
         <div>
@@ -33,12 +33,12 @@ export default function CustomerFooter({ noNav = false }) {
 
       <div style={{ display: 'flex', gap: 20, marginBottom: 20, borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 20 }}>
         {f.showExploreLink && (
-          <button onClick={() => navigate('/explore')} style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>
+          <button onClick={() => navigate('/explore')} style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>
             🗺️ قائمة المطاعم
           </button>
         )}
-        <button style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>📞 تواصل معنا</button>
-        <button style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>❓ المساعدة</button>
+        <button style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>📞 تواصل معنا</button>
+        <button style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>❓ المساعدة</button>
       </div>
 
       <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', textAlign: 'center' }}>{f.copyright}</p>

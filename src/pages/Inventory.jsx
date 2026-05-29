@@ -26,7 +26,7 @@ const modalInputStyle = {
   borderRadius: 'var(--radius-md)', border: '1px solid var(--border)',
   background: 'var(--surface-2)', color: 'var(--text)',
   fontSize: 13, outline: 'none',
-  fontFamily: 'Cairo, sans-serif', boxSizing: 'border-box',
+  fontFamily: 'Zain, sans-serif', boxSizing: 'border-box',
   transition: 'border-color var(--dur-normal) ease, box-shadow var(--dur-normal) ease',
 }
 
@@ -208,7 +208,7 @@ export default function Inventory() {
                 background: 'var(--surface-2)', border: '1px solid var(--border)',
                 borderRadius: 'var(--radius-lg)', padding: '0 40px 0 14px',
                 fontSize: 13, color: 'var(--text)', outline: 'none',
-                fontFamily: 'Cairo, sans-serif',
+                fontFamily: 'Zain, sans-serif',
                 transition: 'border-color var(--dur-normal) ease, box-shadow var(--dur-normal) ease',
               }}
               onFocus={e => {

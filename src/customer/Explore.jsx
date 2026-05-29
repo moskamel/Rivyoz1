@@ -100,7 +100,7 @@ function PinMap({ restaurants, selected, onSelect }) {
                 fontSize: 11, fontWeight: 700, color: '#111827', whiteSpace: 'nowrap',
                 boxShadow: '0 4px 14px rgba(0,0,0,0.14)',
                 border: `1.5px solid ${r.color}40`,
-                fontFamily: 'Cairo, sans-serif',
+                fontFamily: 'Zain, sans-serif',
               }}>
                 {r.name}
               </div>
@@ -144,7 +144,7 @@ function MapBottomSheet({ restaurant, onClose, onNavigate }) {
         padding: '12px 16px 24px',
         boxShadow: '0 -8px 32px rgba(0,0,0,0.14)',
         animation: 'slideUp 0.22s cubic-bezier(0.16,1,0.3,1)',
-        fontFamily: 'Cairo, sans-serif',
+        fontFamily: 'Zain, sans-serif',
       }}
       dir="rtl"
     >
@@ -195,7 +195,7 @@ function MapBottomSheet({ restaurant, onClose, onNavigate }) {
           style={{
             flex: 1, padding: '13px', borderRadius: 12, fontSize: 13, fontWeight: 700,
             border: '1.5px solid #E5E7EB', background: 'white', color: '#6B7280',
-            cursor: 'pointer', fontFamily: 'Cairo, sans-serif',
+            cursor: 'pointer', fontFamily: 'Zain, sans-serif',
           }}
         >إغلاق</button>
         <button
@@ -203,7 +203,7 @@ function MapBottomSheet({ restaurant, onClose, onNavigate }) {
           style={{
             flex: 2, padding: '13px', borderRadius: 12, fontSize: 14, fontWeight: 700,
             border: 'none', background: restaurant.color, color: 'white',
-            cursor: 'pointer', fontFamily: 'Cairo, sans-serif',
+            cursor: 'pointer', fontFamily: 'Zain, sans-serif',
             boxShadow: `0 6px 20px ${restaurant.color}44`,
           }}
         >
@@ -235,7 +235,7 @@ export default function Explore() {
   })
 
   return (
-    <div style={{ height: '100dvh', display: 'flex', flexDirection: 'column', background: 'var(--bg)', fontFamily: 'Cairo, sans-serif', overflow: 'hidden' }} dir="rtl">
+    <div style={{ height: '100dvh', display: 'flex', flexDirection: 'column', background: 'var(--bg)', fontFamily: 'Zain, sans-serif', overflow: 'hidden' }} dir="rtl">
       <style>{`@keyframes slideUp { from { transform:translateY(100%); opacity:0; } to { transform:translateY(0); opacity:1; } }`}</style>
 
       {/* ── Sticky header ── */}
@@ -308,7 +308,7 @@ export default function Explore() {
               style={{
                 width: '100%', padding: '12px 46px 12px 16px', border: 'none', outline: 'none',
                 background: 'transparent', fontSize: 13, color: '#374151',
-                fontFamily: 'Cairo, sans-serif', boxSizing: 'border-box', borderRadius: 50,
+                fontFamily: 'Zain, sans-serif', boxSizing: 'border-box', borderRadius: 50,
               }}
             />
           </div>
@@ -324,7 +324,7 @@ export default function Explore() {
                   border: `1.5px solid ${activeFilter === f.key ? '#F97316' : 'var(--border-strong)'}`,
                   background: activeFilter === f.key ? '#FFF7ED' : 'var(--surface)',
                   color: activeFilter === f.key ? '#EA580C' : '#6B7280',
-                  transition: 'all 0.15s', fontFamily: 'Cairo, sans-serif',
+                  transition: 'all 0.15s', fontFamily: 'Zain, sans-serif',
                 }}
               >
                 <span style={{ fontSize: 15 }}>{f.icon}</span>{f.key}
@@ -349,7 +349,7 @@ export default function Explore() {
                     pointerEvents: 'all', flexShrink: 0, padding: '8px 14px', borderRadius: 20,
                     fontSize: 12, fontWeight: 700, cursor: 'pointer', border: 'none',
                     background: active ? '#F97316' : 'white', color: active ? 'white' : '#6B7280',
-                    transition: 'all 0.15s', fontFamily: 'Cairo, sans-serif',
+                    transition: 'all 0.15s', fontFamily: 'Zain, sans-serif',
                     boxShadow: active ? '0 4px 14px rgba(249,115,22,0.40)' : '0 2px 8px rgba(0,0,0,0.14)',
                   }}
                 >{tab}</button>
@@ -362,7 +362,7 @@ export default function Explore() {
             position: 'absolute', bottom: selectedOnMap ? 260 : 84, right: 16, zIndex: 500,
             background: 'white', borderRadius: 12, padding: '7px 13px',
             boxShadow: '0 2px 10px rgba(0,0,0,0.14)', fontSize: 12, fontWeight: 700, color: '#374151',
-            fontFamily: 'Cairo, sans-serif', transition: 'bottom 0.25s',
+            fontFamily: 'Zain, sans-serif', transition: 'bottom 0.25s',
             display: 'flex', alignItems: 'center', gap: 5,
           }}>
             <span style={{ color: '#F97316' }}>📍</span>{filtered.length} مطعم
@@ -397,7 +397,7 @@ export default function Explore() {
                       flexShrink: 0, padding: '8px 16px', borderRadius: 20, fontSize: 12, fontWeight: 700,
                       cursor: 'pointer', border: 'none',
                       background: active ? '#F97316' : 'var(--surface-2)', color: active ? 'white' : 'var(--text-2)',
-                      transition: 'all 0.15s', fontFamily: 'Cairo, sans-serif',
+                      transition: 'all 0.15s', fontFamily: 'Zain, sans-serif',
                       boxShadow: active ? '0 4px 12px rgba(249,115,22,0.3)' : 'none',
                     }}
                   >{tab}</button>
@@ -433,7 +433,7 @@ export default function Explore() {
                           </div>
                           <button
                             onClick={e => { e.stopPropagation(); navigate(`/${r.slug}`) }}
-                            style={{ padding: '3px 10px', background: 'rgba(255,255,255,0.25)', border: '1px solid rgba(255,255,255,0.5)', borderRadius: 8, color: 'white', fontSize: 10, fontWeight: 700, cursor: 'pointer', fontFamily: 'Cairo, sans-serif', backdropFilter: 'blur(4px)' }}
+                            style={{ padding: '3px 10px', background: 'rgba(255,255,255,0.25)', border: '1px solid rgba(255,255,255,0.5)', borderRadius: 8, color: 'white', fontSize: 10, fontWeight: 700, cursor: 'pointer', fontFamily: 'Zain, sans-serif', backdropFilter: 'blur(4px)' }}
                           >اطلب الآن</button>
                         </div>
                       </div>

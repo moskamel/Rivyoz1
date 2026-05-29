@@ -121,7 +121,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; font-size: 16px; scroll-padding-top: 80px; }
 html, body {
-  font-family: 'Cairo', 'Inter', system-ui, sans-serif;
+  font-family: 'Zain', 'Inter', system-ui, sans-serif;
   background: var(--bg);
   color: var(--text);
   direction: rtl;
@@ -323,7 +323,7 @@ html, body {
 .btn-primary {
   display: inline-flex; align-items: center; justify-content: center; gap: 6px;
   background: var(--accent); color: white;
-  font-family: 'Cairo', sans-serif; font-weight: 700; font-size: 13px;
+  font-family: 'Zain', sans-serif; font-weight: 700; font-size: 13px;
   height: 40px; padding: 0 18px; border-radius: var(--radius-lg);
   border: none; cursor: pointer; white-space: nowrap;
   transition: all var(--dur-normal) var(--ease-default);
@@ -339,7 +339,7 @@ html, body {
 .btn-ghost {
   display: inline-flex; align-items: center; justify-content: center; gap: 6px;
   background: transparent; color: var(--text-2);
-  font-family: 'Cairo', sans-serif; font-weight: 500; font-size: 13px;
+  font-family: 'Zain', sans-serif; font-weight: 500; font-size: 13px;
   height: 40px; padding: 0 16px; border-radius: var(--radius-lg);
   border: 1px solid var(--border); cursor: pointer; white-space: nowrap;
   transition: all var(--dur-normal) ease;
@@ -352,7 +352,7 @@ html, body {
 .btn-subtle {
   display: inline-flex; align-items: center; justify-content: center; gap: 6px;
   background: var(--surface-2); color: var(--text);
-  font-family: 'Cairo', sans-serif; font-weight: 500; font-size: 13px;
+  font-family: 'Zain', sans-serif; font-weight: 500; font-size: 13px;
   height: 40px; padding: 0 16px; border-radius: var(--radius-lg);
   border: 1px solid var(--border); cursor: pointer; white-space: nowrap;
   transition: all var(--dur-normal) ease;
@@ -363,7 +363,7 @@ html, body {
 .btn-danger {
   display: inline-flex; align-items: center; justify-content: center; gap: 6px;
   background: transparent; color: var(--red);
-  font-family: 'Cairo', sans-serif; font-weight: 600; font-size: 13px;
+  font-family: 'Zain', sans-serif; font-weight: 600; font-size: 13px;
   height: 40px; padding: 0 16px; border-radius: var(--radius-lg);
   border: 1px solid rgba(248,113,113,0.20); cursor: pointer; white-space: nowrap;
   transition: all var(--dur-normal) ease;
@@ -392,7 +392,7 @@ html, body {
 
 .badge {
   display: inline-flex; align-items: center; gap: 4px;
-  font-family: 'Cairo', sans-serif; font-weight: 600;
+  font-family: 'Zain', sans-serif; font-weight: 600;
   border-radius: var(--radius-sm); white-space: nowrap;
   font-size: 11px; padding: 3px 8px; line-height: 1.3;
 }
@@ -417,7 +417,7 @@ html, body {
   width: 100%; height: 40px; padding: 0 12px;
   background: var(--surface-2); border: 1px solid var(--border);
   border-radius: var(--radius-md); color: var(--text);
-  font-family: 'Cairo', sans-serif; font-size: 13px; outline: none;
+  font-family: 'Zain', sans-serif; font-size: 13px; outline: none;
   transition: border-color var(--dur-normal) ease, box-shadow var(--dur-normal) ease;
 }
 .input-base::placeholder { color: var(--text-3); }

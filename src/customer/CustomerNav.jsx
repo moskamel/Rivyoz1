@@ -40,7 +40,7 @@ export default function CustomerNav() {
               background: 'var(--surface)', width: 300,
               boxShadow: '4px 0 24px rgba(0,0,0,0.15)',
               display: 'flex', flexDirection: 'column',
-              fontFamily: 'Cairo, sans-serif',
+              fontFamily: 'Zain, sans-serif',
             }}
           >
             {/* Header */}
@@ -81,7 +81,7 @@ export default function CustomerNav() {
                       <span style={{ fontSize: 13, fontWeight: 700, color: '#F59E0B' }}>{pts.balance.toLocaleString()} نقطة</span>
                       <button
                         onClick={() => { setSidebarOpen(false); navigate('/loyalty') }}
-                        style={{ marginRight: 'auto', fontSize: 11, color, fontWeight: 700, background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}
+                        style={{ marginRight: 'auto', fontSize: 11, color, fontWeight: 700, background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}
                       >استبدل ←</button>
                     </div>
                   )}
@@ -98,7 +98,7 @@ export default function CustomerNav() {
                     <button
                       key={link.path}
                       onClick={() => { setSidebarOpen(false); navigate(link.path) }}
-                      style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', background: 'transparent', border: 'none', borderBottom: '1px solid var(--border)', cursor: 'pointer', fontFamily: 'Cairo, sans-serif', textAlign: 'right' }}
+                      style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', background: 'transparent', border: 'none', borderBottom: '1px solid var(--border)', cursor: 'pointer', fontFamily: 'Zain, sans-serif', textAlign: 'right' }}
                     >
                       <span style={{ fontSize: 18 }}>{link.icon}</span>
                       <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>{link.label}</span>
@@ -111,8 +111,8 @@ export default function CustomerNav() {
                   <div style={{ padding: '4px 12px 12px' }}>
                     <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-3)', padding: '8px 4px', letterSpacing: '0.05em' }}>حمّل التطبيق</p>
                     <div style={{ display: 'flex', gap: 8 }}>
-                      <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '9px', borderRadius: 10, background: 'var(--surface-2)', color: 'var(--text)', fontSize: 12, fontWeight: 600, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>🍎 App Store</button>
-                      <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '9px', borderRadius: 10, background: 'var(--surface-2)', color: 'var(--text)', fontSize: 12, fontWeight: 600, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>🤖 Google Play</button>
+                      <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '9px', borderRadius: 10, background: 'var(--surface-2)', color: 'var(--text)', fontSize: 12, fontWeight: 600, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>🍎 App Store</button>
+                      <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '9px', borderRadius: 10, background: 'var(--surface-2)', color: 'var(--text)', fontSize: 12, fontWeight: 600, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>🤖 Google Play</button>
                     </div>
                   </div>
 
@@ -128,7 +128,7 @@ export default function CustomerNav() {
                 <div style={{ padding: '12px 16px', borderTop: '1px solid var(--border)' }}>
                   <button
                     onClick={() => { clearCustomerProfile(); setSidebarOpen(false) }}
-                    style={{ width: '100%', padding: '11px', borderRadius: 12, background: '#FEF2F2', color: '#DC2626', fontWeight: 700, fontSize: 13, border: '1px solid #FECACA', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}
+                    style={{ width: '100%', padding: '11px', borderRadius: 12, background: '#FEF2F2', color: '#DC2626', fontWeight: 700, fontSize: 13, border: '1px solid #FECACA', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}
                   >
                     تسجيل الخروج
                   </button>
@@ -143,13 +143,13 @@ export default function CustomerNav() {
                   <p style={{ fontSize: 13, color: 'var(--text-2)', marginBottom: 24, lineHeight: 1.7 }}>سجّل دخولك لتتبع طلباتك وتجميع النقاط والاستمتاع بالعروض</p>
                   <button
                     onClick={() => { setSidebarOpen(false); navigate('/customer-login') }}
-                    style={{ width: '100%', padding: '13px', borderRadius: 14, background: color, color: 'white', fontWeight: 700, fontSize: 14, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif', boxShadow: `0 6px 20px ${color}40`, marginBottom: 10 }}
+                    style={{ width: '100%', padding: '13px', borderRadius: 14, background: color, color: 'white', fontWeight: 700, fontSize: 14, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', boxShadow: `0 6px 20px ${color}40`, marginBottom: 10 }}
                   >
                     تسجيل الدخول
                   </button>
                   <button
                     onClick={() => { setSidebarOpen(false); navigate('/customer-login') }}
-                    style={{ width: '100%', padding: '11px', borderRadius: 14, background: 'var(--surface)', color, fontWeight: 700, fontSize: 14, border: `2px solid ${color}`, cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}
+                    style={{ width: '100%', padding: '11px', borderRadius: 14, background: 'var(--surface)', color, fontWeight: 700, fontSize: 14, border: `2px solid ${color}`, cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}
                   >
                     إنشاء حساب جديد
                   </button>
@@ -157,8 +157,8 @@ export default function CustomerNav() {
                 <div style={{ padding: '12px 16px', borderTop: '1px solid var(--border)' }}>
                   <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-3)', marginBottom: 10, textAlign: 'center', letterSpacing: '0.05em' }}>حمّل التطبيق</p>
                   <div style={{ display: 'flex', gap: 8 }}>
-                    <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '9px', borderRadius: 10, background: 'var(--surface-2)', color: 'var(--text)', fontSize: 12, fontWeight: 600, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>🍎 App Store</button>
-                    <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '9px', borderRadius: 10, background: 'var(--surface-2)', color: 'var(--text)', fontSize: 12, fontWeight: 600, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>🤖 Google Play</button>
+                    <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '9px', borderRadius: 10, background: 'var(--surface-2)', color: 'var(--text)', fontSize: 12, fontWeight: 600, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>🍎 App Store</button>
+                    <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '9px', borderRadius: 10, background: 'var(--surface-2)', color: 'var(--text)', fontSize: 12, fontWeight: 600, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>🤖 Google Play</button>
                   </div>
                 </div>
               </div>
@@ -174,7 +174,7 @@ export default function CustomerNav() {
           position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 100,
           background: 'var(--surface)', borderTop: '1px solid var(--border)',
           boxShadow: '0 -4px 20px rgba(0,0,0,0.08)',
-          display: 'flex', fontFamily: 'Cairo, sans-serif',
+          display: 'flex', fontFamily: 'Zain, sans-serif',
           paddingBottom: 'env(safe-area-inset-bottom)',
         }}
       >

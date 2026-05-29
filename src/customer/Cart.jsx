@@ -90,13 +90,13 @@ export default function Cart() {
 
   if (itemCount === 0) {
     return (
-      <div style={{ minHeight: '100vh', background: 'var(--bg)', fontFamily: 'Cairo, sans-serif', direction: 'rtl' }}>
+      <div style={{ minHeight: '100vh', background: 'var(--bg)', fontFamily: 'Zain, sans-serif', direction: 'rtl' }}>
         <CartHeader />
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 48, textAlign: 'center', minHeight: 'calc(100vh - 64px)' }}>
           <div style={{ fontSize: 72, marginBottom: 20, lineHeight: 1 }}>🛒</div>
           <p style={{ fontWeight: 800, color: 'var(--text)', fontSize: 22, marginBottom: 8 }}>سلتك فارغة</p>
           <p style={{ color: 'var(--text-3)', fontSize: 14, marginBottom: 32 }}>لم تضف أي أصناف بعد</p>
-          <button onClick={() => navigate(-1)} style={{ padding: '14px 32px', borderRadius: 16, background: config.color, color: 'white', fontWeight: 700, fontSize: 15, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif', boxShadow: `0 6px 20px ${config.color}40` }}>
+          <button onClick={() => navigate(-1)} style={{ padding: '14px 32px', borderRadius: 16, background: config.color, color: 'white', fontWeight: 700, fontSize: 15, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', boxShadow: `0 6px 20px ${config.color}40` }}>
             تصفح القائمة
           </button>
         </div>
@@ -106,7 +106,7 @@ export default function Cart() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg)', fontFamily: 'Cairo, sans-serif', direction: 'rtl' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', fontFamily: 'Zain, sans-serif', direction: 'rtl' }}>
       <CartHeader />
 
       <div style={{ padding: '16px 14px 88px', display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -187,7 +187,7 @@ export default function Cart() {
                     background: orderType === opt.key ? config.color + '12' : 'var(--surface-2)',
                     color: orderType === opt.key ? config.color : 'var(--text-2)',
                     opacity: opt.enabled ? 1 : 0.4,
-                    fontFamily: 'Cairo, sans-serif',
+                    fontFamily: 'Zain, sans-serif',
                   }}
                 >
                   <span style={{ fontSize: 20 }}>{opt.icon}</span>
@@ -205,13 +205,13 @@ export default function Cart() {
                 value={coupon}
                 onChange={e => { setCoupon(e.target.value); setCouponError('') }}
                 placeholder="أدخل كود الخصم"
-                style={{ flex: 1, padding: '11px 14px', borderRadius: 12, border: `1.5px solid ${couponApplied ? '#22C55E' : 'var(--border-strong)'}`, fontSize: 13, outline: 'none', fontFamily: 'Cairo, sans-serif', background: 'var(--surface)', color: 'var(--text)', boxSizing: 'border-box', direction: 'ltr' }}
+                style={{ flex: 1, padding: '11px 14px', borderRadius: 12, border: `1.5px solid ${couponApplied ? '#22C55E' : 'var(--border-strong)'}`, fontSize: 13, outline: 'none', fontFamily: 'Zain, sans-serif', background: 'var(--surface)', color: 'var(--text)', boxSizing: 'border-box', direction: 'ltr' }}
                 onFocus={e => { e.target.style.borderColor = config.color; e.target.style.boxShadow = `0 0 0 3px ${config.color}22` }}
                 onBlur={e => { e.target.style.borderColor = couponApplied ? '#22C55E' : 'var(--border-strong)'; e.target.style.boxShadow = 'none' }}
               />
               <button
                 onClick={applyCoupon}
-                style={{ padding: '11px 18px', borderRadius: 12, background: config.color, color: 'white', fontWeight: 700, fontSize: 13, border: 'none', cursor: 'pointer', flexShrink: 0, fontFamily: 'Cairo, sans-serif' }}
+                style={{ padding: '11px 18px', borderRadius: 12, background: config.color, color: 'white', fontWeight: 700, fontSize: 13, border: 'none', cursor: 'pointer', flexShrink: 0, fontFamily: 'Zain, sans-serif' }}
               >تطبيق</button>
             </div>
             {couponError && <p style={{ color: '#EF4444', fontSize: 12, marginTop: 6, fontWeight: 600 }}>{couponError}</p>}
@@ -267,7 +267,7 @@ export default function Cart() {
                 color: canProceed ? 'white' : 'var(--text-3)',
                 fontWeight: 800, fontSize: 16, border: 'none',
                 cursor: canProceed ? 'pointer' : 'not-allowed',
-                fontFamily: 'Cairo, sans-serif',
+                fontFamily: 'Zain, sans-serif',
                 boxShadow: canProceed ? `0 6px 20px ${config.color}40` : 'none',
                 transition: 'all 0.2s',
               }}
@@ -286,8 +286,8 @@ export default function Cart() {
             <p style={{ fontWeight: 800, color: 'var(--text)', fontSize: 17, marginBottom: 6 }}>تحذف هذا الصنف؟</p>
             <p style={{ color: 'var(--text-3)', fontSize: 13, marginBottom: 20 }}>سيتم إزالة الصنف من سلتك</p>
             <div style={{ display: 'flex', gap: 10 }}>
-              <button onClick={() => setConfirmDelete(null)} style={{ flex: 1, padding: '13px', borderRadius: 14, border: '1.5px solid var(--border-strong)', fontSize: 14, fontWeight: 700, color: 'var(--text-2)', background: 'var(--surface)', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>إلغاء</button>
-              <button onClick={() => { removeItem(confirmDelete); setConfirmDelete(null) }} style={{ flex: 1, padding: '13px', borderRadius: 14, border: 'none', fontSize: 14, fontWeight: 700, color: 'white', background: '#EF4444', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>احذف</button>
+              <button onClick={() => setConfirmDelete(null)} style={{ flex: 1, padding: '13px', borderRadius: 14, border: '1.5px solid var(--border-strong)', fontSize: 14, fontWeight: 700, color: 'var(--text-2)', background: 'var(--surface)', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>إلغاء</button>
+              <button onClick={() => { removeItem(confirmDelete); setConfirmDelete(null) }} style={{ flex: 1, padding: '13px', borderRadius: 14, border: 'none', fontSize: 14, fontWeight: 700, color: 'white', background: '#EF4444', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>احذف</button>
             </div>
           </div>
         </div>
@@ -301,8 +301,8 @@ export default function Cart() {
             <p style={{ fontWeight: 800, color: 'var(--text)', fontSize: 17, marginBottom: 6 }}>تفريغ السلة؟</p>
             <p style={{ color: 'var(--text-3)', fontSize: 13, marginBottom: 20 }}>سيتم حذف جميع المنتجات من سلتك</p>
             <div style={{ display: 'flex', gap: 10 }}>
-              <button onClick={() => setConfirmClearAll(false)} style={{ flex: 1, padding: '13px', borderRadius: 14, border: '1.5px solid var(--border-strong)', fontSize: 14, fontWeight: 700, color: 'var(--text-2)', background: 'var(--surface)', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>إلغاء</button>
-              <button onClick={() => { clearCart(); setConfirmClearAll(false) }} style={{ flex: 1, padding: '13px', borderRadius: 14, border: 'none', fontSize: 14, fontWeight: 700, color: 'white', background: '#EF4444', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>افرغ السلة</button>
+              <button onClick={() => setConfirmClearAll(false)} style={{ flex: 1, padding: '13px', borderRadius: 14, border: '1.5px solid var(--border-strong)', fontSize: 14, fontWeight: 700, color: 'var(--text-2)', background: 'var(--surface)', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>إلغاء</button>
+              <button onClick={() => { clearCart(); setConfirmClearAll(false) }} style={{ flex: 1, padding: '13px', borderRadius: 14, border: 'none', fontSize: 14, fontWeight: 700, color: 'white', background: '#EF4444', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>افرغ السلة</button>
             </div>
           </div>
         </div>

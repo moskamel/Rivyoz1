@@ -107,7 +107,7 @@ function ItemCard({ accentColor, onClick, image, emoji = '🍽️', title, subti
         <button
           disabled={disabled}
           onClick={onAction ? (e) => { e.stopPropagation(); onAction() } : undefined}
-          style={{ width: '100%', marginTop: 8, padding: '7px', background: disabled ? 'var(--surface-2)' : accentColor, color: disabled ? 'var(--text-3)' : 'white', fontWeight: 700, fontSize: 13, borderRadius: 10, border: 'none', cursor: disabled ? 'not-allowed' : 'pointer', fontFamily: 'Cairo, sans-serif' }}
+          style={{ width: '100%', marginTop: 8, padding: '7px', background: disabled ? 'var(--surface-2)' : accentColor, color: disabled ? 'var(--text-3)' : 'white', fontWeight: 700, fontSize: 13, borderRadius: 10, border: 'none', cursor: disabled ? 'not-allowed' : 'pointer', fontFamily: 'Zain, sans-serif' }}
         >
           {actionLabel}
         </button>
@@ -262,7 +262,7 @@ function ReviewsSection({ config, customerProfile, navigate }) {
         ) : (
           <button
             onClick={() => customerProfile ? setWriteOpen(true) : navigate('/customer-login')}
-            style={{ width: '100%', padding: '12px', borderRadius: 14, background: config.color, color: 'white', fontWeight: 700, fontSize: 14, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}
+            style={{ width: '100%', padding: '12px', borderRadius: 14, background: config.color, color: 'white', fontWeight: 700, fontSize: 14, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}
           >
             ✍️ اكتب تقييمك
           </button>
@@ -273,7 +273,7 @@ function ReviewsSection({ config, customerProfile, navigate }) {
       {writeOpen && (
         <>
           <div onClick={() => setWriteOpen(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 150 }} />
-          <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 151, background: 'var(--surface)', borderRadius: '24px 24px 0 0', padding: '20px 20px 40px', fontFamily: 'Cairo, sans-serif', maxWidth: 480, margin: '0 auto' }}>
+          <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 151, background: 'var(--surface)', borderRadius: '24px 24px 0 0', padding: '20px 20px 40px', fontFamily: 'Zain, sans-serif', maxWidth: 480, margin: '0 auto' }}>
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 18, cursor: 'pointer' }} onClick={() => setWriteOpen(false)}>
               <div style={{ width: 40, height: 4, background: 'var(--border-strong)', borderRadius: 2 }} />
             </div>
@@ -298,12 +298,12 @@ function ReviewsSection({ config, customerProfile, navigate }) {
               onChange={e => setMyComment(e.target.value)}
               placeholder="شاركنا تجربتك مع المطعم... (اختياري)"
               rows={3}
-              style={{ width: '100%', padding: '12px 14px', borderRadius: 12, border: '1.5px solid var(--border-strong)', fontSize: 13, outline: 'none', resize: 'none', fontFamily: 'Cairo, sans-serif', boxSizing: 'border-box', color: 'var(--text)', background: 'var(--surface-2)', marginBottom: 14 }}
+              style={{ width: '100%', padding: '12px 14px', borderRadius: 12, border: '1.5px solid var(--border-strong)', fontSize: 13, outline: 'none', resize: 'none', fontFamily: 'Zain, sans-serif', boxSizing: 'border-box', color: 'var(--text)', background: 'var(--surface-2)', marginBottom: 14 }}
             />
             <button
               onClick={handleSubmit}
               disabled={myRating === 0}
-              style={{ width: '100%', padding: '13px', borderRadius: 14, background: myRating > 0 ? config.color : 'var(--surface-2)', color: myRating > 0 ? 'white' : 'var(--text-3)', fontWeight: 700, fontSize: 14, border: 'none', cursor: myRating > 0 ? 'pointer' : 'not-allowed', fontFamily: 'Cairo, sans-serif', transition: 'all 0.15s' }}
+              style={{ width: '100%', padding: '13px', borderRadius: 14, background: myRating > 0 ? config.color : 'var(--surface-2)', color: myRating > 0 ? 'white' : 'var(--text-3)', fontWeight: 700, fontSize: 14, border: 'none', cursor: myRating > 0 ? 'pointer' : 'not-allowed', fontFamily: 'Zain, sans-serif', transition: 'all 0.15s' }}
             >
               إرسال التقييم
             </button>
@@ -472,13 +472,13 @@ export default function StoreFront() {
     : []
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg)', fontFamily: 'Cairo, sans-serif', color: 'var(--text)' }} dir="rtl">
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', fontFamily: 'Zain, sans-serif', color: 'var(--text)' }} dir="rtl">
 
       {/* ─── StoreFront Sidebar ─── */}
       {sidebarOpen && (
         <>
           <div onClick={() => setSidebarOpen(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 200 }} />
-          <div dir="rtl" style={{ position: 'fixed', top: 0, left: 0, bottom: 0, zIndex: 201, background: 'var(--surface)', width: 300, boxShadow: '4px 0 24px rgba(0,0,0,0.15)', display: 'flex', flexDirection: 'column', fontFamily: 'Cairo, sans-serif' }}>
+          <div dir="rtl" style={{ position: 'fixed', top: 0, left: 0, bottom: 0, zIndex: 201, background: 'var(--surface)', width: 300, boxShadow: '4px 0 24px rgba(0,0,0,0.15)', display: 'flex', flexDirection: 'column', fontFamily: 'Zain, sans-serif' }}>
             {/* Sidebar header */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px', borderBottom: '1px solid var(--border)' }}>
               <h2 style={{ fontWeight: 800, fontSize: 16, color: 'var(--text)' }}>{config.name}</h2>
@@ -508,7 +508,7 @@ export default function StoreFront() {
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'var(--surface)', padding: '8px 12px', borderRadius: 12, border: '1px solid var(--border)' }}>
                       <span style={{ fontSize: 16 }}>🎁</span>
                       <span style={{ fontSize: 13, fontWeight: 700, color: '#F59E0B' }}>{pts.balance.toLocaleString()} نقطة</span>
-                      <button onClick={() => { setSidebarOpen(false); navigate('/loyalty') }} style={{ marginRight: 'auto', fontSize: 11, color: config.color, fontWeight: 700, background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>استبدل ←</button>
+                      <button onClick={() => { setSidebarOpen(false); navigate('/loyalty') }} style={{ marginRight: 'auto', fontSize: 11, color: config.color, fontWeight: 700, background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>استبدل ←</button>
                     </div>
                   )}
                 </div>
@@ -520,7 +520,7 @@ export default function StoreFront() {
                     { icon: '🗺️', label: 'استكشف المطاعم', path: '/explore'    },
                   ].map(link => (
                     <button key={link.path} onClick={() => { setSidebarOpen(false); navigate(link.path) }}
-                      style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', background: 'transparent', border: 'none', borderBottom: '1px solid var(--border)', cursor: 'pointer', fontFamily: 'Cairo, sans-serif', textAlign: 'right' }}>
+                      style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', background: 'transparent', border: 'none', borderBottom: '1px solid var(--border)', cursor: 'pointer', fontFamily: 'Zain, sans-serif', textAlign: 'right' }}>
                       <span style={{ fontSize: 18 }}>{link.icon}</span>
                       <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>{link.label}</span>
                     </button>
@@ -529,8 +529,8 @@ export default function StoreFront() {
                   <div style={{ padding: '4px 12px 12px' }}>
                     <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-3)', padding: '8px 4px', letterSpacing: '0.05em' }}>حمّل التطبيق</p>
                     <div style={{ display: 'flex', gap: 8 }}>
-                      <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '9px', borderRadius: 10, background: 'var(--surface-2)', color: 'var(--text)', fontSize: 12, fontWeight: 600, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>🍎 App Store</button>
-                      <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '9px', borderRadius: 10, background: 'var(--surface-2)', color: 'var(--text)', fontSize: 12, fontWeight: 600, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>🤖 Google Play</button>
+                      <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '9px', borderRadius: 10, background: 'var(--surface-2)', color: 'var(--text)', fontSize: 12, fontWeight: 600, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>🍎 App Store</button>
+                      <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '9px', borderRadius: 10, background: 'var(--surface-2)', color: 'var(--text)', fontSize: 12, fontWeight: 600, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>🤖 Google Play</button>
                     </div>
                   </div>
                   <div style={{ padding: '0 16px 16px' }}>
@@ -541,7 +541,7 @@ export default function StoreFront() {
                 </div>
                 <div style={{ padding: '12px 16px', borderTop: '1px solid var(--border)' }}>
                   <button onClick={() => { clearCustomerProfile(); setSidebarOpen(false) }}
-                    style={{ width: '100%', padding: '11px', borderRadius: 12, background: '#FEF2F2', color: '#DC2626', fontWeight: 700, fontSize: 13, border: '1px solid #FECACA', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>
+                    style={{ width: '100%', padding: '11px', borderRadius: 12, background: '#FEF2F2', color: '#DC2626', fontWeight: 700, fontSize: 13, border: '1px solid #FECACA', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>
                     تسجيل الخروج
                   </button>
                 </div>
@@ -553,19 +553,19 @@ export default function StoreFront() {
                   <p style={{ fontSize: 17, fontWeight: 800, color: 'var(--text)', marginBottom: 8 }}>أهلاً بك!</p>
                   <p style={{ fontSize: 13, color: 'var(--text-2)', marginBottom: 24, lineHeight: 1.7 }}>سجّل دخولك لتتبع طلباتك وتجميع النقاط والاستمتاع بالعروض</p>
                   <button onClick={() => { setSidebarOpen(false); navigate('/customer-login') }}
-                    style={{ width: '100%', padding: '13px', borderRadius: 14, background: config.color, color: 'white', fontWeight: 700, fontSize: 14, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif', boxShadow: `0 6px 20px ${config.color}40`, marginBottom: 10 }}>
+                    style={{ width: '100%', padding: '13px', borderRadius: 14, background: config.color, color: 'white', fontWeight: 700, fontSize: 14, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', boxShadow: `0 6px 20px ${config.color}40`, marginBottom: 10 }}>
                     تسجيل الدخول
                   </button>
                   <button onClick={() => { setSidebarOpen(false); navigate('/customer-login') }}
-                    style={{ width: '100%', padding: '11px', borderRadius: 14, background: 'var(--surface)', color: config.color, fontWeight: 700, fontSize: 14, border: `2px solid ${config.color}`, cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>
+                    style={{ width: '100%', padding: '11px', borderRadius: 14, background: 'var(--surface)', color: config.color, fontWeight: 700, fontSize: 14, border: `2px solid ${config.color}`, cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>
                     إنشاء حساب جديد
                   </button>
                 </div>
                 <div style={{ padding: '12px 16px', borderTop: '1px solid var(--border)' }}>
                   <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-3)', marginBottom: 10, textAlign: 'center', letterSpacing: '0.05em' }}>حمّل التطبيق</p>
                   <div style={{ display: 'flex', gap: 8 }}>
-                    <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '9px', borderRadius: 10, background: 'var(--surface-2)', color: 'var(--text)', fontSize: 12, fontWeight: 600, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>🍎 App Store</button>
-                    <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '9px', borderRadius: 10, background: 'var(--surface-2)', color: 'var(--text)', fontSize: 12, fontWeight: 600, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>🤖 Google Play</button>
+                    <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '9px', borderRadius: 10, background: 'var(--surface-2)', color: 'var(--text)', fontSize: 12, fontWeight: 600, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>🍎 App Store</button>
+                    <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '9px', borderRadius: 10, background: 'var(--surface-2)', color: 'var(--text)', fontSize: 12, fontWeight: 600, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>🤖 Google Play</button>
                   </div>
                 </div>
               </div>
@@ -632,7 +632,7 @@ export default function StoreFront() {
                   placeholder="ابحث في القائمة..."
                   value={searchMenuQuery}
                   onChange={e => setSearchMenuQuery(e.target.value)}
-                  style={{ width: '100%', padding: '10px 36px 10px 12px', borderRadius: 12, border: `1.5px solid ${config.color}`, fontSize: 14, outline: 'none', fontFamily: 'Cairo, sans-serif', boxSizing: 'border-box', color: 'var(--text)', background: 'var(--surface)' }}
+                  style={{ width: '100%', padding: '10px 36px 10px 12px', borderRadius: 12, border: `1.5px solid ${config.color}`, fontSize: 14, outline: 'none', fontFamily: 'Zain, sans-serif', boxSizing: 'border-box', color: 'var(--text)', background: 'var(--surface)' }}
                 />
               </div>
               <button onClick={() => setSearchOpen(false)} style={{ width: 36, height: 36, borderRadius: 10, background: 'var(--surface-2)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'var(--text-2)' }}>
@@ -685,7 +685,7 @@ export default function StoreFront() {
                 whiteSpace: 'nowrap', transition: 'all 0.2s',
                 background: isActive ? config.color : 'var(--surface-2)',
                 color: isActive ? 'white' : 'var(--text-2)',
-                fontFamily: 'Cairo, sans-serif',
+                fontFamily: 'Zain, sans-serif',
               }}
             >
               {tab.name}
@@ -752,7 +752,7 @@ export default function StoreFront() {
         <div style={{ position: 'fixed', bottom: 24, left: 0, right: 0, zIndex: 30, padding: '0 16px' }}>
           <button
             onClick={() => navigate('/cart')}
-            style={{ width: '100%', padding: '14px', borderRadius: 18, background: config.color, color: 'white', fontWeight: 800, fontSize: 14, boxShadow: `0 8px 30px ${config.color}60`, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}
+            style={{ width: '100%', padding: '14px', borderRadius: 18, background: config.color, color: 'white', fontWeight: 800, fontSize: 14, boxShadow: `0 8px 30px ${config.color}60`, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}
           >
             <ShoppingCart size={18} />
             عرض السلة · {itemCount} أصناف · {total} ج
@@ -805,7 +805,7 @@ export default function StoreFront() {
                               const isSelected = groupSel === opt.id
                               return (
                                 <button key={opt.id} onClick={() => handleModifierSingle(group.id, opt.id)}
-                                  style={{ padding: '8px 16px', borderRadius: 20, border: `2px solid ${isSelected ? config.color : 'var(--border-strong)'}`, background: isSelected ? config.color + '15' : 'var(--surface)', color: isSelected ? config.color : 'var(--text)', fontWeight: isSelected ? 700 : 500, fontSize: 13, cursor: 'pointer', fontFamily: 'Cairo, sans-serif', transition: 'all 0.15s', display: 'flex', alignItems: 'center', gap: 6 }}>
+                                  style={{ padding: '8px 16px', borderRadius: 20, border: `2px solid ${isSelected ? config.color : 'var(--border-strong)'}`, background: isSelected ? config.color + '15' : 'var(--surface)', color: isSelected ? config.color : 'var(--text)', fontWeight: isSelected ? 700 : 500, fontSize: 13, cursor: 'pointer', fontFamily: 'Zain, sans-serif', transition: 'all 0.15s', display: 'flex', alignItems: 'center', gap: 6 }}>
                                   {opt.name}
                                   {opt.price > 0 && <span style={{ fontSize: 11, fontWeight: 600, color: isSelected ? config.color : 'var(--text-3)' }}>+{opt.price}ج</span>}
                                 </button>
@@ -820,7 +820,7 @@ export default function StoreFront() {
                               const isChecked = !!multiSel[opt.id]
                               return (
                                 <button key={opt.id} onClick={() => handleModifierMulti(group.id, opt.id)}
-                                  style={{ padding: '8px 16px', borderRadius: 20, border: `2px solid ${isChecked ? config.color : 'var(--border-strong)'}`, background: isChecked ? config.color + '15' : 'var(--surface)', color: isChecked ? config.color : 'var(--text)', fontWeight: isChecked ? 700 : 500, fontSize: 13, cursor: 'pointer', fontFamily: 'Cairo, sans-serif', transition: 'all 0.15s', display: 'flex', alignItems: 'center', gap: 6 }}>
+                                  style={{ padding: '8px 16px', borderRadius: 20, border: `2px solid ${isChecked ? config.color : 'var(--border-strong)'}`, background: isChecked ? config.color + '15' : 'var(--surface)', color: isChecked ? config.color : 'var(--text)', fontWeight: isChecked ? 700 : 500, fontSize: 13, cursor: 'pointer', fontFamily: 'Zain, sans-serif', transition: 'all 0.15s', display: 'flex', alignItems: 'center', gap: 6 }}>
                                   <span style={{ width: 16, height: 16, borderRadius: 4, border: `2px solid ${isChecked ? config.color : 'var(--border-strong)'}`, background: isChecked ? config.color : 'var(--surface)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                                     {isChecked && <span style={{ color: 'white', fontSize: 10, fontWeight: 900 }}>✓</span>}
                                   </span>
@@ -844,7 +844,7 @@ export default function StoreFront() {
                   onChange={e => setNote(e.target.value)}
                   placeholder="ملاحظات خاصة (اختياري)..."
                   rows={2}
-                  style={{ width: '100%', padding: '12px 14px', borderRadius: 12, border: '1.5px solid var(--border-strong)', fontSize: 13, outline: 'none', resize: 'none', fontFamily: 'Cairo, sans-serif', boxSizing: 'border-box', color: 'var(--text)', background: 'var(--surface-2)' }}
+                  style={{ width: '100%', padding: '12px 14px', borderRadius: 12, border: '1.5px solid var(--border-strong)', fontSize: 13, outline: 'none', resize: 'none', fontFamily: 'Zain, sans-serif', boxSizing: 'border-box', color: 'var(--text)', background: 'var(--surface-2)' }}
                   onFocus={e => e.target.style.borderColor = config.color}
                   onBlur={e => e.target.style.borderColor = 'var(--border-strong)'}
                 />
@@ -866,7 +866,7 @@ export default function StoreFront() {
                   style={{ width: 36, height: 36, borderRadius: '50%', border: '2px solid var(--border-strong)', background: 'none', cursor: 'pointer', fontSize: 18, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text)' }}>
                   −
                 </button>
-                <span style={{ fontWeight: 800, fontSize: 18, color: 'var(--text)', minWidth: 22, textAlign: 'center', fontFamily: 'Inter, Cairo, sans-serif' }}>{qty}</span>
+                <span style={{ fontWeight: 800, fontSize: 18, color: 'var(--text)', minWidth: 22, textAlign: 'center', fontFamily: 'Inter, Zain, sans-serif' }}>{qty}</span>
                 <button onClick={() => setQty(q => q + 1)}
                   style={{ width: 36, height: 36, borderRadius: '50%', background: config.color, border: 'none', cursor: 'pointer', fontSize: 18, fontWeight: 700, color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   +
@@ -875,7 +875,7 @@ export default function StoreFront() {
               <button
                 onClick={handleAddToCart}
                 disabled={!canAddToCart}
-                style={{ flex: 1, padding: '13px 16px', background: canAddToCart ? config.color : 'var(--surface-2)', color: canAddToCart ? 'white' : 'var(--text-3)', fontWeight: 800, fontSize: 14, borderRadius: 14, border: 'none', cursor: canAddToCart ? 'pointer' : 'not-allowed', fontFamily: 'Cairo, sans-serif', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'all 0.2s' }}
+                style={{ flex: 1, padding: '13px 16px', background: canAddToCart ? config.color : 'var(--surface-2)', color: canAddToCart ? 'white' : 'var(--text-3)', fontWeight: 800, fontSize: 14, borderRadius: 14, border: 'none', cursor: canAddToCart ? 'pointer' : 'not-allowed', fontFamily: 'Zain, sans-serif', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'all 0.2s' }}
               >
                 <ShoppingCart size={16} />
                 إضافة للسلة · {sheetTotal} ج
@@ -893,7 +893,7 @@ export default function StoreFront() {
         >
           <div
             onClick={e => e.stopPropagation()}
-            style={{ background: 'var(--surface)', borderRadius: '24px 24px 0 0', padding: '28px 20px 40px', width: '100%', maxWidth: 480, textAlign: 'center', fontFamily: 'Cairo, sans-serif' }}
+            style={{ background: 'var(--surface)', borderRadius: '24px 24px 0 0', padding: '28px 20px 40px', width: '100%', maxWidth: 480, textAlign: 'center', fontFamily: 'Zain, sans-serif' }}
           >
             <div style={{ fontSize: 48, marginBottom: 16 }}>🛒</div>
             <p style={{ fontWeight: 900, fontSize: 17, color: 'var(--text)', marginBottom: 10 }}>سلتك من مطعم آخر</p>
@@ -905,13 +905,13 @@ export default function StoreFront() {
             <div style={{ display: 'flex', gap: 10 }}>
               <button
                 onClick={() => setConflictPending(null)}
-                style={{ flex: 1, padding: '14px', borderRadius: 14, border: '1.5px solid var(--border-strong)', fontSize: 14, fontWeight: 700, color: 'var(--text-2)', background: 'var(--surface)', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}
+                style={{ flex: 1, padding: '14px', borderRadius: 14, border: '1.5px solid var(--border-strong)', fontSize: 14, fontWeight: 700, color: 'var(--text-2)', background: 'var(--surface)', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}
               >
                 إلغاء
               </button>
               <button
                 onClick={confirmConflict}
-                style={{ flex: 1, padding: '14px', borderRadius: 14, border: 'none', fontSize: 14, fontWeight: 700, color: 'white', background: config.color, cursor: 'pointer', fontFamily: 'Cairo, sans-serif', boxShadow: `0 4px 14px ${config.color}44` }}
+                style={{ flex: 1, padding: '14px', borderRadius: 14, border: 'none', fontSize: 14, fontWeight: 700, color: 'white', background: config.color, cursor: 'pointer', fontFamily: 'Zain, sans-serif', boxShadow: `0 4px 14px ${config.color}44` }}
               >
                 امسح وأضف
               </button>

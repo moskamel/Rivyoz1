@@ -47,7 +47,7 @@ export default function Reviews() {
 
   return (
     <Layout>
-      <div dir="rtl" style={{ fontFamily: 'Cairo, sans-serif' }}>
+      <div dir="rtl" style={{ fontFamily: 'Zain, sans-serif' }}>
         <h1 style={{ fontWeight: 800, fontSize: 22, color: 'var(--text)', marginBottom: 24 }}>التقييمات</h1>
 
         {/* Stats row */}
@@ -101,7 +101,7 @@ export default function Reviews() {
             { id: 'hidden', label: 'مخفية', count: hiddenCount },
           ].map(tab => (
             <button key={tab.id} onClick={() => setActiveTab(tab.id)}
-              style={{ padding: '8px 18px', borderRadius: 20, fontSize: 13, fontWeight: 700, cursor: 'pointer', border: 'none', fontFamily: 'Cairo, sans-serif', transition: 'all 0.15s', background: activeTab === tab.id ? 'var(--accent)' : 'var(--surface-2)', color: activeTab === tab.id ? 'white' : 'var(--text-2)' }}>
+              style={{ padding: '8px 18px', borderRadius: 20, fontSize: 13, fontWeight: 700, cursor: 'pointer', border: 'none', fontFamily: 'Zain, sans-serif', transition: 'all 0.15s', background: activeTab === tab.id ? 'var(--accent)' : 'var(--surface-2)', color: activeTab === tab.id ? 'white' : 'var(--text-2)' }}>
               {tab.label}{tab.count > 0 ? ` (${tab.count})` : ''}
             </button>
           ))}
@@ -159,15 +159,15 @@ export default function Reviews() {
                     onChange={e => setReplyText(e.target.value)}
                     placeholder="اكتب ردك على التقييم..."
                     rows={3}
-                    style={{ width: '100%', padding: '12px 14px', borderRadius: 10, border: '1.5px solid var(--accent)', fontSize: 13, outline: 'none', resize: 'none', fontFamily: 'Cairo, sans-serif', boxSizing: 'border-box', color: 'var(--text)', background: 'var(--surface-2)' }}
+                    style={{ width: '100%', padding: '12px 14px', borderRadius: 10, border: '1.5px solid var(--accent)', fontSize: 13, outline: 'none', resize: 'none', fontFamily: 'Zain, sans-serif', boxSizing: 'border-box', color: 'var(--text)', background: 'var(--surface-2)' }}
                   />
                   <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
                     <button onClick={() => handleReply(review.id)}
-                      style={{ padding: '8px 16px', borderRadius: 10, background: 'var(--accent)', color: 'white', fontWeight: 700, fontSize: 13, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif', display: 'flex', alignItems: 'center', gap: 6 }}>
+                      style={{ padding: '8px 16px', borderRadius: 10, background: 'var(--accent)', color: 'white', fontWeight: 700, fontSize: 13, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', display: 'flex', alignItems: 'center', gap: 6 }}>
                       <Send size={13} /> إرسال الرد
                     </button>
                     <button onClick={() => { setReplyingTo(null); setReplyText('') }}
-                      style={{ padding: '8px 14px', borderRadius: 10, background: 'var(--surface-2)', color: 'var(--text-2)', fontWeight: 600, fontSize: 13, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>
+                      style={{ padding: '8px 14px', borderRadius: 10, background: 'var(--surface-2)', color: 'var(--text-2)', fontWeight: 600, fontSize: 13, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>
                       إلغاء
                     </button>
                   </div>
@@ -179,18 +179,18 @@ export default function Reviews() {
                 {replyingTo !== review.id && (
                   !review.reply ? (
                     <button onClick={() => { setReplyingTo(review.id); setReplyText('') }}
-                      style={{ padding: '7px 14px', borderRadius: 10, background: 'var(--surface-2)', color: 'var(--text-2)', fontWeight: 600, fontSize: 12, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif', display: 'flex', alignItems: 'center', gap: 5 }}>
+                      style={{ padding: '7px 14px', borderRadius: 10, background: 'var(--surface-2)', color: 'var(--text-2)', fontWeight: 600, fontSize: 12, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', display: 'flex', alignItems: 'center', gap: 5 }}>
                       <MessageSquare size={13} /> رد على التقييم
                     </button>
                   ) : (
                     <button onClick={() => { setReplyingTo(review.id); setReplyText(review.reply) }}
-                      style={{ padding: '7px 14px', borderRadius: 10, background: 'var(--surface-2)', color: 'var(--text-2)', fontWeight: 600, fontSize: 12, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif', display: 'flex', alignItems: 'center', gap: 5 }}>
+                      style={{ padding: '7px 14px', borderRadius: 10, background: 'var(--surface-2)', color: 'var(--text-2)', fontWeight: 600, fontSize: 12, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', display: 'flex', alignItems: 'center', gap: 5 }}>
                       ✏️ تعديل الرد
                     </button>
                   )
                 )}
                 <button onClick={() => handleToggle(review.id)}
-                  style={{ padding: '7px 14px', borderRadius: 10, fontWeight: 600, fontSize: 12, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif', display: 'flex', alignItems: 'center', gap: 5, background: review.isVisible ? '#FEF3C7' : '#DCFCE7', color: review.isVisible ? '#92400E' : '#166534' }}>
+                  style={{ padding: '7px 14px', borderRadius: 10, fontWeight: 600, fontSize: 12, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', display: 'flex', alignItems: 'center', gap: 5, background: review.isVisible ? '#FEF3C7' : '#DCFCE7', color: review.isVisible ? '#92400E' : '#166534' }}>
                   {review.isVisible ? <><EyeOff size={13} /> إخفاء</> : <><Eye size={13} /> إظهار</>}
                 </button>
               </div>

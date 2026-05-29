@@ -9,7 +9,7 @@ function makeInputStyle() {
   return {
     width: '100%', padding: '13px 14px', borderRadius: 12,
     border: '1.5px solid var(--border-strong)', fontSize: 14, outline: 'none',
-    fontFamily: 'Cairo, sans-serif', background: 'var(--surface)', color: 'var(--text)',
+    fontFamily: 'Zain, sans-serif', background: 'var(--surface)', color: 'var(--text)',
     boxSizing: 'border-box', transition: 'border-color 0.2s, box-shadow 0.2s',
   }
 }
@@ -47,7 +47,7 @@ function StepIndicator({ step, color }) {
             <span style={{
               fontSize: 10, fontWeight: 700,
               color: s.num === step ? color : s.num < step ? '#22C55E' : '#9CA3AF',
-              whiteSpace: 'nowrap', fontFamily: 'Cairo, sans-serif', transition: 'color 0.3s',
+              whiteSpace: 'nowrap', fontFamily: 'Zain, sans-serif', transition: 'color 0.3s',
             }}>
               {s.label}
             </span>
@@ -235,7 +235,7 @@ export default function Checkout() {
     : null
 
   const BackBtn = ({ onClick }) => (
-    <button onClick={onClick} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '10px 0', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-2)', fontWeight: 700, fontSize: 14, fontFamily: 'Cairo, sans-serif' }}>
+    <button onClick={onClick} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '10px 0', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-2)', fontWeight: 700, fontSize: 14, fontFamily: 'Zain, sans-serif' }}>
       <ArrowRight size={16} />
       رجوع
     </button>
@@ -251,7 +251,7 @@ export default function Checkout() {
         color: disabled ? '#9CA3AF' : 'white',
         fontWeight: 800, fontSize: 16, border: 'none',
         cursor: disabled ? 'not-allowed' : 'pointer',
-        fontFamily: 'Cairo, sans-serif',
+        fontFamily: 'Zain, sans-serif',
         boxShadow: disabled ? 'none' : `0 6px 20px ${accentColor}40`,
         transition: 'all 0.2s',
         marginTop: 8,
@@ -273,7 +273,7 @@ export default function Checkout() {
 
   // ── RENDER ───────────────────────────────────────────────────────────────
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg)', fontFamily: 'Cairo, sans-serif', direction: 'rtl' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', fontFamily: 'Zain, sans-serif', direction: 'rtl' }}>
 
       {/* Step content */}
       <div style={{ padding: '16px 14px 100px', opacity: animating ? 0 : 1, transition: 'opacity 0.18s ease' }}>
@@ -335,7 +335,7 @@ export default function Checkout() {
                       background: orderType === opt.key ? accentColor + '12' : 'var(--surface-2)',
                       color: orderType === opt.key ? accentColor : '#6B7280',
                       opacity: opt.enabled ? 1 : 0.4,
-                      fontFamily: 'Cairo, sans-serif',
+                      fontFamily: 'Zain, sans-serif',
                     }}
                   >
                     <span style={{ fontSize: 22 }}>{opt.icon}</span>
@@ -356,7 +356,7 @@ export default function Checkout() {
                     <div>
                       <button
                         onClick={() => setShowSavedAddresses(!showSavedAddresses)}
-                        style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 12px', borderRadius: 10, background: `${accentColor}12`, border: `1px solid ${accentColor}30`, color: accentColor, fontWeight: 700, fontSize: 12, cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}
+                        style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 12px', borderRadius: 10, background: `${accentColor}12`, border: `1px solid ${accentColor}30`, color: accentColor, fontWeight: 700, fontSize: 12, cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}
                       >
                         📍 استخدم عنوان محفوظ {showSavedAddresses ? '▲' : '▼'}
                       </button>
@@ -372,7 +372,7 @@ export default function Checkout() {
                                 setShowSavedAddresses(false)
                                 setStep1Errors(p => ({ ...p, governorate: '', address: '' }))
                               }}
-                              style={{ textAlign: 'right', padding: '10px 12px', borderRadius: 10, background: '#F9FAFB', border: '1px solid #F3F4F6', fontSize: 13, color: '#374151', fontWeight: 600, cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}
+                              style={{ textAlign: 'right', padding: '10px 12px', borderRadius: 10, background: '#F9FAFB', border: '1px solid #F3F4F6', fontSize: 13, color: '#374151', fontWeight: 600, cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}
                             >
                               📍 {addr}
                             </button>
@@ -479,7 +479,7 @@ export default function Checkout() {
                       border: `2px solid ${payment === opt.key ? accentColor : '#E5E7EB'}`,
                       background: payment === opt.key ? accentColor + '08' : 'white',
                       cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 14,
-                      transition: 'all 0.15s', fontFamily: 'Cairo, sans-serif', textAlign: 'right',
+                      transition: 'all 0.15s', fontFamily: 'Zain, sans-serif', textAlign: 'right',
                     }}
                   >
                     <div style={{ width: 22, height: 22, borderRadius: '50%', border: `2.5px solid ${payment === opt.key ? accentColor : '#D1D5DB'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'border-color 0.15s' }}>
@@ -541,7 +541,7 @@ export default function Checkout() {
                 />
                 <button
                   onClick={applyCoupon}
-                  style={{ padding: '11px 18px', borderRadius: 12, background: accentColor, color: 'white', fontWeight: 700, fontSize: 13, border: 'none', cursor: 'pointer', flexShrink: 0, fontFamily: 'Cairo, sans-serif' }}
+                  style={{ padding: '11px 18px', borderRadius: 12, background: accentColor, color: 'white', fontWeight: 700, fontSize: 13, border: 'none', cursor: 'pointer', flexShrink: 0, fontFamily: 'Zain, sans-serif' }}
                 >تطبيق</button>
               </div>
               {couponError && <p style={{ color: '#EF4444', fontSize: 12, marginTop: 6, fontWeight: 600 }}>{couponError}</p>}

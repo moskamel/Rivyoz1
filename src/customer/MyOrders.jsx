@@ -94,7 +94,7 @@ export default function MyOrders() {
   const past = orders.filter(o => ['done', 'cancelled'].includes(o.status))
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg)', fontFamily: 'Cairo, sans-serif', direction: 'rtl' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', fontFamily: 'Zain, sans-serif', direction: 'rtl' }}>
       {/* Header */}
       <div style={{
         background: 'var(--surface)', borderBottom: '1px solid var(--border)', padding: '14px 16px',
@@ -128,7 +128,7 @@ export default function MyOrders() {
               style={{
                 padding: '14px 32px', borderRadius: 14, background: config.color,
                 color: 'white', fontWeight: 700, fontSize: 14, border: 'none',
-                cursor: 'pointer', fontFamily: 'Cairo, sans-serif',
+                cursor: 'pointer', fontFamily: 'Zain, sans-serif',
                 boxShadow: `0 6px 20px ${config.color}44`,
               }}
             >

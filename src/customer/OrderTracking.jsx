@@ -75,7 +75,7 @@ export default function OrderTracking() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg)', fontFamily: 'Cairo, sans-serif' }} dir="rtl">
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', fontFamily: 'Zain, sans-serif' }} dir="rtl">
       <style>{`
         @keyframes pulse-ring {
           0% { box-shadow: 0 0 0 0 ${config.color}60; }
@@ -160,7 +160,7 @@ export default function OrderTracking() {
             <p style={{ fontSize: 13, color: '#EF4444', marginBottom: 20, lineHeight: 1.6 }}>نأسف لذلك! تواصل مع المطعم لمزيد من التفاصيل</p>
             <button
               onClick={() => navigate('/')}
-              style={{ padding: '13px 32px', background: config.color, color: 'white', borderRadius: 14, fontWeight: 700, fontSize: 14, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif', boxShadow: `0 8px 24px ${config.color}44` }}
+              style={{ padding: '13px 32px', background: config.color, color: 'white', borderRadius: 14, fontWeight: 700, fontSize: 14, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', boxShadow: `0 8px 24px ${config.color}44` }}
             >
               اطلب مرة أخرى 🔄
             </button>
@@ -347,7 +347,7 @@ export default function OrderTracking() {
               padding: '15px', borderRadius: 14, background: '#25D366', color: 'white',
               fontWeight: 700, fontSize: 14, textDecoration: 'none',
               boxShadow: '0 6px 20px rgba(37,211,102,0.35)',
-              fontFamily: 'Cairo, sans-serif',
+              fontFamily: 'Zain, sans-serif',
             }}
           >
             <MessageCircle size={17} />
@@ -360,7 +360,7 @@ export default function OrderTracking() {
               width: '100%', padding: '13px', borderRadius: 14, fontWeight: 700, fontSize: 14, cursor: 'pointer',
               background: 'var(--surface)', border: `2px solid ${config.color}`, color: config.color,
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-              fontFamily: 'Cairo, sans-serif',
+              fontFamily: 'Zain, sans-serif',
             }}
           >
             <Compass size={15} />

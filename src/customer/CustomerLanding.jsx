@@ -23,7 +23,7 @@ export default function CustomerLanding() {
   const profile = getCustomerProfile()
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg)', fontFamily: 'Cairo, sans-serif', direction: 'rtl', color: 'var(--text)' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', fontFamily: 'Zain, sans-serif', direction: 'rtl', color: 'var(--text)' }}>
       <style>{`
         @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
         .float-anim { animation: float 3.5s ease-in-out infinite; }
@@ -54,14 +54,14 @@ export default function CustomerLanding() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <button
             onClick={() => navigate('/explore')}
-            style={{ width: '100%', padding: '16px', borderRadius: 16, background: 'white', color, fontWeight: 800, fontSize: 16, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif', boxShadow: '0 8px 28px rgba(0,0,0,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, boxSizing: 'border-box' }}
+            style={{ width: '100%', padding: '16px', borderRadius: 16, background: 'white', color, fontWeight: 800, fontSize: 16, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', boxShadow: '0 8px 28px rgba(0,0,0,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, boxSizing: 'border-box' }}
           >
             🍴 اكتشف المطاعم
           </button>
           {!profile && (
             <button
               onClick={() => navigate('/customer-login')}
-              style={{ width: '100%', padding: '14px', borderRadius: 16, background: 'rgba(255,255,255,0.2)', color: 'white', fontWeight: 700, fontSize: 15, border: '2px solid rgba(255,255,255,0.5)', cursor: 'pointer', fontFamily: 'Cairo, sans-serif', backdropFilter: 'blur(8px)', boxSizing: 'border-box' }}
+              style={{ width: '100%', padding: '14px', borderRadius: 16, background: 'rgba(255,255,255,0.2)', color: 'white', fontWeight: 700, fontSize: 15, border: '2px solid rgba(255,255,255,0.5)', cursor: 'pointer', fontFamily: 'Zain, sans-serif', backdropFilter: 'blur(8px)', boxSizing: 'border-box' }}
             >
               سجّل مجاناً
             </button>
@@ -107,7 +107,7 @@ export default function CustomerLanding() {
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                    <span style={{ width: 22, height: 22, borderRadius: '50%', background: color, color: 'white', fontSize: 11, fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontFamily: 'Cairo, sans-serif' }}>{s.step}</span>
+                    <span style={{ width: 22, height: 22, borderRadius: '50%', background: color, color: 'white', fontSize: 11, fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontFamily: 'Zain, sans-serif' }}>{s.step}</span>
                     <p style={{ fontWeight: 800, fontSize: 15, color: 'var(--text)', margin: 0 }}>{s.title}</p>
                   </div>
                   <p style={{ fontSize: 13, color: 'var(--text-2)', lineHeight: 1.65, margin: 0 }}>{s.desc}</p>
@@ -187,7 +187,7 @@ export default function CustomerLanding() {
             <h2 style={{ fontSize: 18, fontWeight: 900, color: 'var(--text)', margin: 0 }}>⭐ مميزون</h2>
             <button
               onClick={() => navigate('/explore')}
-              style={{ fontSize: 13, color, fontWeight: 700, background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif', display: 'flex', alignItems: 'center', gap: 4, padding: 0 }}
+              style={{ fontSize: 13, color, fontWeight: 700, background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', display: 'flex', alignItems: 'center', gap: 4, padding: 0 }}
             >
               عرض الكل <ChevronLeft size={14} />
             </button>
@@ -218,7 +218,7 @@ export default function CustomerLanding() {
                 </div>
                 <button
                   onClick={e => { e.stopPropagation(); navigate(`/${r.slug}`) }}
-                  style={{ padding: '8px 16px', borderRadius: 12, background: r.color, color: 'white', fontWeight: 700, fontSize: 12, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif', flexShrink: 0 }}
+                  style={{ padding: '8px 16px', borderRadius: 12, background: r.color, color: 'white', fontWeight: 700, fontSize: 12, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', flexShrink: 0 }}
                 >
                   اطلب
                 </button>
@@ -264,10 +264,10 @@ export default function CustomerLanding() {
               تجربة أسرع وأسهل — إشعارات فورية، تتبع مباشر، ووصول لعروض حصرية
             </p>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-              <button style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '13px', borderRadius: 14, background: '#1a1a1a', color: 'white', fontWeight: 700, fontSize: 13, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>
+              <button style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '13px', borderRadius: 14, background: '#1a1a1a', color: 'white', fontWeight: 700, fontSize: 13, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>
                 🍎 App Store
               </button>
-              <button style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '13px', borderRadius: 14, background: '#1a1a1a', color: 'white', fontWeight: 700, fontSize: 13, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>
+              <button style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '13px', borderRadius: 14, background: '#1a1a1a', color: 'white', fontWeight: 700, fontSize: 13, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>
                 🤖 Google Play
               </button>
             </div>

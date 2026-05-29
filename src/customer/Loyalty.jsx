@@ -55,7 +55,7 @@ export default function Loyalty() {
   ]
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg)', fontFamily: 'Cairo, sans-serif', direction: 'rtl' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', fontFamily: 'Zain, sans-serif', direction: 'rtl' }}>
       {/* Header */}
       <div style={{
         background: `linear-gradient(135deg, ${color} 0%, ${color}cc 100%)`,
@@ -83,7 +83,7 @@ export default function Loyalty() {
           padding: '10px 20px', borderRadius: 14, fontWeight: 700, fontSize: 13,
           boxShadow: '0 8px 24px rgba(34,197,94,0.35)',
           display: 'flex', alignItems: 'center', gap: 8,
-          fontFamily: 'Cairo, sans-serif', whiteSpace: 'nowrap',
+          fontFamily: 'Zain, sans-serif', whiteSpace: 'nowrap',
         }}>
           ✓ تم استبدال {justRedeemed.title}
         </div>
@@ -181,7 +181,7 @@ export default function Loyalty() {
                       color: redeemed ? '#16A34A' : canAfford ? 'white' : '#9CA3AF',
                       fontWeight: 700, fontSize: 12, border: 'none',
                       cursor: redeemed || !canAfford ? 'default' : 'pointer',
-                      fontFamily: 'Cairo, sans-serif', transition: 'all 0.2s',
+                      fontFamily: 'Zain, sans-serif', transition: 'all 0.2s',
                     }}
                   >
                     {redeemed ? 'تم ✓' : canAfford ? 'استبدل' : `${(reward.points - pts.balance).toLocaleString()} نقطة`}
@@ -261,10 +261,10 @@ export default function Loyalty() {
               رصيدك الحالي: {pts.balance.toLocaleString()} نقطة → بعد الاستبدال: {(pts.balance - confirmReward.points).toLocaleString()} نقطة
             </p>
             <div style={{ display: 'flex', gap: 10 }}>
-              <button onClick={() => setConfirmReward(null)} style={{ flex: 1, padding: '14px', borderRadius: 14, border: '1.5px solid #E5E7EB', fontSize: 14, fontWeight: 700, color: 'var(--text-2)', background: 'white', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>
+              <button onClick={() => setConfirmReward(null)} style={{ flex: 1, padding: '14px', borderRadius: 14, border: '1.5px solid #E5E7EB', fontSize: 14, fontWeight: 700, color: 'var(--text-2)', background: 'white', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>
                 إلغاء
               </button>
-              <button onClick={() => handleRedeem(confirmReward)} style={{ flex: 1, padding: '14px', borderRadius: 14, border: 'none', fontSize: 14, fontWeight: 700, color: 'white', background: color, cursor: 'pointer', fontFamily: 'Cairo, sans-serif', boxShadow: `0 4px 14px ${color}44` }}>
+              <button onClick={() => handleRedeem(confirmReward)} style={{ flex: 1, padding: '14px', borderRadius: 14, border: 'none', fontSize: 14, fontWeight: 700, color: 'white', background: color, cursor: 'pointer', fontFamily: 'Zain, sans-serif', boxShadow: `0 4px 14px ${color}44` }}>
                 تأكيد الاستبدال
               </button>
             </div>
