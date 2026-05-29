@@ -51,7 +51,7 @@ export default function Reviews() {
         <h1 style={{ fontWeight: 800, fontSize: 22, color: 'var(--text)', marginBottom: 24 }}>التقييمات</h1>
 
         {/* Stats row */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 16, marginBottom: 28 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginBottom: 28 }}>
           {[
             { label: 'إجمالي التقييمات', value: total, emoji: '⭐', color: '#F59E0B' },
             { label: 'متوسط التقييم', value: avg.toFixed(1) + ' / 5', emoji: '📊', color: '#3B82F6' },
