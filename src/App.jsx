@@ -25,6 +25,7 @@ import Loyalty from './customer/Loyalty'
 import CustomerAuth from './customer/CustomerAuth'
 import MyOrders from './customer/MyOrders'
 import CustomerProfile from './customer/CustomerProfile'
+import CustomerLanding from './customer/CustomerLanding'
 import { CustomerThemeWrapper } from './lib/ThemeContext'
 
 function ProtectedRoute({ children }) {
@@ -76,7 +77,6 @@ export default function App() {
     <>
       <OfflineBanner />
       <Routes>
-      <Route path="/landing" element={<Landing />} />
       <Route path="/login" element={<Login />} />
       <Route path="/kds" element={<KDS />} />
 
@@ -95,6 +95,7 @@ export default function App() {
 
       {/* Customer-facing routes wrapped in theme provider */}
       <Route element={<CustomerThemeWrapper />}>
+        <Route path="/landing" element={<CustomerLanding />} />
         <Route path="/customer-login" element={<CustomerAuth />} />
         <Route path="/my-orders" element={<MyOrders />} />
         <Route path="/my-profile" element={<CustomerProfile />} />
