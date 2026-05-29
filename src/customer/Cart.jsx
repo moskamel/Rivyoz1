@@ -5,6 +5,7 @@ import { getConfig, getCoupons } from '../lib/restaurantStore'
 import { useCart } from './CartContext'
 import { useSidebar } from '../lib/ThemeContext'
 import CustomerNav from './CustomerNav'
+import CustomerFooter from './CustomerFooter'
 
 export default function Cart() {
   const navigate = useNavigate()
@@ -100,6 +101,7 @@ export default function Cart() {
             تصفح القائمة
           </button>
         </div>
+        <CustomerFooter />
         <CustomerNav />
       </div>
     )
@@ -109,7 +111,7 @@ export default function Cart() {
     <div style={{ minHeight: '100vh', background: 'var(--bg)', fontFamily: 'Zain, sans-serif', direction: 'rtl' }}>
       <CartHeader />
 
-      <div style={{ padding: '16px 14px 88px', display: 'flex', flexDirection: 'column', gap: 12 }}>
+      <div style={{ padding: '16px 14px 160px', display: 'flex', flexDirection: 'column', gap: 12 }}>
 
         {/* ── Items list ── */}
         <div style={{ background: 'var(--surface)', borderRadius: 16, overflow: 'hidden', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
@@ -307,6 +309,7 @@ export default function Cart() {
           </div>
         </div>
       )}
+      <CustomerFooter />
       <CustomerNav />
     </div>
   )
