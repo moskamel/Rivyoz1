@@ -154,6 +154,24 @@ export default function Dashboard() {
       {/* ── HERO ROW ── */}
       <div className="flex gap-3 animate-fade-in" style={{ flexWrap: 'wrap', marginBottom: 20 }}>
 
+        {/* New orders alert — first (rightmost in RTL), full flex width */}
+        {newOrders.length > 0 && (
+          <Link to="/orders" className="glass-accent pulse-accent"
+            style={{
+              padding: '14px 22px', textDecoration: 'none',
+              flex: 1, minWidth: 220,
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <span className="badge badge-pill badge-accent" style={{ fontSize: 15, padding: '5px 13px', fontWeight: 800 }}>
+                {newOrders.length}
+              </span>
+              <span style={{ fontSize: 15, fontWeight: 800, color: 'var(--accent)' }}>طلب جديد</span>
+            </div>
+            <ArrowLeft size={16} style={{ color: 'var(--accent)' }} />
+          </Link>
+        )}
+
         {/* Status card */}
         <div className="glass flex items-center gap-3"
           style={{
@@ -214,18 +232,6 @@ export default function Dashboard() {
             {isOpen ? 'إغلاق مؤقت' : 'فتح المطعم'}
           </button>
         </div>
-
-        {/* New orders alert */}
-        {newOrders.length > 0 && (
-          <Link to="/orders" className="glass-accent flex items-center gap-3 pulse-accent"
-            style={{ padding: '14px 18px', textDecoration: 'none', flexShrink: 0, display: 'flex', alignItems: 'center' }}>
-            <span className="badge badge-pill badge-accent" style={{ fontSize: 13, padding: '4px 10px' }}>
-              {newOrders.length}
-            </span>
-            <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--accent)' }}>طلب جديد</span>
-            <ArrowLeft size={14} style={{ color: 'var(--accent)' }} />
-          </Link>
-        )}
       </div>
 
       {/* ── STAT CARDS ── */}
