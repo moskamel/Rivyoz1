@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ShoppingCart, X, Search, ChevronLeft, ChevronRight, Tag, Flame, Menu, Moon, Sun, MapPin } from 'lucide-react'
-import { getConfig, getMenuItems, getCategories, getBanners, getCombos, getCustomerProfile, clearCustomerProfile, getCustomerPoints } from '../lib/restaurantStore'
+import { getConfig, getMenuItems, getCategories, getBanners, getCombos, getCustomerProfile, clearCustomerProfile, getCustomerPoints, getReviews, addReview } from '../lib/restaurantStore'
 import { useCart } from './CartContext'
 import { useTheme } from '../lib/ThemeContext'
 import CustomerFooter from './CustomerFooter'
@@ -186,6 +186,173 @@ function OffersSection({ accentColor, onAddCombo }) {
   )
 }
 
+/* ─── Reviews Section ───────────────────────────────────────── */
+function StarRow({ rating, size = 12 }) {
+  return (
+    <span>
+      {[1, 2, 3, 4, 5].map(s => (
+        <span key={s} style={{ color: s <= rating ? '#F59E0B' : 'var(--border-strong)', fontSize: size }}>★</span>
+      ))}
+    </span>
+  )
+}
+
+function ReviewsSection({ config, customerProfile, navigate }) {
+  const [reviews, setReviews] = useState(() => getReviews().filter(r => r.isVisible))
+  const [writeOpen, setWriteOpen] = useState(false)
+  const [myRating, setMyRating] = useState(0)
+  const [myComment, setMyComment] = useState('')
+  const [justSubmitted, setJustSubmitted] = useState(false)
+
+  const count = reviews.length
+  const avg = count ? reviews.reduce((s, r) => s + r.rating, 0) / count : 0
+
+  const handleSubmit = () => {
+    if (myRating === 0) return
+    addReview({ customerName: customerProfile.name, customerPhone: customerProfile.phone, rating: myRating, comment: myComment })
+    setReviews(getReviews().filter(r => r.isVisible))
+    setWriteOpen(false)
+    setMyRating(0)
+    setMyComment('')
+    setJustSubmitted(true)
+    setTimeout(() => setJustSubmitted(false), 3000)
+  }
+
+  return (
+    <div style={{ paddingBottom: 120 }}>
+      {/* Aggregate stats */}
+      <div style={{ background: 'var(--surface)', padding: '16px 16px 14px', marginBottom: 2 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+          <h2 style={{ fontWeight: 800, fontSize: 15, color: 'var(--text)', display: 'flex', alignItems: 'center', gap: 6 }}>
+            ⭐ التقييمات
+          </h2>
+          <span style={{ fontSize: 12, color: 'var(--text-3)', fontWeight: 600 }}>{count} تقييم</span>
+        </div>
+
+        {count > 0 && (
+          <div style={{ display: 'flex', gap: 16, alignItems: 'center', marginBottom: 16 }}>
+            <div style={{ textAlign: 'center', flexShrink: 0 }}>
+              <div style={{ fontSize: 36, fontWeight: 900, color: '#F59E0B', lineHeight: 1 }}>{avg.toFixed(1)}</div>
+              <div style={{ marginTop: 4 }}><StarRow rating={Math.round(avg)} size={13} /></div>
+              <div style={{ fontSize: 10, color: 'var(--text-3)', marginTop: 3 }}>من 5</div>
+            </div>
+            <div style={{ flex: 1 }}>
+              {[5, 4, 3, 2, 1].map(s => {
+                const cnt = reviews.filter(r => r.rating === s).length
+                const pct = count > 0 ? (cnt / count) * 100 : 0
+                return (
+                  <div key={s} style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+                    <span style={{ fontSize: 10, color: 'var(--text-3)', width: 8, flexShrink: 0 }}>{s}</span>
+                    <span style={{ color: '#F59E0B', fontSize: 10, flexShrink: 0 }}>★</span>
+                    <div style={{ flex: 1, height: 6, background: 'var(--surface-2)', borderRadius: 3, overflow: 'hidden' }}>
+                      <div style={{ width: `${pct}%`, height: '100%', background: '#F59E0B', borderRadius: 3, transition: 'width 0.5s' }} />
+                    </div>
+                    <span style={{ fontSize: 10, color: 'var(--text-3)', width: 16, flexShrink: 0 }}>{cnt}</span>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )}
+
+        {justSubmitted ? (
+          <div style={{ textAlign: 'center', padding: '12px', background: '#DCFCE7', borderRadius: 12, color: '#166534', fontWeight: 700, fontSize: 13 }}>
+            ✅ شكراً! تم إرسال تقييمك بنجاح
+          </div>
+        ) : (
+          <button
+            onClick={() => customerProfile ? setWriteOpen(true) : navigate('/customer-login')}
+            style={{ width: '100%', padding: '12px', borderRadius: 14, background: config.color, color: 'white', fontWeight: 700, fontSize: 14, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}
+          >
+            ✍️ اكتب تقييمك
+          </button>
+        )}
+      </div>
+
+      {/* Write review sheet */}
+      {writeOpen && (
+        <>
+          <div onClick={() => setWriteOpen(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 150 }} />
+          <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 151, background: 'var(--surface)', borderRadius: '24px 24px 0 0', padding: '20px 20px 40px', fontFamily: 'Cairo, sans-serif', maxWidth: 480, margin: '0 auto' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 18, cursor: 'pointer' }} onClick={() => setWriteOpen(false)}>
+              <div style={{ width: 40, height: 4, background: 'var(--border-strong)', borderRadius: 2 }} />
+            </div>
+            <h3 style={{ fontWeight: 800, fontSize: 16, color: 'var(--text)', marginBottom: 18, textAlign: 'center' }}>قيّم تجربتك</h3>
+
+            <div style={{ display: 'flex', justifyContent: 'center', gap: 6, marginBottom: 8 }}>
+              {[1, 2, 3, 4, 5].map(s => (
+                <button key={s} onClick={() => setMyRating(s)}
+                  style={{ fontSize: 38, background: 'none', border: 'none', cursor: 'pointer', color: s <= myRating ? '#F59E0B' : 'var(--border-strong)', transition: 'color 0.15s, transform 0.1s', transform: s <= myRating ? 'scale(1.15)' : 'scale(1)', padding: 0 }}>
+                  ★
+                </button>
+              ))}
+            </div>
+            {myRating > 0 && (
+              <p style={{ textAlign: 'center', fontSize: 13, color: '#F59E0B', fontWeight: 700, marginBottom: 16 }}>
+                {['', 'سيء جداً', 'سيء', 'متوسط', 'جيد', 'ممتاز'][myRating]}
+              </p>
+            )}
+
+            <textarea
+              value={myComment}
+              onChange={e => setMyComment(e.target.value)}
+              placeholder="شاركنا تجربتك مع المطعم... (اختياري)"
+              rows={3}
+              style={{ width: '100%', padding: '12px 14px', borderRadius: 12, border: '1.5px solid var(--border-strong)', fontSize: 13, outline: 'none', resize: 'none', fontFamily: 'Cairo, sans-serif', boxSizing: 'border-box', color: 'var(--text)', background: 'var(--surface-2)', marginBottom: 14 }}
+            />
+            <button
+              onClick={handleSubmit}
+              disabled={myRating === 0}
+              style={{ width: '100%', padding: '13px', borderRadius: 14, background: myRating > 0 ? config.color : 'var(--surface-2)', color: myRating > 0 ? 'white' : 'var(--text-3)', fontWeight: 700, fontSize: 14, border: 'none', cursor: myRating > 0 ? 'pointer' : 'not-allowed', fontFamily: 'Cairo, sans-serif', transition: 'all 0.15s' }}
+            >
+              إرسال التقييم
+            </button>
+          </div>
+        </>
+      )}
+
+      {/* Reviews list */}
+      {count === 0 ? (
+        <div style={{ textAlign: 'center', padding: '48px 16px', color: 'var(--text-3)' }}>
+          <div style={{ fontSize: 40, marginBottom: 12 }}>⭐</div>
+          <p style={{ fontWeight: 700, fontSize: 14 }}>لا توجد تقييمات بعد</p>
+          <p style={{ fontSize: 12, marginTop: 4 }}>كن أول من يقيّم هذا المطعم!</p>
+        </div>
+      ) : (
+        <div style={{ padding: '8px 12px' }}>
+          {reviews.map(review => (
+            <div key={review.id} style={{ background: 'var(--surface)', borderRadius: 16, padding: '14px 16px', marginBottom: 10, border: '1px solid var(--border)' }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, marginBottom: 8 }}>
+                <div style={{ width: 36, height: 36, borderRadius: '50%', background: config.color + '20', display: 'flex', alignItems: 'center', justifyContent: 'center', color: config.color, fontWeight: 900, fontSize: 14, flexShrink: 0 }}>
+                  {review.customerName?.charAt(0)}
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <p style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)' }}>{review.customerName}</p>
+                    <span style={{ fontSize: 10, color: 'var(--text-3)' }}>{review.date}</span>
+                  </div>
+                  <div style={{ marginTop: 2 }}><StarRow rating={review.rating} /></div>
+                </div>
+              </div>
+
+              {review.comment && (
+                <p style={{ fontSize: 13, color: 'var(--text-2)', lineHeight: 1.65, marginBottom: review.reply ? 10 : 0 }}>{review.comment}</p>
+              )}
+
+              {review.reply && (
+                <div style={{ background: config.color + '0D', borderRight: `3px solid ${config.color}`, padding: '10px 12px', borderRadius: '0 8px 8px 0', marginTop: 8 }}>
+                  <p style={{ fontSize: 11, fontWeight: 700, color: config.color, marginBottom: 4 }}>رد المطعم · {review.replyDate}</p>
+                  <p style={{ fontSize: 12, color: 'var(--text-2)', lineHeight: 1.6 }}>{review.reply}</p>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
 /* ─── Main StoreFront ───────────────────────────────────────── */
 export default function StoreFront() {
   const navigate = useNavigate()
@@ -205,7 +372,7 @@ export default function StoreFront() {
     ...(popularItems.length > 0 ? [{ id: 'popular', name: '🔥 الأكثر طلباً' }] : []),
     ...(activeCombos.length > 0 ? [{ id: 'combos', name: '🏷️ العروض' }] : []),
   ]
-  const allTabs = [...specialTabs, ...categories]
+  const allTabs = [...specialTabs, ...categories, { id: 'reviews', name: '⭐ التقييمات' }]
 
   const [selectedItem, setSelectedItem] = useState(null)
   const [sheetOpen, setSheetOpen] = useState(false)
@@ -572,6 +739,10 @@ export default function StoreFront() {
           </ItemGrid>
         )
       })()}
+
+      {activeTab === 'reviews' && (
+        <ReviewsSection config={config} customerProfile={customerProfile} navigate={navigate} />
+      )}
 
       {/* ─── Footer ─── */}
       <CustomerFooter noNav />

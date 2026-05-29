@@ -4,12 +4,13 @@ import {
   LayoutDashboard, ClipboardList, UtensilsCrossed,
   Megaphone, BarChart3, Settings, ExternalLink,
   Users, UserCheck, Package, Monitor, ChevronDown,
-  Check, Zap, ArrowUpRight, Palette, LogOut
+  Check, Zap, ArrowUpRight, Palette, LogOut, Star
 } from 'lucide-react'
 import { getConfig, getOrders } from '../../lib/restaurantStore'
 
 const navGrowth = [
   { to: '/customers', label: 'الزبائن', icon: Users },
+  { to: '/reviews', label: 'التقييمات', icon: Star },
   { to: '/marketing', label: 'التسويق', icon: Megaphone },
   { to: '/reports', label: 'التقارير', icon: BarChart3 },
 ]

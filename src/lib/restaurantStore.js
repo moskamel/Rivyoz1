@@ -213,3 +213,38 @@ export function getCustomerOrders(phone) {
   if (!phone) return []
   return getOrders().filter(o => o.phone === phone)
 }
+
+/* ─── Reviews ─────────────────────────────────────────────── */
+const mockReviews = [
+  { id: 1, customerName: 'محمد عبد الله', customerPhone: '01012345678', rating: 5, comment: 'أكل رائع وتوصيل سريع! أنصح الجميع بتجربة الكفتة المشوية، طعمها لا يوصف.', date: '٢٠ مايو', reply: 'شكراً جزيلاً على كلماتك الطيبة! يسعدنا دائماً خدمتك.', replyDate: '٢٠ مايو', isVisible: true },
+  { id: 2, customerName: 'فاطمة أحمد', customerPhone: '01098765432', rating: 4, comment: 'الطعام لذيذ جداً والأسعار معقولة. الخدمة ممتازة. التوصيل تأخر قليلاً.', date: '١٨ مايو', reply: null, replyDate: null, isVisible: true },
+  { id: 3, customerName: 'أحمد محمود', customerPhone: '01155443322', rating: 3, comment: 'الأكل كويس بس الكمية قليلة شوية', date: '١٥ مايو', reply: null, replyDate: null, isVisible: true },
+  { id: 4, customerName: 'سارة علي', customerPhone: '01234567890', rating: 5, comment: 'تجربة مميزة من كل النواحي! الكومبو قيمة جداً بسعره.', date: '١٢ مايو', reply: 'شكراً سارة! نسعد دائماً بزيارتك.', replyDate: '١٣ مايو', isVisible: true },
+  { id: 5, customerName: 'عمر حسين', customerPhone: '01567891234', rating: 2, comment: 'الطلب وصل بارد وناقصين صنف', date: '١٠ مايو', reply: 'نأسف جداً على هذه التجربة. سنتواصل معك لتعويضك.', replyDate: '١٠ مايو', isVisible: true },
+  { id: 6, customerName: 'نور إبراهيم', customerPhone: '01099887766', rating: 5, comment: 'من أحسن المطاعم اللي جربتها! كل شيء ممتاز.', date: '٨ مايو', reply: null, replyDate: null, isVisible: true },
+  { id: 7, customerName: 'ياسمين خالد', customerPhone: '01011223344', rating: 4, comment: 'وجبة الكفتة الكاملة كانت رائعة. سأطلب مرة أخرى بالتأكيد.', date: '٥ مايو', reply: null, replyDate: null, isVisible: false },
+]
+
+export function getReviews() {
+  try { const r = localStorage.getItem('store_reviews'); if (r) return JSON.parse(r) } catch (e) {}
+  return mockReviews
+}
+
+export function addReview({ customerName, customerPhone, rating, comment }) {
+  const reviews = getReviews()
+  const newReview = { id: Date.now(), customerName, customerPhone, rating, comment, date: 'الآن', reply: null, replyDate: null, isVisible: true }
+  localStorage.setItem('store_reviews', JSON.stringify([newReview, ...reviews]))
+  return newReview
+}
+
+export function replyToReview(id, reply) {
+  const reviews = getReviews()
+  const updated = reviews.map(r => r.id === id ? { ...r, reply, replyDate: 'الآن' } : r)
+  localStorage.setItem('store_reviews', JSON.stringify(updated))
+}
+
+export function toggleReviewVisibility(id) {
+  const reviews = getReviews()
+  const updated = reviews.map(r => r.id === id ? { ...r, isVisible: !r.isVisible } : r)
+  localStorage.setItem('store_reviews', JSON.stringify(updated))
+}
