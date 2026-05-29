@@ -401,6 +401,19 @@ export default function StoreFront() {
             <p style={{ fontWeight: 900, fontSize: 15, color: 'var(--text)', lineHeight: 1.2 }}>{config.name}</p>
             <p style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 1 }}>⭐ 4.9 · {config.deliveryTime} دقيقة · توصيل 15ج</p>
           </div>
+
+          {/* Cart */}
+          <button
+            onClick={() => navigate('/cart')}
+            style={{ width: 36, height: 36, borderRadius: 10, background: 'var(--surface-2)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-2)', position: 'relative', flexShrink: 0 }}
+          >
+            <ShoppingCart size={17} />
+            {itemCount > 0 && (
+              <span style={{ position: 'absolute', top: -4, right: -4, background: config.color, color: 'white', fontSize: 9, fontWeight: 800, borderRadius: '50%', width: 16, height: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid var(--surface)' }}>
+                {itemCount > 9 ? '9+' : itemCount}
+              </span>
+            )}
+          </button>
         </div>
 
         {!config.isOpen && (
