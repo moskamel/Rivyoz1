@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Star1, Clock, ArrowLeft2 } from 'iconsax-react'
 import { getConfig, getCustomerProfile } from '../lib/restaurantStore'
@@ -15,6 +16,73 @@ const testimonials = [
   { name: 'محمد ع.', text: 'برنامج النقاط رائع جداً، استبدلت نقاطي بوجبة مجانية بعد شهر واحد بس!', stars: 5, avatar: 'م' },
   { name: 'نور ك.',  text: 'تتبع الطلب مباشرة يعطيك راحة بال، بعرف وين طلبي في كل لحظة', stars: 5, avatar: 'ن' },
 ]
+
+function TestimonialsSlider({ testimonials, color }) {
+  const [active, setActive] = useState(0)
+
+  const prev = () => setActive(i => (i - 1 + testimonials.length) % testimonials.length)
+  const next = () => setActive(i => (i + 1) % testimonials.length)
+
+  const t = testimonials[active]
+
+  return (
+    <div style={{ paddingTop: 36 }}>
+      <div style={{ textAlign: 'center', marginBottom: 20 }}>
+        <p style={{ fontSize: 11, fontWeight: 700, color, letterSpacing: '0.08em', marginBottom: 6 }}>آراء عملائنا</p>
+        <h2 style={{ fontSize: 22, fontWeight: 900, color: 'var(--text)', margin: 0 }}>ماذا يقولون عنّا</h2>
+      </div>
+
+      <div style={{ position: 'relative' }}>
+        {/* Card */}
+        <div
+          key={active}
+          className="animate-fade-in"
+          style={{ background: 'var(--surface)', borderRadius: 20, padding: '22px 18px', border: '1px solid var(--border)', boxShadow: '0 2px 12px rgba(0,0,0,0.06)', minHeight: 130 }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+            <div style={{ width: 44, height: 44, borderRadius: '50%', background: `${color}20`, color, fontWeight: 900, fontSize: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              {t.avatar}
+            </div>
+            <div>
+              <p style={{ fontWeight: 700, fontSize: 14, color: 'var(--text)', margin: '0 0 4px' }}>{t.name}</p>
+              <div style={{ display: 'flex', gap: 2 }}>
+                {Array.from({ length: t.stars }).map((_, j) => (
+                  <Star1 key={j} size={12} color="#F59E0B" fill="#F59E0B" />
+                ))}
+              </div>
+            </div>
+          </div>
+          <p style={{ fontSize: 13, color: 'var(--text-2)', lineHeight: 1.8, margin: 0 }}>"{t.text}"</p>
+        </div>
+
+        {/* Prev / Next arrows */}
+        <button
+          onClick={prev}
+          style={{ position: 'absolute', top: '50%', right: -14, transform: 'translateY(-50%)', width: 32, height: 32, borderRadius: '50%', background: 'var(--surface)', border: '1px solid var(--border)', boxShadow: '0 2px 8px rgba(0,0,0,0.10)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1 }}
+        >
+          <ArrowLeft2 size={14} color="var(--text-2)" />
+        </button>
+        <button
+          onClick={next}
+          style={{ position: 'absolute', top: '50%', left: -14, transform: 'translateY(-50%) scaleX(-1)', width: 32, height: 32, borderRadius: '50%', background: 'var(--surface)', border: '1px solid var(--border)', boxShadow: '0 2px 8px rgba(0,0,0,0.10)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1 }}
+        >
+          <ArrowLeft2 size={14} color="var(--text-2)" />
+        </button>
+      </div>
+
+      {/* Dots */}
+      <div style={{ display: 'flex', justifyContent: 'center', gap: 6, marginTop: 16 }}>
+        {testimonials.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setActive(i)}
+            style={{ width: i === active ? 20 : 7, height: 7, borderRadius: 4, background: i === active ? color : 'var(--border-strong)', border: 'none', cursor: 'pointer', padding: 0, transition: 'all 0.25s ease' }}
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
 
 export default function CustomerLanding() {
   const navigate = useNavigate()
@@ -229,33 +297,8 @@ export default function CustomerLanding() {
           </div>
         </div>
 
-        {/* Testimonials — full width */}
-        <div style={{ paddingTop: 36 }}>
-          <div style={{ textAlign: 'center', marginBottom: 20 }}>
-            <p style={{ fontSize: 11, fontWeight: 700, color, letterSpacing: '0.08em', marginBottom: 6 }}>آراء عملائنا</p>
-            <h2 style={{ fontSize: 22, fontWeight: 900, color: 'var(--text)', margin: 0 }}>ماذا يقولون عنّا</h2>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            {testimonials.map((t, i) => (
-              <div key={i} style={{ background: 'var(--surface)', borderRadius: 20, padding: '18px 16px', border: '1px solid var(--border)', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
-                  <div style={{ width: 40, height: 40, borderRadius: '50%', background: `${color}20`, color, fontWeight: 900, fontSize: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    {t.avatar}
-                  </div>
-                  <div>
-                    <p style={{ fontWeight: 700, fontSize: 14, color: 'var(--text)', margin: '0 0 2px' }}>{t.name}</p>
-                    <div style={{ display: 'flex', gap: 1 }}>
-                      {Array.from({ length: t.stars }).map((_, j) => (
-                        <Star1 key={j} size={11} color="#F59E0B" fill="#F59E0B" />
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                <p style={{ fontSize: 13, color: 'var(--text-2)', lineHeight: 1.75, margin: 0 }}>"{t.text}"</p>
-              </div>
-            ))}
-          </div>
-        </div>
+        {/* Testimonials — slider */}
+        <TestimonialsSlider testimonials={testimonials} color={color} />
 
         {/* App download — full width */}
         <div style={{ marginTop: 36 }}>
