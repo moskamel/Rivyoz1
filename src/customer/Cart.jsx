@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { CheckCircle, X, ArrowRight, Menu } from 'lucide-react'
+import { CheckCircle, X, Menu } from 'lucide-react'
 import { getConfig, getCoupons } from '../lib/restaurantStore'
 import { useCart } from './CartContext'
 import { useSidebar } from '../lib/ThemeContext'
