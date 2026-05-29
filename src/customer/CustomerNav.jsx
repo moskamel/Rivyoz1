@@ -18,11 +18,10 @@ export default function CustomerNav() {
   const pts = customerProfile ? getCustomerPoints(customerProfile.phone) : null
 
   const tabs = [
-    { label: 'الرئيسية', icon: Home,        path: '/landing'  },
-    { label: 'استكشف',  icon: Compass,      path: '/explore'  },
-    { label: 'السلة',   icon: ShoppingCart, path: '/cart'     },
+    { label: 'الرئيسية', icon: Home,        path: '/landing'    },
+    { label: 'استكشف',  icon: Compass,      path: '/explore'    },
+    { label: 'السلة',   icon: ShoppingCart, path: '/cart'       },
     { label: 'حسابي',   icon: User,         path: '/my-profile' },
-    { label: 'القائمة', icon: Menu,         path: null        },
   ]
 
   return (
@@ -180,14 +179,13 @@ export default function CustomerNav() {
         }}
       >
         {tabs.map(({ label, icon: Icon, path }) => {
-          const isCart    = path === '/cart'
-          const isMenu    = path === null
-          const active    = isMenu ? sidebarOpen : (path ? pathname === path : false)
+          const isCart   = path === '/cart'
+          const active   = path ? pathname === path : false
 
           return (
             <button
               key={label}
-              onClick={() => isMenu ? setSidebarOpen(o => !o) : navigate(path)}
+              onClick={() => navigate(path)}
               style={{
                 flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center',
                 justifyContent: 'center', gap: 3, padding: '10px 4px 8px',
@@ -197,14 +195,11 @@ export default function CustomerNav() {
               }}
             >
               <div style={{ position: 'relative' }}>
-                <Icon size={20} strokeWidth={active ? 2.5 : 1.8} fill={active && !isCart && !isMenu ? `${color}18` : 'none'} />
+                <Icon size={20} strokeWidth={active ? 2.5 : 1.8} fill={active && !isCart ? `${color}18` : 'none'} />
                 {isCart && itemCount > 0 && (
                   <span style={{ position: 'absolute', top: -6, left: -6, background: color, color: 'white', fontSize: 9, fontWeight: 800, borderRadius: '50%', width: 16, height: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1.5px solid var(--surface)' }}>
                     {itemCount > 9 ? '9+' : itemCount}
                   </span>
-                )}
-                {isMenu && !customerProfile && (
-                  <span style={{ position: 'absolute', top: -5, left: -5, background: '#EF4444', color: 'white', fontSize: 8, fontWeight: 800, borderRadius: '50%', width: 14, height: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1.5px solid var(--surface)' }}>!</span>
                 )}
               </div>
               <span style={{ fontSize: 10, fontWeight: active ? 700 : 500 }}>{label}</span>

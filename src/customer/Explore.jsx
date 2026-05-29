@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Search, Star, Clock, MapPin, List, Map } from 'lucide-react'
+import { Search, Star, Clock, MapPin, List, Map, Menu } from 'lucide-react'
+import { useSidebar } from '../lib/ThemeContext'
 import CustomerNav from './CustomerNav'
 import CustomerFooter from './CustomerFooter'
 
@@ -215,6 +216,7 @@ function MapBottomSheet({ restaurant, onClose, onNavigate }) {
 
 export default function Explore() {
   const navigate = useNavigate()
+  const { setSidebarOpen } = useSidebar()
   const [search, setSearch] = useState('')
   const [activeFilter, setActiveFilter] = useState('الكل')
   const [searchFocused, setSearchFocused] = useState(false)
@@ -250,6 +252,8 @@ export default function Explore() {
               </div>
             </div>
 
+            {/* Right side: location + view toggle + menu */}
+
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <button style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'var(--surface-2)', border: '1px solid var(--border-strong)', borderRadius: 10, padding: '7px 11px', cursor: 'pointer' }}>
                 <MapPin size={13} color="#F97316" />
@@ -277,6 +281,14 @@ export default function Explore() {
                   </button>
                 ))}
               </div>
+
+              {/* Menu icon */}
+              <button
+                onClick={() => setSidebarOpen(true)}
+                style={{ width: 36, height: 36, borderRadius: 10, background: 'var(--surface-2)', border: '1px solid var(--border-strong)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}
+              >
+                <Menu size={17} color="var(--text-2)" />
+              </button>
             </div>
           </div>
 
