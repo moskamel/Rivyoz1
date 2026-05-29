@@ -1,12 +1,20 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ArrowRight, Add, Trash, Edit2 } from 'iconsax-react'
+import { HambergerMenu, CloseCircle, Add, Trash, Edit2 } from 'iconsax-react'
 import {
   getCustomerProfile, setCustomerProfile, clearCustomerProfile,
   getCustomerPoints, getCustomerOrders, getConfig,
 } from '../lib/restaurantStore'
 import CustomerNav from './CustomerNav'
 import CustomerFooter from './CustomerFooter'
+
+const sideLinks = [
+  { icon: '🏠', label: 'الرئيسية', to: '/landing' },
+  { icon: '🍽️', label: 'اكتشف المطاعم', to: '/explore' },
+  { icon: '📋', label: 'طلباتي', to: '/my-orders' },
+  { icon: '🎁', label: 'نقاط المكافآت', to: '/loyalty' },
+  { icon: '👤', label: 'حسابي', to: '/my-profile' },
+]
 
 export default function CustomerProfile() {
   const navigate = useNavigate()
@@ -19,19 +27,52 @@ export default function CustomerProfile() {
   const [addingAddress, setAddingAddress] = useState(false)
   const [newAddress, setNewAddress] = useState('')
   const [addressError, setAddressError] = useState('')
+  const [sideOpen, setSideOpen] = useState(false)
+
+  const SideDrawer = () => (
+    <>
+      <div onClick={() => setSideOpen(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)', zIndex: 200, backdropFilter: 'blur(2px)' }} />
+      <div style={{ position: 'fixed', top: 0, left: 0, bottom: 0, width: 260, background: 'var(--surface)', zIndex: 201, boxShadow: '4px 0 24px rgba(0,0,0,0.18)', display: 'flex', flexDirection: 'column', fontFamily: 'Zain, sans-serif' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 16px', borderBottom: '1px solid var(--border)' }}>
+          <button onClick={() => setSideOpen(false)} style={{ width: 34, height: 34, borderRadius: 10, background: 'var(--surface-2)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <CloseCircle size={18} color="var(--text-2)" />
+          </button>
+          <p style={{ fontWeight: 800, fontSize: 16, color: 'var(--text)' }}>القائمة</p>
+        </div>
+        <nav style={{ flex: 1, padding: '12px 10px', display: 'flex', flexDirection: 'column', gap: 4 }}>
+          {sideLinks.map(link => (
+            <button key={link.to} onClick={() => { setSideOpen(false); navigate(link.to) }}
+              style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 14px', borderRadius: 12, border: 'none', background: link.to === '/my-profile' ? `${color}14` : 'transparent', color: link.to === '/my-profile' ? color : 'var(--text)', fontWeight: link.to === '/my-profile' ? 700 : 500, fontSize: 14, cursor: 'pointer', fontFamily: 'Zain, sans-serif', textAlign: 'right', width: '100%', transition: 'background 0.15s' }}>
+              <span style={{ fontSize: 20 }}>{link.icon}</span>
+              {link.label}
+            </button>
+          ))}
+        </nav>
+        {profile && (
+          <div style={{ padding: '12px 10px', borderTop: '1px solid var(--border)' }}>
+            <button onClick={() => { clearCustomerProfile(); setSideOpen(false); navigate('/explore') }}
+              style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 14px', borderRadius: 12, border: 'none', background: '#FEF2F2', color: '#DC2626', fontWeight: 700, fontSize: 14, cursor: 'pointer', fontFamily: 'Zain, sans-serif', width: '100%' }}>
+              <span style={{ fontSize: 18 }}>🚪</span> تسجيل الخروج
+            </button>
+          </div>
+        )}
+      </div>
+    </>
+  )
 
   if (!profile) {
     return (
       <div style={{ minHeight: '100vh', background: 'var(--bg)', fontFamily: 'Zain, sans-serif', direction: 'rtl', display: 'flex', flexDirection: 'column' }}>
+        {sideOpen && <SideDrawer />}
         {/* Header */}
-        <div style={{ background: 'var(--surface)', borderBottom: '1px solid var(--border)', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 12, boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
+        <div style={{ background: 'var(--surface)', borderBottom: '1px solid var(--border)', padding: '14px 16px', display: 'flex', alignItems: 'center', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
+          <h1 style={{ fontWeight: 800, fontSize: 18, color: 'var(--text)', flex: 1, margin: 0 }}>حسابي</h1>
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => setSideOpen(true)}
             style={{ width: 38, height: 38, borderRadius: 12, background: 'var(--surface-2)', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
           >
-            <ArrowRight size={18} color="var(--text-2)" />
+            <HambergerMenu size={18} color="var(--text-2)" />
           </button>
-          <h1 style={{ fontWeight: 800, fontSize: 18, color: 'var(--text)', flex: 1, margin: 0 }}>حسابي</h1>
         </div>
 
         {/* Empty state body */}
@@ -133,6 +174,7 @@ export default function CustomerProfile() {
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg)', fontFamily: 'Zain, sans-serif', direction: 'rtl' }}>
+      {sideOpen && <SideDrawer />}
       {/* Gradient header */}
       <div style={{
         background: `linear-gradient(135deg, ${color} 0%, ${color}cc 100%)`,
@@ -141,14 +183,14 @@ export default function CustomerProfile() {
         <div style={{ position: 'absolute', top: -24, left: -24, width: 110, height: 110, borderRadius: '50%', background: 'rgba(255,255,255,0.08)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', bottom: -30, right: 30, width: 90, height: 90, borderRadius: '50%', background: 'rgba(255,255,255,0.06)', pointerEvents: 'none' }} />
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20, position: 'relative', zIndex: 1 }}>
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: 20, position: 'relative', zIndex: 1 }}>
+          <h1 style={{ fontWeight: 900, fontSize: 18, color: 'white', flex: 1 }}>حسابي</h1>
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => setSideOpen(true)}
             style={{ width: 38, height: 38, borderRadius: 12, background: 'rgba(255,255,255,0.2)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(8px)' }}
           >
-            <ArrowRight size={18} color="white" />
+            <HambergerMenu size={18} color="white" />
           </button>
-          <h1 style={{ fontWeight: 900, fontSize: 18, color: 'white', flex: 1 }}>حسابي</h1>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, position: 'relative', zIndex: 1 }}>
