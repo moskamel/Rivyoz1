@@ -253,7 +253,7 @@ export default function Cart() {
 
       {/* Delete item confirm */}
       {confirmDelete && (
-        <div onClick={() => setConfirmDelete(null)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 50, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
+        <div onClick={() => setConfirmDelete(null)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 150, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
           <div onClick={e => e.stopPropagation()} style={{ background: 'var(--surface)', borderRadius: '20px 20px 0 0', padding: '24px 20px 32px', width: '100%', maxWidth: 480, textAlign: 'center' }}>
             <div style={{ fontSize: 40, marginBottom: 12 }}>🗑️</div>
             <p style={{ fontWeight: 800, color: 'var(--text)', fontSize: 17, marginBottom: 6 }}>تحذف هذا الصنف؟</p>
@@ -268,7 +268,7 @@ export default function Cart() {
 
       {/* Clear all confirm */}
       {confirmClearAll && (
-        <div onClick={() => setConfirmClearAll(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 50, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
+        <div onClick={() => setConfirmClearAll(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 150, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
           <div onClick={e => e.stopPropagation()} style={{ background: 'var(--surface)', borderRadius: '20px 20px 0 0', padding: '24px 20px 32px', width: '100%', maxWidth: 480, textAlign: 'center' }}>
             <div style={{ fontSize: 40, marginBottom: 12 }}>🗑️</div>
             <p style={{ fontWeight: 800, color: 'var(--text)', fontSize: 17, marginBottom: 6 }}>تفريغ السلة؟</p>
