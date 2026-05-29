@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { getConfig } from '../lib/restaurantStore'
-import { MapPin, Clock, UtensilsCrossed } from 'lucide-react'
+import { Location, Clock, Cup } from 'iconsax-react'
 import CustomerNav from './CustomerNav'
 import CustomerFooter from './CustomerFooter'
 
@@ -153,7 +153,7 @@ export default function OrderConfirm() {
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <div style={{ width: 32, height: 32, borderRadius: 10, background: '#FFF7ED', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <MapPin size={14} color={config.color} />
+                  <Location size={14} color={config.color} />
                 </div>
                 <span style={{ fontSize: 13, color: 'var(--text-2)' }}>المطعم</span>
               </div>
@@ -174,7 +174,7 @@ export default function OrderConfirm() {
             {order.details && order.details.length > 0 && (
               <div style={{ paddingTop: 12, borderTop: '1px solid var(--border)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10 }}>
-                  <UtensilsCrossed size={13} color="#9CA3AF" />
+                  <Cup size={13} color="#9CA3AF" />
                   <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-3)' }}>الأصناف</span>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>

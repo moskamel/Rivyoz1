@@ -13,8 +13,8 @@ const defaultConfig = {
   deliveryFee: 15,
   minOrder: 50,
   deliveryTime: 30,
-  bannerUrl: null,
-  logoUrl: null,
+  bannerUrl: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&h=300&fit=crop&q=80',
+  logoUrl: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=200&h=200&fit=crop&q=80',
   allowDelivery: true,
   allowPickup: true,
   allowTable: false,
@@ -87,9 +87,9 @@ export function updateOrderStatus(id, status) {
 
 /* ─── Banners ─────────────────────────────────────────────── */
 const defaultBanners = [
-  { id: 1, title: '🔥 عرض اليوم', subtitle: 'كفتة مشوية × 2 بـ 120 ج بدل 170!', color: ['#F97316', '#EA580C'], active: true, imageUrl: null },
-  { id: 2, title: '🎉 عرض العيد', subtitle: 'وجبة عائلية كاملة بـ 299 ج', color: ['#8B5CF6', '#7C3AED'], active: true, imageUrl: null },
-  { id: 3, title: '🚀 توصيل مجاني', subtitle: 'على الطلبات فوق 150 ج', color: ['#10B981', '#059669'], active: true, imageUrl: null },
+  { id: 1, title: '🔥 عرض اليوم', subtitle: 'كفتة مشوية × 2 بـ 120 ج بدل 170!', color: ['#F97316', '#EA580C'], active: true, imageUrl: 'https://images.unsplash.com/photo-1529042355636-b6e6a74e86f6?w=800&h=400&fit=crop&q=80' },
+  { id: 2, title: '🎉 عرض العيد', subtitle: 'وجبة عائلية كاملة بـ 299 ج', color: ['#8B5CF6', '#7C3AED'], active: true, imageUrl: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=800&h=400&fit=crop&q=80' },
+  { id: 3, title: '🚀 توصيل مجاني', subtitle: 'على الطلبات فوق 150 ج', color: ['#10B981', '#059669'], active: true, imageUrl: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&h=400&fit=crop&q=80' },
 ]
 export function getBanners() {
   try { const r = localStorage.getItem('store_banners'); if (r) return JSON.parse(r) } catch (e) {}

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Plus, Copy, Tag, Users, TrendingUp, Zap, MessageSquare, Gift, Check, Trash2, Star } from 'lucide-react'
+import { Add, Copy, Tag, People, TrendUp, Flash, Message, Gift, Check, Trash, Star1 } from 'iconsax-react'
 import Layout from '../components/layout/Layout'
 import { getCoupons, setCoupons } from '../lib/restaurantStore'
 
@@ -19,7 +19,7 @@ function useToast() {
 
 const tabs = [
   { label: 'برنامج الولاء', icon: Gift },
-  { label: 'حملات واتساب', icon: MessageSquare },
+  { label: 'حملات واتساب', icon: Message },
   { label: 'الكوبونات', icon: Tag },
 ]
 
@@ -138,10 +138,10 @@ function LoyaltyTab() {
           <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14, marginBottom: 14 }}>إحصائيات هذا الشهر</p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
             {[
-              { label: 'أعضاء البرنامج', value: '234', icon: Users, color: 'var(--accent)' },
-              { label: 'نقاط محصودة', value: '12,400', icon: Zap, color: 'var(--yellow)' },
+              { label: 'أعضاء البرنامج', value: '234', icon: People, color: 'var(--accent)' },
+              { label: 'نقاط محصودة', value: '12,400', icon: Flash, color: 'var(--yellow)' },
               { label: 'خصومات مستخدمة', value: '89', icon: Tag, color: 'var(--green)' },
-              { label: 'طلب/عضو/شهر', value: '3.2', icon: TrendingUp, color: 'var(--blue)' },
+              { label: 'طلب/عضو/شهر', value: '3.2', icon: TrendUp, color: 'var(--blue)' },
             ].map(s => {
               const Icon = s.icon
               return (
@@ -276,7 +276,7 @@ function WhatsappTab() {
             جدولة لوقت معين
           </button>
           <button onClick={handleSend} style={{ flex: 1, height: 40, background: sent ? 'var(--green)' : '#25D366', color: 'white', borderRadius: 'var(--radius-lg)', fontWeight: 600, fontSize: 13, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, transition: 'all var(--dur-normal) var(--ease-default)' }}>
-            {sent ? <Check size={14} /> : <MessageSquare size={14} />}
+            {sent ? <Check size={14} /> : <Message size={14} />}
             {sent ? 'تم الإرسال ✓' : 'إرسال الآن'}
           </button>
         </div>
@@ -326,7 +326,7 @@ function CouponsTab() {
         <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>الكوبونات ({coupons.length})</p>
           <button onClick={() => setShowForm(!showForm)} className="btn-primary" style={{ height: 36, padding: '0 14px', fontSize: 13, display: 'flex', alignItems: 'center', gap: 6 }}>
-            <Plus size={14} /> كوبون جديد
+            <Add size={14} /> كوبون جديد
           </button>
         </div>
 
@@ -348,7 +348,7 @@ function CouponsTab() {
                 <div style={{ marginRight: 'auto', display: 'flex', alignItems: 'center', gap: 6 }}>
                   {c.minOrder && <span style={{ fontSize: 11, color: 'var(--text-3)' }}>حد أدنى {c.minOrder} ج</span>}
                   <button onClick={() => remove(c.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 2 }}>
-                    <Trash2 size={13} style={{ color: 'var(--text-3)' }} />
+                    <Trash size={13} style={{ color: 'var(--text-3)' }} />
                   </button>
                 </div>
               </div>
@@ -388,7 +388,7 @@ function CouponsTab() {
                 </div>
               ))}
               <button onClick={() => setShowForm(true)} className="btn-primary" style={{ marginTop: 8, width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
-                <Plus size={14} /> إضافة كوبون
+                <Add size={14} /> إضافة كوبون
               </button>
             </div>
           ) : (
@@ -468,10 +468,10 @@ export default function Marketing() {
   const [activeTab, setActiveTab] = useState(0)
 
   const topStats = [
-    { label: 'أعضاء الولاء', value: '234', color: 'var(--accent)', mutedBg: 'var(--accent-muted)', icon: Users },
-    { label: 'رسائل واتساب', value: '1,240', color: '#25D366', mutedBg: 'rgba(37,211,102,0.12)', icon: MessageSquare },
+    { label: 'أعضاء الولاء', value: '234', color: 'var(--accent)', mutedBg: 'var(--accent-muted)', icon: People },
+    { label: 'رسائل واتساب', value: '1,240', color: '#25D366', mutedBg: 'rgba(37,211,102,0.12)', icon: Message },
     { label: 'كوبونات نشطة', value: '6', color: 'var(--blue)', mutedBg: 'var(--blue-muted)', icon: Tag },
-    { label: 'عائد التسويق', value: '8,400 ج', color: 'var(--yellow)', mutedBg: 'var(--yellow-muted)', icon: TrendingUp },
+    { label: 'عائد التسويق', value: '8,400 ج', color: 'var(--yellow)', mutedBg: 'var(--yellow-muted)', icon: TrendUp },
   ]
 
   return (

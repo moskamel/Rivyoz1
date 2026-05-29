@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight } from 'iconsax-react'
 import { getCustomerOrders, getCustomerProfile, getConfig } from '../lib/restaurantStore'
 import CustomerNav from './CustomerNav'
 import CustomerFooter from './CustomerFooter'

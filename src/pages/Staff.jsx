@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { UserPlus, X, Trash2, Phone } from 'lucide-react'
+import { UserAdd, CloseCircle, Trash, Call } from 'iconsax-react'
 import Layout from '../components/layout/Layout'
 import { getStaff, setStaff } from '../lib/restaurantStore'
 
@@ -37,16 +37,27 @@ const inputStyle = {
 
 function AddStaffModal({ onClose, onAdd }) {
   const [form, setForm] = useState({ name: '', phone: '', role: 'cashier', password: '' })
+  const [errors, setErrors] = useState({})
+
+  const clearErr = (key) => setErrors(p => ({ ...p, [key]: '' }))
 
   function handleSubmit(e) {
     e.preventDefault()
+    const errs = {}
+    if (!form.name.trim() || form.name.trim().length < 2) errs.name = 'الاسم مطلوب (حرفان على الأقل)'
+    if (!form.phone.trim()) errs.phone = 'رقم الهاتف مطلوب'
+    else if (!/^\d{10,15}$/.test(form.phone.replace(/[\s\-()]/g, ''))) errs.phone = 'رقم هاتف غير صحيح (10–15 رقم)'
+    if (!form.password) errs.password = 'كلمة المرور مطلوبة'
+    else if (form.password.length < 6) errs.password = 'كلمة المرور يجب أن تكون 6 أحرف على الأقل'
+    setErrors(errs)
+    if (Object.keys(errs).length) return
     onAdd({
       id: Date.now(),
-      name: form.name,
+      name: form.name.trim(),
       role: form.role,
-      phone: form.phone,
+      phone: form.phone.trim(),
       status: 'available',
-      initials: form.name.slice(0, 2),
+      initials: form.name.trim().slice(0, 2),
     })
     onClose()
   }
@@ -78,15 +89,15 @@ function AddStaffModal({ onClose, onAdd }) {
         }}>
           <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 16 }}>إضافة موظف جديد</p>
           <button className="btn-icon md" onClick={onClose}>
-            <X size={14} />
+            <CloseCircle size={14} />
           </button>
         </div>
 
         {/* Form */}
         <form onSubmit={handleSubmit} style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: 14 }}>
           {[
-            { label: 'الاسم الكامل', key: 'name',  type: 'text',     placeholder: 'مثال: أحمد محمد' },
-            { label: 'رقم الهاتف',   key: 'phone', type: 'text',     placeholder: '01XXXXXXXXX'      },
+            { label: 'الاسم الكامل *', key: 'name',  type: 'text', placeholder: 'مثال: أحمد محمد' },
+            { label: 'رقم الهاتف *',   key: 'phone', type: 'text', placeholder: '01XXXXXXXXX'      },
           ].map(f => (
             <div key={f.key}>
               <label style={{
@@ -97,21 +108,21 @@ function AddStaffModal({ onClose, onAdd }) {
                 {f.label}
               </label>
               <input
-                required
                 value={form[f.key]}
-                onChange={e => setForm({ ...form, [f.key]: e.target.value })}
+                onChange={e => { setForm({ ...form, [f.key]: e.target.value }); clearErr(f.key) }}
                 placeholder={f.placeholder}
                 type={f.type}
-                style={inputStyle}
+                style={{ ...inputStyle, ...(errors[f.key] ? { borderColor: 'var(--red)' } : {}) }}
                 onFocus={e => {
                   e.target.style.borderColor = 'var(--accent)'
                   e.target.style.boxShadow = '0 0 0 3px var(--accent-muted)'
                 }}
                 onBlur={e => {
-                  e.target.style.borderColor = 'var(--border)'
+                  e.target.style.borderColor = errors[f.key] ? 'var(--red)' : 'var(--border)'
                   e.target.style.boxShadow = 'none'
                 }}
               />
+              {errors[f.key] && <p style={{ color: 'var(--red)', fontSize: 11, marginTop: 4, fontWeight: 600 }}>{errors[f.key]}</p>}
             </div>
           ))}
 
@@ -148,24 +159,24 @@ function AddStaffModal({ onClose, onAdd }) {
               color: 'var(--text-2)', marginBottom: 6,
               textTransform: 'uppercase', letterSpacing: '0.04em',
             }}>
-              كلمة المرور
+              كلمة المرور *
             </label>
             <input
-              required
               type="password"
               value={form.password}
-              onChange={e => setForm({ ...form, password: e.target.value })}
+              onChange={e => { setForm({ ...form, password: e.target.value }); clearErr('password') }}
               placeholder="••••••••"
-              style={inputStyle}
+              style={{ ...inputStyle, ...(errors.password ? { borderColor: 'var(--red)' } : {}) }}
               onFocus={e => {
                 e.target.style.borderColor = 'var(--accent)'
                 e.target.style.boxShadow = '0 0 0 3px var(--accent-muted)'
               }}
               onBlur={e => {
-                e.target.style.borderColor = 'var(--border)'
+                e.target.style.borderColor = errors.password ? 'var(--red)' : 'var(--border)'
                 e.target.style.boxShadow = 'none'
               }}
             />
+            {errors.password && <p style={{ color: 'var(--red)', fontSize: 11, marginTop: 4, fontWeight: 600 }}>{errors.password}</p>}
           </div>
 
           <div style={{ display: 'flex', gap: 10, paddingTop: 4 }}>
@@ -215,7 +226,7 @@ export default function Staff() {
           <span className="num" style={{ color: 'var(--text)', fontWeight: 700 }}>{staff.length}</span> موظف
         </p>
         <button className="btn-primary" onClick={() => setShowModal(true)}>
-          <UserPlus size={15} />
+          <UserAdd size={15} />
           إضافة موظف
         </button>
       </div>
@@ -280,14 +291,14 @@ export default function Staff() {
                       e.currentTarget.style.color = 'var(--text-2)'
                     }}
                   >
-                    <Trash2 size={13} />
+                    <Trash size={13} />
                   </button>
                 </div>
 
                 {/* Details */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <Phone size={12} style={{ color: 'var(--text-3)', flexShrink: 0 }} />
+                    <Call size={12} style={{ color: 'var(--text-3)', flexShrink: 0 }} />
                     <span className="num" style={{ fontSize: 12, color: 'var(--text-2)' }}>{member.phone}</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>

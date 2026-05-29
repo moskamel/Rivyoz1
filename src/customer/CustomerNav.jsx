@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Home, Compass, ShoppingCart, User, Menu, X, Moon, Sun } from 'lucide-react'
+import { Home2, Discover, ShoppingCart, User, HambergerMenu, CloseCircle, Moon, Sun } from 'iconsax-react'
 import { useCart } from './CartContext'
 import { useTheme } from '../lib/ThemeContext'
 import { useSidebar } from '../lib/ThemeContext'
@@ -18,8 +18,8 @@ export default function CustomerNav() {
   const pts = customerProfile ? getCustomerPoints(customerProfile.phone) : null
 
   const tabs = [
-    { label: 'الرئيسية', icon: Home,        path: '/landing'    },
-    { label: 'استكشف',  icon: Compass,      path: '/explore'    },
+    { label: 'الرئيسية', icon: Home2,        path: '/landing'    },
+    { label: 'استكشف',  icon: Discover,      path: '/explore'    },
     { label: 'السلة',   icon: ShoppingCart, path: '/cart'       },
     { label: 'حسابي',   icon: User,         path: '/my-profile' },
   ]
@@ -57,7 +57,7 @@ export default function CustomerNav() {
                   onClick={() => setSidebarOpen(false)}
                   style={{ padding: 8, borderRadius: 8, background: 'var(--surface-2)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-2)' }}
                 >
-                  <X size={16} />
+                  <CloseCircle size={16} />
                 </button>
               </div>
             </div>
@@ -111,7 +111,7 @@ export default function CustomerNav() {
                   <div style={{ padding: '4px 12px 12px' }}>
                     <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-3)', padding: '8px 4px', letterSpacing: '0.05em' }}>حمّل التطبيق</p>
                     <div style={{ display: 'flex', gap: 8 }}>
-                      <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '9px', borderRadius: 10, background: 'var(--surface-2)', color: 'var(--text)', fontSize: 12, fontWeight: 600, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>🍎 App Store</button>
+                      <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '9px', borderRadius: 10, background: 'var(--surface-2)', color: 'var(--text)', fontSize: 12, fontWeight: 600, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>🍎 App Shop</button>
                       <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '9px', borderRadius: 10, background: 'var(--surface-2)', color: 'var(--text)', fontSize: 12, fontWeight: 600, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>🤖 Google Play</button>
                     </div>
                   </div>
@@ -157,7 +157,7 @@ export default function CustomerNav() {
                 <div style={{ padding: '12px 16px', borderTop: '1px solid var(--border)' }}>
                   <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-3)', marginBottom: 10, textAlign: 'center', letterSpacing: '0.05em' }}>حمّل التطبيق</p>
                   <div style={{ display: 'flex', gap: 8 }}>
-                    <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '9px', borderRadius: 10, background: 'var(--surface-2)', color: 'var(--text)', fontSize: 12, fontWeight: 600, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>🍎 App Store</button>
+                    <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '9px', borderRadius: 10, background: 'var(--surface-2)', color: 'var(--text)', fontSize: 12, fontWeight: 600, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>🍎 App Shop</button>
                     <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '9px', borderRadius: 10, background: 'var(--surface-2)', color: 'var(--text)', fontSize: 12, fontWeight: 600, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>🤖 Google Play</button>
                   </div>
                 </div>

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Zap } from 'lucide-react'
+import { Flash } from 'iconsax-react'
 
 const roles = [
   { id: 'owner', label: 'صاحب المطعم' },
@@ -228,7 +228,7 @@ export default function Login() {
 
         <div style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
           <div style={{ width: 80, height: 80, background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(10px)', borderRadius: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px', boxShadow: '0 20px 60px rgba(0,0,0,0.15)' }}>
-            <Zap size={40} color="white" strokeWidth={2.5} />
+            <Flash size={40} color="white" strokeWidth={2.5} />
           </div>
           <h1 style={{ fontSize: 42, fontWeight: 900, color: 'white', marginBottom: 10, letterSpacing: '-0.02em' }}>ريڤيو</h1>
           <p style={{ fontSize: 18, fontWeight: 600, color: 'rgba(255,255,255,0.85)', marginBottom: 8 }}>نظام إدارة المطعم الذكي</p>
@@ -257,7 +257,7 @@ export default function Login() {
           {/* Mobile logo */}
           <div className="flex items-center gap-3 mb-8 lg:hidden">
             <div style={{ width: 38, height: 38, background: 'linear-gradient(135deg, #F97316, #EA6C10)', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Zap size={20} color="white" strokeWidth={2.5} />
+              <Flash size={20} color="white" strokeWidth={2.5} />
             </div>
             <p style={{ fontSize: 20, fontWeight: 900, color: 'var(--text)' }}>ريڤيو</p>
           </div>
@@ -299,7 +299,7 @@ export default function Login() {
             </div>
           </div>
 
-          {/* Step 1: Phone entry */}
+          {/* Step 1: Call entry */}
           {step === 1 && (
             <div>
               <div style={{ marginBottom: 20 }}>

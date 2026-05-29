@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { AlertTriangle, Package, TrendingDown, XCircle, Search, Plus, X, Check, Edit3 } from 'lucide-react'
+import { Warning2, Box, TrendDown, CloseCircle, SearchNormal1, Add, Check, Edit2 } from 'iconsax-react'
 import Layout from '../components/layout/Layout'
 
 const initialItems = [
@@ -82,7 +82,7 @@ function ItemModal({ item, onClose, onSave }) {
             {item ? 'تعديل الصنف' : 'إضافة صنف جديد'}
           </p>
           <button className="btn-icon md" onClick={onClose}>
-            <X size={14} />
+            <CloseCircle size={14} />
           </button>
         </div>
 
@@ -189,9 +189,9 @@ export default function Inventory() {
           صنف
         </p>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          {/* Search */}
+          {/* SearchNormal1 */}
           <div style={{ position: 'relative' }}>
-            <Search
+            <SearchNormal1
               size={14}
               style={{
                 position: 'absolute', right: 13, top: '50%',
@@ -222,7 +222,7 @@ export default function Inventory() {
             />
           </div>
           <button className="btn-primary" onClick={() => { setEditItem(null); setShowModal(true) }}>
-            <Plus size={15} />
+            <Add size={15} />
             إضافة صنف
           </button>
         </div>
@@ -237,7 +237,7 @@ export default function Inventory() {
           padding: '12px 16px', marginBottom: 16,
           display: 'flex', alignItems: 'center', gap: 10,
         }}>
-          <AlertTriangle size={17} style={{ color: 'var(--red)', flexShrink: 0 }} />
+          <Warning2 size={17} style={{ color: 'var(--red)', flexShrink: 0 }} />
           <p style={{ fontSize: 13, color: 'var(--text-2)', flex: 1 }}>
             <span style={{ fontWeight: 700, color: 'var(--red)' }}>
               {lowItems.length + outItems.length}
@@ -254,9 +254,9 @@ export default function Inventory() {
       {/* Summary cards */}
       <div style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
         {[
-          { label: 'إجمالي الأصناف',   value: items.length,              icon: Package,      color: 'var(--accent)', muted: 'var(--accent-muted)' },
-          { label: 'مخزون منخفض',      value: lowItems.length,           icon: TrendingDown, color: 'var(--yellow)', muted: 'var(--yellow-muted)' },
-          { label: 'نفذ المخزون',      value: outItems.length,           icon: XCircle,      color: 'var(--red)',    muted: 'var(--red-muted)'    },
+          { label: 'إجمالي الأصناف',   value: items.length,              icon: Box,      color: 'var(--accent)', muted: 'var(--accent-muted)' },
+          { label: 'مخزون منخفض',      value: lowItems.length,           icon: TrendDown, color: 'var(--yellow)', muted: 'var(--yellow-muted)' },
+          { label: 'نفذ المخزون',      value: outItems.length,           icon: CloseCircle,      color: 'var(--red)',    muted: 'var(--red-muted)'    },
         ].map((s, i) => (
           <div key={i} className="glass" style={{ flex: 1, padding: '14px 18px', display: 'flex', alignItems: 'center', gap: 10 }}>
             <div style={{
@@ -324,7 +324,7 @@ export default function Inventory() {
                       <td style={{ padding: '12px 16px' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
                           {isLow && (
-                            <AlertTriangle
+                            <Warning2
                               size={13}
                               style={{ color: item.qty === 0 ? 'var(--red)' : 'var(--yellow)', flexShrink: 0 }}
                             />
@@ -405,7 +405,7 @@ export default function Inventory() {
                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                               }}
                             >
-                              <X size={13} />
+                              <CloseCircle size={13} />
                             </button>
                           </div>
                         ) : (
@@ -415,7 +415,7 @@ export default function Inventory() {
                               onClick={() => startEdit(item)}
                               title="تحديث الكمية"
                             >
-                              <Edit3 size={13} />
+                              <Edit2 size={13} />
                             </button>
                           </div>
                         )}

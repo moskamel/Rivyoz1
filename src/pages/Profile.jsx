@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Layout from '../components/layout/Layout'
-import { Camera, Save, Lock, Shield, LogOut, ChevronLeft } from 'lucide-react'
+import { Camera, Save2, Lock, Shield, Logout, ArrowLeft2 } from 'iconsax-react'
 
 const roleLabels = {
   owner: 'صاحب المطعم',
@@ -65,7 +65,7 @@ function SectionCard({ title, children }) {
   )
 }
 
-function FormField({ label, value, onChange, type = 'text', placeholder = '' }) {
+function FormField({ label, value, onChange, type = 'text', placeholder = '', error }) {
   return (
     <div style={{ marginBottom: 16 }}>
       <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: 'var(--text-2)', marginBottom: 6 }}>
@@ -76,10 +76,11 @@ function FormField({ label, value, onChange, type = 'text', placeholder = '' }) 
         value={value}
         onChange={e => onChange(e.target.value)}
         placeholder={placeholder}
-        style={inputStyle}
+        style={{ ...inputStyle, ...(error ? { borderColor: '#EF4444' } : {}) }}
         onFocus={e => e.target.style.borderColor = 'var(--accent)'}
-        onBlur={e => e.target.style.borderColor = 'var(--border)'}
+        onBlur={e => e.target.style.borderColor = error ? '#EF4444' : 'var(--border)'}
       />
+      {error && <p style={{ color: '#EF4444', fontSize: 11, marginTop: 4, fontWeight: 600 }}>{error}</p>}
     </div>
   )
 }
@@ -154,13 +155,33 @@ export default function Profile() {
 
   const [savedPersonal, setSavedPersonal] = useState(false)
   const [savedRestaurant, setSavedRestaurant] = useState(false)
+  const [personalErrors, setPersonalErrors] = useState({})
+  const [restaurantErrors, setRestaurantErrors] = useState({})
+
+  const clearPersonalErr = (key) => setPersonalErrors(p => ({ ...p, [key]: '' }))
+  const clearRestaurantErr = (key) => setRestaurantErrors(p => ({ ...p, [key]: '' }))
 
   function handleSavePersonal() {
+    const e = {}
+    if (!personalInfo.name.trim()) e.name = 'الاسم مطلوب'
+    if (!personalInfo.email.trim()) e.email = 'البريد الإلكتروني مطلوب'
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(personalInfo.email)) e.email = 'بريد إلكتروني غير صحيح'
+    if (!personalInfo.phone.trim()) e.phone = 'رقم الجوال مطلوب'
+    else if (!/^\d{10,15}$/.test(personalInfo.phone.replace(/[\s\-()]/g, ''))) e.phone = 'رقم جوال غير صحيح (10–15 رقم)'
+    setPersonalErrors(e)
+    if (Object.keys(e).length) return
     setSavedPersonal(true)
     setTimeout(() => setSavedPersonal(false), 2000)
   }
 
   function handleSaveRestaurant() {
+    const e = {}
+    if (!restaurantInfo.name.trim()) e.name = 'اسم المطعم مطلوب'
+    if (!restaurantInfo.address.trim()) e.address = 'العنوان مطلوب'
+    if (!restaurantInfo.phone.trim()) e.phone = 'رقم الهاتف مطلوب'
+    else if (!/^\d{10,15}$/.test(restaurantInfo.phone.replace(/[\s\-()]/g, ''))) e.phone = 'رقم هاتف غير صحيح (10–15 رقم)'
+    setRestaurantErrors(e)
+    if (Object.keys(e).length) return
     setSavedRestaurant(true)
     setTimeout(() => setSavedRestaurant(false), 2000)
   }
@@ -273,24 +294,27 @@ export default function Profile() {
         {/* Personal info form */}
         <SectionCard title="المعلومات الشخصية">
           <FormField
-            label="الاسم الكامل"
+            label="الاسم الكامل *"
             value={personalInfo.name}
-            onChange={v => setPersonalInfo(p => ({ ...p, name: v }))}
+            onChange={v => { setPersonalInfo(p => ({ ...p, name: v })); clearPersonalErr('name') }}
             placeholder="الاسم الكامل"
+            error={personalErrors.name}
           />
           <FormField
-            label="البريد الإلكتروني"
+            label="البريد الإلكتروني *"
             type="email"
             value={personalInfo.email}
-            onChange={v => setPersonalInfo(p => ({ ...p, email: v }))}
+            onChange={v => { setPersonalInfo(p => ({ ...p, email: v })); clearPersonalErr('email') }}
             placeholder="example@restaurant.com"
+            error={personalErrors.email}
           />
           <FormField
-            label="رقم الجوال"
+            label="رقم الجوال *"
             type="tel"
             value={personalInfo.phone}
-            onChange={v => setPersonalInfo(p => ({ ...p, phone: v }))}
+            onChange={v => { setPersonalInfo(p => ({ ...p, phone: v })); clearPersonalErr('phone') }}
             placeholder="05xxxxxxxx"
+            error={personalErrors.phone}
           />
           <button
             onClick={handleSavePersonal}
@@ -311,7 +335,7 @@ export default function Profile() {
               boxShadow: '0 4px 14px rgba(249,115,22,0.2)',
             }}
           >
-            <Save size={14} strokeWidth={2.5} />
+            <Save2 size={14} strokeWidth={2.5} />
             {savedPersonal ? 'تم الحفظ ✓' : 'حفظ التغييرات'}
           </button>
         </SectionCard>
@@ -319,23 +343,26 @@ export default function Profile() {
         {/* Restaurant info */}
         <SectionCard title="معلومات المطعم">
           <FormField
-            label="اسم المطعم"
+            label="اسم المطعم *"
             value={restaurantInfo.name}
-            onChange={v => setRestaurantInfo(r => ({ ...r, name: v }))}
+            onChange={v => { setRestaurantInfo(r => ({ ...r, name: v })); clearRestaurantErr('name') }}
             placeholder="اسم المطعم"
+            error={restaurantErrors.name}
           />
           <FormField
-            label="العنوان"
+            label="العنوان *"
             value={restaurantInfo.address}
-            onChange={v => setRestaurantInfo(r => ({ ...r, address: v }))}
+            onChange={v => { setRestaurantInfo(r => ({ ...r, address: v })); clearRestaurantErr('address') }}
             placeholder="المدينة، الحي، الشارع"
+            error={restaurantErrors.address}
           />
           <FormField
-            label="رقم هاتف المطعم"
+            label="رقم هاتف المطعم *"
             type="tel"
             value={restaurantInfo.phone}
-            onChange={v => setRestaurantInfo(r => ({ ...r, phone: v }))}
+            onChange={v => { setRestaurantInfo(r => ({ ...r, phone: v })); clearRestaurantErr('phone') }}
             placeholder="011xxxxxxx"
+            error={restaurantErrors.phone}
           />
           <button
             onClick={handleSaveRestaurant}
@@ -356,7 +383,7 @@ export default function Profile() {
               boxShadow: '0 4px 14px rgba(249,115,22,0.2)',
             }}
           >
-            <Save size={14} strokeWidth={2.5} />
+            <Save2 size={14} strokeWidth={2.5} />
             {savedRestaurant ? 'تم الحفظ ✓' : 'حفظ التغييرات'}
           </button>
         </SectionCard>
@@ -466,7 +493,7 @@ export default function Profile() {
               onMouseEnter={e => { e.currentTarget.style.background = 'rgba(239,68,68,0.15)' }}
               onMouseLeave={e => { e.currentTarget.style.background = 'rgba(239,68,68,0.08)' }}
             >
-              <LogOut size={14} strokeWidth={2} />
+              <Logout size={14} strokeWidth={2} />
               تسجيل الخروج
             </button>
           </div>

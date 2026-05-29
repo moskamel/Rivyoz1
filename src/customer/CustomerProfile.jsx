@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ArrowRight, Plus, Trash2, Edit3 } from 'lucide-react'
+import { ArrowRight, Add, Trash, Edit2 } from 'iconsax-react'
 import {
   getCustomerProfile, setCustomerProfile, clearCustomerProfile,
   getCustomerPoints, getCustomerOrders, getConfig,
@@ -15,8 +15,10 @@ export default function CustomerProfile() {
   const [profile, setProfileState] = useState(getCustomerProfile)
   const [editingName, setEditingName] = useState(false)
   const [newName, setNewName] = useState('')
+  const [nameError, setNameError] = useState('')
   const [addingAddress, setAddingAddress] = useState(false)
   const [newAddress, setNewAddress] = useState('')
+  const [addressError, setAddressError] = useState('')
 
   if (!profile) {
     return (
@@ -103,15 +105,17 @@ export default function CustomerProfile() {
   }
 
   const saveNameEdit = () => {
-    if (!newName.trim()) return
+    if (!newName.trim()) { setNameError('الاسم مطلوب'); return }
     update({ name: newName.trim() })
+    setNameError('')
     setEditingName(false)
   }
 
   const addAddress = () => {
-    if (!newAddress.trim()) return
+    if (!newAddress.trim()) { setAddressError('العنوان مطلوب'); return }
     update({ addresses: [...(profile.addresses || []), newAddress.trim()] })
     setNewAddress('')
+    setAddressError('')
     setAddingAddress(false)
   }
 
@@ -164,7 +168,7 @@ export default function CustomerProfile() {
                 onClick={() => { setNewName(profile.name); setEditingName(true) }}
                 style={{ width: 28, height: 28, borderRadius: 8, background: 'rgba(255,255,255,0.2)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
               >
-                <Edit3 size={13} color="white" />
+                <Edit2 size={13} color="white" />
               </button>
             </div>
             <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.78)', fontFamily: 'Inter, monospace', direction: 'ltr', marginTop: 2 }}>
@@ -268,7 +272,7 @@ export default function CustomerProfile() {
                 cursor: 'pointer', fontFamily: 'Zain, sans-serif',
               }}
             >
-              <Plus size={13} /> إضافة
+              <Add size={13} /> إضافة
             </button>
           </div>
 
@@ -284,7 +288,7 @@ export default function CustomerProfile() {
                 <span style={{ fontSize: 20 }}>📍</span>
                 <p style={{ flex: 1, fontSize: 13, fontWeight: 600, color: 'var(--text)', lineHeight: 1.4 }}>{addr}</p>
                 <button onClick={() => removeAddress(i)} style={{ width: 32, height: 32, borderRadius: 8, background: '#FEF2F2', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <Trash2 size={14} color="#EF4444" />
+                  <Trash size={14} color="#EF4444" />
                 </button>
               </div>
             ))}
@@ -293,15 +297,16 @@ export default function CustomerProfile() {
                 <input
                   autoFocus
                   value={newAddress}
-                  onChange={e => setNewAddress(e.target.value)}
+                  onChange={e => { setNewAddress(e.target.value); setAddressError('') }}
                   onKeyDown={e => e.key === 'Enter' && addAddress()}
                   placeholder="مثال: 15 شارع البحر، المعادي"
                   style={{
                     width: '100%', padding: '11px 12px', borderRadius: 12,
-                    border: `1.5px solid ${color}`, fontSize: 13,
+                    border: `1.5px solid ${addressError ? '#EF4444' : color}`, fontSize: 13,
                     fontFamily: 'Zain, sans-serif', boxSizing: 'border-box', outline: 'none',
                   }}
                 />
+                {addressError && <p style={{ color: '#EF4444', fontSize: 11, marginTop: 5, fontWeight: 600 }}>{addressError}</p>}
                 <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
                   <button
                     onClick={() => { setAddingAddress(false); setNewAddress('') }}
@@ -349,10 +354,11 @@ export default function CustomerProfile() {
             <input
               autoFocus
               value={newName}
-              onChange={e => setNewName(e.target.value)}
+              onChange={e => { setNewName(e.target.value); setNameError('') }}
               onKeyDown={e => e.key === 'Enter' && saveNameEdit()}
-              style={{ width: '100%', padding: '13px 14px', borderRadius: 14, border: `1.5px solid ${color}`, fontSize: 15, fontFamily: 'Zain, sans-serif', boxSizing: 'border-box', outline: 'none' }}
+              style={{ width: '100%', padding: '13px 14px', borderRadius: 14, border: `1.5px solid ${nameError ? 'var(--red, #EF4444)' : color}`, fontSize: 15, fontFamily: 'Zain, sans-serif', boxSizing: 'border-box', outline: 'none' }}
             />
+            {nameError && <p style={{ color: '#EF4444', fontSize: 11, marginTop: 5, fontWeight: 600 }}>{nameError}</p>}
             <div style={{ display: 'flex', gap: 10, marginTop: 14 }}>
               <button onClick={() => setEditingName(false)} style={{ flex: 1, padding: '13px', borderRadius: 14, background: '#F9FAFB', border: '1px solid #E5E7EB', color: 'var(--text-2)', fontWeight: 600, fontSize: 14, cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>إلغاء</button>
               <button onClick={saveNameEdit} style={{ flex: 1, padding: '13px', borderRadius: 14, background: color, color: 'white', fontWeight: 700, fontSize: 14, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>حفظ</button>

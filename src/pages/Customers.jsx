@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Search, Users, Activity, ShoppingBag, X, MessageCircle, Send, Download } from 'lucide-react'
+import { SearchNormal1, People, Activity, ShoppingBag, CloseCircle, MessageCircle, Send, Import } from 'iconsax-react'
 import Layout from '../components/layout/Layout'
 
 const mockCustomers = [
@@ -51,7 +51,7 @@ function CustomerDrawer({ customer, onClose }) {
         }}>
           <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 16 }}>{customer.name}</p>
           <button className="btn-icon md" onClick={onClose}>
-            <X size={15} />
+            <CloseCircle size={15} />
           </button>
         </div>
 
@@ -167,9 +167,9 @@ export default function Customers() {
           زبون
         </p>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          {/* Search */}
+          {/* SearchNormal1 */}
           <div style={{ position: 'relative' }}>
-            <Search
+            <SearchNormal1
               size={14}
               style={{
                 position: 'absolute', right: 13, top: '50%',
@@ -202,7 +202,7 @@ export default function Customers() {
             />
           </div>
           <button className="btn-ghost" style={{ gap: 6 }}>
-            <Download size={14} />
+            <Import size={14} />
             تصدير
           </button>
         </div>
@@ -211,7 +211,7 @@ export default function Customers() {
       {/* Stats row */}
       <div style={{ display: 'flex', gap: 12, marginBottom: 20 }}>
         {[
-          { label: 'إجمالي الزبائن', value: mockCustomers.length, icon: Users,       color: 'var(--blue)',   muted: 'var(--blue-muted)'   },
+          { label: 'إجمالي الزبائن', value: mockCustomers.length, icon: People,       color: 'var(--blue)',   muted: 'var(--blue-muted)'   },
           { label: 'زبائن نشطون',    value: activeCustomers,      icon: Activity,    color: 'var(--green)',  muted: 'var(--green-muted)'  },
           { label: 'متوسط الطلبات',  value: avgOrders,            icon: ShoppingBag, color: 'var(--accent)', muted: 'var(--accent-muted)' },
         ].map((s, i) => (
@@ -279,7 +279,7 @@ export default function Customers() {
                         </div>
                       </td>
 
-                      {/* Phone col */}
+                      {/* Call col */}
                       <td style={{ padding: '12px 16px' }}>
                         <span className="num" style={{ fontSize: 12, color: 'var(--text-2)' }}>{c.phone}</span>
                       </td>

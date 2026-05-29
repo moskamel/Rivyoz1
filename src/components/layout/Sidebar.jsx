@@ -1,22 +1,17 @@
 import { useState, useEffect } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
-import {
-  LayoutDashboard, ClipboardList, UtensilsCrossed,
-  Megaphone, BarChart3, Settings, ExternalLink,
-  Users, UserCheck, Package, Monitor, ChevronDown,
-  Check, Zap, ArrowUpRight, Palette, LogOut, Star
-} from 'lucide-react'
+import { Category, Task, Cup, Speaker, Chart, Settings, Export, People, UserTick, Box, Monitor, ArrowDown2, Check, Flash, ExportSquare, ColorSwatch, Logout, Star1 } from 'iconsax-react'
 import { getConfig, getOrders } from '../../lib/restaurantStore'
 
 const navGrowth = [
-  { to: '/customers', label: 'الزبائن', icon: Users },
-  { to: '/reviews', label: 'التقييمات', icon: Star },
-  { to: '/marketing', label: 'التسويق', icon: Megaphone },
-  { to: '/reports', label: 'التقارير', icon: BarChart3 },
+  { to: '/customers', label: 'الزبائن', icon: People },
+  { to: '/reviews', label: 'التقييمات', icon: Star1 },
+  { to: '/marketing', label: 'التسويق', icon: Speaker },
+  { to: '/reports', label: 'التقارير', icon: Chart },
 ]
 const navSystem = [
-  { to: '/staff', label: 'الموظفون', icon: UserCheck },
-  { to: '/design', label: 'تصميم الموقع', icon: Palette },
+  { to: '/staff', label: 'الموظفون', icon: UserTick },
+  { to: '/design', label: 'تصميم الموقع', icon: ColorSwatch },
   { to: '/settings', label: 'الإعدادات', icon: Settings },
 ]
 
@@ -137,10 +132,10 @@ export default function Sidebar() {
   }
 
   const navMain = [
-    { to: '/', label: 'الرئيسية', icon: LayoutDashboard, exact: true },
-    { to: '/orders', label: 'الطلبات', icon: ClipboardList, badge: newOrderCount },
-    { to: '/menu', label: 'القائمة', icon: UtensilsCrossed },
-    { to: '/inventory', label: 'المخزون', icon: Package },
+    { to: '/', label: 'الرئيسية', icon: Category, exact: true },
+    { to: '/orders', label: 'الطلبات', icon: Task, badge: newOrderCount },
+    { to: '/menu', label: 'القائمة', icon: Cup },
+    { to: '/inventory', label: 'المخزون', icon: Box },
   ]
 
   const restaurantInitial = (config.name || 'م').charAt(0)
@@ -236,7 +231,7 @@ export default function Sidebar() {
             <span style={{ fontSize: 12, color: 'var(--text-2)', fontWeight: 500 }}>
               {selectedBranch}
             </span>
-            <ChevronDown
+            <ArrowDown2
               size={13}
               style={{
                 color: 'var(--text-3)',
@@ -347,9 +342,9 @@ export default function Sidebar() {
             e.currentTarget.style.borderColor = 'var(--border)'
           }}
         >
-          <ExternalLink size={13} />
+          <Export size={13} />
           <span>عرض موقع المطعم</span>
-          <ArrowUpRight size={11} style={{ marginRight: 'auto', opacity: 0.5 }} />
+          <ExportSquare size={11} style={{ marginRight: 'auto', opacity: 0.5 }} />
         </a>
 
         {/* KDS link */}
@@ -387,7 +382,7 @@ export default function Sidebar() {
         >
           <Monitor size={13} />
           <span>KDS شاشة المطبخ</span>
-          <ArrowUpRight size={11} style={{ marginRight: 'auto', opacity: 0.5 }} />
+          <ExportSquare size={11} style={{ marginRight: 'auto', opacity: 0.5 }} />
         </a>
 
         {/* Logout */}
@@ -408,7 +403,7 @@ export default function Sidebar() {
             marginBottom: 8,
           }}
         >
-          <LogOut size={13} />
+          <Logout size={13} />
           <span>تسجيل الخروج</span>
         </button>
 

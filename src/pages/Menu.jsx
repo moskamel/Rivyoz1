@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { Plus, MoreVertical, X, GripVertical, Star } from 'lucide-react'
+import { Add, More, CloseCircle, Sort, Star1 } from 'iconsax-react'
 import Layout from '../components/layout/Layout'
 import { getMenuItems, setMenuItems, getCategories } from '../lib/restaurantStore'
 
@@ -14,7 +14,7 @@ const inputStyle = {
   transition: 'border-color var(--dur-normal) var(--ease-default), box-shadow var(--dur-normal) var(--ease-default)',
 }
 
-export default function Menu() {
+export default function HambergerMenu() {
   const [loading, setLoading] = useState(true)
   const [categories, setCategories] = useState(getCategories)
   const [items, setItems] = useState(getMenuItems)
@@ -23,6 +23,7 @@ export default function Menu() {
   const [editItem, setEditItem] = useState(null)
   const [form, setForm] = useState({ name: '', price: '', categoryId: 1, description: '', active: true, bestseller: false, discountTag: '' })
   const [openMenuId, setOpenMenuId] = useState(null)
+  const [formErrors, setFormErrors] = useState({})
   const menuRef = useRef(null)
 
   useEffect(() => {
@@ -65,17 +66,23 @@ export default function Menu() {
   const openAdd = () => {
     setForm({ name: '', price: '', categoryId: activeCategory, description: '', active: true, bestseller: false, discountTag: '' })
     setEditItem(null)
+    setFormErrors({})
     setShowForm(true)
   }
 
   const openEdit = (item) => {
     setForm({ name: item.name, price: item.price, categoryId: item.categoryId, description: item.description || '', active: item.active, bestseller: item.bestseller || false, discountTag: item.discountTag || '' })
     setEditItem(item.id)
+    setFormErrors({})
     setShowForm(true)
   }
 
   const saveItem = () => {
-    if (!form.name || !form.price) return
+    const errs = {}
+    if (!form.name.trim()) errs.name = 'اسم الأكلة مطلوب'
+    if (!form.price || Number(form.price) <= 0) errs.price = 'السعر مطلوب ويجب أن يكون أكبر من صفر'
+    setFormErrors(errs)
+    if (Object.keys(errs).length) return
     if (editItem) {
       setItems(prev => {
         const next = prev.map(i => i.id === editItem ? { ...i, ...form, price: Number(form.price) } : i)
@@ -181,11 +188,11 @@ export default function Menu() {
             onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.color = 'var(--accent)' }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-3)' }}
           >
-            <Plus size={12} /> قسم جديد
+            <Add size={12} /> قسم جديد
           </button>
         </div>
         <button onClick={openAdd} className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
-          <Plus size={14} />
+          <Add size={14} />
           إضافة أكلة
         </button>
       </div>
@@ -207,7 +214,7 @@ export default function Menu() {
               <p className="empty-title">لا توجد أكلات في هذا القسم</p>
               <p className="empty-desc">أضف أول أكلة لتظهر هنا</p>
               <button onClick={openAdd} className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: 6, margin: '12px auto 0' }}>
-                <Plus size={14} /> إضافة أكلة
+                <Add size={14} /> إضافة أكلة
               </button>
             </div>
           ) : (
@@ -230,14 +237,14 @@ export default function Menu() {
                   onMouseEnter={e => { if (dragIdx === null) e.currentTarget.style.background = 'var(--surface-2)' }}
                   onMouseLeave={e => { if (dragIdx === null) e.currentTarget.style.background = 'transparent' }}
                 >
-                  <GripVertical size={15} style={{ color: 'var(--text-3)', cursor: 'grab', flexShrink: 0 }} />
+                  <Sort size={15} style={{ color: 'var(--text-3)', cursor: 'grab', flexShrink: 0 }} />
                   <div style={{ width: 40, height: 40, background: 'var(--surface-2)', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, border: '1px solid var(--border)' }}>
                     <span style={{ fontSize: 18 }}>🍽️</span>
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                       <p style={{ fontWeight: 600, color: item.active ? 'var(--text)' : 'var(--text-3)', fontSize: 13 }}>{item.name}</p>
-                      {item.bestseller && <Star size={11} style={{ color: 'var(--yellow)', fill: 'var(--yellow)', flexShrink: 0 }} />}
+                      {item.bestseller && <Star1 size={11} style={{ color: 'var(--yellow)', fill: 'var(--yellow)', flexShrink: 0 }} />}
                       {!item.active && <span className="badge badge-pill badge-sm badge-default">متوقف</span>}
                     </div>
                     {item.description && (
@@ -259,7 +266,7 @@ export default function Menu() {
                       className="btn-icon sm"
                       style={{ background: openMenuId === item.id ? 'var(--surface-2)' : 'transparent', border: 'none', color: 'var(--text-3)' }}
                     >
-                      <MoreVertical size={15} />
+                      <More size={15} />
                     </button>
                     {openMenuId === item.id && (
                       <div style={{ position: 'absolute', left: 0, top: 36, background: 'var(--surface-3)', border: '1px solid var(--border-strong)', borderRadius: 10, overflow: 'hidden', zIndex: 200, minWidth: 120, boxShadow: 'var(--shadow-lg)' }}>
@@ -300,7 +307,7 @@ export default function Menu() {
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', borderBottom: '1px solid var(--border)' }}>
               <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 15 }}>{editItem ? 'تعديل الأكلة' : 'إضافة أكلة جديدة'}</p>
               <button onClick={() => setShowForm(false)} className="btn-icon sm" style={{ border: 'none', background: 'var(--surface-2)', color: 'var(--text-2)' }}>
-                <X size={14} />
+                <CloseCircle size={14} />
               </button>
             </div>
             <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -309,24 +316,28 @@ export default function Menu() {
                 onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)' }}
                 onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)' }}
               >
-                <Plus size={18} style={{ color: 'var(--text-3)' }} />
+                <Add size={18} style={{ color: 'var(--text-3)' }} />
                 <p style={{ fontSize: 10, color: 'var(--text-3)', fontWeight: 500 }}>صورة</p>
               </div>
 
               <div>
                 <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: 'var(--text-2)', marginBottom: 6, letterSpacing: '0.04em', textTransform: 'uppercase' }}>اسم الأكلة *</label>
-                <input type="text" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} style={inputStyle} placeholder="مثال: كفتة مشوية"
+                <input type="text" value={form.name} onChange={e => { setForm({ ...form, name: e.target.value }); setFormErrors(p => ({ ...p, name: '' })) }}
+                  style={{ ...inputStyle, ...(formErrors.name ? { borderColor: 'var(--red)' } : {}) }} placeholder="مثال: كفتة مشوية"
                   onFocus={e => { e.target.style.borderColor = 'var(--accent)'; e.target.style.boxShadow = '0 0 0 3px var(--accent-muted)' }}
-                  onBlur={e => { e.target.style.borderColor = 'var(--border)'; e.target.style.boxShadow = 'none' }}
+                  onBlur={e => { e.target.style.borderColor = formErrors.name ? 'var(--red)' : 'var(--border)'; e.target.style.boxShadow = 'none' }}
                 />
+                {formErrors.name && <p style={{ color: 'var(--red)', fontSize: 11, marginTop: 4, fontWeight: 600 }}>{formErrors.name}</p>}
               </div>
 
               <div>
                 <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: 'var(--text-2)', marginBottom: 6, letterSpacing: '0.04em', textTransform: 'uppercase' }}>السعر *</label>
-                <input type="number" value={form.price} onChange={e => setForm({ ...form, price: e.target.value })} style={inputStyle} placeholder="85"
+                <input type="number" value={form.price} onChange={e => { setForm({ ...form, price: e.target.value }); setFormErrors(p => ({ ...p, price: '' })) }}
+                  style={{ ...inputStyle, ...(formErrors.price ? { borderColor: 'var(--red)' } : {}) }} placeholder="85" min="0"
                   onFocus={e => { e.target.style.borderColor = 'var(--accent)'; e.target.style.boxShadow = '0 0 0 3px var(--accent-muted)' }}
-                  onBlur={e => { e.target.style.borderColor = 'var(--border)'; e.target.style.boxShadow = 'none' }}
+                  onBlur={e => { e.target.style.borderColor = formErrors.price ? 'var(--red)' : 'var(--border)'; e.target.style.boxShadow = 'none' }}
                 />
+                {formErrors.price && <p style={{ color: 'var(--red)', fontSize: 11, marginTop: 4, fontWeight: 600 }}>{formErrors.price}</p>}
               </div>
 
               <div>

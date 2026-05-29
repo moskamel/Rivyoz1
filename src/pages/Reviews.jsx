@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { MessageSquare, Eye, EyeOff, Send } from 'lucide-react'
+import { Message, Eye, EyeSlash, Send } from 'iconsax-react'
 import Layout from '../components/layout/Layout'
 import { getReviews, replyToReview, toggleReviewVisibility } from '../lib/restaurantStore'
 
@@ -180,7 +180,7 @@ export default function Reviews() {
                   !review.reply ? (
                     <button onClick={() => { setReplyingTo(review.id); setReplyText('') }}
                       style={{ padding: '7px 14px', borderRadius: 10, background: 'var(--surface-2)', color: 'var(--text-2)', fontWeight: 600, fontSize: 12, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', display: 'flex', alignItems: 'center', gap: 5 }}>
-                      <MessageSquare size={13} /> رد على التقييم
+                      <Message size={13} /> رد على التقييم
                     </button>
                   ) : (
                     <button onClick={() => { setReplyingTo(review.id); setReplyText(review.reply) }}
@@ -191,7 +191,7 @@ export default function Reviews() {
                 )}
                 <button onClick={() => handleToggle(review.id)}
                   style={{ padding: '7px 14px', borderRadius: 10, fontWeight: 600, fontSize: 12, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', display: 'flex', alignItems: 'center', gap: 5, background: review.isVisible ? '#FEF3C7' : '#DCFCE7', color: review.isVisible ? '#92400E' : '#166534' }}>
-                  {review.isVisible ? <><EyeOff size={13} /> إخفاء</> : <><Eye size={13} /> إظهار</>}
+                  {review.isVisible ? <><EyeSlash size={13} /> إخفاء</> : <><Eye size={13} /> إظهار</>}
                 </button>
               </div>
             </div>

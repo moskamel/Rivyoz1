@@ -1,12 +1,6 @@
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import {
-  Zap, Package, UtensilsCrossed, ChefHat, BarChart3,
-  Users, Archive, Star, Check, ArrowLeft,
-  TrendingUp, Wifi, Bell, Printer, Smartphone,
-  MessageCircle, ChevronDown, ChevronUp, Banknote,
-  Sun, Moon,
-} from 'lucide-react'
+import { Flash, Box, Cup, Shop, Chart, People, Archive, Star1, Check, ArrowLeft, TrendUp, Wifi, Notification, Printer, Mobile, MessageCircle, ArrowDown2, ArrowUp, Money, Sun, Moon } from 'iconsax-react'
 
 /* ─── Theme definitions ─────────────────────────────────── */
 const DARK = {
@@ -89,7 +83,7 @@ function StarRow({ count = 5 }) {
   return (
     <span style={{ display: 'inline-flex', gap: 2 }}>
       {Array.from({ length: count }).map((_, i) => (
-        <Star key={i} size={14} fill={T.yellow} color={T.yellow} />
+        <Star1 key={i} size={14} fill={T.yellow} color={T.yellow} />
       ))}
     </span>
   )
@@ -191,7 +185,7 @@ function Navbar({ isDark, onToggle }) {
       {/* Logo */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }} onClick={() => scrollTo('hero')}>
         <div style={{ width: 36, height: 36, borderRadius: 10, background: T.accent, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: T.accentGlow }}>
-          <Zap size={20} color="#fff" fill="#fff" />
+          <Flash size={20} color="#fff" fill="#fff" />
         </div>
         <span style={{ fontFamily: 'Zain, sans-serif', fontWeight: 800, fontSize: 22, color: T.text, letterSpacing: '-0.5px' }}>ريڤيو</span>
         <span style={{ background: T.accentMut, border: `1px solid ${T.borderAcc}`, borderRadius: 6, padding: '2px 8px', fontFamily: 'Zain, sans-serif', fontSize: 11, fontWeight: 700, color: T.accent }}>مصر</span>
@@ -295,7 +289,7 @@ function Hero() {
       </div>
 
       <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: T.accentMut, border: `1px solid ${T.borderAcc}`, borderRadius: 999, padding: '5px 14px', marginBottom: 28 }}>
-        <Zap size={14} color={T.accent} fill={T.accent} />
+        <Flash size={14} color={T.accent} fill={T.accent} />
         <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 13, fontWeight: 600, color: T.accent }}>نظام إدارة المطاعم #١ في مصر</span>
       </div>
 
@@ -394,7 +388,7 @@ const FEATURES_DATA = [
   { title: 'طباعة فواتير وإيصالات',       desc: 'فواتير احترافية بلوجو المطعم تُطبع تلقائياً مع كل طلب على الطابعة الحرارية' },
   { title: 'إشعارات واتساب للعملاء',      desc: 'ابعت تأكيد الطلب وتحديث التوصيل لعملائك مباشرة على واتساب بشكل تلقائي' },
 ]
-const FEATURE_ICONS = [Package, UtensilsCrossed, ChefHat, BarChart3, Users, Archive, Smartphone, Printer, Bell]
+const FEATURE_ICONS = [Box, Cup, Shop, Chart, People, Archive, Mobile, Printer, Notification]
 
 function FeatureCard({ IconComp, title, desc }) {
   const T = useTheme()
@@ -479,7 +473,7 @@ function ROICalc() {
       <div style={{ maxWidth: 780, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: 44 }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: T.accentMut, border: `1px solid ${T.borderAcc}`, borderRadius: 999, padding: '4px 14px', marginBottom: 16 }}>
-            <TrendingUp size={13} color={T.accent} />
+            <TrendUp size={13} color={T.accent} />
             <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 13, fontWeight: 600, color: T.accent }}>احسب عائدك</span>
           </div>
           <h2 style={{ fontFamily: 'Zain, sans-serif', fontSize: 'clamp(26px,4vw,40px)', fontWeight: 800, color: T.text, margin: '0 0 10px', letterSpacing: '-0.5px' }}>ريڤيو هيوفرلك كام بالشهر؟</h2>
@@ -682,7 +676,7 @@ function Pricing() {
       <div style={{ maxWidth: 1100, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: 56 }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: T.accentMut, border: `1px solid ${T.borderAcc}`, borderRadius: 999, padding: '4px 14px', marginBottom: 16 }}>
-            <Banknote size={13} color={T.accent} />
+            <Money size={13} color={T.accent} />
             <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 13, fontWeight: 600, color: T.accent }}>التسعير</span>
           </div>
           <h2 style={{ fontFamily: 'Zain, sans-serif', fontSize: 'clamp(28px,4vw,44px)', fontWeight: 800, color: T.text, margin: '0 0 12px', letterSpacing: '-0.5px' }}>اختر الخطة المناسبة لمطعمك</h2>
@@ -734,7 +728,7 @@ function FAQ() {
               <button onClick={() => setOpen(open === i ? null : i)}
                 style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '18px 20px', background: 'none', border: 'none', cursor: 'pointer', gap: 12 }}>
                 <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 15, fontWeight: 700, color: T.text, textAlign: 'right', flex: 1 }}>{faq.q}</span>
-                <span style={{ color: T.accent, flexShrink: 0 }}>{open === i ? <ChevronUp size={18} /> : <ChevronDown size={18} />}</span>
+                <span style={{ color: T.accent, flexShrink: 0 }}>{open === i ? <ArrowUp size={18} /> : <ArrowDown2 size={18} />}</span>
               </button>
               {open === i && (
                 <div style={{ padding: '0 20px 18px' }}>
@@ -794,7 +788,7 @@ function Footer() {
       <div style={{ maxWidth: 1100, margin: '0 auto', display: 'flex', flexWrap: 'wrap', gap: 40, justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 40 }}>
         <div style={{ maxWidth: 280 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14, cursor: 'pointer' }} onClick={() => scrollTo('hero')}>
-            <div style={{ width: 34, height: 34, borderRadius: 9, background: T.accent, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Zap size={18} color="#fff" fill="#fff" /></div>
+            <div style={{ width: 34, height: 34, borderRadius: 9, background: T.accent, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Flash size={18} color="#fff" fill="#fff" /></div>
             <span style={{ fontFamily: 'Zain, sans-serif', fontWeight: 800, fontSize: 20, color: T.text }}>ريڤيو</span>
             <span style={{ background: T.accentMut, border: `1px solid ${T.borderAcc}`, borderRadius: 5, padding: '2px 7px', fontFamily: 'Zain, sans-serif', fontSize: 10, fontWeight: 700, color: T.accent }}>مصر</span>
           </div>

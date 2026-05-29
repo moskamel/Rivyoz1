@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Plus, Trash2, Edit3, X, Check, Palette, Image, Tag, LayoutTemplate, Smartphone, ChevronDown } from 'lucide-react'
+import { Add, Trash, Edit2, CloseCircle, Check, ColorSwatch, Image, Tag, LayoutMaximize, Mobile, ArrowDown2 } from 'iconsax-react'
 import Layout from '../components/layout/Layout'
 import {
   getConfig, setConfig,
@@ -39,11 +39,11 @@ function Toggle({ value, onChange }) {
 }
 
 const tabs = [
-  { label: 'اللون والهوية', icon: Palette },
+  { label: 'اللون والهوية', icon: ColorSwatch },
   { label: 'البانرات', icon: Image },
   { label: 'العروض', icon: Tag },
-  { label: 'الأقسام والمنتجات', icon: LayoutTemplate },
-  { label: 'الفوتر', icon: Smartphone },
+  { label: 'الأقسام والمنتجات', icon: LayoutMaximize },
+  { label: 'الفوتر', icon: Mobile },
 ]
 
 /* ─── Tab 1: Color & Identity ──────────────────────────────── */
@@ -238,7 +238,7 @@ function BannersTab() {
                   <div onClick={e => { e.stopPropagation(); toggle(b.id) }}>
                     <Toggle value={b.active} onChange={() => toggle(b.id)} />
                   </div>
-                  <button onClick={e => { e.stopPropagation(); remove(b.id) }} style={{ padding: 5, borderRadius: 7, background: 'rgba(0,0,0,0.25)', border: 'none', cursor: 'pointer', color: 'white', display: 'flex' }}><Trash2 size={12} /></button>
+                  <button onClick={e => { e.stopPropagation(); remove(b.id) }} style={{ padding: 5, borderRadius: 7, background: 'rgba(0,0,0,0.25)', border: 'none', cursor: 'pointer', color: 'white', display: 'flex' }}><Trash size={12} /></button>
                 </div>
               </div>
             </div>
@@ -247,7 +247,7 @@ function BannersTab() {
             onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.color = 'var(--accent)' }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-2)' }}
           >
-            <Plus size={14} /> بانر جديد
+            <Add size={14} /> بانر جديد
           </button>
         </div>
       </div>
@@ -257,7 +257,7 @@ function BannersTab() {
         <div className="glass" style={{ padding: 20 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
             <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>{editing === 'new' ? 'بانر جديد' : 'تعديل البانر'}</p>
-            <button onClick={() => setEditing(null)} style={{ padding: 6, borderRadius: 8, background: 'var(--surface-2)', border: 'none', cursor: 'pointer', color: 'var(--text-2)', display: 'flex' }}><X size={13} /></button>
+            <button onClick={() => setEditing(null)} style={{ padding: 6, borderRadius: 8, background: 'var(--surface-2)', border: 'none', cursor: 'pointer', color: 'var(--text-2)', display: 'flex' }}><CloseCircle size={13} /></button>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             {/* Image upload */}
@@ -270,7 +270,7 @@ function BannersTab() {
                     onClick={() => setForm(f => ({ ...f, imageUrl: '' }))}
                     style={{ position: 'absolute', top: 6, left: 6, width: 24, height: 24, borderRadius: '50%', background: 'rgba(0,0,0,0.6)', border: 'none', cursor: 'pointer', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                   >
-                    <X size={12} />
+                    <CloseCircle size={12} />
                   </button>
                 </div>
               ) : (
@@ -450,12 +450,12 @@ function CombosTab() {
 
   return (
     <div className="split-panel">
-      {/* List */}
+      {/* TextalignJustifyleft */}
       <div>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
           <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>العروض ({combos.length})</p>
           <button onClick={startNew} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '7px 14px', background: 'var(--accent)', color: 'white', borderRadius: 10, fontSize: 13, fontWeight: 600, border: 'none', cursor: 'pointer' }}>
-            <Plus size={13} /> عرض جديد
+            <Add size={13} /> عرض جديد
           </button>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -473,8 +473,8 @@ function CombosTab() {
                   </div>
                 </div>
                 <Toggle value={c.active} onChange={() => toggle(c.id)} />
-                <button onClick={() => startEdit(c)} style={{ padding: 6, borderRadius: 8, background: 'var(--surface-2)', border: 'none', cursor: 'pointer', color: 'var(--text-2)', display: 'flex' }}><Edit3 size={13} /></button>
-                <button onClick={() => remove(c.id)} style={{ padding: 6, borderRadius: 8, background: 'var(--red-muted)', border: 'none', cursor: 'pointer', color: 'var(--red)', display: 'flex' }}><Trash2 size={13} /></button>
+                <button onClick={() => startEdit(c)} style={{ padding: 6, borderRadius: 8, background: 'var(--surface-2)', border: 'none', cursor: 'pointer', color: 'var(--text-2)', display: 'flex' }}><Edit2 size={13} /></button>
+                <button onClick={() => remove(c.id)} style={{ padding: 6, borderRadius: 8, background: 'var(--red-muted)', border: 'none', cursor: 'pointer', color: 'var(--red)', display: 'flex' }}><Trash size={13} /></button>
               </div>
             )
           })}
@@ -486,7 +486,7 @@ function CombosTab() {
         <div className="glass" style={{ padding: 20 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
             <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>{editing === 'new' ? 'عرض جديد' : 'تعديل العرض'}</p>
-            <button onClick={() => setEditing(null)} style={{ padding: 6, borderRadius: 8, background: 'var(--surface-2)', border: 'none', cursor: 'pointer', color: 'var(--text-2)', display: 'flex' }}><X size={13} /></button>
+            <button onClick={() => setEditing(null)} style={{ padding: 6, borderRadius: 8, background: 'var(--surface-2)', border: 'none', cursor: 'pointer', color: 'var(--text-2)', display: 'flex' }}><CloseCircle size={13} /></button>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             <div>
@@ -637,7 +637,7 @@ function CategoriesTab() {
                 <p style={{ fontSize: 11, color: 'var(--accent)', fontWeight: 700, fontFamily: 'Inter' }}>{item.price} ج</p>
               </div>
               <button onClick={() => removeFromSlider(item.id)} style={{ padding: 5, borderRadius: 7, background: 'var(--red-muted)', border: 'none', cursor: 'pointer', color: 'var(--red)', display: 'flex', flexShrink: 0 }}>
-                <X size={12} />
+                <CloseCircle size={12} />
               </button>
             </div>
           ))}
@@ -651,7 +651,7 @@ function CategoriesTab() {
             onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.color = 'var(--accent)' }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-2)' }}
           >
-            <Plus size={14} /> أضف منتج للسلايدر
+            <Add size={14} /> أضف منتج للسلايدر
           </button>
           {addOpen && (
             <>
@@ -671,7 +671,7 @@ function CategoriesTab() {
                     >
                       <span style={{ flex: 1, fontSize: 13, color: 'var(--text)' }}>{item.name}</span>
                       <span style={{ fontSize: 11, color: 'var(--text-3)', fontFamily: 'Inter' }}>{item.price} ج</span>
-                      <Plus size={13} style={{ color: 'var(--accent)', flexShrink: 0 }} />
+                      <Add size={13} style={{ color: 'var(--accent)', flexShrink: 0 }} />
                     </div>
                   ))}
                   {availableToAdd.filter(i => !addSearch || i.name.includes(addSearch)).length === 0 && (
@@ -725,14 +725,14 @@ function FooterTab() {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
             <div>
               <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>أزرار التطبيق</p>
-              <p style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 2 }}>App Store و Google Play</p>
+              <p style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 2 }}>App Shop و Google Play</p>
             </div>
             <Toggle value={settings.showAppButtons} onChange={v => update('showAppButtons', v)} />
           </div>
           {settings.showAppButtons && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               <div>
-                <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: 'var(--text-2)', marginBottom: 5 }}>رابط iOS (App Store)</label>
+                <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: 'var(--text-2)', marginBottom: 5 }}>رابط iOS (App Shop)</label>
                 <input value={settings.iosUrl} onChange={e => update('iosUrl', e.target.value)} style={inputStyle} placeholder="https://apps.apple.com/..."
                   onFocus={e => e.target.style.borderColor = 'var(--accent)'} onBlur={e => e.target.style.borderColor = 'var(--border)'} />
               </div>
@@ -789,7 +789,7 @@ function FooterTab() {
           </div>
           {settings.showAppButtons && (
             <div style={{ display: 'flex', gap: 8, marginBottom: 14 }}>
-              {['🍎 App Store', '🤖 Google Play'].map(l => (
+              {['🍎 App Shop', '🤖 Google Play'].map(l => (
                 <div key={l} style={{ flex: 1, padding: '8px', background: 'rgba(255,255,255,0.1)', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, color: 'white', fontWeight: 600 }}>{l}</div>
               ))}
             </div>

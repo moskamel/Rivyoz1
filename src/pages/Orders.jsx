@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { X, Check } from 'lucide-react'
+import { CloseCircle, Check } from 'iconsax-react'
 import Layout from '../components/layout/Layout'
 import { statusMap } from '../lib/mock'
 import { getOrders, updateOrderStatus } from '../lib/restaurantStore'
@@ -464,7 +464,7 @@ export default function Orders() {
                 className="btn-icon sm"
                 style={{ cursor: 'pointer' }}
               >
-                <X size={15} />
+                <CloseCircle size={15} />
               </button>
             </div>
 

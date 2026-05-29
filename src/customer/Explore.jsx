@@ -1,17 +1,17 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Search, Star, Clock, MapPin, List, Map, Menu } from 'lucide-react'
+import { SearchNormal1, Star1, Clock, Location, TextalignJustifyleft, Map1, HambergerMenu } from 'iconsax-react'
 import { useSidebar } from '../lib/ThemeContext'
 import CustomerNav from './CustomerNav'
 import CustomerFooter from './CustomerFooter'
 
 const mockRestaurants = [
-  { id: 1, name: 'مطعم الشيف أحمد', category: 'مشويات', rating: 4.9, reviews: 312, deliveryTime: 30, deliveryFee: 15, color: '#f97316', emoji: '🍖', slug: 'chef-ahmed', isOpen: true, tags: ['مشهور', 'طازج'], address: 'التجمع الخامس، القاهرة', x: 62, y: 38 },
-  { id: 2, name: 'بيتزا بلازا', category: 'بيتزا', rating: 4.7, reviews: 218, deliveryTime: 25, deliveryFee: 10, color: '#ef4444', emoji: '🍕', slug: 'pizza-plaza', isOpen: true, tags: ['أكثر طلباً'], address: 'مدينة نصر، القاهرة', x: 72, y: 58 },
-  { id: 3, name: 'كافيه ميترو', category: 'كافيه', rating: 4.5, reviews: 184, deliveryTime: 20, deliveryFee: 0, color: '#8b5cf6', emoji: '☕', slug: 'metro-cafe', isOpen: true, tags: ['توصيل مجاني'], address: 'وسط البلد، القاهرة', x: 38, y: 28 },
-  { id: 4, name: 'شاورما كينج', category: 'مشويات', rating: 4.8, reviews: 267, deliveryTime: 30, deliveryFee: 12, color: '#f59e0b', emoji: '🌯', slug: 'shawarma-king', isOpen: false, tags: [], address: 'المعادي، القاهرة', x: 80, y: 72 },
-  { id: 5, name: 'سوشي هاوس', category: 'سوشي', rating: 4.6, reviews: 143, deliveryTime: 40, deliveryFee: 20, color: '#10b981', emoji: '🍣', slug: 'sushi-house', isOpen: true, tags: ['جديد'], address: 'الزمالك، القاهرة', x: 25, y: 52 },
-  { id: 6, name: 'برجر فاكتوري', category: 'مشويات', rating: 4.4, reviews: 195, deliveryTime: 35, deliveryFee: 15, color: '#6366f1', emoji: '🍔', slug: 'burger-factory', isOpen: true, tags: [], address: 'الدقي، الجيزة', x: 50, y: 70 },
+  { id: 1, name: 'مطعم الشيف أحمد', category: 'مشويات', rating: 4.9, reviews: 312, deliveryTime: 30, deliveryFee: 15, color: '#f97316', emoji: '🍖', slug: 'chef-ahmed', isOpen: true, tags: ['مشهور', 'طازج'], address: 'التجمع الخامس، القاهرة', x: 62, y: 38, imageUrl: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=280&fit=crop&q=80' },
+  { id: 2, name: 'بيتزا بلازا', category: 'بيتزا', rating: 4.7, reviews: 218, deliveryTime: 25, deliveryFee: 10, color: '#ef4444', emoji: '🍕', slug: 'pizza-plaza', isOpen: true, tags: ['أكثر طلباً'], address: 'مدينة نصر، القاهرة', x: 72, y: 58, imageUrl: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&h=280&fit=crop&q=80' },
+  { id: 3, name: 'كافيه ميترو', category: 'كافيه', rating: 4.5, reviews: 184, deliveryTime: 20, deliveryFee: 0, color: '#8b5cf6', emoji: '☕', slug: 'metro-cafe', isOpen: true, tags: ['توصيل مجاني'], address: 'وسط البلد، القاهرة', x: 38, y: 28, imageUrl: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&h=280&fit=crop&q=80' },
+  { id: 4, name: 'شاورما كينج', category: 'مشويات', rating: 4.8, reviews: 267, deliveryTime: 30, deliveryFee: 12, color: '#f59e0b', emoji: '🌯', slug: 'shawarma-king', isOpen: false, tags: [], address: 'المعادي، القاهرة', x: 80, y: 72, imageUrl: 'https://images.unsplash.com/photo-1561651823-34feb02250e4?w=400&h=280&fit=crop&q=80' },
+  { id: 5, name: 'سوشي هاوس', category: 'سوشي', rating: 4.6, reviews: 143, deliveryTime: 40, deliveryFee: 20, color: '#10b981', emoji: '🍣', slug: 'sushi-house', isOpen: true, tags: ['جديد'], address: 'الزمالك، القاهرة', x: 25, y: 52, imageUrl: 'https://images.unsplash.com/photo-1617196034183-421b4040ed20?w=400&h=280&fit=crop&q=80' },
+  { id: 6, name: 'برجر فاكتوري', category: 'مشويات', rating: 4.4, reviews: 195, deliveryTime: 35, deliveryFee: 15, color: '#6366f1', emoji: '🍔', slug: 'burger-factory', isOpen: true, tags: [], address: 'الدقي، الجيزة', x: 50, y: 70, imageUrl: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=280&fit=crop&q=80' },
 ]
 
 const categoryFilters = [
@@ -109,7 +109,7 @@ function PinMap({ restaurants, selected, onSelect }) {
         )
       })}
 
-      {/* Compass rose */}
+      {/* Discover rose */}
       <div style={{
         position: 'absolute', top: 12, left: 12, width: 32, height: 32,
         background: 'white', borderRadius: '50%',
@@ -175,7 +175,7 @@ function MapBottomSheet({ restaurant, onClose, onNavigate }) {
           <p style={{ fontSize: 12, color: '#9CA3AF', marginTop: 1 }}>{restaurant.category}</p>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 5 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-              <Star size={12} color="#F59E0B" fill="#F59E0B" />
+              <Star1 size={12} color="#F59E0B" fill="#F59E0B" />
               <span style={{ fontSize: 12, fontWeight: 700, color: '#111827', fontFamily: 'Inter' }}>{restaurant.rating}</span>
             </div>
             <span style={{ color: '#D1D5DB' }}>·</span>
@@ -256,7 +256,7 @@ export default function Explore() {
 
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <button style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'var(--surface-2)', border: '1px solid var(--border-strong)', borderRadius: 10, padding: '7px 11px', cursor: 'pointer' }}>
-                <MapPin size={13} color="#F97316" />
+                <Location size={13} color="#F97316" />
                 <div style={{ textAlign: 'right' }}>
                   <p style={{ fontSize: 10, fontWeight: 700, color: '#374151' }}>التجمع الخامس</p>
                   <p style={{ fontSize: 9, color: '#9CA3AF' }}>القاهرة</p>
@@ -265,7 +265,7 @@ export default function Explore() {
 
               {/* View toggle */}
               <div style={{ display: 'flex', background: '#F3F4F6', borderRadius: 10, padding: 3, gap: 2 }}>
-                {[{ mode: 'list', Icon: List }, { mode: 'map', Icon: Map }].map(({ mode, Icon }) => (
+                {[{ mode: 'list', Icon: TextalignJustifyleft }, { mode: 'map', Icon: Map1 }].map(({ mode, Icon }) => (
                   <button
                     key={mode}
                     onClick={() => { setViewMode(mode); setSelectedOnMap(null) }}
@@ -282,17 +282,17 @@ export default function Explore() {
                 ))}
               </div>
 
-              {/* Menu icon */}
+              {/* HambergerMenu icon */}
               <button
                 onClick={() => setSidebarOpen(true)}
                 style={{ width: 36, height: 36, borderRadius: 10, background: 'var(--surface-2)', border: '1px solid var(--border-strong)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}
               >
-                <Menu size={17} color="var(--text-2)" />
+                <HambergerMenu size={17} color="var(--text-2)" />
               </button>
             </div>
           </div>
 
-          {/* Search */}
+          {/* SearchNormal1 */}
           <div style={{
             position: 'relative', marginBottom: 12,
             borderRadius: 50, border: `1.5px solid ${searchFocused ? '#F97316' : '#E5E7EB'}`,
@@ -300,7 +300,7 @@ export default function Explore() {
             boxShadow: searchFocused ? '0 0 0 3px rgba(249,115,22,0.12)' : 'none',
             transition: 'all 0.2s',
           }}>
-            <Search size={15} style={{ position: 'absolute', right: 16, top: '50%', transform: 'translateY(-50%)', color: searchFocused ? '#F97316' : '#9CA3AF', transition: 'color 0.2s' }} />
+            <SearchNormal1 size={15} style={{ position: 'absolute', right: 16, top: '50%', transform: 'translateY(-50%)', color: searchFocused ? '#F97316' : '#9CA3AF', transition: 'color 0.2s' }} />
             <input
               type="text" placeholder="ابحث عن مطعم أو أكلة..."
               value={search} onChange={e => setSearch(e.target.value)}
@@ -334,7 +334,7 @@ export default function Explore() {
         </div>
       </div>
 
-      {/* ── Map view ── */}
+      {/* ── Map1 view ── */}
       {viewMode === 'map' ? (
         <div style={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
           {/* Floating filter tabs */}
@@ -381,7 +381,7 @@ export default function Explore() {
           />
         </div>
       ) : (
-        /* ── List view ── */
+        /* ── TextalignJustifyleft view ── */
         <div style={{ flex: 1, overflowY: 'auto' }}>
           <div style={{ padding: '16px 16px 0' }}>
 
@@ -415,19 +415,20 @@ export default function Explore() {
                       key={r.id} onClick={() => navigate(`/${r.slug}`)}
                       style={{
                         flexShrink: 0, width: 200, height: 140, borderRadius: 16, overflow: 'hidden', cursor: 'pointer',
-                        background: `linear-gradient(135deg, ${r.color}, ${r.color}bb)`,
+                        background: r.imageUrl ? `url(${r.imageUrl}) center/cover no-repeat` : `linear-gradient(135deg, ${r.color}, ${r.color}bb)`,
                         position: 'relative', boxShadow: `0 8px 24px ${r.color}40`, transition: 'transform 0.15s, box-shadow 0.15s',
                       }}
                       onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = `0 14px 32px ${r.color}55` }}
                       onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = `0 8px 24px ${r.color}40` }}
                     >
-                      <div style={{ position: 'absolute', top: -15, left: -15, width: 80, height: 80, borderRadius: '50%', background: 'rgba(255,255,255,0.12)', pointerEvents: 'none' }} />
-                      <div style={{ position: 'absolute', top: 12, right: 12, fontSize: 36 }}>{r.emoji}</div>
+                      {r.imageUrl && <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to bottom, ${r.color}22, ${r.color}99)`, pointerEvents: 'none' }} />}
+                      {!r.imageUrl && <div style={{ position: 'absolute', top: -15, left: -15, width: 80, height: 80, borderRadius: '50%', background: 'rgba(255,255,255,0.12)', pointerEvents: 'none' }} />}
+                      {!r.imageUrl && <div style={{ position: 'absolute', top: 12, right: 12, fontSize: 36 }}>{r.emoji}</div>}
                       <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '8px 12px 10px', background: 'rgba(0,0,0,0.25)', backdropFilter: 'blur(4px)' }}>
                         <p style={{ color: 'white', fontWeight: 800, fontSize: 13, marginBottom: 2 }}>{r.name}</p>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                            <Star size={10} color="#FCD34D" fill="#FCD34D" />
+                            <Star1 size={10} color="#FCD34D" fill="#FCD34D" />
                             <span style={{ fontSize: 11, color: 'white', fontFamily: 'Inter', fontWeight: 700 }}>{r.rating}</span>
                             <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.7)', fontFamily: 'Inter' }}>· {r.deliveryTime} د</span>
                           </div>
@@ -470,8 +471,10 @@ export default function Explore() {
                     onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(0,0,0,0.09)' }}
                     onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04)' }}
                   >
-                    <div style={{ width: 80, flexShrink: 0, background: `linear-gradient(135deg, ${r.color}22, ${r.color}44)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32, borderLeft: `3px solid ${r.color}30` }}>
-                      {r.emoji}
+                    <div style={{ width: 80, flexShrink: 0, background: r.imageUrl ? 'none' : `linear-gradient(135deg, ${r.color}22, ${r.color}44)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32, borderLeft: `3px solid ${r.color}30`, overflow: 'hidden' }}>
+                      {r.imageUrl
+                        ? <img src={r.imageUrl} alt={r.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        : r.emoji}
                     </div>
                     <div style={{ flex: 1, padding: '12px 14px 12px 12px', minWidth: 0 }}>
                       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 3 }}>
@@ -480,13 +483,13 @@ export default function Explore() {
                           <p style={{ fontSize: 11, color: '#9CA3AF', marginBottom: 3 }}>{r.category}</p>
                           {r.address && (
                             <div style={{ display: 'flex', alignItems: 'center', gap: 3, marginBottom: 4 }}>
-                              <MapPin size={10} color="#9CA3AF" />
+                              <Location size={10} color="#9CA3AF" />
                               <span style={{ fontSize: 10, color: '#9CA3AF' }}>{r.address}</span>
                             </div>
                           )}
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 3, flexShrink: 0, marginRight: 8 }}>
-                          <Star size={12} color="#F59E0B" fill="#F59E0B" />
+                          <Star1 size={12} color="#F59E0B" fill="#F59E0B" />
                           <span style={{ fontSize: 12, fontWeight: 700, color: '#111827', fontFamily: 'Inter' }}>{r.rating}</span>
                           <span style={{ fontSize: 10, color: '#9CA3AF', fontFamily: 'Inter' }}>({r.reviews})</span>
                         </div>

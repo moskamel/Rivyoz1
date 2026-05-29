@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Sun, Moon, Search } from 'lucide-react'
+import { Sun, Moon, SearchNormal1 } from 'iconsax-react'
 import { useNavigate } from 'react-router-dom'
 import NotificationBell from '../NotificationBell'
 
@@ -58,13 +58,13 @@ export default function TopBar({ title }) {
 
       {/* Right controls */}
       <div className="flex items-center gap-2">
-        {/* Search */}
+        {/* SearchNormal1 */}
         <button
           className="btn-icon md"
           title="بحث"
           style={{ cursor: 'pointer' }}
         >
-          <Search size={15} strokeWidth={2} />
+          <SearchNormal1 size={15} strokeWidth={2} />
         </button>
 
         {/* Notification bell */}

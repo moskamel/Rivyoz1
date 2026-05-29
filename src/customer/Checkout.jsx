@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ArrowRight, CheckCircle } from 'lucide-react'
+import { ArrowRight, TickCircle } from 'iconsax-react'
 import { getConfig, addOrder, getCoupons, getCustomerProfile, setCustomerProfile } from '../lib/restaurantStore'
 import { useCart } from './CartContext'
 
@@ -42,7 +42,7 @@ function StepIndicator({ step, color }) {
               color: s.num <= step ? 'white' : '#9CA3AF',
               transition: 'all 0.3s',
             }}>
-              {s.num < step ? <CheckCircle size={15} /> : s.num}
+              {s.num < step ? <TickCircle size={15} /> : s.num}
             </div>
             <span style={{
               fontSize: 10, fontWeight: 700,
@@ -547,7 +547,7 @@ export default function Checkout() {
               {couponError && <p style={{ color: '#EF4444', fontSize: 12, marginTop: 6, fontWeight: 600 }}>{couponError}</p>}
               {couponApplied && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 8, background: '#F0FDF4', padding: '7px 12px', borderRadius: 10 }}>
-                  <CheckCircle size={13} color="#22C55E" />
+                  <TickCircle size={13} color="#22C55E" />
                   <p style={{ color: '#16A34A', fontSize: 12, fontWeight: 700 }}>تم تطبيق خصم {couponDiscount} ج</p>
                 </div>
               )}

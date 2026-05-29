@@ -1,5 +1,5 @@
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight } from 'iconsax-react'
 import { getConfig } from '../lib/restaurantStore'
 
 const mockRestaurants = [

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ShoppingCart, X, Search, ChevronLeft, ChevronRight, Tag, Flame, Menu, Moon, Sun, MapPin } from 'lucide-react'
+import { ShoppingCart, CloseCircle, SearchNormal1, ArrowLeft2, ArrowRight2, Tag, Flash, HambergerMenu, Moon, Sun, Location } from 'iconsax-react'
 import { getConfig, getMenuItems, getCategories, getBanners, getCombos, getCustomerProfile, clearCustomerProfile, getCustomerPoints, getReviews, addReview } from '../lib/restaurantStore'
 import { useCart } from './CartContext'
 import { useTheme } from '../lib/ThemeContext'
@@ -56,10 +56,10 @@ function BannerCarousel({ accentColor }) {
       </div>
 
       <button onClick={() => go(-1)} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', width: 32, height: 32, borderRadius: '50%', background: 'rgba(0,0,0,0.25)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', backdropFilter: 'blur(4px)' }}>
-        <ChevronRight size={18} />
+        <ArrowRight2 size={18} />
       </button>
       <button onClick={() => go(1)} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', width: 32, height: 32, borderRadius: '50%', background: 'rgba(0,0,0,0.25)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', backdropFilter: 'blur(4px)' }}>
-        <ChevronLeft size={18} />
+        <ArrowLeft2 size={18} />
       </button>
 
       <div style={{ position: 'absolute', bottom: 12, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 6 }}>
@@ -139,7 +139,7 @@ function PopularSlider({ items, accentColor, onOpen }) {
   if (popular.length === 0) return null
 
   return (
-    <ItemGrid title="الأكثر طلباً" icon={Flame} accentColor={accentColor}>
+    <ItemGrid title="الأكثر طلباً" icon={Flash} accentColor={accentColor}>
       {popular.map(item => (
         <ItemCard
           key={item.id}
@@ -487,7 +487,7 @@ export default function StoreFront() {
                   {isDark ? <Sun size={16} /> : <Moon size={16} />}
                 </button>
                 <button onClick={() => setSidebarOpen(false)} style={{ padding: 8, borderRadius: 8, background: 'var(--surface-2)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-2)' }}>
-                  <X size={16} />
+                  <CloseCircle size={16} />
                 </button>
               </div>
             </div>
@@ -529,7 +529,7 @@ export default function StoreFront() {
                   <div style={{ padding: '4px 12px 12px' }}>
                     <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-3)', padding: '8px 4px', letterSpacing: '0.05em' }}>حمّل التطبيق</p>
                     <div style={{ display: 'flex', gap: 8 }}>
-                      <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '9px', borderRadius: 10, background: 'var(--surface-2)', color: 'var(--text)', fontSize: 12, fontWeight: 600, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>🍎 App Store</button>
+                      <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '9px', borderRadius: 10, background: 'var(--surface-2)', color: 'var(--text)', fontSize: 12, fontWeight: 600, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>🍎 App Shop</button>
                       <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '9px', borderRadius: 10, background: 'var(--surface-2)', color: 'var(--text)', fontSize: 12, fontWeight: 600, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>🤖 Google Play</button>
                     </div>
                   </div>
@@ -564,7 +564,7 @@ export default function StoreFront() {
                 <div style={{ padding: '12px 16px', borderTop: '1px solid var(--border)' }}>
                   <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-3)', marginBottom: 10, textAlign: 'center', letterSpacing: '0.05em' }}>حمّل التطبيق</p>
                   <div style={{ display: 'flex', gap: 8 }}>
-                    <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '9px', borderRadius: 10, background: 'var(--surface-2)', color: 'var(--text)', fontSize: 12, fontWeight: 600, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>🍎 App Store</button>
+                    <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '9px', borderRadius: 10, background: 'var(--surface-2)', color: 'var(--text)', fontSize: 12, fontWeight: 600, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>🍎 App Shop</button>
                     <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '9px', borderRadius: 10, background: 'var(--surface-2)', color: 'var(--text)', fontSize: 12, fontWeight: 600, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>🤖 Google Play</button>
                   </div>
                 </div>
@@ -582,7 +582,7 @@ export default function StoreFront() {
             onClick={() => navigate(-1)}
             style={{ width: 36, height: 36, borderRadius: 10, background: 'var(--surface-2)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-2)', flexShrink: 0 }}
           >
-            <ChevronRight size={20} />
+            <ArrowRight2 size={20} />
           </button>
 
           {/* Restaurant name — 15px from back button */}
@@ -591,7 +591,7 @@ export default function StoreFront() {
             <p style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 1 }}>⭐ 4.9 · {config.deliveryTime} دقيقة · توصيل 15ج</p>
             {config.address && (
               <div style={{ display: 'flex', alignItems: 'center', gap: 3, marginTop: 2 }}>
-                <MapPin size={10} color="var(--text-3)" />
+                <Location size={10} color="var(--text-3)" />
                 <span style={{ fontSize: 10, color: 'var(--text-3)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{config.address}</span>
               </div>
             )}
@@ -618,14 +618,14 @@ export default function StoreFront() {
         )}
       </div>
 
-      {/* ─── Search Overlay ─── */}
+      {/* ─── SearchNormal1 Overlay ─── */}
       {searchOpen && (
         <>
           <div onClick={() => setSearchOpen(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', zIndex: 110 }} />
           <div style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 111, background: 'var(--surface)', maxWidth: 480, margin: '0 auto', borderRadius: '0 0 20px 20px', boxShadow: '0 8px 32px rgba(0,0,0,0.15)', maxHeight: '90vh', display: 'flex', flexDirection: 'column' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '14px 16px', borderBottom: '1px solid var(--border)' }}>
               <div style={{ flex: 1, position: 'relative' }}>
-                <Search size={15} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', color: config.color }} />
+                <SearchNormal1 size={15} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', color: config.color }} />
                 <input
                   autoFocus
                   type="text"
@@ -636,7 +636,7 @@ export default function StoreFront() {
                 />
               </div>
               <button onClick={() => setSearchOpen(false)} style={{ width: 36, height: 36, borderRadius: 10, background: 'var(--surface-2)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'var(--text-2)' }}>
-                <X size={17} />
+                <CloseCircle size={17} />
               </button>
             </div>
             <div style={{ overflowY: 'auto', padding: 12 }}>
@@ -773,7 +773,7 @@ export default function StoreFront() {
                 ? <img src={selectedItem.image} alt={selectedItem.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 : '🍽️'}
               <button onClick={closeSheet} style={{ position: 'absolute', top: 12, left: 12, width: 32, height: 32, borderRadius: '50%', background: 'rgba(0,0,0,0.25)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', backdropFilter: 'blur(4px)' }}>
-                <X size={16} />
+                <CloseCircle size={16} />
               </button>
             </div>
             <div style={{ padding: '16px 20px 120px' }}>

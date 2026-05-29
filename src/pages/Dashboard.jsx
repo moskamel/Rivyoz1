@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { TrendingUp, TrendingDown, ShoppingBag, Users, DollarSign, ArrowLeft, Power, ArrowUpRight } from 'lucide-react'
+import { TrendUp, TrendDown, ShoppingBag, People, DollarSquare, ArrowLeft, ToggleOn, ExportSquare } from 'iconsax-react'
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import Layout from '../components/layout/Layout'
 import { mockStats, mockSalesData, mockTopItems, statusMap } from '../lib/mock'
@@ -38,7 +38,7 @@ function StatCard({ label, value, change, icon: Icon, color }) {
         {change !== undefined && (
           <span className={`badge badge-pill badge-sm ${positive ? 'badge-green' : 'badge-red'}`}
             style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-            {positive ? <TrendingUp size={10} /> : <TrendingDown size={10} />}
+            {positive ? <TrendUp size={10} /> : <TrendDown size={10} />}
             {Math.abs(change)}%
           </span>
         )}
@@ -210,7 +210,7 @@ export default function Dashboard() {
               transition: 'all 0.15s'
             }}
           >
-            <Power size={12} />
+            <ToggleOn size={12} />
             {isOpen ? 'إغلاق مؤقت' : 'فتح المطعم'}
           </button>
         </div>
@@ -230,10 +230,10 @@ export default function Dashboard() {
 
       {/* ── STAT CARDS ── */}
       <div className="stagger" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 20 }}>
-        <StatCard label="مبيعات اليوم"  value={mockStats.revenue}      change={mockStats.revenueChange} icon={DollarSign}   color="#F97316" />
+        <StatCard label="مبيعات اليوم"  value={mockStats.revenue}      change={mockStats.revenueChange} icon={DollarSquare}   color="#F97316" />
         <StatCard label="طلبات اليوم"   value={mockStats.orders}       change={mockStats.ordersChange}  icon={ShoppingBag}  color="#3B82F6" />
-        <StatCard label="متوسط الطلب"   value={mockStats.avgOrder}                                      icon={ArrowUpRight}  color="#8B5CF6" />
-        <StatCard label="زبائن جدد"     value={mockStats.newCustomers}                                  icon={Users}         color="#22C55E" />
+        <StatCard label="متوسط الطلب"   value={mockStats.avgOrder}                                      icon={ExportSquare}  color="#8B5CF6" />
+        <StatCard label="زبائن جدد"     value={mockStats.newCustomers}                                  icon={People}         color="#22C55E" />
       </div>
 
       {/* ── CHART + TOP ITEMS ── */}

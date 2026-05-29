@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { TrendingUp, TrendingDown, Download, FileText, Check, DollarSign, ShoppingBag, Users, Star } from 'lucide-react'
+import { TrendUp, TrendDown, Import, Document, Check, DollarSquare, ShoppingBag, People, Star1 } from 'iconsax-react'
 import {
   LineChart, Line, BarChart, Bar, XAxis, YAxis,
   CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell
@@ -70,10 +70,10 @@ export default function Reports() {
   }
 
   const stats = [
-    { label: 'الإيراد الكلي', value: '45,600', unit: 'ج', change: 15, icon: DollarSign, color: 'var(--accent)', mutedBg: 'var(--accent-muted)' },
+    { label: 'الإيراد الكلي', value: '45,600', unit: 'ج', change: 15, icon: DollarSquare, color: 'var(--accent)', mutedBg: 'var(--accent-muted)' },
     { label: 'الطلبات الكلية', value: '312', unit: '', change: 8, icon: ShoppingBag, color: 'var(--blue)', mutedBg: 'var(--blue-muted)' },
-    { label: 'الزبائن الجدد', value: '78', unit: '', change: 22, icon: Users, color: 'var(--green)', mutedBg: 'var(--green-muted)' },
-    { label: 'التقييم المتوسط', value: '4.8', unit: '★', change: null, icon: Star, color: 'var(--yellow)', mutedBg: 'var(--yellow-muted)' },
+    { label: 'الزبائن الجدد', value: '78', unit: '', change: 22, icon: People, color: 'var(--green)', mutedBg: 'var(--green-muted)' },
+    { label: 'التقييم المتوسط', value: '4.8', unit: '★', change: null, icon: Star1, color: 'var(--yellow)', mutedBg: 'var(--yellow-muted)' },
   ]
 
   return (
@@ -117,7 +117,7 @@ export default function Reports() {
                 </div>
                 {s.change !== null && s.change !== undefined && (
                   <span className={`badge badge-pill badge-sm ${s.change >= 0 ? 'badge-green' : 'badge-red'}`} style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-                    {s.change >= 0 ? <TrendingUp size={9} /> : <TrendingDown size={9} />}
+                    {s.change >= 0 ? <TrendUp size={9} /> : <TrendDown size={9} />}
                     {Math.abs(s.change)}%
                   </span>
                 )}
@@ -220,11 +220,11 @@ export default function Reports() {
       {/* Export buttons */}
       <div className="flex gap-3 animate-fade-in">
         <button onClick={() => handleExport('PDF')} className="btn-ghost" style={{ display: 'flex', alignItems: 'center', gap: 6, transition: 'all var(--dur-normal) var(--ease-default)' }}>
-          {exportedType === 'PDF' ? <Check size={14} /> : <FileText size={14} />}
+          {exportedType === 'PDF' ? <Check size={14} /> : <Document size={14} />}
           {exportedType === 'PDF' ? '✓ تم التصدير' : 'تصدير PDF'}
         </button>
         <button onClick={() => handleExport('Excel')} className="btn-ghost" style={{ display: 'flex', alignItems: 'center', gap: 6, transition: 'all var(--dur-normal) var(--ease-default)' }}>
-          {exportedType === 'Excel' ? <Check size={14} /> : <Download size={14} />}
+          {exportedType === 'Excel' ? <Check size={14} /> : <Import size={14} />}
           {exportedType === 'Excel' ? '✓ تم التصدير' : 'تصدير Excel'}
         </button>
       </div>

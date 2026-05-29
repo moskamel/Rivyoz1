@@ -1,14 +1,14 @@
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Bell, ShoppingBag, XCircle, AlertTriangle, Megaphone, UserPlus } from 'lucide-react'
+import { Notification, ShoppingBag, CloseCircle, Warning2, Speaker, UserAdd } from 'iconsax-react'
 import { getNotifications, setNotifications } from '../lib/restaurantStore'
 
 const typeIconMap = {
   order: { icon: ShoppingBag, iconBg: 'var(--accent-muted)', iconColor: 'var(--accent)' },
-  cancel: { icon: XCircle, iconBg: 'var(--red-muted)', iconColor: 'var(--red)' },
-  inventory: { icon: AlertTriangle, iconBg: 'var(--yellow-muted)', iconColor: 'var(--yellow)' },
-  campaign: { icon: Megaphone, iconBg: 'var(--blue-muted)', iconColor: 'var(--blue)' },
-  customer: { icon: UserPlus, iconBg: 'var(--green-muted)', iconColor: 'var(--green)' },
+  cancel: { icon: CloseCircle, iconBg: 'var(--red-muted)', iconColor: 'var(--red)' },
+  inventory: { icon: Warning2, iconBg: 'var(--yellow-muted)', iconColor: 'var(--yellow)' },
+  campaign: { icon: Speaker, iconBg: 'var(--blue-muted)', iconColor: 'var(--blue)' },
+  customer: { icon: UserAdd, iconBg: 'var(--green-muted)', iconColor: 'var(--green)' },
 }
 
 export default function NotificationBell() {
@@ -49,7 +49,7 @@ export default function NotificationBell() {
         onMouseEnter={e => { e.currentTarget.style.background = 'var(--surface-2)'; e.currentTarget.style.color = 'var(--text)' }}
         onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--text-2)' }}
       >
-        <Bell size={18} />
+        <Notification size={18} />
         {unreadCount > 0 && (
           <span style={{ position: 'absolute', top: 4, right: 4, width: 16, height: 16, background: 'var(--red)', color: 'white', fontSize: 9, fontWeight: 700, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Inter' }}>
             {unreadCount}

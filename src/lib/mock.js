@@ -56,16 +56,16 @@ const grillModifiers = [
 ]
 
 export const mockMenuItems = [
-  { id: 1, categoryId: 1, name: 'كفتة مشوية', price: 85, active: true, image: null, bestseller: true, modifiers: grillModifiers },
-  { id: 2, categoryId: 1, name: 'فراخ مشوية', price: 70, active: true, image: null, bestseller: false, modifiers: grillModifiers },
-  { id: 3, categoryId: 1, name: 'لحم مشوي', price: 110, active: true, image: null, bestseller: false, modifiers: grillModifiers },
-  { id: 4, categoryId: 1, name: 'سلطة خضراء', price: 35, active: false, image: null, bestseller: false, modifiers: grillModifiers },
-  { id: 5, categoryId: 1, name: 'شاورما دجاج', price: 55, active: true, image: null, bestseller: true, modifiers: [] },
-  { id: 6, categoryId: 2, name: 'عصير قصب', price: 25, active: true, image: null, bestseller: false, modifiers: [] },
-  { id: 7, categoryId: 2, name: 'عصير برتقال', price: 30, active: true, image: null, bestseller: false, modifiers: [] },
+  { id: 1, categoryId: 1, name: 'كفتة مشوية', price: 85, active: true, image: 'https://images.unsplash.com/photo-1529042355636-b6e6a74e86f6?w=400&h=300&fit=crop&q=80', bestseller: true, modifiers: grillModifiers },
+  { id: 2, categoryId: 1, name: 'فراخ مشوية', price: 70, active: true, image: 'https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?w=400&h=300&fit=crop&q=80', bestseller: false, modifiers: grillModifiers },
+  { id: 3, categoryId: 1, name: 'لحم مشوي', price: 110, active: true, image: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=400&h=300&fit=crop&q=80', bestseller: false, modifiers: grillModifiers },
+  { id: 4, categoryId: 1, name: 'سلطة خضراء', price: 35, active: false, image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop&q=80', bestseller: false, modifiers: grillModifiers },
+  { id: 5, categoryId: 1, name: 'شاورما دجاج', price: 55, active: true, image: 'https://images.unsplash.com/photo-1561651823-34feb02250e4?w=400&h=300&fit=crop&q=80', bestseller: true, modifiers: [] },
+  { id: 6, categoryId: 2, name: 'عصير قصب', price: 25, active: true, image: 'https://images.unsplash.com/photo-1546173159-315724a31696?w=400&h=300&fit=crop&q=80', bestseller: false, modifiers: [] },
+  { id: 7, categoryId: 2, name: 'عصير برتقال', price: 30, active: true, image: 'https://images.unsplash.com/photo-1600718374662-0483d2b9da44?w=400&h=300&fit=crop&q=80', bestseller: false, modifiers: [] },
   { id: 8, categoryId: 2, name: 'مياه معدنية', price: 10, active: true, image: null, bestseller: false, modifiers: [] },
   { id: 9, categoryId: 2, name: 'كولا', price: 15, active: true, image: null, bestseller: false, modifiers: [] },
-  { id: 10, categoryId: 3, name: 'أم علي', price: 45, active: true, image: null, bestseller: false, modifiers: [] },
+  { id: 10, categoryId: 3, name: 'أم علي', price: 45, active: true, image: 'https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=400&h=300&fit=crop&q=80', bestseller: false, modifiers: [] },
 ]
 
 export const mockSalesData = [

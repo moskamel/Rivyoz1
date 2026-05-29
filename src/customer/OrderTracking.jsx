@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { getConfig, getOrders, rateOrder } from '../lib/restaurantStore'
-import { ArrowRight, MessageCircle, Compass } from 'lucide-react'
+import { ArrowRight, MessageCircle, Discover } from 'iconsax-react'
 import CustomerNav from './CustomerNav'
 import CustomerFooter from './CustomerFooter'
 
@@ -363,7 +363,7 @@ export default function OrderTracking() {
               fontFamily: 'Zain, sans-serif',
             }}
           >
-            <Compass size={15} />
+            <Discover size={15} />
             اكتشف مطاعم تانية
           </button>
         </div>

@@ -1,14 +1,14 @@
 import { useState } from 'react'
-import { Download, QrCode, Store, Bike, CreditCard } from 'lucide-react'
+import { Import, Scanner, Shop, Car, Card } from 'iconsax-react'
 import QRCode from 'react-qr-code'
 import Layout from '../components/layout/Layout'
 import { getConfig, setConfig } from '../lib/restaurantStore'
 
 const tabs = [
-  { label: 'المطعم',   icon: Store },
-  { label: 'التوصيل',  icon: Bike },
-  { label: 'QR Code',  icon: QrCode },
-  { label: 'الاشتراك', icon: CreditCard },
+  { label: 'المطعم',   icon: Shop },
+  { label: 'التوصيل',  icon: Car },
+  { label: 'QR Code',  icon: Scanner },
+  { label: 'الاشتراك', icon: Card },
 ]
 
 function Toast({ message }) {
@@ -35,7 +35,7 @@ const inputStyle = {
   transition: 'border-color var(--dur-normal) ease, box-shadow var(--dur-normal) ease',
 }
 
-function Field({ label, value, onChange, type = 'text' }) {
+function Field({ label, value, onChange, type = 'text', error }) {
   return (
     <div>
       <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: 'var(--text-2)', letterSpacing: '0.04em', marginBottom: 6 }}>{label}</label>
@@ -43,10 +43,11 @@ function Field({ label, value, onChange, type = 'text' }) {
         type={type}
         value={value}
         onChange={onChange}
-        style={inputStyle}
+        style={{ ...inputStyle, borderColor: error ? 'var(--red)' : undefined }}
         onFocus={e => { e.target.style.borderColor = 'var(--accent)'; e.target.style.boxShadow = '0 0 0 3px var(--accent-muted)' }}
-        onBlur={e => { e.target.style.borderColor = 'var(--border)'; e.target.style.boxShadow = 'none' }}
+        onBlur={e => { e.target.style.borderColor = error ? 'var(--red)' : 'var(--border)'; e.target.style.boxShadow = 'none' }}
       />
+      {error && <p style={{ color: 'var(--red)', fontSize: 11, marginTop: 4, fontWeight: 600 }}>{error}</p>}
     </div>
   )
 }
@@ -60,21 +61,33 @@ function RestaurantTab() {
     phone: storedConfig.phone || '01012345678',
     email: 'chef@email.com',
   })
+  const [errors, setErrors] = useState({})
   const { toast, showToast } = useToast()
+
+  const clearErr = (key) => setErrors(p => ({ ...p, [key]: '' }))
+
+  const validate = () => {
+    const e = {}
+    if (!form.name.trim()) e.name = 'اسم المطعم مطلوب'
+    if (!form.phone.trim()) e.phone = 'رقم الهاتف مطلوب'
+    else if (!/^\d{10,15}$/.test(form.phone.replace(/[\s\-()]/g, ''))) e.phone = 'رقم هاتف غير صحيح (10–15 رقم)'
+    if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = 'بريد إلكتروني غير صحيح'
+    return e
+  }
 
   return (
     <div className="animate-fade-in">
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
         <div className="glass" style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>
           <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 0 }}>معلومات المطعم</p>
-          <Field label="اسم المطعم" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
+          <Field label="اسم المطعم *" value={form.name} onChange={e => { setForm({ ...form, name: e.target.value }); clearErr('name') }} error={errors.name} />
           <Field label="الوصف" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} />
           <Field label="العنوان" value={form.address} onChange={e => setForm({ ...form, address: e.target.value })} />
         </div>
         <div className="glass" style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>
           <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 0 }}>بيانات التواصل</p>
-          <Field label="رقم الموبايل" value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} />
-          <Field label="البريد الإلكتروني" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} />
+          <Field label="رقم الموبايل *" value={form.phone} onChange={e => { setForm({ ...form, phone: e.target.value }); clearErr('phone') }} error={errors.phone} />
+          <Field label="البريد الإلكتروني" type="email" value={form.email} onChange={e => { setForm({ ...form, email: e.target.value }); clearErr('email') }} error={errors.email} />
           <div>
             <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: 'var(--text-2)', letterSpacing: '0.04em', marginBottom: 10 }}>ساعات العمل</label>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -101,7 +114,7 @@ function RestaurantTab() {
       </div>
       <button
         className="btn-primary"
-        onClick={() => { setConfig(form); showToast('تم الحفظ ✓') }}
+        onClick={() => { const e = validate(); setErrors(e); if (!Object.keys(e).length) { setConfig(form); showToast('تم الحفظ ✓') } }}
       >
         حفظ التغييرات
       </button>
@@ -130,7 +143,15 @@ function DeliveryTab() {
   const { toast, showToast } = useToast()
   const toggle = (k) => setOpts(p => ({ ...p, [k]: !p[k] }))
 
+  const [deliveryErrors, setDeliveryErrors] = useState({})
+
   const save = () => {
+    const e = {}
+    if (deliveryFee === '' || Number(deliveryFee) < 0) e.deliveryFee = 'يجب أن تكون القيمة 0 أو أكبر'
+    if (minOrder === '' || Number(minOrder) < 0) e.minOrder = 'يجب أن تكون القيمة 0 أو أكبر'
+    if (!deliveryTime || Number(deliveryTime) <= 0) e.deliveryTime = 'وقت التوصيل يجب أن يكون أكبر من صفر'
+    setDeliveryErrors(e)
+    if (Object.keys(e).length) return
     setConfig({
       allowDelivery: opts.delivery,
       allowPickup: opts.pickup,
@@ -165,19 +186,23 @@ function DeliveryTab() {
         <div className="glass" style={{ padding: 20 }}>
           <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 16 }}>إعدادات التوصيل</p>
           {[
-            { label: 'رسوم التوصيل', value: deliveryFee, setValue: setDeliveryFee, unit: 'ج' },
-            { label: 'الحد الأدنى للطلب', value: minOrder, setValue: setMinOrder, unit: 'ج' },
-            { label: 'وقت التوصيل المتوقع', value: deliveryTime, setValue: setDeliveryTime, unit: 'دقيقة' },
+            { label: 'رسوم التوصيل', value: deliveryFee, setValue: setDeliveryFee, unit: 'ج', errKey: 'deliveryFee' },
+            { label: 'الحد الأدنى للطلب', value: minOrder, setValue: setMinOrder, unit: 'ج', errKey: 'minOrder' },
+            { label: 'وقت التوصيل المتوقع', value: deliveryTime, setValue: setDeliveryTime, unit: 'دقيقة', errKey: 'deliveryTime' },
           ].map(f => (
-            <div key={f.label} style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
-              <label style={{ flex: 1, fontSize: 13, color: 'var(--text-2)' }}>{f.label}</label>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <input type="number" value={f.value} onChange={e => f.setValue(e.target.value)} style={{ ...inputStyle, width: 80, textAlign: 'center', padding: '8px' }}
-                  onFocus={e => { e.target.style.borderColor = 'var(--accent)'; e.target.style.boxShadow = '0 0 0 3px var(--accent-muted)' }}
-                  onBlur={e => { e.target.style.borderColor = 'var(--border)'; e.target.style.boxShadow = 'none' }}
-                />
-                <span style={{ fontSize: 12, color: 'var(--text-3)', minWidth: 36 }}>{f.unit}</span>
+            <div key={f.label} style={{ marginBottom: 14 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <label style={{ flex: 1, fontSize: 13, color: 'var(--text-2)' }}>{f.label}</label>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <input type="number" value={f.value} min="0" onChange={e => { f.setValue(e.target.value); setDeliveryErrors(p => ({ ...p, [f.errKey]: '' })) }}
+                    style={{ ...inputStyle, width: 80, textAlign: 'center', padding: '8px', borderColor: deliveryErrors[f.errKey] ? 'var(--red)' : undefined }}
+                    onFocus={e => { e.target.style.borderColor = 'var(--accent)'; e.target.style.boxShadow = '0 0 0 3px var(--accent-muted)' }}
+                    onBlur={e => { e.target.style.borderColor = deliveryErrors[f.errKey] ? 'var(--red)' : 'var(--border)'; e.target.style.boxShadow = 'none' }}
+                  />
+                  <span style={{ fontSize: 12, color: 'var(--text-3)', minWidth: 36 }}>{f.unit}</span>
+                </div>
               </div>
+              {deliveryErrors[f.errKey] && <p style={{ color: 'var(--red)', fontSize: 11, marginTop: 4, fontWeight: 600, textAlign: 'left' }}>{deliveryErrors[f.errKey]}</p>}
             </div>
           ))}
         </div>
@@ -213,7 +238,7 @@ function QRTab() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 20 }}>
           {['تحميل PNG عالي الدقة', 'تحميل PDF جاهز للطباعة A4', 'تحميل ملصق جاهز 10×10 سم'].map(label => (
             <button key={label} className="btn-ghost" onClick={() => handleDownload(label)} style={{ justifyContent: 'flex-start', gap: 10, width: '100%' }}>
-              <Download size={14} />
+              <Import size={14} />
               {label}
             </button>
           ))}
@@ -262,7 +287,7 @@ function SubscriptionTab() {
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
               <span className="num" style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>500 ج</span>
               <button style={{ fontSize: 12, color: 'var(--accent)', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}>
-                <Download size={12} /> تحميل
+                <Import size={12} /> تحميل
               </button>
             </div>
           </div>

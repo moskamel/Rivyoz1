@@ -1,13 +1,13 @@
 import { useNavigate } from 'react-router-dom'
-import { Star, Clock, ChevronLeft } from 'lucide-react'
+import { Star1, Clock, ArrowLeft2 } from 'iconsax-react'
 import { getConfig, getCustomerProfile } from '../lib/restaurantStore'
 import CustomerNav from './CustomerNav'
 import CustomerFooter from './CustomerFooter'
 
 const mockRestaurants = [
-  { name: 'مطعم الشيف أحمد', category: 'مشويات', rating: 4.9, time: 30, color: '#f97316', emoji: '🍖', slug: 'chef-ahmed' },
-  { name: 'بيتزا بلازا',      category: 'بيتزا',   rating: 4.7, time: 25, color: '#ef4444', emoji: '🍕', slug: 'pizza-plaza' },
-  { name: 'كافيه ميترو',      category: 'كافيه',   rating: 4.5, time: 20, color: '#8b5cf6', emoji: '☕', slug: 'metro-cafe' },
+  { name: 'مطعم الشيف أحمد', category: 'مشويات', rating: 4.9, time: 30, color: '#f97316', emoji: '🍖', slug: 'chef-ahmed', imageUrl: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=200&h=200&fit=crop&q=80' },
+  { name: 'بيتزا بلازا',      category: 'بيتزا',   rating: 4.7, time: 25, color: '#ef4444', emoji: '🍕', slug: 'pizza-plaza', imageUrl: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=200&h=200&fit=crop&q=80' },
+  { name: 'كافيه ميترو',      category: 'كافيه',   rating: 4.5, time: 20, color: '#8b5cf6', emoji: '☕', slug: 'metro-cafe', imageUrl: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=200&h=200&fit=crop&q=80' },
 ]
 
 const testimonials = [
@@ -175,7 +175,7 @@ export default function CustomerLanding() {
               </div>
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,0.25)', borderRadius: 12, padding: '10px 16px' }}>
                 <span style={{ fontSize: 13, fontWeight: 700, color: 'white' }}>{profile ? 'اعرض نقاطي' : 'ابدأ تجميع النقاط'}</span>
-                <ChevronLeft size={14} color="white" />
+                <ArrowLeft2 size={14} color="white" />
               </div>
             </div>
           </div>
@@ -189,7 +189,7 @@ export default function CustomerLanding() {
               onClick={() => navigate('/explore')}
               style={{ fontSize: 13, color, fontWeight: 700, background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', display: 'flex', alignItems: 'center', gap: 4, padding: 0 }}
             >
-              عرض الكل <ChevronLeft size={14} />
+              عرض الكل <ArrowLeft2 size={14} />
             </button>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -201,14 +201,16 @@ export default function CustomerLanding() {
                 onTouchStart={e => (e.currentTarget.style.transform = 'scale(0.98)')}
                 onTouchEnd={e => (e.currentTarget.style.transform = 'scale(1)')}
               >
-                <div style={{ width: 52, height: 52, borderRadius: 16, background: `linear-gradient(135deg,${r.color}22,${r.color}44)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28, flexShrink: 0, border: `2px solid ${r.color}30` }}>
-                  {r.emoji}
+                <div style={{ width: 52, height: 52, borderRadius: 16, background: `linear-gradient(135deg,${r.color}22,${r.color}44)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28, flexShrink: 0, border: `2px solid ${r.color}30`, overflow: 'hidden' }}>
+                  {r.imageUrl
+                    ? <img src={r.imageUrl} alt={r.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    : r.emoji}
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <p style={{ fontWeight: 800, fontSize: 14, color: 'var(--text)', marginBottom: 3, margin: '0 0 3px' }}>{r.name}</p>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-                      <Star size={11} color="#F59E0B" fill="#F59E0B" />
+                      <Star1 size={11} color="#F59E0B" fill="#F59E0B" />
                       <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)', fontFamily: 'Inter' }}>{r.rating}</span>
                     </div>
                     <span style={{ color: 'var(--text-3)', fontSize: 12 }}>·</span>
@@ -244,7 +246,7 @@ export default function CustomerLanding() {
                     <p style={{ fontWeight: 700, fontSize: 14, color: 'var(--text)', margin: '0 0 2px' }}>{t.name}</p>
                     <div style={{ display: 'flex', gap: 1 }}>
                       {Array.from({ length: t.stars }).map((_, j) => (
-                        <Star key={j} size={11} color="#F59E0B" fill="#F59E0B" />
+                        <Star1 key={j} size={11} color="#F59E0B" fill="#F59E0B" />
                       ))}
                     </div>
                   </div>
@@ -265,7 +267,7 @@ export default function CustomerLanding() {
             </p>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
               <button style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '13px', borderRadius: 14, background: '#1a1a1a', color: 'white', fontWeight: 700, fontSize: 13, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>
-                🍎 App Store
+                🍎 App Shop
               </button>
               <button style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '13px', borderRadius: 14, background: '#1a1a1a', color: 'white', fontWeight: 700, fontSize: 13, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>
                 🤖 Google Play

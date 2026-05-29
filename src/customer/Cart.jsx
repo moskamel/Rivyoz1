@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { CheckCircle, X, Menu } from 'lucide-react'
+import { TickCircle, CloseCircle, HambergerMenu } from 'iconsax-react'
 import { getConfig, getCoupons } from '../lib/restaurantStore'
 import { useCart } from './CartContext'
 import { useSidebar } from '../lib/ThemeContext'
@@ -78,7 +78,7 @@ export default function Cart() {
         onClick={() => setSidebarOpen(true)}
         style={{ width: 36, height: 36, borderRadius: 10, background: 'var(--surface-2)', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}
       >
-        <Menu size={18} color="var(--text-2)" />
+        <HambergerMenu size={18} color="var(--text-2)" />
       </button>
     </div>
   )
@@ -151,7 +151,7 @@ export default function Cart() {
                   onClick={() => setConfirmDelete(item.cartId)}
                   style={{ width: 30, height: 30, borderRadius: '50%', background: '#FEF2F2', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginRight: -2 }}
                 >
-                  <X size={13} color="#EF4444" />
+                  <CloseCircle size={13} color="#EF4444" />
                 </button>
               </div>
             </div>
@@ -213,7 +213,7 @@ export default function Cart() {
             {couponError && <p style={{ color: '#EF4444', fontSize: 12, marginTop: 6, fontWeight: 600 }}>{couponError}</p>}
             {couponApplied && (
               <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 6, background: '#F0FDF4', padding: '6px 10px', borderRadius: 8 }}>
-                <CheckCircle size={13} color="#22C55E" />
+                <TickCircle size={13} color="#22C55E" />
                 <p style={{ color: '#16A34A', fontSize: 12, fontWeight: 700 }}>تم تطبيق خصم {couponDiscount} ج</p>
               </div>
             )}

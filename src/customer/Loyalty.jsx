@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight } from 'iconsax-react'
 import {
   getCustomerProfile, getCustomerPoints, redeemPoints, getConfig,
 } from '../lib/restaurantStore'
