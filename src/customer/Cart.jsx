@@ -73,12 +73,6 @@ export default function Cart() {
       position: 'sticky', top: 0, zIndex: 10,
       boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
     }}>
-      <button
-        onClick={() => navigate(-1)}
-        style={{ width: 36, height: 36, borderRadius: 10, background: 'var(--surface-2)', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}
-      >
-        <ArrowRight size={18} color="var(--text-2)" />
-      </button>
       <h1 style={{ flex: 1, fontWeight: 800, fontSize: 18, color: 'var(--text)', margin: 0 }}>السلة</h1>
       <button
         onClick={() => setSidebarOpen(true)}
