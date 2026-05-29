@@ -1,8 +1,8 @@
-import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Home, Compass, ShoppingCart, User, Menu, X, Moon, Sun } from 'lucide-react'
 import { useCart } from './CartContext'
 import { useTheme } from '../lib/ThemeContext'
+import { useSidebar } from '../lib/ThemeContext'
 import { getConfig, getCustomerProfile, getCustomerPoints, clearCustomerProfile } from '../lib/restaurantStore'
 
 export default function CustomerNav() {
@@ -10,10 +10,9 @@ export default function CustomerNav() {
   const navigate = useNavigate()
   const { itemCount } = useCart()
   const { isDark, toggle } = useTheme()
+  const { sidebarOpen, setSidebarOpen } = useSidebar()
   const config = getConfig()
   const color = config.color
-
-  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   const customerProfile = getCustomerProfile()
   const pts = customerProfile ? getCustomerPoints(customerProfile.phone) : null

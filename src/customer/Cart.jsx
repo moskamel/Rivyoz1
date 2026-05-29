@@ -1,14 +1,16 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { CheckCircle, X } from 'lucide-react'
+import { CheckCircle, X, ArrowRight, Menu } from 'lucide-react'
 import { getConfig, getCoupons } from '../lib/restaurantStore'
 import { useCart } from './CartContext'
+import { useSidebar } from '../lib/ThemeContext'
 import CustomerNav from './CustomerNav'
 
 export default function Cart() {
   const navigate = useNavigate()
   const config = getConfig()
   const { cartItems, removeItem, updateQty, clearCart, total, itemCount } = useCart()
+  const { setSidebarOpen } = useSidebar()
 
   const [orderType, setOrderType] = useState('delivery')
   const [coupon, setCoupon] = useState('')
@@ -63,9 +65,33 @@ export default function Cart() {
     navigate('/checkout')
   }
 
+  const CartHeader = () => (
+    <div style={{
+      background: 'var(--surface)', borderBottom: '1px solid var(--border)',
+      padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 12,
+      position: 'sticky', top: 0, zIndex: 10,
+      boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+    }}>
+      <button
+        onClick={() => navigate(-1)}
+        style={{ width: 36, height: 36, borderRadius: 10, background: 'var(--surface-2)', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}
+      >
+        <ArrowRight size={18} color="var(--text-2)" />
+      </button>
+      <h1 style={{ flex: 1, fontWeight: 800, fontSize: 18, color: 'var(--text)', margin: 0 }}>السلة</h1>
+      <button
+        onClick={() => setSidebarOpen(true)}
+        style={{ width: 36, height: 36, borderRadius: 10, background: 'var(--surface-2)', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}
+      >
+        <Menu size={18} color="var(--text-2)" />
+      </button>
+    </div>
+  )
+
   if (itemCount === 0) {
     return (
       <div style={{ minHeight: '100vh', background: 'var(--bg)', fontFamily: 'Cairo, sans-serif', direction: 'rtl' }}>
+        <CartHeader />
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 48, textAlign: 'center', minHeight: 'calc(100vh - 64px)' }}>
           <div style={{ fontSize: 72, marginBottom: 20, lineHeight: 1 }}>🛒</div>
           <p style={{ fontWeight: 800, color: 'var(--text)', fontSize: 22, marginBottom: 8 }}>سلتك فارغة</p>
@@ -81,6 +107,7 @@ export default function Cart() {
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg)', fontFamily: 'Cairo, sans-serif', direction: 'rtl' }}>
+      <CartHeader />
 
       <div style={{ padding: '16px 14px 88px', display: 'flex', flexDirection: 'column', gap: 12 }}>
 
