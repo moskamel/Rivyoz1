@@ -289,7 +289,7 @@ export default function StoreFront() {
       {sidebarOpen && (
         <>
           <div onClick={() => setSidebarOpen(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 200 }} />
-          <div dir="rtl" style={{ position: 'fixed', top: 0, right: 0, bottom: 0, zIndex: 201, background: 'var(--surface)', width: 300, boxShadow: '-4px 0 24px rgba(0,0,0,0.15)', display: 'flex', flexDirection: 'column', fontFamily: 'Cairo, sans-serif' }}>
+          <div dir="rtl" style={{ position: 'fixed', top: 0, left: 0, bottom: 0, zIndex: 201, background: 'var(--surface)', width: 300, boxShadow: '4px 0 24px rgba(0,0,0,0.15)', display: 'flex', flexDirection: 'column', fontFamily: 'Cairo, sans-serif' }}>
             {/* Sidebar header */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px', borderBottom: '1px solid var(--border)' }}>
               <h2 style={{ fontWeight: 800, fontSize: 16, color: 'var(--text)' }}>{config.name}</h2>
