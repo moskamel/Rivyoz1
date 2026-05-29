@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { Star, Clock, MapPin, Shield, Gift, Zap, ChevronLeft, Smartphone } from 'lucide-react'
+import { Star, Clock, ChevronLeft } from 'lucide-react'
 import { getConfig, getCustomerProfile } from '../lib/restaurantStore'
 import CustomerNav from './CustomerNav'
 import CustomerFooter from './CustomerFooter'
@@ -25,48 +25,43 @@ export default function CustomerLanding() {
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg)', fontFamily: 'Cairo, sans-serif', direction: 'rtl', color: 'var(--text)' }}>
       <style>{`
-        @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-        @keyframes fadeUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
         .float-anim { animation: float 3.5s ease-in-out infinite; }
-        .fade-up { animation: fadeUp 0.6s ease forwards; }
       `}</style>
 
-      {/* ── Hero ── */}
+      {/* ── Hero — full bleed ── */}
       <div style={{
         background: `linear-gradient(160deg, ${color} 0%, ${color}cc 55%, var(--bg) 100%)`,
         padding: '52px 20px 56px', position: 'relative', overflow: 'hidden', textAlign: 'center',
+        width: '100%', boxSizing: 'border-box',
       }}>
-        {/* Background orbs */}
         <div style={{ position: 'absolute', top: -40, right: -40, width: 200, height: 200, borderRadius: '50%', background: 'rgba(255,255,255,0.08)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', bottom: -60, left: -30, width: 160, height: 160, borderRadius: '50%', background: 'rgba(255,255,255,0.06)', pointerEvents: 'none' }} />
 
-        {/* App badge */}
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(8px)', borderRadius: 20, padding: '5px 14px', marginBottom: 20, border: '1px solid rgba(255,255,255,0.3)' }}>
           <span style={{ fontSize: 14 }}>🍽️</span>
           <span style={{ fontSize: 12, fontWeight: 700, color: 'white' }}>منصة توصيل الطعام الأذكى</span>
         </div>
 
-        {/* Headline */}
         <div className="float-anim" style={{ fontSize: 72, marginBottom: 12, lineHeight: 1 }}>🛵</div>
-        <h1 style={{ fontSize: 32, fontWeight: 900, color: 'white', marginBottom: 12, lineHeight: 1.25, textShadow: '0 2px 12px rgba(0,0,0,0.15)' }}>
+        <h1 style={{ fontSize: 30, fontWeight: 900, color: 'white', marginBottom: 12, lineHeight: 1.3, textShadow: '0 2px 12px rgba(0,0,0,0.15)' }}>
           طعامك المفضل<br />على بابك في دقائق
         </h1>
-        <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.88)', marginBottom: 32, lineHeight: 1.7, maxWidth: 320, margin: '0 auto 32px' }}>
+        <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.88)', marginBottom: 32, lineHeight: 1.8 }}>
           اكتشف أفضل المطاعم، اطلب بسهولة، وتتبع طلبك خطوة بخطوة — مع مكافآت تزداد مع كل وجبة 🎁
         </p>
 
-        {/* CTAs */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12, maxWidth: 320, margin: '0 auto' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <button
             onClick={() => navigate('/explore')}
-            style={{ width: '100%', padding: '16px', borderRadius: 16, background: 'white', color, fontWeight: 800, fontSize: 16, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif', boxShadow: '0 8px 28px rgba(0,0,0,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
+            style={{ width: '100%', padding: '16px', borderRadius: 16, background: 'white', color, fontWeight: 800, fontSize: 16, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif', boxShadow: '0 8px 28px rgba(0,0,0,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, boxSizing: 'border-box' }}
           >
             🍴 اكتشف المطاعم
           </button>
           {!profile && (
             <button
               onClick={() => navigate('/customer-login')}
-              style={{ width: '100%', padding: '14px', borderRadius: 16, background: 'rgba(255,255,255,0.2)', color: 'white', fontWeight: 700, fontSize: 15, border: '2px solid rgba(255,255,255,0.5)', cursor: 'pointer', fontFamily: 'Cairo, sans-serif', backdropFilter: 'blur(8px)' }}
+              style={{ width: '100%', padding: '14px', borderRadius: 16, background: 'rgba(255,255,255,0.2)', color: 'white', fontWeight: 700, fontSize: 15, border: '2px solid rgba(255,255,255,0.5)', cursor: 'pointer', fontFamily: 'Cairo, sans-serif', backdropFilter: 'blur(8px)', boxSizing: 'border-box' }}
             >
               سجّل مجاناً
             </button>
@@ -74,13 +69,13 @@ export default function CustomerLanding() {
         </div>
       </div>
 
-      {/* ── Stats bar ── */}
-      <div style={{ background: 'var(--surface)', borderBottom: '1px solid var(--border)', padding: '20px 16px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, maxWidth: 480, margin: '0 auto' }}>
+      {/* ── Stats bar — full bleed ── */}
+      <div style={{ background: 'var(--surface)', borderBottom: '1px solid var(--border)', padding: '20px 20px', width: '100%', boxSizing: 'border-box' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8 }}>
           {[
-            { value: '5+', label: 'مطاعم متاحة', icon: '🏪' },
+            { value: '5+',  label: 'مطاعم متاحة',  icon: '🏪' },
             { value: '30د', label: 'متوسط التوصيل', icon: '⚡' },
-            { value: '98%', label: 'رضا العملاء', icon: '⭐' },
+            { value: '98%', label: 'رضا العملاء',   icon: '⭐' },
           ].map((s, i) => (
             <div key={i} style={{ textAlign: 'center' }}>
               <div style={{ fontSize: 22, marginBottom: 4 }}>{s.icon}</div>
@@ -91,13 +86,14 @@ export default function CustomerLanding() {
         </div>
       </div>
 
-      <div style={{ padding: '0 16px 88px', maxWidth: 480, margin: '0 auto' }}>
+      {/* ── All sections — full width with 20px side padding ── */}
+      <div style={{ padding: '0 20px 88px', width: '100%', boxSizing: 'border-box' }}>
 
-        {/* ── How it works ── */}
-        <div style={{ paddingTop: 32 }}>
-          <div style={{ textAlign: 'center', marginBottom: 24 }}>
+        {/* How it works */}
+        <div style={{ paddingTop: 36 }}>
+          <div style={{ textAlign: 'center', marginBottom: 20 }}>
             <p style={{ fontSize: 11, fontWeight: 700, color, letterSpacing: '0.08em', marginBottom: 6 }}>كيف يعمل؟</p>
-            <h2 style={{ fontSize: 22, fontWeight: 900, color: 'var(--text)' }}>ثلاث خطوات بسيطة</h2>
+            <h2 style={{ fontSize: 22, fontWeight: 900, color: 'var(--text)', margin: 0 }}>ثلاث خطوات بسيطة</h2>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             {[
@@ -109,75 +105,75 @@ export default function CustomerLanding() {
                 <div style={{ width: 48, height: 48, borderRadius: 16, background: `${color}18`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 26, flexShrink: 0 }}>
                   {s.icon}
                 </div>
-                <div style={{ flex: 1 }}>
+                <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
                     <span style={{ width: 22, height: 22, borderRadius: '50%', background: color, color: 'white', fontSize: 11, fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontFamily: 'Cairo, sans-serif' }}>{s.step}</span>
-                    <p style={{ fontWeight: 800, fontSize: 15, color: 'var(--text)' }}>{s.title}</p>
+                    <p style={{ fontWeight: 800, fontSize: 15, color: 'var(--text)', margin: 0 }}>{s.title}</p>
                   </div>
-                  <p style={{ fontSize: 13, color: 'var(--text-2)', lineHeight: 1.6 }}>{s.desc}</p>
+                  <p style={{ fontSize: 13, color: 'var(--text-2)', lineHeight: 1.65, margin: 0 }}>{s.desc}</p>
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* ── Key features ── */}
+        {/* Features grid */}
         <div style={{ paddingTop: 36 }}>
-          <div style={{ textAlign: 'center', marginBottom: 24 }}>
+          <div style={{ textAlign: 'center', marginBottom: 20 }}>
             <p style={{ fontSize: 11, fontWeight: 700, color, letterSpacing: '0.08em', marginBottom: 6 }}>لماذا ريفيو؟</p>
-            <h2 style={{ fontSize: 22, fontWeight: 900, color: 'var(--text)' }}>تجربة طلب لا مثيل لها</h2>
+            <h2 style={{ fontSize: 22, fontWeight: 900, color: 'var(--text)', margin: 0 }}>تجربة طلب لا مثيل لها</h2>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
             {[
-              { icon: '📍', title: 'تتبع مباشر', desc: 'شاهد طلبك وهو في طريقه إليك لحظة بلحظة', color: '#3B82F6' },
-              { icon: '🎁', title: 'نقاط مكافآت', desc: 'اكسب نقاط مع كل طلب واستبدلها بوجبات مجانية', color: '#F59E0B' },
-              { icon: '⚡', title: 'توصيل سريع', desc: 'شبكة توصيل مدربة تضمن وصول طلبك ساخناً', color: '#22C55E' },
-              { icon: '💳', title: 'دفع آمن', desc: 'ادفع كاش أو إلكتروني بكل أمان وسهولة', color: '#8B5CF6' },
-              { icon: '🏆', title: 'أفضل المطاعم', desc: 'مطاعم مختارة بعناية بمعايير الجودة والنظافة', color: '#EF4444' },
-              { icon: '🔔', title: 'إشعارات فورية', desc: 'ابق على اطلاع بكل مرحلة من مراحل طلبك', color: '#F97316' },
+              { icon: '📍', title: 'تتبع مباشر',    desc: 'شاهد طلبك وهو في طريقه إليك لحظة بلحظة',            accent: '#3B82F6' },
+              { icon: '🎁', title: 'نقاط مكافآت',   desc: 'اكسب نقاط مع كل طلب واستبدلها بوجبات مجانية',        accent: '#F59E0B' },
+              { icon: '⚡', title: 'توصيل سريع',    desc: 'شبكة توصيل مدربة تضمن وصول طلبك ساخناً',             accent: '#22C55E' },
+              { icon: '💳', title: 'دفع آمن',        desc: 'ادفع كاش أو إلكتروني بكل أمان وسهولة',               accent: '#8B5CF6' },
+              { icon: '🏆', title: 'أفضل المطاعم',  desc: 'مطاعم مختارة بعناية بمعايير الجودة والنظافة',          accent: '#EF4444' },
+              { icon: '🔔', title: 'إشعارات فورية', desc: 'ابق على اطلاع بكل مرحلة من مراحل طلبك',               accent: '#F97316' },
             ].map((f, i) => (
               <div key={i} style={{ background: 'var(--surface)', borderRadius: 18, padding: '18px 14px', border: '1px solid var(--border)', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-                <div style={{ width: 44, height: 44, borderRadius: 14, background: f.color + '18', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, marginBottom: 10 }}>
+                <div style={{ width: 44, height: 44, borderRadius: 14, background: f.accent + '18', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, marginBottom: 10 }}>
                   {f.icon}
                 </div>
                 <p style={{ fontWeight: 800, fontSize: 13, color: 'var(--text)', marginBottom: 4 }}>{f.title}</p>
-                <p style={{ fontSize: 11, color: 'var(--text-2)', lineHeight: 1.6 }}>{f.desc}</p>
+                <p style={{ fontSize: 11, color: 'var(--text-2)', lineHeight: 1.65, margin: 0 }}>{f.desc}</p>
               </div>
             ))}
           </div>
         </div>
 
-        {/* ── Loyalty highlight ── */}
-        <div style={{ marginTop: 32 }}>
+        {/* Loyalty highlight — full width */}
+        <div style={{ marginTop: 36 }}>
           <div
             onClick={() => navigate(profile ? '/loyalty' : '/customer-login')}
-            style={{ background: 'linear-gradient(135deg, #F59E0B, #F97316)', borderRadius: 24, padding: '28px 20px', cursor: 'pointer', position: 'relative', overflow: 'hidden', boxShadow: '0 8px 32px rgba(249,115,22,0.3)' }}
+            style={{ background: 'linear-gradient(135deg, #F59E0B, #F97316)', borderRadius: 24, padding: '28px 20px', cursor: 'pointer', position: 'relative', overflow: 'hidden', boxShadow: '0 8px 32px rgba(249,115,22,0.3)', width: '100%', boxSizing: 'border-box' }}
           >
-            <div style={{ position: 'absolute', top: -20, left: -20, width: 120, height: 120, borderRadius: '50%', background: 'rgba(255,255,255,0.1)', pointerEvents: 'none' }} />
-            <div style={{ position: 'absolute', bottom: -30, right: -10, width: 140, height: 140, borderRadius: '50%', background: 'rgba(255,255,255,0.07)', pointerEvents: 'none' }} />
+            <div style={{ position: 'absolute', top: -20, left: -20, width: 130, height: 130, borderRadius: '50%', background: 'rgba(255,255,255,0.1)', pointerEvents: 'none' }} />
+            <div style={{ position: 'absolute', bottom: -30, right: -10, width: 150, height: 150, borderRadius: '50%', background: 'rgba(255,255,255,0.07)', pointerEvents: 'none' }} />
             <div style={{ position: 'relative', zIndex: 1 }}>
               <span style={{ display: 'inline-block', background: 'rgba(255,255,255,0.25)', borderRadius: 20, padding: '4px 14px', fontSize: 11, fontWeight: 700, color: 'white', marginBottom: 14 }}>
                 🌟 برنامج المكافآت
               </span>
-              <h3 style={{ fontSize: 22, fontWeight: 900, color: 'white', marginBottom: 8, lineHeight: 1.3 }}>
+              <h3 style={{ fontSize: 22, fontWeight: 900, color: 'white', marginBottom: 8, lineHeight: 1.35, marginTop: 0 }}>
                 كل وجبة تقرّبك<br />من مكافأة مجانية
               </h3>
-              <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.88)', lineHeight: 1.7, marginBottom: 20 }}>
+              <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.88)', lineHeight: 1.75, marginBottom: 20, marginTop: 0 }}>
                 اجمع نقاط مع كل طلب واستبدلها بخصومات، وجبات مجانية، وتوصيل بلا رسوم
               </p>
-              <div style={{ display: 'flex', gap: 16, marginBottom: 20 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10, marginBottom: 20 }}>
                 {[
-                  { points: '500', reward: 'خصم 10%' },
-                  { points: '1500', reward: 'وجبة مجانية' },
-                  { points: '2000', reward: 'توصيل مجاني' },
+                  { points: '500',  reward: 'خصم 10%'      },
+                  { points: '1500', reward: 'وجبة مجانية'   },
+                  { points: '2000', reward: 'توصيل مجاني'   },
                 ].map((r, i) => (
-                  <div key={i} style={{ flex: 1, background: 'rgba(255,255,255,0.2)', borderRadius: 12, padding: '10px 6px', textAlign: 'center' }}>
-                    <p style={{ fontSize: 16, fontWeight: 900, color: 'white', fontFamily: 'Inter, sans-serif' }}>{r.points}</p>
-                    <p style={{ fontSize: 9, color: 'rgba(255,255,255,0.85)', fontWeight: 700, marginTop: 2 }}>نقطة → {r.reward}</p>
+                  <div key={i} style={{ background: 'rgba(255,255,255,0.2)', borderRadius: 12, padding: '10px 6px', textAlign: 'center' }}>
+                    <p style={{ fontSize: 16, fontWeight: 900, color: 'white', fontFamily: 'Inter, sans-serif', margin: 0 }}>{r.points}</p>
+                    <p style={{ fontSize: 9, color: 'rgba(255,255,255,0.85)', fontWeight: 700, marginTop: 4, margin: '4px 0 0' }}>نقطة → {r.reward}</p>
                   </div>
                 ))}
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,0.25)', borderRadius: 12, padding: '10px 16px', width: 'fit-content' }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,0.25)', borderRadius: 12, padding: '10px 16px' }}>
                 <span style={{ fontSize: 13, fontWeight: 700, color: 'white' }}>{profile ? 'اعرض نقاطي' : 'ابدأ تجميع النقاط'}</span>
                 <ChevronLeft size={14} color="white" />
               </div>
@@ -185,13 +181,13 @@ export default function CustomerLanding() {
           </div>
         </div>
 
-        {/* ── Featured restaurants ── */}
+        {/* Featured restaurants — full width */}
         <div style={{ paddingTop: 36 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-            <h2 style={{ fontSize: 18, fontWeight: 900, color: 'var(--text)' }}>⭐ مميزون</h2>
+            <h2 style={{ fontSize: 18, fontWeight: 900, color: 'var(--text)', margin: 0 }}>⭐ مميزون</h2>
             <button
               onClick={() => navigate('/explore')}
-              style={{ fontSize: 13, color, fontWeight: 700, background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif', display: 'flex', alignItems: 'center', gap: 4 }}
+              style={{ fontSize: 13, color, fontWeight: 700, background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif', display: 'flex', alignItems: 'center', gap: 4, padding: 0 }}
             >
               عرض الكل <ChevronLeft size={14} />
             </button>
@@ -205,17 +201,17 @@ export default function CustomerLanding() {
                 onTouchStart={e => (e.currentTarget.style.transform = 'scale(0.98)')}
                 onTouchEnd={e => (e.currentTarget.style.transform = 'scale(1)')}
               >
-                <div style={{ width: 52, height: 52, borderRadius: 16, background: `linear-gradient(135deg, ${r.color}22, ${r.color}44)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28, flexShrink: 0, border: `2px solid ${r.color}30` }}>
+                <div style={{ width: 52, height: 52, borderRadius: 16, background: `linear-gradient(135deg,${r.color}22,${r.color}44)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28, flexShrink: 0, border: `2px solid ${r.color}30` }}>
                   {r.emoji}
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <p style={{ fontWeight: 800, fontSize: 14, color: 'var(--text)', marginBottom: 3 }}>{r.name}</p>
+                  <p style={{ fontWeight: 800, fontSize: 14, color: 'var(--text)', marginBottom: 3, margin: '0 0 3px' }}>{r.name}</p>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
                       <Star size={11} color="#F59E0B" fill="#F59E0B" />
                       <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)', fontFamily: 'Inter' }}>{r.rating}</span>
                     </div>
-                    <span style={{ color: 'var(--border-strong)', fontSize: 12 }}>·</span>
+                    <span style={{ color: 'var(--text-3)', fontSize: 12 }}>·</span>
                     <Clock size={11} color="var(--text-3)" />
                     <span style={{ fontSize: 12, color: 'var(--text-2)' }}>{r.time} دقيقة</span>
                   </div>
@@ -231,11 +227,11 @@ export default function CustomerLanding() {
           </div>
         </div>
 
-        {/* ── Testimonials ── */}
+        {/* Testimonials — full width */}
         <div style={{ paddingTop: 36 }}>
-          <div style={{ textAlign: 'center', marginBottom: 24 }}>
+          <div style={{ textAlign: 'center', marginBottom: 20 }}>
             <p style={{ fontSize: 11, fontWeight: 700, color, letterSpacing: '0.08em', marginBottom: 6 }}>آراء عملائنا</p>
-            <h2 style={{ fontSize: 22, fontWeight: 900, color: 'var(--text)' }}>ماذا يقولون عنّا</h2>
+            <h2 style={{ fontSize: 22, fontWeight: 900, color: 'var(--text)', margin: 0 }}>ماذا يقولون عنّا</h2>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             {testimonials.map((t, i) => (
@@ -245,7 +241,7 @@ export default function CustomerLanding() {
                     {t.avatar}
                   </div>
                   <div>
-                    <p style={{ fontWeight: 700, fontSize: 14, color: 'var(--text)' }}>{t.name}</p>
+                    <p style={{ fontWeight: 700, fontSize: 14, color: 'var(--text)', margin: '0 0 2px' }}>{t.name}</p>
                     <div style={{ display: 'flex', gap: 1 }}>
                       {Array.from({ length: t.stars }).map((_, j) => (
                         <Star key={j} size={11} color="#F59E0B" fill="#F59E0B" />
@@ -253,26 +249,26 @@ export default function CustomerLanding() {
                     </div>
                   </div>
                 </div>
-                <p style={{ fontSize: 13, color: 'var(--text-2)', lineHeight: 1.7 }}>"{t.text}"</p>
+                <p style={{ fontSize: 13, color: 'var(--text-2)', lineHeight: 1.75, margin: 0 }}>"{t.text}"</p>
               </div>
             ))}
           </div>
         </div>
 
-        {/* ── App download ── */}
-        <div style={{ marginTop: 32 }}>
+        {/* App download — full width */}
+        <div style={{ marginTop: 36 }}>
           <div style={{ background: 'var(--surface)', borderRadius: 24, padding: '28px 20px', textAlign: 'center', border: '1px solid var(--border)', boxShadow: '0 4px 16px rgba(0,0,0,0.06)' }}>
             <div style={{ fontSize: 52, marginBottom: 12 }}>📱</div>
-            <h3 style={{ fontSize: 20, fontWeight: 900, color: 'var(--text)', marginBottom: 8 }}>حمّل التطبيق الآن</h3>
-            <p style={{ fontSize: 13, color: 'var(--text-2)', lineHeight: 1.7, marginBottom: 24 }}>
+            <h3 style={{ fontSize: 20, fontWeight: 900, color: 'var(--text)', marginBottom: 8, marginTop: 0 }}>حمّل التطبيق الآن</h3>
+            <p style={{ fontSize: 13, color: 'var(--text-2)', lineHeight: 1.75, marginBottom: 24, marginTop: 0 }}>
               تجربة أسرع وأسهل — إشعارات فورية، تتبع مباشر، ووصول لعروض حصرية
             </p>
-            <div style={{ display: 'flex', gap: 10 }}>
-              <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '13px', borderRadius: 14, background: '#1a1a1a', color: 'white', fontWeight: 700, fontSize: 13, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>
-                <span>🍎</span> App Store
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+              <button style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '13px', borderRadius: 14, background: '#1a1a1a', color: 'white', fontWeight: 700, fontSize: 13, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>
+                🍎 App Store
               </button>
-              <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '13px', borderRadius: 14, background: '#1a1a1a', color: 'white', fontWeight: 700, fontSize: 13, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>
-                <span>🤖</span> Google Play
+              <button style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '13px', borderRadius: 14, background: '#1a1a1a', color: 'white', fontWeight: 700, fontSize: 13, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>
+                🤖 Google Play
               </button>
             </div>
           </div>
