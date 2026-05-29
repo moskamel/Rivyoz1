@@ -80,6 +80,7 @@ export default function App() {
       <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/kds" element={<KDS />} />
+      <Route path="/rivyo" element={<Landing />} />
 
       {/* Protected admin routes */}
       <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />

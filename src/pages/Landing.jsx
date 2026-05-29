@@ -1,115 +1,1079 @@
-import { createContext, useContext, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Flash, Box, Cup, Shop, Chart, People, Archive, Star1, Check, ArrowLeft, TrendUp, Wifi, Notification, Printer, Mobile, MessageCircle, ArrowDown2, ArrowUp, Money, Sun, Moon } from 'iconsax-react'
+import {
+  Global, Scan, Notification, Category, Star1, Shop,
+  ArrowLeft2, ArrowRight2, TickCircle, HambergerMenu, CloseCircle,
+  Call, Sms, Instagram, Facebook
+} from 'iconsax-react'
 
-/* ─── Theme definitions ─────────────────────────────────── */
-const DARK = {
-  mode:          'dark',
-  bg:            '#080808',
-  surface:       '#111111',
-  surface2:      '#1A1A1A',
-  surface3:      '#242424',
-  border:        'rgba(255,255,255,0.07)',
-  borderStr:     'rgba(255,255,255,0.13)',
-  borderAcc:     'rgba(249,115,22,0.30)',
-  text:          '#F0F0F0',
-  text2:         '#8A8A8A',
-  accent:        '#F97316',
-  accentHov:     '#EA6C10',
-  accentMut:     'rgba(249,115,22,0.10)',
-  accentGlow:    '0 0 32px rgba(249,115,22,0.22)',
-  green:         '#22C55E',
-  greenMut:      'rgba(34,197,94,0.10)',
-  greenBorder:   'rgba(34,197,94,0.25)',
-  yellow:        '#FBBF24',
-  navBgTop:      'rgba(8,8,8,0.60)',
-  navBgScrolled: 'rgba(8,8,8,0.95)',
-  painBg:        'linear-gradient(180deg, #080808 0%, #100500 50%, #080808 100%)',
-  ctaBg:         'linear-gradient(135deg, #0f0f0f 0%, #1a0a00 50%, #0f0f0f 100%)',
-  ctaTextColor:  '#F0F0F0',
-  trustBg:       '#111111',
-  orb1:          'rgba(249,115,22,0.13)',
-  orb2:          'rgba(249,115,22,0.07)',
-  roiBg:         '#111111',
-  roiInner:      '#1A1A1A',
-  stepBg:        '#080808',
-  footerBg:      '#111111',
+/* ─── Design Tokens ───────────────────────────────────────── */
+const C = {
+  orange:      '#E8572A',
+  orangeHov:   '#D04B22',
+  orangeLight: '#FFF1EC',
+  orangeMid:   'rgba(232,87,42,0.12)',
+  orangeBorder:'rgba(232,87,42,0.25)',
+  navy:        '#1A1A2E',
+  navyLight:   '#2A2A45',
+  white:       '#FFFFFF',
+  gray50:      '#F8F9FA',
+  gray100:     '#F1F3F5',
+  gray200:     '#E9ECEF',
+  gray400:     '#ADB5BD',
+  gray600:     '#6C757D',
+  gray700:     '#495057',
+  gray900:     '#1A1A2E',
+  green:       '#198754',
+  greenLight:  '#D1E7DD',
+  red:         '#DC3545',
+  redLight:    '#F8D7DA',
 }
-
-const LIGHT = {
-  mode:          'light',
-  bg:            '#F8F9FA',
-  surface:       '#FFFFFF',
-  surface2:      '#F1F3F5',
-  surface3:      '#E5E7EB',
-  border:        'rgba(0,0,0,0.08)',
-  borderStr:     'rgba(0,0,0,0.15)',
-  borderAcc:     'rgba(249,115,22,0.28)',
-  text:          '#111827',
-  text2:         '#6B7280',
-  accent:        '#F97316',
-  accentHov:     '#EA6C10',
-  accentMut:     'rgba(249,115,22,0.08)',
-  accentGlow:    '0 4px 24px rgba(249,115,22,0.18)',
-  green:         '#16A34A',
-  greenMut:      'rgba(22,163,74,0.08)',
-  greenBorder:   'rgba(22,163,74,0.25)',
-  yellow:        '#D97706',
-  navBgTop:      'rgba(248,249,250,0.75)',
-  navBgScrolled: 'rgba(255,255,255,0.97)',
-  painBg:        'linear-gradient(180deg, #F8F9FA 0%, #FFF7ED 50%, #F8F9FA 100%)',
-  ctaBg:         'linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 50%, #FFF7ED 100%)',
-  ctaTextColor:  '#111827',
-  trustBg:       '#FFFFFF',
-  orb1:          'rgba(249,115,22,0.10)',
-  orb2:          'rgba(249,115,22,0.05)',
-  roiBg:         '#F8F9FA',
-  roiInner:      '#FFFFFF',
-  stepBg:        '#FFFFFF',
-  footerBg:      '#FFFFFF',
-}
-
-/* ─── Context ───────────────────────────────────────────── */
-const ThemeCtx = createContext(DARK)
-const useTheme = () => useContext(ThemeCtx)
-
-const scrollTo = (id) => {
+const F = "'Tajawal', 'Zain', sans-serif"
+const scrollTo = id => {
   const el = document.getElementById(id)
   if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 
-function StarRow({ count = 5 }) {
-  const T = useTheme()
+/* ─── Global Styles ───────────────────────────────────────── */
+const GlobalStyles = () => (
+  <style>{`
+    @keyframes fadeUp   { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes fadeIn   { from{opacity:0} to{opacity:1} }
+    @keyframes pulse    { 0%,100%{opacity:1} 50%{opacity:.5} }
+    @keyframes marquee  { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+    @keyframes float    { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+    .fazz-fadeup   { animation: fadeUp 0.55s ease both }
+    .fazz-fadein   { animation: fadeIn 0.4s ease both }
+    .fazz-float    { animation: float 4s ease-in-out infinite }
+    .fazz-btn-primary {
+      display:inline-flex; align-items:center; gap:8px;
+      background:${C.orange}; color:#fff; border:none;
+      font-family:${F}; font-weight:800; font-size:16px;
+      border-radius:12px; padding:14px 28px; cursor:pointer;
+      transition:background .18s,transform .15s,box-shadow .18s;
+      text-decoration:none;
+    }
+    .fazz-btn-primary:hover { background:${C.orangeHov}; transform:translateY(-2px); box-shadow:0 8px 24px rgba(232,87,42,.35); }
+    .fazz-btn-outline {
+      display:inline-flex; align-items:center; gap:8px;
+      background:transparent; color:${C.navy}; border:2px solid ${C.gray200};
+      font-family:${F}; font-weight:700; font-size:15px;
+      border-radius:12px; padding:13px 24px; cursor:pointer;
+      transition:border-color .18s,color .18s,transform .15s;
+      text-decoration:none;
+    }
+    .fazz-btn-outline:hover { border-color:${C.orange}; color:${C.orange}; transform:translateY(-2px); }
+    .fazz-card {
+      background:#fff; border:1.5px solid ${C.gray200};
+      border-radius:16px; transition:border-color .2s, transform .2s, box-shadow .2s;
+    }
+    .fazz-card:hover { border-color:${C.orangeBorder}; transform:translateY(-4px); box-shadow:0 12px 32px rgba(232,87,42,.10); }
+    .fazz-section-badge {
+      display:inline-flex; align-items:center; gap:6px;
+      background:${C.orangeLight}; color:${C.orange};
+      border:1.5px solid ${C.orangeBorder};
+      border-radius:999px; padding:4px 14px;
+      font-family:${F}; font-size:13px; font-weight:700;
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    html { scroll-behavior: smooth; }
+    body { direction:rtl; }
+  `}</style>
+)
+
+/* ─── Navbar ──────────────────────────────────────────────── */
+function Navbar() {
+  const navigate = useNavigate()
+  const [scrolled, setScrolled]   = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
+
+  useEffect(() => {
+    const fn = () => setScrolled(window.scrollY > 24)
+    window.addEventListener('scroll', fn)
+    return () => window.removeEventListener('scroll', fn)
+  }, [])
+
+  const links = [
+    { label: 'المميزات', id: 'features' },
+    { label: 'الأسعار',  id: 'pricing'  },
+    { label: 'كيف يعمل', id: 'how'     },
+  ]
+
   return (
-    <span style={{ display: 'inline-flex', gap: 2 }}>
-      {Array.from({ length: count }).map((_, i) => (
-        <Star1 key={i} size={14} fill={T.yellow} color={T.yellow} />
-      ))}
-    </span>
+    <>
+      <nav dir="rtl" style={{
+        position: 'fixed', top: 0, insetInline: 0, zIndex: 100,
+        height: 68,
+        background: scrolled ? 'rgba(255,255,255,0.97)' : 'rgba(255,255,255,0.85)',
+        backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)',
+        borderBottom: `1.5px solid ${scrolled ? C.gray200 : 'transparent'}`,
+        transition: 'background .3s, border-color .3s, box-shadow .3s',
+        boxShadow: scrolled ? '0 2px 16px rgba(26,26,46,.07)' : 'none',
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: '0 clamp(16px,5vw,72px)',
+      }}>
+        {/* Logo */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer' }} onClick={() => scrollTo('hero')}>
+          <div style={{ width: 40, height: 40, borderRadius: 12, background: C.orange, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ fontFamily: F, fontWeight: 900, fontSize: 20, color: '#fff', letterSpacing: '-1px' }}>F</span>
+          </div>
+          <div>
+            <span style={{ fontFamily: F, fontWeight: 900, fontSize: 22, color: C.navy, letterSpacing: '-0.5px' }}>Fazz</span>
+            <span style={{ fontFamily: F, fontSize: 11, color: C.gray600, display: 'block', lineHeight: 1, marginTop: 1 }}>فَذّ</span>
+          </div>
+        </div>
+
+        {/* Desktop nav */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 32 }} className="fazz-desktop-nav">
+          {links.map(l => (
+            <button key={l.id} onClick={() => scrollTo(l.id)} style={{
+              background: 'none', border: 'none', cursor: 'pointer',
+              fontFamily: F, fontWeight: 600, fontSize: 15, color: C.gray700,
+              transition: 'color .15s', padding: '4px 0',
+            }}
+            onMouseEnter={e => e.target.style.color = C.orange}
+            onMouseLeave={e => e.target.style.color = C.gray700}
+            >{l.label}</button>
+          ))}
+          <button onClick={() => navigate('/login')} style={{
+            background: 'none', border: 'none', cursor: 'pointer',
+            fontFamily: F, fontWeight: 600, fontSize: 15, color: C.gray700,
+            transition: 'color .15s', padding: '4px 0',
+          }}
+          onMouseEnter={e => e.target.style.color = C.orange}
+          onMouseLeave={e => e.target.style.color = C.gray700}
+          >تسجيل الدخول</button>
+          <button className="fazz-btn-primary" onClick={() => navigate('/login')}
+            style={{ fontSize: 14, padding: '10px 22px', borderRadius: 10 }}>
+            ابدأ مجاناً
+          </button>
+        </div>
+
+        {/* Mobile hamburger */}
+        <button onClick={() => setMobileOpen(o => !o)} style={{
+          display: 'none', background: 'none', border: 'none', cursor: 'pointer',
+          padding: 4,
+        }} className="fazz-mobile-menu-btn">
+          {mobileOpen
+            ? <CloseCircle size={28} color={C.navy} />
+            : <HambergerMenu size={28} color={C.navy} />}
+        </button>
+      </nav>
+
+      {/* Mobile drawer */}
+      {mobileOpen && (
+        <div dir="rtl" style={{
+          position: 'fixed', top: 68, insetInline: 0, zIndex: 99,
+          background: '#fff', borderBottom: `1.5px solid ${C.gray200}`,
+          padding: '20px 24px 28px', display: 'flex', flexDirection: 'column', gap: 4,
+          boxShadow: '0 8px 32px rgba(26,26,46,.12)',
+        }}>
+          {links.map(l => (
+            <button key={l.id} onClick={() => { scrollTo(l.id); setMobileOpen(false) }} style={{
+              background: 'none', border: 'none', cursor: 'pointer',
+              fontFamily: F, fontWeight: 700, fontSize: 17, color: C.navy,
+              textAlign: 'right', padding: '12px 0',
+              borderBottom: `1px solid ${C.gray100}`,
+            }}>{l.label}</button>
+          ))}
+          <button onClick={() => { navigate('/login'); setMobileOpen(false) }} style={{
+            background: 'none', border: 'none', cursor: 'pointer',
+            fontFamily: F, fontWeight: 700, fontSize: 17, color: C.navy,
+            textAlign: 'right', padding: '12px 0',
+            borderBottom: `1px solid ${C.gray100}`,
+          }}>تسجيل الدخول</button>
+          <button className="fazz-btn-primary" onClick={() => { navigate('/login'); setMobileOpen(false) }}
+            style={{ marginTop: 12, width: '100%', justifyContent: 'center', fontSize: 16, padding: '14px' }}>
+            ابدأ مجاناً
+          </button>
+        </div>
+      )}
+
+      <style>{`
+        @media (max-width:768px) {
+          .fazz-desktop-nav { display:none !important; }
+          .fazz-mobile-menu-btn { display:flex !important; }
+        }
+      `}</style>
+    </>
   )
 }
 
-/* ─── Floating WhatsApp ─────────────────────────────────── */
+/* ─── Dashboard Mockup ────────────────────────────────────── */
+function DashboardMockup() {
+  const orders = [
+    { id: '#٢١٤', item: 'كفتة مشوية × ٢',  status: 'جديد',      dot: C.orange },
+    { id: '#٢١٣', item: 'شاورما دجاج',     status: 'تحضير',     dot: '#3B82F6' },
+    { id: '#٢١٢', item: 'بيتزا مارغريتا', status: 'جاهز ✓',    dot: C.green },
+  ]
+  return (
+    <div className="fazz-float" style={{
+      background: C.navy,
+      borderRadius: 20,
+      padding: 20,
+      width: '100%',
+      maxWidth: 380,
+      boxShadow: '0 24px 64px rgba(26,26,46,.45)',
+      position: 'relative',
+    }}>
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18 }}>
+        <div>
+          <p style={{ fontFamily: F, fontSize: 11, color: 'rgba(255,255,255,.5)', fontWeight: 500 }}>لوحة التحكم</p>
+          <p style={{ fontFamily: F, fontSize: 16, fontWeight: 800, color: '#fff', marginTop: 2 }}>مطعم الشيف كريم</p>
+        </div>
+        <div style={{ background: C.orange, borderRadius: 10, padding: '6px 12px', display: 'flex', alignItems: 'center', gap: 5 }}>
+          <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#fff', display: 'inline-block' }} />
+          <span style={{ fontFamily: F, fontSize: 12, fontWeight: 700, color: '#fff' }}>مفتوح</span>
+        </div>
+      </div>
+
+      {/* Stats row */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10, marginBottom: 18 }}>
+        {[
+          { label: 'طلبات اليوم', val: '٣٢', up: true },
+          { label: 'المبيعات',    val: '١٨٤٠ج', up: true },
+          { label: 'متوسط الطلب', val: '٥٧ج',   up: false },
+        ].map((s, i) => (
+          <div key={i} style={{ background: 'rgba(255,255,255,.06)', borderRadius: 12, padding: '10px 12px' }}>
+            <p style={{ fontFamily: F, fontSize: 10, color: 'rgba(255,255,255,.5)', marginBottom: 4 }}>{s.label}</p>
+            <p style={{ fontFamily: F, fontSize: 15, fontWeight: 800, color: '#fff' }}>{s.val}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Orders list */}
+      <div style={{ background: 'rgba(255,255,255,.04)', borderRadius: 14, overflow: 'hidden' }}>
+        <div style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,.06)' }}>
+          <p style={{ fontFamily: F, fontSize: 12, fontWeight: 700, color: 'rgba(255,255,255,.7)' }}>الطلبات الحالية</p>
+        </div>
+        {orders.map((o, i) => (
+          <div key={i} style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            padding: '11px 14px',
+            borderBottom: i < orders.length - 1 ? '1px solid rgba(255,255,255,.04)' : 'none',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: o.dot, display: 'inline-block', flexShrink: 0 }} />
+              <div>
+                <p style={{ fontFamily: F, fontSize: 12, fontWeight: 700, color: '#fff' }}>{o.item}</p>
+                <p style={{ fontFamily: F, fontSize: 10, color: 'rgba(255,255,255,.4)', marginTop: 1 }}>{o.id}</p>
+              </div>
+            </div>
+            <span style={{ fontFamily: F, fontSize: 11, fontWeight: 700, color: o.dot, background: `${o.dot}22`, padding: '3px 10px', borderRadius: 999 }}>{o.status}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Floating badge */}
+      <div style={{
+        position: 'absolute', top: -14, left: -14,
+        background: '#fff', border: `1.5px solid ${C.gray200}`,
+        borderRadius: 12, padding: '8px 14px',
+        display: 'flex', alignItems: 'center', gap: 8,
+        boxShadow: '0 4px 16px rgba(26,26,46,.12)',
+      }}>
+        <span style={{ fontSize: 18 }}>🎉</span>
+        <div>
+          <p style={{ fontFamily: F, fontSize: 10, color: C.gray600 }}>وفّرت هذا الشهر</p>
+          <p style={{ fontFamily: F, fontSize: 15, fontWeight: 800, color: C.green }}>١٢٠٠ ج عمولة</p>
+        </div>
+      </div>
+
+      {/* Notification badge */}
+      <div style={{
+        position: 'absolute', bottom: -16, right: -16,
+        background: C.orange, borderRadius: 12, padding: '8px 14px',
+        display: 'flex', alignItems: 'center', gap: 6,
+        boxShadow: '0 4px 16px rgba(232,87,42,.4)',
+      }}>
+        <Notification size={16} color="#fff" variant="Bold" />
+        <span style={{ fontFamily: F, fontSize: 12, fontWeight: 700, color: '#fff' }}>طلب جديد!</span>
+      </div>
+    </div>
+  )
+}
+
+/* ─── Hero ────────────────────────────────────────────────── */
+function Hero() {
+  const navigate = useNavigate()
+  const badges = ['✓ لا عمولة', '✓ موقع خاص بك', '✓ QR Code جاهز']
+
+  return (
+    <section id="hero" dir="rtl" style={{
+      minHeight: '100vh',
+      background: `linear-gradient(160deg, ${C.white} 55%, ${C.orangeLight} 100%)`,
+      display: 'flex', alignItems: 'center',
+      padding: 'clamp(96px,12vw,140px) clamp(16px,6vw,80px) clamp(64px,8vw,100px)',
+    }}>
+      <div style={{ maxWidth: 1180, margin: '0 auto', width: '100%', display: 'flex', alignItems: 'center', gap: 'clamp(32px,5vw,72px)', flexWrap: 'wrap' }}>
+
+        {/* Text column */}
+        <div style={{ flex: '1 1 400px', minWidth: 0 }}>
+          <div className="fazz-section-badge fazz-fadeup" style={{ marginBottom: 24 }}>
+            🚀 منصة الطلبات المستقلة رقم ١ في مصر
+          </div>
+
+          <h1 className="fazz-fadeup" style={{
+            fontFamily: F, fontWeight: 900,
+            fontSize: 'clamp(32px,4.5vw,58px)',
+            color: C.navy, lineHeight: 1.2, letterSpacing: '-1px',
+            margin: '0 0 20px',
+            animationDelay: '.08s',
+          }}>
+            وفّر عمولتك —<br />
+            <span style={{ color: C.orange }}>امتلك مطعمك الرقمي</span>
+          </h1>
+
+          <p className="fazz-fadeup" style={{
+            fontFamily: F, fontSize: 'clamp(15px,2vw,19px)',
+            color: C.gray600, lineHeight: 1.85,
+            margin: '0 0 36px', maxWidth: 520,
+            animationDelay: '.16s',
+          }}>
+            بدون عمولة. بدون تبعية. فقط موقعك الخاص وزبائنك وأرباحك — كلها في يدك من النهارده.
+          </p>
+
+          <div className="fazz-fadeup" style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginBottom: 32, animationDelay: '.24s' }}>
+            <button className="fazz-btn-primary" onClick={() => navigate('/login')}
+              style={{ fontSize: 16, padding: '15px 32px' }}>
+              ابدأ مجاناً — ١٤ يوم <ArrowLeft2 size={18} />
+            </button>
+            <button className="fazz-btn-outline" onClick={() => scrollTo('how')}>
+              شاهد كيف يعمل
+            </button>
+          </div>
+
+          <div className="fazz-fadeup" style={{ display: 'flex', gap: 20, flexWrap: 'wrap', animationDelay: '.32s' }}>
+            {badges.map((b, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <TickCircle size={17} color={C.green} variant="Bold" />
+                <span style={{ fontFamily: F, fontSize: 14, fontWeight: 600, color: C.gray700 }}>{b.replace('✓ ', '')}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Mockup column */}
+        <div style={{ flex: '1 1 320px', minWidth: 0, display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: 32 }}>
+          <DashboardMockup />
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ─── Pain Section ────────────────────────────────────────── */
+function PainSection() {
+  const [monthly, setMonthly] = useState(30)
+  const [avg, setAvg]         = useState(80)
+  const commission = Math.round(monthly * avg * 30 * 0.20)
+  const fazzCost   = 500
+
+  return (
+    <section dir="rtl" style={{ padding: 'clamp(64px,8vw,100px) clamp(16px,6vw,80px)', background: C.gray50 }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+
+        <div style={{ textAlign: 'center', marginBottom: 52 }}>
+          <div className="fazz-section-badge" style={{ marginBottom: 16 }}>💸 المشكلة</div>
+          <h2 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(26px,4vw,44px)', color: C.navy, letterSpacing: '-0.5px', margin: '0 0 12px' }}>
+            بتدفع كام عمولة كل شهر؟
+          </h2>
+          <p style={{ fontFamily: F, fontSize: 16, color: C.gray600, maxWidth: 520, margin: '0 auto' }}>
+            تطبيقات الطلبات بتاخد ٢٠٪ من كل طلب — وانت بتدفع وهم بيكسبوا
+          </p>
+        </div>
+
+        {/* Comparison */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 20, marginBottom: 48 }}>
+          {/* Old way */}
+          <div style={{ background: C.navy, borderRadius: 20, padding: 32, color: '#fff' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 24 }}>
+              <div style={{ width: 40, height: 40, borderRadius: 10, background: 'rgba(255,255,255,.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>😤</div>
+              <div>
+                <p style={{ fontFamily: F, fontWeight: 800, fontSize: 17, color: '#fff' }}>مع تطبيقات الطلبات</p>
+                <p style={{ fontFamily: F, fontSize: 12, color: 'rgba(255,255,255,.5)' }}>الطريقة القديمة</p>
+              </div>
+            </div>
+            {[
+              'عمولة ٢٠٪ على كل طلب',
+              'بياناتك وزبائنك ليهم',
+              'تصميمهم — مش تصميمك',
+              'قواعدهم — أنت تتبعها',
+              'يحذفوك متى ما شاؤوا',
+            ].map((t, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
+                <div style={{ width: 22, height: 22, borderRadius: '50%', background: '#DC354522', border: '1.5px solid #DC354555', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <span style={{ color: '#DC3545', fontSize: 12, fontWeight: 900 }}>✕</span>
+                </div>
+                <span style={{ fontFamily: F, fontSize: 14, color: 'rgba(255,255,255,.75)' }}>{t}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Fazz way */}
+          <div style={{ background: C.white, border: `2.5px solid ${C.orange}`, borderRadius: 20, padding: 32, position: 'relative', overflow: 'hidden' }}>
+            <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 4, background: C.orange }} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 24 }}>
+              <div style={{ width: 40, height: 40, borderRadius: 10, background: C.orangeLight, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>🚀</div>
+              <div>
+                <p style={{ fontFamily: F, fontWeight: 800, fontSize: 17, color: C.navy }}>مع Fazz</p>
+                <p style={{ fontFamily: F, fontSize: 12, color: C.orange, fontWeight: 600 }}>الطريقة الذكية</p>
+              </div>
+            </div>
+            {[
+              'صفر عمولة — ٠٪ على كل طلب',
+              'بياناتك وزبائنك ليك أنت',
+              'تصميمك وهويتك الخاصة',
+              'استقلالية كاملة',
+              'موقعك — لا أحد يحذفك',
+            ].map((t, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
+                <TickCircle size={22} color={C.green} variant="Bold" style={{ flexShrink: 0 }} />
+                <span style={{ fontFamily: F, fontSize: 14, color: C.gray700, fontWeight: 600 }}>{t}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Calculator */}
+        <div style={{ background: C.white, border: `1.5px solid ${C.gray200}`, borderRadius: 20, padding: 'clamp(24px,4vw,40px)', maxWidth: 680, margin: '0 auto' }}>
+          <h3 style={{ fontFamily: F, fontWeight: 800, fontSize: 20, color: C.navy, textAlign: 'center', margin: '0 0 28px' }}>
+            احسب كم بتخسر كل شهر 👇
+          </h3>
+          {[
+            { label: 'عدد الطلبات في اليوم', val: monthly, set: setMonthly, min: 5, max: 200, unit: 'طلب' },
+            { label: 'متوسط قيمة الطلب',     val: avg,     set: setAvg,     min: 30, max: 400, unit: 'ج' },
+          ].map((s, i) => (
+            <div key={i} style={{ marginBottom: 24 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
+                <span style={{ fontFamily: F, fontSize: 14, fontWeight: 600, color: C.gray700 }}>{s.label}</span>
+                <span style={{ fontFamily: F, fontSize: 15, fontWeight: 800, color: C.orange }}>{s.val} {s.unit}</span>
+              </div>
+              <input type="range" min={s.min} max={s.max} value={s.val} onChange={e => s.set(+e.target.value)}
+                style={{ width: '100%', accentColor: C.orange, height: 4, cursor: 'pointer' }} />
+            </div>
+          ))}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginTop: 8 }}>
+            <div style={{ background: C.redLight, border: `1.5px solid rgba(220,53,69,.25)`, borderRadius: 14, padding: '18px 20px', textAlign: 'center' }}>
+              <p style={{ fontFamily: F, fontSize: 12, color: C.red, marginBottom: 6, fontWeight: 600 }}>عمولتك الشهرية المهدرة</p>
+              <p style={{ fontFamily: F, fontSize: 26, fontWeight: 900, color: C.red }}>{commission.toLocaleString('ar-EG')} ج</p>
+            </div>
+            <div style={{ background: C.greenLight, border: `1.5px solid rgba(25,135,84,.25)`, borderRadius: 14, padding: '18px 20px', textAlign: 'center' }}>
+              <p style={{ fontFamily: F, fontSize: 12, color: C.green, marginBottom: 6, fontWeight: 600 }}>توفيرك مع Fazz شهرياً</p>
+              <p style={{ fontFamily: F, fontSize: 26, fontWeight: 900, color: C.green }}>{Math.max(0, commission - fazzCost).toLocaleString('ar-EG')} ج</p>
+            </div>
+          </div>
+          <p style={{ fontFamily: F, fontSize: 13, color: C.gray600, textAlign: 'center', marginTop: 14 }}>
+            اشتراك Fazz Pro = ٥٠٠ ج/شهر فقط 💪
+          </p>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ─── How It Works ────────────────────────────────────────── */
+function HowItWorks() {
+  const navigate = useNavigate()
+  const steps = [
+    {
+      num: '١',
+      icon: '🎉',
+      title: 'اشترك مجاناً',
+      desc: 'أنشئ حسابك في دقيقتين — اسم مطعمك وبياناتك الأساسية وتبدأ فوراً بدون أي تحميل أو تثبيت',
+    },
+    {
+      num: '٢',
+      icon: '🎨',
+      title: 'خصّص موقعك',
+      desc: 'أضف قائمتك باللون والصورة والسعر، واختار هوية مطعمك — الألوان، اللوجو، وطريقة العرض',
+    },
+    {
+      num: '٣',
+      icon: '📲',
+      title: 'شارك QR Code',
+      desc: 'اطبع الكود على المناشير والمنيو — وابدأ تستقبل طلبات ودفع مباشرة في جيبك',
+    },
+  ]
+
+  return (
+    <section id="how" dir="rtl" style={{
+      padding: 'clamp(64px,8vw,100px) clamp(16px,6vw,80px)',
+      background: C.white,
+      borderTop: `1.5px solid ${C.gray200}`,
+    }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: 56 }}>
+          <div className="fazz-section-badge" style={{ marginBottom: 16 }}>⚡ كيف يعمل</div>
+          <h2 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(26px,4vw,44px)', color: C.navy, letterSpacing: '-0.5px', margin: '0 0 12px' }}>
+            ٣ خطوات بسيطة — وانت جاهز
+          </h2>
+          <p style={{ fontFamily: F, fontSize: 16, color: C.gray600 }}>
+            بدون تعقيد ولا تدريب مطوّل — Fazz مصمم عشان تشتغل بيه من أول يوم
+          </p>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))', gap: 24, position: 'relative' }}>
+          {steps.map((s, i) => (
+            <div key={i} style={{ position: 'relative' }}>
+              {/* Connector line (desktop) */}
+              {i < steps.length - 1 && (
+                <div style={{
+                  position: 'absolute', top: 32, left: '-12%',
+                  width: '24%', height: 2,
+                  background: `linear-gradient(90deg, ${C.orangeBorder}, transparent)`,
+                  zIndex: 0,
+                  display: 'block',
+                }} />
+              )}
+              <div className="fazz-card" style={{ padding: '32px 28px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
+                <div style={{
+                  width: 56, height: 56, borderRadius: '50%',
+                  background: C.orange, color: '#fff',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontFamily: "'Inter', sans-serif", fontWeight: 900, fontSize: 22,
+                  margin: '0 auto 18px',
+                  boxShadow: `0 8px 24px ${C.orangeBorder}`,
+                }}>{s.num}</div>
+                <div style={{ fontSize: 36, marginBottom: 14 }}>{s.icon}</div>
+                <h3 style={{ fontFamily: F, fontWeight: 800, fontSize: 19, color: C.navy, margin: '0 0 10px' }}>{s.title}</h3>
+                <p style={{ fontFamily: F, fontSize: 14, color: C.gray600, lineHeight: 1.8, margin: 0 }}>{s.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div style={{ textAlign: 'center', marginTop: 44 }}>
+          <button className="fazz-btn-primary" onClick={() => navigate('/login')}
+            style={{ fontSize: 16, padding: '15px 40px' }}>
+            ابدأ مجاناً الآن <ArrowLeft2 size={18} />
+          </button>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ─── Features Grid ───────────────────────────────────────── */
+function FeaturesGrid() {
+  const features = [
+    {
+      Icon: Global, title: 'موقع خاص بتصميمك',
+      desc: 'موقعك على الإنترنت بعنوانك الخاص — هويتك، ألوانك، طريقتك — مش تصميم تطبيق تاني',
+    },
+    {
+      Icon: Scan, title: 'QR Code جاهز للطباعة',
+      desc: 'اطبعه على المنيو والطاولات — عميلك يمسح ويطلب ويدفع من موبايله في ثوانٍ',
+    },
+    {
+      Icon: Notification, title: 'استقبال طلبات لحظي',
+      desc: 'كل طلب جديد بيوصلك فوري — صوت، إشعار، وبيظهر في لوحة التحكم مباشرة',
+    },
+    {
+      Icon: Category, title: 'لوحة تحكم شاملة',
+      desc: 'إحصائيات، تقارير، تاريخ الطلبات، وإدارة القائمة — كل حاجة من مكان واحد',
+    },
+    {
+      Icon: Star1, title: 'برنامج ولاء للزبائن',
+      desc: 'نقاط وهدايا لزبائنك الدايمين — خليهم يرجعوا تاني ويجيبوا معاهم ناس',
+    },
+    {
+      Icon: Shop, title: 'ماركتبليس موحد',
+      desc: 'مطعمك بيظهر في قائمة Fazz للزبائن الجدد — مبيعات إضافية بدون مجهود',
+    },
+  ]
+
+  return (
+    <section id="features" dir="rtl" style={{
+      padding: 'clamp(64px,8vw,100px) clamp(16px,6vw,80px)',
+      background: C.gray50,
+    }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: 52 }}>
+          <div className="fazz-section-badge" style={{ marginBottom: 16 }}>✨ المميزات</div>
+          <h2 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(26px,4vw,44px)', color: C.navy, letterSpacing: '-0.5px', margin: '0 0 12px' }}>
+            كل اللي محتاجه في مكان واحد
+          </h2>
+          <p style={{ fontFamily: F, fontSize: 16, color: C.gray600 }}>
+            من الطلب للتوصيل — Fazz بيغطي كل جزء من تجربة مطعمك الرقمي
+          </p>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 20 }}>
+          {features.map(({ Icon, title, desc }, i) => (
+            <div key={i} className="fazz-card" style={{ padding: '28px 24px' }}>
+              <div style={{
+                width: 52, height: 52, borderRadius: 14,
+                background: C.orangeLight, border: `1.5px solid ${C.orangeBorder}`,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                marginBottom: 18,
+              }}>
+                <Icon size={26} color={C.orange} />
+              </div>
+              <h3 style={{ fontFamily: F, fontWeight: 800, fontSize: 17, color: C.navy, margin: '0 0 8px' }}>{title}</h3>
+              <p style={{ fontFamily: F, fontSize: 14, color: C.gray600, lineHeight: 1.8, margin: 0 }}>{desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ─── Pricing ─────────────────────────────────────────────── */
+function Pricing() {
+  const navigate = useNavigate()
+  const plans = [
+    {
+      name: 'المجاني',
+      price: 0,
+      badge: null,
+      featured: false,
+      desc: 'ابدأ وجرّب بدون أي التزام',
+      cta: 'ابدأ مجاناً',
+      features: [
+        'قائمة رقمية كاملة',
+        'حتى ٣٠ طلب يومياً',
+        'QR Code قابل للطباعة',
+        'صفحة مطعم جاهزة',
+        'دعم بريد إلكتروني',
+      ],
+    },
+    {
+      name: 'Pro',
+      price: 500,
+      badge: 'الأكثر شيوعاً',
+      featured: true,
+      desc: 'لمطعم نشط يريد النمو والاستقلالية',
+      cta: 'ابدأ الـ Pro',
+      features: [
+        'طلبات غير محدودة — صفر عمولة',
+        'ماركتبليس Fazz الموحد',
+        'برنامج ولاء للزبائن',
+        'تقارير مبيعات متقدمة',
+        'إشعارات واتساب للزبائن',
+        'دعم ٧ أيام / ٢٤ ساعة',
+        'دومين خاص بمطعمك',
+        'تخصيص كامل للهوية',
+      ],
+    },
+  ]
+
+  return (
+    <section id="pricing" dir="rtl" style={{
+      padding: 'clamp(64px,8vw,100px) clamp(16px,6vw,80px)',
+      background: C.white,
+      borderTop: `1.5px solid ${C.gray200}`,
+    }}>
+      <div style={{ maxWidth: 900, margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: 52 }}>
+          <div className="fazz-section-badge" style={{ marginBottom: 16 }}>💰 الأسعار</div>
+          <h2 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(26px,4vw,44px)', color: C.navy, letterSpacing: '-0.5px', margin: '0 0 12px' }}>
+            سعر واضح. بدون مفاجآت.
+          </h2>
+          <p style={{ fontFamily: F, fontSize: 16, color: C.gray600 }}>
+            ابدأ مجاناً — ادفع بالجنيه المصري — ألغِ وقتما تشاء
+          </p>
+        </div>
+
+        <div style={{ display: 'flex', gap: 24, justifyContent: 'center', flexWrap: 'wrap', alignItems: 'stretch' }}>
+          {plans.map((p, i) => (
+            <div key={i} style={{
+              flex: '1 1 300px', maxWidth: 400,
+              background: p.featured ? C.navy : C.white,
+              border: p.featured ? `2.5px solid ${C.orange}` : `1.5px solid ${C.gray200}`,
+              borderRadius: 20,
+              padding: '36px 32px',
+              position: 'relative',
+              boxShadow: p.featured ? `0 20px 48px rgba(26,26,46,.2)` : 'none',
+              transition: 'transform .2s',
+            }}
+            onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-6px)'}
+            onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
+            >
+              {p.badge && (
+                <div style={{
+                  position: 'absolute', top: -14, right: 28,
+                  background: C.orange, borderRadius: 999,
+                  padding: '4px 18px',
+                  fontFamily: F, fontSize: 12, fontWeight: 800, color: '#fff',
+                }}>{p.badge}</div>
+              )}
+
+              <h3 style={{ fontFamily: F, fontWeight: 800, fontSize: 20, color: p.featured ? '#fff' : C.navy, margin: '0 0 4px' }}>{p.name}</h3>
+              <p style={{ fontFamily: F, fontSize: 13, color: p.featured ? 'rgba(255,255,255,.6)' : C.gray600, margin: '0 0 22px' }}>{p.desc}</p>
+
+              <div style={{ margin: '0 0 28px' }}>
+                {p.price === 0
+                  ? <span style={{ fontFamily: F, fontWeight: 900, fontSize: 40, color: p.featured ? '#fff' : C.navy }}>مجاني</span>
+                  : <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
+                      <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 900, fontSize: 46, color: C.orange }}>{p.price}</span>
+                      <span style={{ fontFamily: F, fontSize: 16, color: p.featured ? 'rgba(255,255,255,.7)' : C.gray600 }}>ج / شهر</span>
+                    </div>
+                }
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 28 }}>
+                {p.features.map((f, j) => (
+                  <div key={j} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <TickCircle size={19} color={p.featured ? C.orange : C.green} variant="Bold" style={{ flexShrink: 0 }} />
+                    <span style={{ fontFamily: F, fontSize: 14, color: p.featured ? 'rgba(255,255,255,.82)' : C.gray700 }}>{f}</span>
+                  </div>
+                ))}
+              </div>
+
+              <button
+                className={p.featured ? 'fazz-btn-primary' : 'fazz-btn-outline'}
+                onClick={() => navigate('/login')}
+                style={{ width: '100%', justifyContent: 'center', fontSize: 15, padding: '14px' }}>
+                {p.cta}
+              </button>
+            </div>
+          ))}
+        </div>
+
+        <p style={{ fontFamily: F, fontSize: 13, color: C.gray600, textAlign: 'center', marginTop: 28 }}>
+          ✓ بدون رسوم خفية &nbsp;•&nbsp; ✓ إلغاء في أي وقت &nbsp;•&nbsp; ✓ الدفع بفوري أو فودافون كاش أو InstaPay
+        </p>
+      </div>
+    </section>
+  )
+}
+
+/* ─── Testimonials ────────────────────────────────────────── */
+function Testimonials() {
+  const [active, setActive] = useState(0)
+  const testimonials = [
+    {
+      quote: 'من أول ما اشتركت في Fazz بطلت أدفع ٢٠٪ عمولة. في أول شهر وفّرت أكتر من ١٥٠٠ جنيه. الموقع سهل جداً وعملائي بيحبوا يطلبوا منه.',
+      name: 'محمد الغزالي',
+      restaurant: 'مطعم كبابجي مدينة نصر',
+      stars: 5,
+    },
+    {
+      quote: 'كنت خايفة إن الإعداد يكون معقد. في ساعة واحدة مطعمي كان أون لاين. دلوقتي QR Code على كل طاولة وعملائي بيطلبوا من موبايلهم.',
+      name: 'نرمين حسن',
+      restaurant: 'كافيه ويف — الإسكندرية',
+      stars: 5,
+    },
+    {
+      quote: 'عندي ٣ فروع وFazz بيخليني أتابعهم كلهم من شاشة واحدة. التقارير اليومية واضحة والأرباح بيّنة. أنصح أي صاحب مطعم يجرب.',
+      name: 'كريم وهبي',
+      restaurant: 'سلسلة شاورما كروز',
+      stars: 5,
+    },
+  ]
+
+  const prev = () => setActive(a => (a - 1 + testimonials.length) % testimonials.length)
+  const next = () => setActive(a => (a + 1) % testimonials.length)
+
+  return (
+    <section dir="rtl" style={{
+      padding: 'clamp(64px,8vw,100px) clamp(16px,6vw,80px)',
+      background: C.gray50,
+      borderTop: `1.5px solid ${C.gray200}`,
+    }}>
+      <div style={{ maxWidth: 900, margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: 48 }}>
+          <div className="fazz-section-badge" style={{ marginBottom: 16 }}>⭐ آراء العملاء</div>
+          <h2 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(26px,4vw,44px)', color: C.navy, letterSpacing: '-0.5px', margin: '0 0 12px' }}>
+            مطاعم بتثق في Fazz
+          </h2>
+        </div>
+
+        {/* Slider */}
+        <div style={{ position: 'relative' }}>
+          <div style={{
+            background: C.white, border: `1.5px solid ${C.gray200}`,
+            borderRadius: 20, padding: 'clamp(28px,5vw,48px)',
+            minHeight: 260,
+          }}>
+            {/* Stars */}
+            <div style={{ display: 'flex', gap: 4, marginBottom: 20 }}>
+              {Array.from({ length: testimonials[active].stars }).map((_, i) => (
+                <Star1 key={i} size={20} color="#FBBF24" variant="Bold" />
+              ))}
+            </div>
+
+            <p style={{
+              fontFamily: F, fontSize: 'clamp(15px,2vw,18px)', fontWeight: 500,
+              color: C.gray700, lineHeight: 1.85, margin: '0 0 28px',
+              borderRight: `4px solid ${C.orange}`, paddingRight: 16,
+            }}>
+              "{testimonials[active].quote}"
+            </p>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+              <div style={{
+                width: 48, height: 48, borderRadius: '50%',
+                background: `linear-gradient(135deg, ${C.orange}, ${C.orangeHov})`,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontFamily: F, fontWeight: 900, fontSize: 20, color: '#fff', flexShrink: 0,
+              }}>
+                {testimonials[active].name[0]}
+              </div>
+              <div>
+                <p style={{ fontFamily: F, fontWeight: 800, fontSize: 16, color: C.navy }}>{testimonials[active].name}</p>
+                <p style={{ fontFamily: F, fontSize: 13, color: C.gray600 }}>{testimonials[active].restaurant}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Controls */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, marginTop: 24 }}>
+            <button onClick={prev} style={{
+              width: 44, height: 44, borderRadius: '50%',
+              background: C.white, border: `1.5px solid ${C.gray200}`,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              cursor: 'pointer', transition: 'border-color .15s',
+            }}
+            onMouseEnter={e => e.currentTarget.style.borderColor = C.orange}
+            onMouseLeave={e => e.currentTarget.style.borderColor = C.gray200}
+            ><ArrowRight2 size={20} color={C.navy} /></button>
+
+            <div style={{ display: 'flex', gap: 8 }}>
+              {testimonials.map((_, i) => (
+                <button key={i} onClick={() => setActive(i)} style={{
+                  width: active === i ? 24 : 8, height: 8,
+                  borderRadius: 4,
+                  background: active === i ? C.orange : C.gray200,
+                  border: 'none', cursor: 'pointer',
+                  transition: 'width .25s, background .25s',
+                  padding: 0,
+                }} />
+              ))}
+            </div>
+
+            <button onClick={next} style={{
+              width: 44, height: 44, borderRadius: '50%',
+              background: C.white, border: `1.5px solid ${C.gray200}`,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              cursor: 'pointer', transition: 'border-color .15s',
+            }}
+            onMouseEnter={e => e.currentTarget.style.borderColor = C.orange}
+            onMouseLeave={e => e.currentTarget.style.borderColor = C.gray200}
+            ><ArrowLeft2 size={20} color={C.navy} /></button>
+          </div>
+        </div>
+
+        {/* Stats strip */}
+        <div style={{
+          display: 'flex', gap: 0, marginTop: 44,
+          background: C.navy, borderRadius: 16, overflow: 'hidden',
+          flexWrap: 'wrap',
+        }}>
+          {[
+            { val: '٤.٩ ★', label: 'متوسط التقييم' },
+            { val: '+٥٠٠', label: 'مطعم يستخدم Fazz' },
+            { val: '٩٨٪', label: 'نسبة الرضا' },
+          ].map((s, i) => (
+            <div key={i} style={{
+              flex: '1 1 140px', padding: '24px 20px', textAlign: 'center',
+              borderLeft: i > 0 ? '1px solid rgba(255,255,255,.1)' : 'none',
+            }}>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 900, fontSize: 30, color: C.orange, marginBottom: 4 }}>{s.val}</p>
+              <p style={{ fontFamily: F, fontSize: 13, color: 'rgba(255,255,255,.65)' }}>{s.label}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ─── Final CTA ───────────────────────────────────────────── */
+function FinalCTA() {
+  const navigate = useNavigate()
+  return (
+    <section dir="rtl" style={{
+      padding: 'clamp(80px,10vw,120px) clamp(16px,6vw,80px)',
+      background: C.navy,
+      textAlign: 'center',
+      position: 'relative', overflow: 'hidden',
+    }}>
+      {/* Background decoration */}
+      <div style={{ position: 'absolute', top: '-30%', right: '-10%', width: 500, height: 500, borderRadius: '50%', background: `radial-gradient(circle, rgba(232,87,42,.18) 0%, transparent 65%)`, pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', bottom: '-20%', left: '-5%', width: 400, height: 400, borderRadius: '50%', background: `radial-gradient(circle, rgba(232,87,42,.1) 0%, transparent 65%)`, pointerEvents: 'none' }} />
+
+      <div style={{ position: 'relative', zIndex: 1 }}>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: C.orangeMid, border: `1.5px solid ${C.orangeBorder}`, borderRadius: 999, padding: '5px 18px', marginBottom: 24 }}>
+          <span style={{ width: 8, height: 8, borderRadius: '50%', background: C.orange, boxShadow: `0 0 8px ${C.orange}`, display: 'inline-block' }} />
+          <span style={{ fontFamily: F, fontSize: 13, fontWeight: 700, color: C.orange }}>متاح الآن — ابدأ في دقيقتين</span>
+        </div>
+
+        <h2 style={{
+          fontFamily: F, fontWeight: 900,
+          fontSize: 'clamp(30px,5vw,58px)',
+          color: '#fff', lineHeight: 1.2, letterSpacing: '-1px',
+          margin: '0 0 16px',
+        }}>
+          جاهز تبدأ؟
+        </h2>
+        <p style={{ fontFamily: F, fontSize: 'clamp(15px,2vw,19px)', color: 'rgba(255,255,255,.7)', margin: '0 0 12px', lineHeight: 1.7 }}>
+          ١٤ يوم مجاناً — لا بطاقة بنكية — إلغاء في أي وقت
+        </p>
+        <p style={{ fontFamily: F, fontSize: 14, color: C.orange, fontWeight: 700, margin: '0 0 44px' }}>
+          انضم لـ +٥٠٠ مطعم بيستخدموا Fazz كل يوم
+        </p>
+
+        <button className="fazz-btn-primary" onClick={() => navigate('/login')}
+          style={{ fontSize: 18, padding: '18px 52px', borderRadius: 14, boxShadow: `0 16px 48px rgba(232,87,42,.5)` }}>
+          ابدأ دلوقتي — مجاناً <ArrowLeft2 size={22} />
+        </button>
+
+        <div style={{ display: 'flex', gap: 28, justifyContent: 'center', marginTop: 28, flexWrap: 'wrap' }}>
+          {['لا عمولة أبداً', 'QR Code فوري', 'إلغاء بنقرة', 'دعم عربي ٧ أيام'].map((t, i) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <TickCircle size={16} color={C.orange} variant="Bold" />
+              <span style={{ fontFamily: F, fontSize: 14, color: 'rgba(255,255,255,.75)', fontWeight: 600 }}>{t}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ─── Footer ──────────────────────────────────────────────── */
+function Footer() {
+  const navigate = useNavigate()
+  return (
+    <footer dir="rtl" style={{
+      background: C.white,
+      borderTop: `1.5px solid ${C.gray200}`,
+      padding: 'clamp(40px,5vw,64px) clamp(16px,6vw,80px)',
+    }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+        <div style={{ display: 'flex', gap: 48, flexWrap: 'wrap', justifyContent: 'space-between', marginBottom: 40 }}>
+
+          {/* Brand */}
+          <div style={{ maxWidth: 280 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14, cursor: 'pointer' }} onClick={() => scrollTo('hero')}>
+              <div style={{ width: 40, height: 40, borderRadius: 12, background: C.orange, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ fontFamily: F, fontWeight: 900, fontSize: 20, color: '#fff' }}>F</span>
+              </div>
+              <div>
+                <span style={{ fontFamily: F, fontWeight: 900, fontSize: 20, color: C.navy }}>Fazz</span>
+                <span style={{ fontFamily: F, fontSize: 11, color: C.gray600, display: 'block', lineHeight: 1, marginTop: 1 }}>فَذّ</span>
+              </div>
+            </div>
+            <p style={{ fontFamily: F, fontSize: 14, color: C.gray600, lineHeight: 1.8, margin: '0 0 20px' }}>
+              منصة الطلبات المستقلة للمطاعم المصرية — امتلك مطعمك الرقمي بدون عمولة
+            </p>
+            <div style={{ display: 'flex', gap: 10 }}>
+              {[
+                { Icon: Call,      href: 'tel:+201000000000' },
+                { Icon: Sms,       href: 'mailto:hello@fazz.app' },
+                { Icon: Instagram, href: '#' },
+                { Icon: Facebook,  href: '#' },
+              ].map(({ Icon, href }, i) => (
+                <a key={i} href={href} style={{
+                  width: 38, height: 38, borderRadius: 10,
+                  background: C.gray100, border: `1.5px solid ${C.gray200}`,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  textDecoration: 'none', transition: 'border-color .15s, background .15s',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = C.orange; e.currentTarget.style.background = C.orangeLight }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = C.gray200; e.currentTarget.style.background = C.gray100 }}
+                >
+                  <Icon size={18} color={C.gray700} />
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Links */}
+          <div style={{ display: 'flex', gap: 48, flexWrap: 'wrap' }}>
+            <div>
+              <p style={{ fontFamily: F, fontWeight: 800, fontSize: 14, color: C.navy, marginBottom: 16 }}>المنتج</p>
+              {[
+                ['المميزات',  'features'],
+                ['الأسعار',   'pricing'],
+                ['كيف يعمل', 'how'],
+              ].map(([label, id]) => (
+                <div key={id} style={{ marginBottom: 12 }}>
+                  <button onClick={() => scrollTo(id)} style={{
+                    background: 'none', border: 'none', cursor: 'pointer',
+                    fontFamily: F, fontSize: 14, color: C.gray600, padding: 0,
+                    transition: 'color .15s',
+                  }}
+                  onMouseEnter={e => e.target.style.color = C.orange}
+                  onMouseLeave={e => e.target.style.color = C.gray600}
+                  >{label}</button>
+                </div>
+              ))}
+            </div>
+            <div>
+              <p style={{ fontFamily: F, fontWeight: 800, fontSize: 14, color: C.navy, marginBottom: 16 }}>الحساب</p>
+              {['تسجيل الدخول', 'إنشاء حساب مجاني'].map(l => (
+                <div key={l} style={{ marginBottom: 12 }}>
+                  <button onClick={() => navigate('/login')} style={{
+                    background: 'none', border: 'none', cursor: 'pointer',
+                    fontFamily: F, fontSize: 14, color: C.gray600, padding: 0,
+                    transition: 'color .15s',
+                  }}
+                  onMouseEnter={e => e.target.style.color = C.orange}
+                  onMouseLeave={e => e.target.style.color = C.gray600}
+                  >{l}</button>
+                </div>
+              ))}
+            </div>
+            <div>
+              <p style={{ fontFamily: F, fontWeight: 800, fontSize: 14, color: C.navy, marginBottom: 16 }}>تواصل معنا</p>
+              <div style={{ fontFamily: F, fontSize: 14, color: C.gray600, lineHeight: 2.2 }}>
+                <div>📞 ٠١٠٠٠٠٠٠٠٠٠</div>
+                <div>📧 hello@fazz.app</div>
+                <div style={{ marginTop: 4 }}>
+                  <a href="https://wa.me/201000000000" target="_blank" rel="noopener noreferrer"
+                    style={{ color: '#25D366', fontWeight: 700, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                    💬 واتساب مباشر
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style={{
+          paddingTop: 24, borderTop: `1.5px solid ${C.gray200}`,
+          display: 'flex', gap: 12, justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap',
+        }}>
+          <span style={{ fontFamily: F, fontSize: 13, color: C.gray600 }}>© 2025 Fazz — جميع الحقوق محفوظة</span>
+          <div style={{ display: 'flex', gap: 20 }}>
+            {['سياسة الخصوصية', 'شروط الاستخدام', 'عن المنصة'].map(l => (
+              <span key={l} style={{ fontFamily: F, fontSize: 13, color: C.gray600, cursor: 'pointer' }}
+                onMouseEnter={e => e.target.style.color = C.orange}
+                onMouseLeave={e => e.target.style.color = C.gray600}
+              >{l}</span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </footer>
+  )
+}
+
+/* ─── WhatsApp Float ──────────────────────────────────────── */
 function WhatsAppFloat() {
-  const [visible, setVisible] = useState(false)
+  const [show, setShow] = useState(false)
   useEffect(() => {
-    const fn = () => setVisible(window.scrollY > 300)
+    const fn = () => setShow(window.scrollY > 400)
     window.addEventListener('scroll', fn)
     return () => window.removeEventListener('scroll', fn)
   }, [])
   return (
-    <a
-      href="https://wa.me/201000000000?text=مرحبا،%20أريد%20معرفة%20المزيد%20عن%20ريڤيو"
-      target="_blank"
-      rel="noopener noreferrer"
+    <a href="https://wa.me/201000000000?text=مرحبا،%20أريد%20معرفة%20المزيد%20عن%20Fazz"
+      target="_blank" rel="noopener noreferrer"
       style={{
         position: 'fixed', bottom: 28, left: 24, zIndex: 200,
         width: 56, height: 56, borderRadius: '50%',
         background: '#25D366', display: 'flex', alignItems: 'center', justifyContent: 'center',
-        boxShadow: '0 4px 20px rgba(37,211,102,0.45)', cursor: 'pointer', textDecoration: 'none',
-        transition: 'transform 0.2s, opacity 0.3s',
-        opacity: visible ? 1 : 0, transform: visible ? 'scale(1)' : 'scale(0.7)',
-        pointerEvents: visible ? 'all' : 'none',
+        boxShadow: '0 4px 20px rgba(37,211,102,.45)', textDecoration: 'none',
+        transition: 'transform .2s, opacity .3s',
+        opacity: show ? 1 : 0,
+        transform: show ? 'scale(1)' : 'scale(0.7)',
+        pointerEvents: show ? 'all' : 'none',
       }}
       onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.1)'}
       onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
@@ -121,762 +1085,28 @@ function WhatsAppFloat() {
   )
 }
 
-/* ─── Theme Toggle ──────────────────────────────────────── */
-function ThemeToggle({ isDark, onToggle }) {
-  const T = useTheme()
-  return (
-    <button
-      onClick={onToggle}
-      title={isDark ? 'الوضع الفاتح' : 'الوضع الداكن'}
-      style={{
-        display: 'flex', alignItems: 'center', gap: 6,
-        background: T.surface2, border: `1px solid ${T.border}`,
-        borderRadius: 20, padding: '6px 12px', cursor: 'pointer',
-        transition: 'background 0.2s, border-color 0.2s, transform 0.15s',
-        color: T.text2,
-      }}
-      onMouseEnter={e => { e.currentTarget.style.borderColor = T.accent; e.currentTarget.style.transform = 'scale(1.05)' }}
-      onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.transform = 'scale(1)' }}
-    >
-      {isDark
-        ? <Sun size={15} color={T.yellow} strokeWidth={2.5} />
-        : <Moon size={15} color={T.text2} strokeWidth={2.5} />
-      }
-      <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 12, fontWeight: 600, color: isDark ? T.yellow : T.text2 }}>
-        {isDark ? 'فاتح' : 'داكن'}
-      </span>
-    </button>
-  )
-}
-
-/* ─── Navbar ────────────────────────────────────────────── */
-function Navbar({ isDark, onToggle }) {
-  const T = useTheme()
-  const [scrolled, setScrolled] = useState(false)
-  const navigate = useNavigate()
-
-  useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 20)
-    window.addEventListener('scroll', fn)
-    return () => window.removeEventListener('scroll', fn)
-  }, [])
-
-  const navLinks = [
-    { label: 'المميزات',    id: 'features' },
-    { label: 'كيف يعمل',   id: 'how'      },
-    { label: 'التسعير',    id: 'pricing'  },
-    { label: 'أسئلة شائعة', id: 'faq'    },
-  ]
-
-  return (
-    <nav
-      dir="rtl"
-      style={{
-        position: 'fixed', top: 0, insetInline: 0, zIndex: 100,
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '0 clamp(16px, 5vw, 80px)', height: 64,
-        background: scrolled ? T.navBgScrolled : T.navBgTop,
-        backdropFilter: 'blur(18px)', WebkitBackdropFilter: 'blur(18px)',
-        borderBottom: `1px solid ${scrolled ? T.border : 'transparent'}`,
-        transition: 'background 0.3s, border-color 0.3s',
-        boxShadow: scrolled && T.mode === 'light' ? '0 1px 12px rgba(0,0,0,0.06)' : 'none',
-      }}
-    >
-      {/* Logo */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }} onClick={() => scrollTo('hero')}>
-        <div style={{ width: 36, height: 36, borderRadius: 10, background: T.accent, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: T.accentGlow }}>
-          <Flash size={20} color="#fff" fill="#fff" />
-        </div>
-        <span style={{ fontFamily: 'Zain, sans-serif', fontWeight: 800, fontSize: 22, color: T.text, letterSpacing: '-0.5px' }}>ريڤيو</span>
-        <span style={{ background: T.accentMut, border: `1px solid ${T.borderAcc}`, borderRadius: 6, padding: '2px 8px', fontFamily: 'Zain, sans-serif', fontSize: 11, fontWeight: 700, color: T.accent }}>مصر</span>
-      </div>
-
-      {/* Links + actions */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
-        {navLinks.map(l => (
-          <button key={l.id} onClick={() => scrollTo(l.id)}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', fontWeight: 500, fontSize: 14, color: T.text2, padding: '4px 0', transition: 'color 0.2s' }}
-            onMouseEnter={e => e.target.style.color = T.text}
-            onMouseLeave={e => e.target.style.color = T.text2}
-          >{l.label}</button>
-        ))}
-
-        <ThemeToggle isDark={isDark} onToggle={onToggle} />
-
-        <a href="https://wa.me/201000000000" target="_blank" rel="noopener noreferrer"
-          style={{ background: '#25D366', border: 'none', borderRadius: 8, padding: '7px 16px', fontFamily: 'Zain, sans-serif', fontWeight: 700, fontSize: 13, color: '#fff', cursor: 'pointer', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6 }}>
-          <MessageCircle size={14} />واتساب
-        </a>
-
-        <button onClick={() => navigate('/explore')}
-          style={{ background: T.surface2, border: `1px solid ${T.border}`, borderRadius: 8, padding: '8px 16px', fontFamily: 'Zain, sans-serif', fontWeight: 700, fontSize: 14, color: T.text, cursor: 'pointer', transition: 'background 0.2s, border-color 0.2s, transform 0.15s' }}
-          onMouseEnter={e => { e.currentTarget.style.borderColor = T.accent; e.currentTarget.style.transform = 'translateY(-1px)' }}
-          onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.transform = 'translateY(0)' }}
-        >اكتشف المطاعم</button>
-
-        <button onClick={() => navigate('/login')}
-          style={{ background: T.accent, border: 'none', borderRadius: 8, padding: '8px 20px', fontFamily: 'Zain, sans-serif', fontWeight: 700, fontSize: 14, color: '#fff', cursor: 'pointer', boxShadow: T.accentGlow, transition: 'background 0.2s, transform 0.15s' }}
-          onMouseEnter={e => { e.currentTarget.style.background = T.accentHov; e.currentTarget.style.transform = 'translateY(-1px)' }}
-          onMouseLeave={e => { e.currentTarget.style.background = T.accent; e.currentTarget.style.transform = 'translateY(0)' }}
-        >ابدأ مجاناً</button>
-      </div>
-    </nav>
-  )
-}
-
-/* ─── Trust Bar ─────────────────────────────────────────── */
-function TrustBar() {
-  const T = useTheme()
-  const items = [
-    { icon: '🇪🇬', label: 'منتج مصري 100٪' },
-    { icon: '🔒', label: 'بياناتك محمية' },
-    { icon: '💳', label: 'فوري • فودافون كاش • InstaPay' },
-    { icon: '📞', label: 'دعم بالعربي ٧ أيام' },
-    { icon: '⚡', label: 'إعداد في أقل من ١٠ دقائق' },
-    { icon: '🏆', label: 'الأكثر استخداماً في مصر' },
-  ]
-  return (
-    <div style={{ background: T.trustBg, borderBottom: `1px solid ${T.border}`, overflow: 'hidden', padding: '10px 0' }}>
-      <div style={{ display: 'flex', gap: 48, animation: 'marquee 22s linear infinite', whiteSpace: 'nowrap', width: 'max-content' }}>
-        {[...items, ...items].map((item, i) => (
-          <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
-            <span style={{ fontSize: 16 }}>{item.icon}</span>
-            <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 13, fontWeight: 600, color: T.text2 }}>{item.label}</span>
-            <span style={{ color: T.border, fontSize: 18, marginRight: 16 }}>•</span>
-          </div>
-        ))}
-      </div>
-      <style>{`@keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }`}</style>
-    </div>
-  )
-}
-
-/* ─── Hero ──────────────────────────────────────────────── */
-function Hero() {
-  const T = useTheme()
-  const navigate = useNavigate()
-  const [c1, setC1] = useState(0)
-  const [c2, setC2] = useState(0)
-  const [c3, setC3] = useState(0)
-  const [c4, setC4] = useState(0)
-  const ran = useRef(false)
-
-  useEffect(() => {
-    if (ran.current) return
-    ran.current = true
-    const animate = (setter, target, duration) => {
-      const step = target / (duration / 16); let cur = 0
-      const id = setInterval(() => {
-        cur = Math.min(cur + step, target)
-        setter(Math.round(cur * 10) / 10)
-        if (cur >= target) clearInterval(id)
-      }, 16)
-    }
-    setTimeout(() => {
-      animate(setC1, 1200, 1600); animate(setC2, 98, 1200)
-      animate(setC3, 4.9, 900);   animate(setC4, 35, 1000)
-    }, 400)
-  }, [])
-
-  return (
-    <section id="hero" dir="rtl" style={{ position: 'relative', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: 'clamp(100px,14vw,160px) clamp(16px,6vw,80px) 80px', overflow: 'hidden' }}>
-      <div style={{ position: 'absolute', top: '8%', right: '10%', width: 520, height: 520, borderRadius: '50%', background: `radial-gradient(circle, ${T.orb1} 0%, transparent 70%)`, pointerEvents: 'none', filter: 'blur(2px)' }} />
-      <div style={{ position: 'absolute', bottom: '10%', left: '8%', width: 380, height: 380, borderRadius: '50%', background: `radial-gradient(circle, ${T.orb2} 0%, transparent 70%)`, pointerEvents: 'none' }} />
-
-      <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: T.greenMut, border: `1px solid ${T.greenBorder}`, borderRadius: 999, padding: '5px 16px', marginBottom: 20 }}>
-        <span style={{ width: 8, height: 8, borderRadius: '50%', background: T.green, boxShadow: `0 0 8px ${T.green}99`, display: 'inline-block' }} />
-        <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 13, fontWeight: 600, color: T.green }}>+٢٣ مطعم انضموا هذا الأسبوع</span>
-      </div>
-
-      <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: T.accentMut, border: `1px solid ${T.borderAcc}`, borderRadius: 999, padding: '5px 14px', marginBottom: 28 }}>
-        <Flash size={14} color={T.accent} fill={T.accent} />
-        <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 13, fontWeight: 600, color: T.accent }}>نظام إدارة المطاعم #١ في مصر</span>
-      </div>
-
-      <h1 style={{ fontFamily: 'Zain, sans-serif', fontSize: 'clamp(34px,5.5vw,68px)', fontWeight: 900, color: T.text, lineHeight: 1.15, margin: '0 0 20px', maxWidth: 820, letterSpacing: '-1px' }}>
-        خلّص من الفوضى وزوّد مبيعاتك مع{' '}
-        <span style={{ color: T.accent, textShadow: `0 0 40px ${T.accent}66` }}>ريڤيو</span>
-      </h1>
-
-      <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 'clamp(15px,2vw,19px)', color: T.text2, lineHeight: 1.85, maxWidth: 600, margin: '0 0 12px' }}>
-        نظام إدارة متكامل للمطاعم المصرية — طلبات، قائمة، مطبخ، تقارير، فريق عمل
-      </p>
-      <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 14, color: T.accent, margin: '0 0 44px', fontWeight: 600 }}>
-        يدعم الدفع بـ فوري • فودافون كاش • InstaPay • بطاقات بنكية
-      </p>
-
-      <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', justifyContent: 'center', marginBottom: 72 }}>
-        <button onClick={() => navigate('/login')}
-          style={{ background: T.accent, border: 'none', borderRadius: 12, padding: '15px 36px', fontFamily: 'Zain, sans-serif', fontWeight: 800, fontSize: 17, color: '#fff', cursor: 'pointer', boxShadow: `0 8px 32px ${T.accent}66`, display: 'flex', alignItems: 'center', gap: 8, transition: 'transform 0.2s, box-shadow 0.2s' }}
-          onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = `0 12px 40px ${T.accent}80` }}
-          onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = `0 8px 32px ${T.accent}66` }}>
-          ابدأ مجاناً — بدون كريدت كارد <ArrowLeft size={18} />
-        </button>
-        <button onClick={() => scrollTo('how')}
-          style={{ background: 'transparent', border: `1px solid ${T.borderStr}`, borderRadius: 12, padding: '15px 32px', fontFamily: 'Zain, sans-serif', fontWeight: 600, fontSize: 17, color: T.text2, cursor: 'pointer', transition: 'border-color 0.2s, color 0.2s, transform 0.2s' }}
-          onMouseEnter={e => { e.currentTarget.style.borderColor = T.accent; e.currentTarget.style.color = T.text; e.currentTarget.style.transform = 'translateY(-2px)' }}
-          onMouseLeave={e => { e.currentTarget.style.borderColor = T.borderStr; e.currentTarget.style.color = T.text2; e.currentTarget.style.transform = 'translateY(0)' }}>
-          شاهد كيف يعمل
-        </button>
-      </div>
-
-      <div style={{ display: 'flex', gap: 'clamp(16px,4vw,52px)', flexWrap: 'wrap', justifyContent: 'center', background: T.surface, border: `1px solid ${T.border}`, borderRadius: 20, padding: '22px 44px', backdropFilter: 'blur(8px)', boxShadow: T.mode === 'light' ? '0 2px 16px rgba(0,0,0,0.06)' : 'none' }}>
-        {[
-          { value: `+${Math.round(c1).toLocaleString('ar-EG')}`, label: 'مطعم يستخدم ريڤيو', color: T.accent },
-          { value: `${Math.round(c2)}٪`, label: 'من العملاء راضون', color: T.green },
-          { value: `${c3.toFixed(1)} ★`, label: 'متوسط التقييم', color: T.yellow },
-          { value: `+${Math.round(c4)}٪`, label: 'زيادة في المبيعات', color: T.accent },
-        ].map((s, i) => (
-          <div key={i} style={{ textAlign: 'center', minWidth: 90 }}>
-            <div style={{ fontFamily: 'Inter, Zain, sans-serif', fontWeight: 800, fontSize: 'clamp(22px,3vw,30px)', color: s.color, lineHeight: 1, marginBottom: 5 }}>{s.value}</div>
-            <div style={{ fontFamily: 'Zain, sans-serif', fontSize: 12, color: T.text2, fontWeight: 500 }}>{s.label}</div>
-          </div>
-        ))}
-      </div>
-    </section>
-  )
-}
-
-/* ─── Pain Points ───────────────────────────────────────── */
-function PainPoints() {
-  const T = useTheme()
-  const pains = [
-    { emoji: '😤', title: 'طلبات بتتضيع', desc: 'الكاشير بيكتب غلط، الطباخ مش فاهم، العميل بيشتكي' },
-    { emoji: '📊', title: 'مش عارف مبيعاتي كام', desc: 'في الآخر اليوم مش عارف كسبت ولا خسرت بدون أرقام واضحة' },
-    { emoji: '👥', title: 'الفريق مش منظم', desc: 'كل واحد شغال بطريقته وفي فوضى في التنسيق' },
-    { emoji: '📦', title: 'المخزون بيخلص فجأة', desc: 'عميل بيطلب صنف وبتكتشف إنه مش موجود' },
-  ]
-  return (
-    <section style={{ padding: 'clamp(60px,8vw,100px) clamp(16px,6vw,80px)', background: T.painBg }} dir="rtl">
-      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: 52 }}>
-          <h2 style={{ fontFamily: 'Zain, sans-serif', fontSize: 'clamp(26px,4vw,42px)', fontWeight: 800, color: T.text, margin: '0 0 12px', letterSpacing: '-0.5px' }}>هل بتعاني من أي من دي؟</h2>
-          <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 16, color: T.text2 }}>معظم أصحاب المطاعم في مصر بيواجهوا نفس المشاكل دي كل يوم</p>
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 16 }}>
-          {pains.map((p, i) => (
-            <div key={i}
-              style={{ background: T.mode === 'dark' ? 'rgba(239,68,68,0.04)' : 'rgba(239,68,68,0.03)', border: '1px solid rgba(239,68,68,0.15)', borderRadius: 16, padding: '24px 20px', transition: 'border-color 0.2s' }}
-              onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(239,68,68,0.4)'}
-              onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(239,68,68,0.15)'}
-            >
-              <span style={{ fontSize: 36, display: 'block', marginBottom: 14 }}>{p.emoji}</span>
-              <h3 style={{ fontFamily: 'Zain, sans-serif', fontWeight: 700, fontSize: 17, color: T.text, margin: '0 0 8px' }}>{p.title}</h3>
-              <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 14, color: T.text2, lineHeight: 1.7, margin: 0 }}>{p.desc}</p>
-            </div>
-          ))}
-        </div>
-        <div style={{ marginTop: 48, background: T.surface, border: `1px solid ${T.borderAcc}`, borderRadius: 20, padding: '28px 32px', textAlign: 'center', boxShadow: T.mode === 'light' ? '0 2px 16px rgba(0,0,0,0.06)' : 'none' }}>
-          <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 'clamp(17px,2.5vw,22px)', fontWeight: 700, color: T.text, margin: 0, lineHeight: 1.6 }}>
-            ريڤيو حل كل المشاكل دي لـ <span style={{ color: T.accent }}>+١٢٠٠ مطعم مصري</span> — وهيحلها لك كمان ⚡
-          </p>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-/* ─── Features ──────────────────────────────────────────── */
-const FEATURES_DATA = [
-  { title: 'إدارة الطلبات لحظة بلحظة',  desc: 'تتبع كل طلب من الاستلام للتسليم — دليفري، تيك أواي، أو أوندور — في شاشة واحدة واضحة' },
-  { title: 'قائمة ذكية سهلة التعديل',    desc: 'غيّر أسعارك وأضف أصناف جديدة في ثوانٍ، مع صور وتصنيفات وعروض خاصة بضغطة' },
-  { title: 'شاشة المطبخ KDS',             desc: 'الطلبات بتوصل مباشرة لشاشة المطبخ — مفيش ورق ومفيش أخطاء في أوقات الزحمة' },
-  { title: 'تقارير وأرباح واضحة',         desc: 'اعرف أكتر صنف بيتباع، أعلى ساعة مبيعات، وصافي ربحك يومياً وشهرياً' },
-  { title: 'إدارة الفريق والصلاحيات',     desc: 'كل موظف عنده دوره — مدير، كاشير، طباخ، موصل — وانت بتراقب الكل من بُعد' },
-  { title: 'مخزون تلقائي مع تنبيهات',    desc: 'النظام بيخصم من المخزون مع كل طلب وبيبعتلك تنبيه لما الكمية تقل' },
-  { title: 'تطبيق موبايل للمدير',         desc: 'راقب مطعمك من موبايلك في أي وقت — حتى لو مش موجود في المطعم' },
-  { title: 'طباعة فواتير وإيصالات',       desc: 'فواتير احترافية بلوجو المطعم تُطبع تلقائياً مع كل طلب على الطابعة الحرارية' },
-  { title: 'إشعارات واتساب للعملاء',      desc: 'ابعت تأكيد الطلب وتحديث التوصيل لعملائك مباشرة على واتساب بشكل تلقائي' },
-]
-const FEATURE_ICONS = [Box, Cup, Shop, Chart, People, Archive, Mobile, Printer, Notification]
-
-function FeatureCard({ IconComp, title, desc }) {
-  const T = useTheme()
-  const [hov, setHov] = useState(false)
-  return (
-    <div onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
-      style={{ background: hov ? T.surface2 : T.surface, border: `1px solid ${hov ? T.borderAcc : T.border}`, borderRadius: 16, padding: '28px 24px', transition: 'background 0.25s, border-color 0.25s, transform 0.25s, box-shadow 0.25s', transform: hov ? 'translateY(-4px)' : 'none', boxShadow: hov ? T.accentGlow : (T.mode === 'light' ? '0 1px 6px rgba(0,0,0,0.05)' : 'none') }}>
-      <div style={{ width: 48, height: 48, borderRadius: 12, background: T.accentMut, border: `1px solid ${T.borderAcc}`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
-        <IconComp size={24} color={T.accent} />
-      </div>
-      <h3 style={{ fontFamily: 'Zain, sans-serif', fontWeight: 700, fontSize: 16, color: T.text, margin: '0 0 8px' }}>{title}</h3>
-      <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 14, color: T.text2, lineHeight: 1.7, margin: 0 }}>{desc}</p>
-    </div>
-  )
-}
-
-function Features() {
-  const T = useTheme()
-  return (
-    <section id="features" dir="rtl" style={{ padding: 'clamp(60px,8vw,120px) clamp(16px,6vw,80px)', maxWidth: 1100, margin: '0 auto' }}>
-      <div style={{ textAlign: 'center', marginBottom: 56 }}>
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: T.accentMut, border: `1px solid ${T.borderAcc}`, borderRadius: 999, padding: '4px 14px', marginBottom: 16 }}>
-          <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 13, fontWeight: 600, color: T.accent }}>المميزات</span>
-        </div>
-        <h2 style={{ fontFamily: 'Zain, sans-serif', fontSize: 'clamp(28px,4vw,44px)', fontWeight: 800, color: T.text, margin: '0 0 12px', letterSpacing: '-0.5px' }}>كل أدوات مطعمك في مكان واحد</h2>
-        <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 16, color: T.text2, margin: 0 }}>كل ما تحتاجه لتشغيل مطعمك باحترافية — بدون برامج متعددة وبدون تعقيد</p>
-      </div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
-        {FEATURES_DATA.map((f, i) => <FeatureCard key={i} IconComp={FEATURE_ICONS[i]} title={f.title} desc={f.desc} />)}
-      </div>
-    </section>
-  )
-}
-
-/* ─── How It Works ──────────────────────────────────────── */
-const STEPS = [
-  { num: '01', title: 'سجّل مطعمك',        desc: 'أنشئ حسابك في دقيقتين — اسم مطعمك وأدخل بياناتك الأساسية وابدأ مباشرة بدون أي تحميل أو تثبيت' },
-  { num: '02', title: 'أضف قائمتك',         desc: 'أضف أصنافك بالاسم والسعر والصورة، وقسّمها في فئات. إذا عندك قائمة موجودة نساعدك تستوردها مجاناً' },
-  { num: '03', title: 'ابدأ تستقبل طلبات', desc: 'وزّع رابط مطعمك على عملائك أو اطبع QR Code على المنيو وفوراً تبدأ تستقبل طلبات ومدفوعات' },
-]
-
-function HowItWorks() {
-  const T = useTheme()
-  return (
-    <section id="how" dir="rtl" style={{ padding: 'clamp(60px,8vw,120px) clamp(16px,6vw,80px)', background: T.mode === 'light' ? T.surface2 : T.surface, borderTop: `1px solid ${T.border}`, borderBottom: `1px solid ${T.border}` }}>
-      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: 56 }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: T.accentMut, border: `1px solid ${T.borderAcc}`, borderRadius: 999, padding: '4px 14px', marginBottom: 16 }}>
-            <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 13, fontWeight: 600, color: T.accent }}>كيف يعمل</span>
-          </div>
-          <h2 style={{ fontFamily: 'Zain, sans-serif', fontSize: 'clamp(28px,4vw,44px)', fontWeight: 800, color: T.text, margin: '0 0 12px', letterSpacing: '-0.5px' }}>ابدأ في ٣ خطوات بسيطة</h2>
-          <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 16, color: T.text2, margin: 0 }}>بدون تعقيد ولا تدريب مطوّل — ريڤيو مصمم عشان تشتغل بيه من أول يوم</p>
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 24 }}>
-          {STEPS.map((s, i) => (
-            <div key={i} style={{ background: T.stepBg, border: `1px solid ${T.border}`, borderRadius: 16, padding: '32px 24px', position: 'relative', overflow: 'hidden', boxShadow: T.mode === 'light' ? '0 2px 12px rgba(0,0,0,0.06)' : 'none' }}>
-              <div style={{ position: 'absolute', top: -10, left: 16, fontFamily: 'Inter, sans-serif', fontWeight: 900, fontSize: 80, color: 'rgba(249,115,22,0.06)', lineHeight: 1, userSelect: 'none' }}>{s.num}</div>
-              <div style={{ width: 40, height: 40, borderRadius: '50%', background: T.accent, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16, fontFamily: 'Inter, sans-serif', fontWeight: 800, fontSize: 16, color: '#fff', boxShadow: T.accentGlow }}>
-                {i + 1}
-              </div>
-              <h3 style={{ fontFamily: 'Zain, sans-serif', fontWeight: 700, fontSize: 18, color: T.text, margin: '0 0 10px' }}>{s.title}</h3>
-              <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 14, color: T.text2, lineHeight: 1.75, margin: 0 }}>{s.desc}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}
-
-/* ─── ROI Calculator ────────────────────────────────────── */
-function ROICalc() {
-  const T = useTheme()
-  const [orders, setOrders] = useState(30)
-  const [avg, setAvg] = useState(80)
-  const monthly = orders * avg * 30
-  const saved = Math.round(monthly * 0.15)
-  const cost = 199
-
-  return (
-    <section dir="rtl" style={{ padding: 'clamp(60px,8vw,100px) clamp(16px,6vw,80px)', background: T.roiBg }}>
-      <div style={{ maxWidth: 780, margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: 44 }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: T.accentMut, border: `1px solid ${T.borderAcc}`, borderRadius: 999, padding: '4px 14px', marginBottom: 16 }}>
-            <TrendUp size={13} color={T.accent} />
-            <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 13, fontWeight: 600, color: T.accent }}>احسب عائدك</span>
-          </div>
-          <h2 style={{ fontFamily: 'Zain, sans-serif', fontSize: 'clamp(26px,4vw,40px)', fontWeight: 800, color: T.text, margin: '0 0 10px', letterSpacing: '-0.5px' }}>ريڤيو هيوفرلك كام بالشهر؟</h2>
-          <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 15, color: T.text2 }}>حرّك المؤشرات عشان تحسب العائد المتوقع لمطعمك</p>
-        </div>
-        <div style={{ background: T.roiInner, border: `1px solid ${T.border}`, borderRadius: 24, padding: 'clamp(24px,4vw,44px)', boxShadow: T.mode === 'light' ? '0 2px 20px rgba(0,0,0,0.07)' : 'none' }}>
-          {[
-            { label: 'عدد الطلبات في اليوم', value: orders, setter: setOrders, min: 5, max: 300, unit: 'طلب' },
-            { label: 'متوسط قيمة الطلب', value: avg, setter: setAvg, min: 30, max: 500, unit: 'جنيه' },
-          ].map((s, i) => (
-            <div key={i} style={{ marginBottom: 32 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 12 }}>
-                <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 15, fontWeight: 600, color: T.text }}>{s.label}</span>
-                <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 16, fontWeight: 800, color: T.accent }}>{s.value.toLocaleString('ar-EG')} {s.unit}</span>
-              </div>
-              <input type="range" min={s.min} max={s.max} value={s.value} onChange={e => s.setter(+e.target.value)}
-                style={{ width: '100%', accentColor: T.accent, height: 4, cursor: 'pointer' }} />
-            </div>
-          ))}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 16, marginTop: 8 }}>
-            {[
-              { label: 'مبيعاتك الشهرية',       value: `${monthly.toLocaleString('ar-EG')} ج`, color: T.text },
-              { label: 'التوفير المتوقع مع ريڤيو', value: `${saved.toLocaleString('ar-EG')} ج`,  color: T.green, sub: 'تقليل أخطاء + كفاءة أعلى' },
-              { label: 'تكلفة ريڤيو الاحترافي', value: `${cost} ج/شهر`,                           color: T.accent },
-            ].map((r, i) => (
-              <div key={i} style={{ background: T.surface2, borderRadius: 14, padding: '18px 20px', textAlign: 'center', border: `1px solid ${T.border}` }}>
-                <div style={{ fontFamily: 'Zain, sans-serif', fontSize: 11, color: T.text2, marginBottom: 8, lineHeight: 1.4 }}>{r.label}</div>
-                <div style={{ fontFamily: 'Zain, sans-serif', fontSize: 22, fontWeight: 800, color: r.color }}>{r.value}</div>
-                {r.sub && <div style={{ fontFamily: 'Zain, sans-serif', fontSize: 11, color: T.text2, marginTop: 4 }}>{r.sub}</div>}
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 20, padding: '14px 20px', background: T.greenMut, border: `1px solid ${T.greenBorder}`, borderRadius: 12, textAlign: 'center' }}>
-            <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 14, fontWeight: 700, color: T.green }}>
-              🎯 ريڤيو بيوفر متوسط {Math.round(saved / cost).toLocaleString('ar-EG')}× قيمته الشهرية
-            </span>
-          </div>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-/* ─── Testimonials ──────────────────────────────────────── */
-const TESTIMONIALS = [
-  { name: 'محمد عبد العزيز', role: 'صاحب مطعم كبابجي — القاهرة، مدينة نصر', quote: 'كنت بخسر طلبات كتير بسبب الفوضى. مع ريڤيو الطلبات بوصل للمطبخ تلقائياً والأخطاء وقفت تقريباً. في أول شهر المبيعات زادت ٢٨٪!', stars: 5 },
-  { name: 'نرمين السيد',    role: 'مديرة كافيه ويف — الإسكندرية، سيدي جابر',   quote: 'شاشة المطبخ KDS غيرت حياتنا في وقت الذروة. البريستا والكاشير بقوا متنسقين تماماً. العملاء بقوا يمدحوا السرعة.', stars: 5 },
-  { name: 'أحمد الغزالي',   role: 'صاحب سلسلة بيتزا — الجيزة، فيصل والهرم',    quote: 'عندي ٣ فروع وريڤيو بيخليني أتابعهم كلهم من موبايلي. التقارير واضحة والأرباح بيّنة. الاشتراك اتعوّض في أول أسبوع.', stars: 5 },
-  { name: 'هاجر رمضان',    role: 'صاحبة كلاود كيتشن — المنصورة',                quote: 'أنا cloud kitchen ومحتاجة كل حاجة أون لاين. ريڤيو أعطاني لينك طلبات، دفع بفوري وفودافون كاش، وتقارير يومية.', stars: 5 },
-  { name: 'كريم وهبي',     role: 'مدير عمليات — سلسلة شاورما كروز، ٥ فروع',    quote: 'إدارة ٥ فروع كانت كابوس. دلوقتي كل فرع عنده صلاحياته وأنا شايف كل حاجة من داشبورد واحدة. الدعم سريع جداً.', stars: 5 },
-  { name: 'دينا مصطفى',    role: 'صاحبة مطعم نوري — طنطا',                      quote: 'خايفة كنت إن النظام معقد. لقيته أسهل من أي حاجة استخدمتها. في ساعة واحدة أنا والعمال بقينا شغالين عليه.', stars: 5 },
-]
-
-function TestimonialCard({ name, role, quote, stars }) {
-  const T = useTheme()
-  return (
-    <div style={{ background: T.surface, border: `1px solid ${T.border}`, borderRadius: 16, padding: '28px 24px', display: 'flex', flexDirection: 'column', gap: 16, boxShadow: T.mode === 'light' ? '0 1px 8px rgba(0,0,0,0.05)' : 'none' }}>
-      <StarRow count={stars} />
-      <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 14, color: T.text, lineHeight: 1.85, margin: 0, flex: 1 }}>"{quote}"</p>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-        <div style={{ width: 44, height: 44, borderRadius: '50%', background: `linear-gradient(135deg, ${T.accent}, #c25905)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Zain, sans-serif', fontWeight: 800, fontSize: 18, color: '#fff', flexShrink: 0 }}>
-          {name[0]}
-        </div>
-        <div>
-          <div style={{ fontFamily: 'Zain, sans-serif', fontWeight: 700, fontSize: 15, color: T.text }}>{name}</div>
-          <div style={{ fontFamily: 'Zain, sans-serif', fontSize: 12, color: T.text2 }}>{role}</div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function Testimonials() {
-  const T = useTheme()
-  return (
-    <section id="testimonials" dir="rtl" style={{ padding: 'clamp(60px,8vw,120px) clamp(16px,6vw,80px)', background: T.mode === 'light' ? T.surface2 : T.surface, borderTop: `1px solid ${T.border}`, borderBottom: `1px solid ${T.border}` }}>
-      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: 56 }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: T.accentMut, border: `1px solid ${T.borderAcc}`, borderRadius: 999, padding: '4px 14px', marginBottom: 16 }}>
-            <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 13, fontWeight: 600, color: T.accent }}>آراء العملاء</span>
-          </div>
-          <h2 style={{ fontFamily: 'Zain, sans-serif', fontSize: 'clamp(28px,4vw,44px)', fontWeight: 800, color: T.text, margin: '0 0 12px', letterSpacing: '-0.5px' }}>ماذا يقول أصحاب المطاعم في مصر</h2>
-          <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 16, color: T.text2, margin: 0 }}>من القاهرة للإسكندرية للمنصورة — ريڤيو فرق حياة مطاعم حقيقية</p>
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 20 }}>
-          {TESTIMONIALS.map((t, i) => <TestimonialCard key={i} {...t} />)}
-        </div>
-        <div style={{ marginTop: 40, display: 'flex', justifyContent: 'center' }}>
-          <div style={{ background: T.surface, border: `1px solid ${T.border}`, borderRadius: 16, padding: '18px 36px', display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap', justifyContent: 'center', boxShadow: T.mode === 'light' ? '0 2px 16px rgba(0,0,0,0.06)' : 'none' }}>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontFamily: 'Zain, sans-serif', fontSize: 40, fontWeight: 900, color: T.yellow, lineHeight: 1 }}>٤.٩</div>
-              <StarRow count={5} />
-              <div style={{ fontFamily: 'Zain, sans-serif', fontSize: 12, color: T.text2, marginTop: 4 }}>من ٥ نجوم</div>
-            </div>
-            <div style={{ width: 1, height: 56, background: T.border }} />
-            <div style={{ fontFamily: 'Zain, sans-serif', fontSize: 15, color: T.text2, lineHeight: 1.8 }}>
-              <span style={{ color: T.text, fontWeight: 700 }}>+٩٨٪</span> من العملاء ينصحون بريڤيو<br />
-              <span style={{ color: T.text, fontWeight: 700 }}>+١٢٠٠</span> مطعم نشط في مصر<br />
-              <span style={{ color: T.text, fontWeight: 700 }}>٧ أيام</span> متوسط فترة الإعداد
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-/* ─── Integrations ──────────────────────────────────────── */
-function Integrations() {
-  const T = useTheme()
-  const items = [
-    { name: 'فوري',           emoji: '🔵', desc: 'دفع فوري في كل مكان' },
-    { name: 'فودافون كاش',   emoji: '🔴', desc: 'أكثر محفظة انتشاراً' },
-    { name: 'InstaPay',       emoji: '🟣', desc: 'التحويل الفوري'       },
-    { name: 'واتساب',         emoji: '🟢', desc: 'إشعارات العملاء'      },
-    { name: 'بطاقات بنكية',  emoji: '💳', desc: 'Visa & Mastercard'     },
-    { name: 'طابعة حرارية',  emoji: '🖨️', desc: 'كل الموديلات'         },
-  ]
-  return (
-    <section dir="rtl" style={{ padding: 'clamp(60px,8vw,100px) clamp(16px,6vw,80px)' }}>
-      <div style={{ maxWidth: 1000, margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: 48 }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: T.accentMut, border: `1px solid ${T.borderAcc}`, borderRadius: 999, padding: '4px 14px', marginBottom: 16 }}>
-            <Wifi size={13} color={T.accent} />
-            <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 13, fontWeight: 600, color: T.accent }}>التكاملات</span>
-          </div>
-          <h2 style={{ fontFamily: 'Zain, sans-serif', fontSize: 'clamp(26px,4vw,40px)', fontWeight: 800, color: T.text, margin: '0 0 10px', letterSpacing: '-0.5px' }}>يتكامل مع كل اللي بتستخدمه</h2>
-          <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 15, color: T.text2 }}>وسائل الدفع والتواصل الأكثر انتشاراً في مصر جاهزة من اليوم الأول</p>
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 16 }}>
-          {items.map((item, i) => (
-            <div key={i}
-              style={{ background: T.surface, border: `1px solid ${T.border}`, borderRadius: 14, padding: '20px 16px', textAlign: 'center', transition: 'border-color 0.2s, transform 0.2s, box-shadow 0.2s', boxShadow: T.mode === 'light' ? '0 1px 6px rgba(0,0,0,0.05)' : 'none' }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = T.borderAcc; e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = T.accentGlow }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = T.mode === 'light' ? '0 1px 6px rgba(0,0,0,0.05)' : 'none' }}
-            >
-              <div style={{ fontSize: 32, marginBottom: 10 }}>{item.emoji}</div>
-              <div style={{ fontFamily: 'Zain, sans-serif', fontSize: 14, fontWeight: 700, color: T.text, marginBottom: 4 }}>{item.name}</div>
-              <div style={{ fontFamily: 'Zain, sans-serif', fontSize: 12, color: T.text2 }}>{item.desc}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}
-
-/* ─── Pricing ───────────────────────────────────────────── */
-const PLANS = [
-  { title: 'المجاني',     price: 0,   desc: 'ابدأ وجرّب بدون أي التزام',      badge: null,          features: ['حتى ٥٠ طلب/شهر', 'قائمة واحدة — ٢٠ صنف', 'تقارير أساسية', 'رابط طلبات للعملاء', 'دعم بريد إلكتروني'], highlighted: false },
-  { title: 'الاحترافي',  price: 199, desc: 'لمطعم نشط يريد النمو',           badge: 'الأكثر شيوعاً', features: ['طلبات غير محدودة', 'قوائم متعددة بصور', 'شاشة المطبخ KDS', 'إدارة فريق + صلاحيات', 'تقارير متقدمة + تصدير', 'دعم فوري ٧ أيام/٢٤ ساعة', 'إشعارات واتساب للعملاء', 'طباعة فواتير احترافية'], highlighted: true },
-  { title: 'المؤسسات',   price: 499, desc: 'لسلاسل وفروع متعددة',            badge: 'للسلاسل',     features: ['كل مميزات الاحترافي', 'فروع غير محدودة', 'داشبورد مركزي للفروع', 'API تكامل مع أنظمتك', 'مدير حساب مخصص', 'تدريب الفريق أون سايت', 'SLA ٩٩.٩٪ uptime'], highlighted: false },
-]
-
-function PricingCard({ title, price, desc, features, highlighted, badge }) {
-  const T = useTheme()
-  const navigate = useNavigate()
-  const [hov, setHov] = useState(false)
-  return (
-    <div onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
-      style={{ background: highlighted ? (T.mode === 'dark' ? T.surface2 : '#FFF7ED') : T.surface, border: highlighted ? `2px solid ${T.accent}` : `1px solid ${hov ? T.borderStr : T.border}`, borderRadius: 20, padding: '36px 28px', position: 'relative', flex: 1, minWidth: 240, maxWidth: 360, transition: 'transform 0.25s, box-shadow 0.25s', transform: (highlighted || hov) ? 'translateY(-6px)' : 'none', boxShadow: highlighted ? T.accentGlow : (T.mode === 'light' && hov ? '0 4px 24px rgba(0,0,0,0.08)' : 'none') }}>
-      {badge && (
-        <div style={{ position: 'absolute', top: -14, right: 24, background: highlighted ? T.accent : T.surface3, borderRadius: 999, padding: '4px 16px', fontFamily: 'Zain, sans-serif', fontWeight: 700, fontSize: 12, color: highlighted ? '#fff' : T.text2 }}>{badge}</div>
-      )}
-      <h3 style={{ fontFamily: 'Zain, sans-serif', fontWeight: 700, fontSize: 19, color: T.text, margin: '0 0 4px' }}>{title}</h3>
-      <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 13, color: T.text2, margin: '0 0 20px' }}>{desc}</p>
-      <div style={{ marginBottom: 28 }}>
-        {price === 0
-          ? <span style={{ fontFamily: 'Zain, sans-serif', fontWeight: 800, fontSize: 36, color: T.text }}>مجاني</span>
-          : <span style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
-              <span style={{ fontFamily: 'Inter, sans-serif', fontWeight: 900, fontSize: 40, color: highlighted ? T.accent : T.text }}>{price}</span>
-              <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 15, color: T.text2 }}>ج/شهر</span>
-            </span>
-        }
-        {price > 0 && <div style={{ fontFamily: 'Zain, sans-serif', fontSize: 12, color: T.green, marginTop: 6 }}>✓ شامل ضريبة القيمة المضافة</div>}
-      </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 11, marginBottom: 28 }}>
-        {features.map((f, i) => (
-          <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div style={{ width: 20, height: 20, borderRadius: '50%', background: T.accentMut, border: `1px solid ${T.borderAcc}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-              <Check size={11} color={T.accent} strokeWidth={3} />
-            </div>
-            <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 13, color: T.text2 }}>{f}</span>
-          </div>
-        ))}
-      </div>
-      <button onClick={() => navigate('/login')}
-        style={{ width: '100%', background: highlighted ? T.accent : 'transparent', border: highlighted ? 'none' : `1px solid ${T.borderStr}`, borderRadius: 10, padding: '13px', fontFamily: 'Zain, sans-serif', fontWeight: 700, fontSize: 14, color: highlighted ? '#fff' : T.text2, cursor: 'pointer', transition: 'background 0.2s, color 0.2s', boxShadow: highlighted ? `0 4px 20px ${T.accent}4d` : 'none' }}
-        onMouseEnter={e => { if (!highlighted) { e.currentTarget.style.background = T.accentMut; e.currentTarget.style.color = T.accent } }}
-        onMouseLeave={e => { if (!highlighted) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = T.text2 } }}
-      >{price === 0 ? 'ابدأ مجاناً' : price === 199 ? 'ابدأ الاحترافي ←' : 'تواصل معنا'}</button>
-    </div>
-  )
-}
-
-function Pricing() {
-  const T = useTheme()
-  return (
-    <section id="pricing" dir="rtl" style={{ padding: 'clamp(60px,8vw,120px) clamp(16px,6vw,80px)', background: T.mode === 'light' ? T.surface2 : T.surface, borderTop: `1px solid ${T.border}`, borderBottom: `1px solid ${T.border}` }}>
-      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: 56 }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: T.accentMut, border: `1px solid ${T.borderAcc}`, borderRadius: 999, padding: '4px 14px', marginBottom: 16 }}>
-            <Money size={13} color={T.accent} />
-            <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 13, fontWeight: 600, color: T.accent }}>التسعير</span>
-          </div>
-          <h2 style={{ fontFamily: 'Zain, sans-serif', fontSize: 'clamp(28px,4vw,44px)', fontWeight: 800, color: T.text, margin: '0 0 12px', letterSpacing: '-0.5px' }}>اختر الخطة المناسبة لمطعمك</h2>
-          <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 16, color: T.text2, margin: '0 0 8px' }}>ابدأ مجاناً — ادفع بالجنيه المصري — ألغِ وقتما تشاء</p>
-          <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 13, color: T.text2 }}>💳 الدفع بفوري، فودافون كاش، InstaPay، أو بطاقة بنكية</p>
-        </div>
-        <div style={{ display: 'flex', gap: 20, justifyContent: 'center', flexWrap: 'wrap', alignItems: 'stretch' }}>
-          {PLANS.map((p, i) => <PricingCard key={i} {...p} />)}
-        </div>
-        <p style={{ textAlign: 'center', fontFamily: 'Zain, sans-serif', fontSize: 13, color: T.text2, marginTop: 28 }}>
-          ✓ بدون رسوم خفية &nbsp;•&nbsp; ✓ إلغاء في أي وقت &nbsp;•&nbsp; ✓ لا يوجد التزام سنوي
-        </p>
-      </div>
-    </section>
-  )
-}
-
-/* ─── FAQ ───────────────────────────────────────────────── */
-const FAQS = [
-  { q: 'هل محتاج خبرة تقنية لاستخدام ريڤيو؟', a: 'لأ خالص. ريڤيو مصمم عشان أي حد يقدر يستخدمه بدون أي خلفية تقنية. معظم العملاء بيبدأوا وحدهم في أقل من ساعة.' },
-  { q: 'هل بياناتي ومبيعاتي آمنة؟', a: 'نعم بالكامل. بياناتك مشفّرة وموجودة على سيرفرات آمنة. مفيش أي طرف تالت بيوصل لبياناتك. بنعمل نسخ احتياطي تلقائي يومياً.' },
-  { q: 'هل ينفع أستخدمه لأكتر من فرع؟', a: 'أيوه. خطة المؤسسات بتخليك تدير فروع غير محدودة من داشبورد واحد. كل فرع عنده إحصائياته الخاصة.' },
-  { q: 'إيه طرق الدفع المتاحة في مصر؟', a: 'بندعم فوري، فودافون كاش، InstaPay، وبطاقات Visa وMastercard. كل الأسعار بالجنيه المصري وشاملة ضريبة القيمة المضافة.' },
-  { q: 'هل في نسخة تجريبية مجانية؟', a: 'أيوه! الخطة المجانية متاحة بدون أي بطاقة بنكية. تقدر تجرب النظام لأول ٥٠ طلب كامل المميزات الأساسية.' },
-  { q: 'إيه لو احتجت مساعدة بعد الاشتراك؟', a: 'فريق دعمنا بيرد على واتساب والإيميل ٧ أيام في الأسبوع. في خطة الاحترافي الرد خلال ساعة.' },
-  { q: 'هل ريڤيو بيشتغل مع الطابعة الحرارية؟', a: 'أيوه، بيدعم كل الطابعات الحرارية الشائعة في السوق المصري. الفواتير بتُطبع تلقائياً مع كل طلب بلوجو مطعمك.' },
-  { q: 'ممكن أشوف النظام قبل ما أشترك؟', a: 'بالتأكيد! ابدأ بالخطة المجانية وجرّب كل حاجة. أو تواصل معنا على واتساب وهنعملك جلسة demo مجانية.' },
-]
-
-function FAQ() {
-  const T = useTheme()
-  const [open, setOpen] = useState(null)
-  return (
-    <section id="faq" dir="rtl" style={{ padding: 'clamp(60px,8vw,100px) clamp(16px,6vw,80px)' }}>
-      <div style={{ maxWidth: 780, margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: 48 }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: T.accentMut, border: `1px solid ${T.borderAcc}`, borderRadius: 999, padding: '4px 14px', marginBottom: 16 }}>
-            <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 13, fontWeight: 600, color: T.accent }}>أسئلة شائعة</span>
-          </div>
-          <h2 style={{ fontFamily: 'Zain, sans-serif', fontSize: 'clamp(26px,4vw,40px)', fontWeight: 800, color: T.text, margin: '0 0 10px', letterSpacing: '-0.5px' }}>كل أسئلتك عندنا إجابة</h2>
-          <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 15, color: T.text2 }}>
-            مش لاقي إجابتك؟ تواصل معنا على{' '}
-            <a href="https://wa.me/201000000000" target="_blank" rel="noopener noreferrer" style={{ color: '#25D366', fontWeight: 700, textDecoration: 'none' }}>واتساب</a>
-          </p>
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          {FAQS.map((faq, i) => (
-            <div key={i} style={{ background: T.surface, border: `1px solid ${open === i ? T.borderAcc : T.border}`, borderRadius: 14, overflow: 'hidden', transition: 'border-color 0.2s', boxShadow: T.mode === 'light' ? '0 1px 4px rgba(0,0,0,0.04)' : 'none' }}>
-              <button onClick={() => setOpen(open === i ? null : i)}
-                style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '18px 20px', background: 'none', border: 'none', cursor: 'pointer', gap: 12 }}>
-                <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 15, fontWeight: 700, color: T.text, textAlign: 'right', flex: 1 }}>{faq.q}</span>
-                <span style={{ color: T.accent, flexShrink: 0 }}>{open === i ? <ArrowUp size={18} /> : <ArrowDown2 size={18} />}</span>
-              </button>
-              {open === i && (
-                <div style={{ padding: '0 20px 18px' }}>
-                  <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 14, color: T.text2, lineHeight: 1.8, margin: 0 }}>{faq.a}</p>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}
-
-/* ─── CTA Banner ────────────────────────────────────────── */
-function CTABanner() {
-  const T = useTheme()
-  const navigate = useNavigate()
-  return (
-    <section id="cta" dir="rtl" style={{ padding: 'clamp(60px,8vw,100px) clamp(16px,6vw,80px)', textAlign: 'center', background: T.ctaBg, position: 'relative', overflow: 'hidden' }}>
-      <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 600, height: 600, borderRadius: '50%', background: `radial-gradient(circle, ${T.orb1} 0%, transparent 65%)`, pointerEvents: 'none' }} />
-      <div style={{ position: 'relative', zIndex: 1 }}>
-        <h2 style={{ fontFamily: 'Zain, sans-serif', fontSize: 'clamp(28px,4.5vw,52px)', fontWeight: 900, color: T.ctaTextColor, margin: '0 0 16px', letterSpacing: '-0.5px', lineHeight: 1.2 }}>
-          جاهز تطور مطعمك من النهارده؟
-        </h2>
-        <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 'clamp(15px,2vw,18px)', color: T.text2, margin: '0 0 12px', maxWidth: 520, marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.7 }}>
-          انضم لـ +١٢٠٠ مطعم مصري بيستخدموا ريڤيو كل يوم
-        </p>
-        <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 14, color: T.accent, margin: '0 0 40px', fontWeight: 600 }}>
-          ⚡ ابدأ في أقل من ١٠ دقائق — بدون كريدت كارد — بدون التزام
-        </p>
-        <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
-          <button onClick={() => navigate('/login')}
-            style={{ background: T.accent, border: 'none', borderRadius: 14, padding: '16px 44px', fontFamily: 'Zain, sans-serif', fontWeight: 800, fontSize: 18, color: '#fff', cursor: 'pointer', boxShadow: `0 12px 48px ${T.accent}73`, display: 'inline-flex', alignItems: 'center', gap: 10, transition: 'transform 0.2s, box-shadow 0.2s' }}
-            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = `0 16px 56px ${T.accent}8c` }}
-            onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = `0 12px 48px ${T.accent}73` }}>
-            ابدأ مجاناً الآن <ArrowLeft size={20} />
-          </button>
-          <a href="https://wa.me/201000000000?text=مرحبا،%20أريد%20demo%20مجاني%20لريڤيو" target="_blank" rel="noopener noreferrer"
-            style={{ background: 'transparent', border: '1px solid rgba(37,211,102,0.4)', borderRadius: 14, padding: '16px 36px', fontFamily: 'Zain, sans-serif', fontWeight: 700, fontSize: 17, color: '#25D366', cursor: 'pointer', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 10, transition: 'background 0.2s, border-color 0.2s' }}
-            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(37,211,102,0.08)'; e.currentTarget.style.borderColor = '#25D366' }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(37,211,102,0.4)' }}>
-            <MessageCircle size={18} /> Demo مجاني على واتساب
-          </a>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-/* ─── Footer ────────────────────────────────────────────── */
-function Footer() {
-  const T = useTheme()
-  const navigate = useNavigate()
-  return (
-    <footer id="footer" dir="rtl" style={{ background: T.footerBg, borderTop: `1px solid ${T.border}`, padding: 'clamp(40px,5vw,64px) clamp(16px,6vw,80px)' }}>
-      <div style={{ maxWidth: 1100, margin: '0 auto', display: 'flex', flexWrap: 'wrap', gap: 40, justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 40 }}>
-        <div style={{ maxWidth: 280 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14, cursor: 'pointer' }} onClick={() => scrollTo('hero')}>
-            <div style={{ width: 34, height: 34, borderRadius: 9, background: T.accent, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Flash size={18} color="#fff" fill="#fff" /></div>
-            <span style={{ fontFamily: 'Zain, sans-serif', fontWeight: 800, fontSize: 20, color: T.text }}>ريڤيو</span>
-            <span style={{ background: T.accentMut, border: `1px solid ${T.borderAcc}`, borderRadius: 5, padding: '2px 7px', fontFamily: 'Zain, sans-serif', fontSize: 10, fontWeight: 700, color: T.accent }}>مصر</span>
-          </div>
-          <p style={{ fontFamily: 'Zain, sans-serif', fontSize: 14, color: T.text2, lineHeight: 1.75, margin: '0 0 18px' }}>نظام إدارة متكامل للمطاعم المصرية — مصمم بعناية لأصحاب المطاعم العرب</p>
-          <a href="https://wa.me/201000000000" target="_blank" rel="noopener noreferrer"
-            style={{ width: 36, height: 36, borderRadius: 8, background: '#25D366', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none' }}>
-            <MessageCircle size={18} color="#fff" />
-          </a>
-        </div>
-        <div style={{ display: 'flex', gap: 48, flexWrap: 'wrap' }}>
-          <div>
-            <div style={{ fontFamily: 'Zain, sans-serif', fontWeight: 700, fontSize: 13, color: T.text, marginBottom: 16 }}>المنتج</div>
-            {[['المميزات','features'],['كيف يعمل','how'],['التسعير','pricing'],['أسئلة شائعة','faq']].map(([label, id]) => (
-              <div key={id} style={{ marginBottom: 10 }}>
-                <button onClick={() => scrollTo(id)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', fontSize: 14, color: T.text2, padding: 0, transition: 'color 0.2s' }}
-                  onMouseEnter={e => e.target.style.color = T.text} onMouseLeave={e => e.target.style.color = T.text2}>{label}</button>
-              </div>
-            ))}
-          </div>
-          <div>
-            <div style={{ fontFamily: 'Zain, sans-serif', fontWeight: 700, fontSize: 13, color: T.text, marginBottom: 16 }}>الحساب</div>
-            {['تسجيل الدخول','إنشاء حساب مجاني','الدعم الفني'].map(l => (
-              <div key={l} style={{ marginBottom: 10 }}>
-                <button onClick={() => navigate('/login')} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', fontSize: 14, color: T.text2, padding: 0, transition: 'color 0.2s' }}
-                  onMouseEnter={e => e.target.style.color = T.text} onMouseLeave={e => e.target.style.color = T.text2}>{l}</button>
-              </div>
-            ))}
-          </div>
-          <div>
-            <div style={{ fontFamily: 'Zain, sans-serif', fontWeight: 700, fontSize: 13, color: T.text, marginBottom: 16 }}>تواصل معنا</div>
-            <div style={{ fontFamily: 'Zain, sans-serif', fontSize: 14, color: T.text2, lineHeight: 2 }}>
-              <div>📞 ٠١٠٠٠٠٠٠٠٠٠</div>
-              <div>📧 hello@rivyo.com</div>
-              <div>🕐 ٩ ص – ١١ م يومياً</div>
-              <div style={{ marginTop: 8 }}><a href="https://wa.me/201000000000" target="_blank" rel="noopener noreferrer" style={{ color: '#25D366', fontWeight: 700, textDecoration: 'none' }}>💬 واتساب مباشر</a></div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div style={{ maxWidth: 1100, margin: '0 auto', paddingTop: 20, borderTop: `1px solid ${T.border}`, display: 'flex', flexWrap: 'wrap', gap: 12, justifyContent: 'space-between', alignItems: 'center' }}>
-        <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 13, color: T.text2 }}>© 2025 ريڤيو. جميع الحقوق محفوظة • مصر</span>
-        <span style={{ fontFamily: 'Zain, sans-serif', fontSize: 13, color: T.text2, display: 'flex', alignItems: 'center', gap: 6 }}>
-          صُنع بـ <span style={{ color: T.accent }}>♥</span> للمطاعم المصرية
-        </span>
-      </div>
-    </footer>
-  )
-}
-
-/* ─── Page ──────────────────────────────────────────────── */
+/* ─── Page ────────────────────────────────────────────────── */
 export default function Landing() {
-  const [isDark, setIsDark] = useState(() => {
-    try { return localStorage.getItem('rivyo_theme') !== 'light' } catch { return true }
-  })
-
-  const theme = isDark ? DARK : LIGHT
-
-  const toggleTheme = () => {
-    setIsDark(d => {
-      const next = !d
-      try { localStorage.setItem('rivyo_theme', next ? 'dark' : 'light') } catch {}
-      return next
-    })
-  }
-
   useEffect(() => {
-    document.title = 'ريڤيو — نظام إدارة المطاعم #١ في مصر'
+    document.title = 'Fazz فَذّ — امتلك مطعمك الرقمي بدون عمولة'
     window.scrollTo(0, 0)
   }, [])
 
   return (
-    <ThemeCtx.Provider value={theme}>
-      <div dir="rtl" style={{ background: theme.bg, minHeight: '100vh', fontFamily: 'Zain, sans-serif', overflowX: 'hidden', transition: 'background 0.3s, color 0.3s' }}>
-        <Navbar isDark={isDark} onToggle={toggleTheme} />
-        <TrustBar />
+    <>
+      <GlobalStyles />
+      <div dir="rtl" style={{ background: C.white, minHeight: '100vh', fontFamily: F, overflowX: 'hidden' }}>
+        <Navbar />
         <Hero />
-        <PainPoints />
-        <Features />
+        <PainSection />
         <HowItWorks />
-        <ROICalc />
-        <Testimonials />
-        <Integrations />
+        <FeaturesGrid />
         <Pricing />
-        <FAQ />
-        <CTABanner />
+        <Testimonials />
+        <FinalCTA />
         <Footer />
         <WhatsAppFloat />
       </div>
-    </ThemeCtx.Provider>
+    </>
   )
 }
