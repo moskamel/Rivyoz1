@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { TickCircle, CloseCircle, HambergerMenu } from 'iconsax-react'
+import { TickCircle, CloseCircle, HambergerMenu, Eye, EyeSlash } from 'iconsax-react'
 import { getConfig, getCoupons, addOrder, getCustomerProfile, setCustomerProfile } from '../lib/restaurantStore'
 import { useCart } from './CartContext'
 import { useSidebar } from '../lib/ThemeContext'
@@ -67,6 +67,18 @@ export default function Cart() {
 
   const [payment, setPayment] = useState('cash')
 
+  /* ─── card fields ─── */
+  const [cardNumber, setCardNumber] = useState('')
+  const [cardName,   setCardName]   = useState('')
+  const [cardExpiry, setCardExpiry] = useState('')
+  const [cardCvv,    setCardCvv]    = useState('')
+  const [showCvv,    setShowCvv]    = useState(false)
+
+  const formatCardNumber = v => v.replace(/\D/g, '').slice(0, 16).replace(/(.{4})/g, '$1 ').trim()
+  const formatExpiry     = v => { const d = v.replace(/\D/g, '').slice(0, 4); return d.length >= 3 ? d.slice(0, 2) + '/' + d.slice(2) : d }
+  const cardBrand = cardNumber.replace(/\s/g, '').startsWith('4') ? 'visa'
+    : ['51','52','53','54','55'].some(p => cardNumber.replace(/\s/g, '').startsWith(p)) ? 'mc' : null
+
   const deliveryFee = orderType === 'delivery' ? config.deliveryFee : 0
   const finalTotal  = Math.max(0, total + deliveryFee - couponDiscount)
   const minOrderOk  = !(config.minOrder && total < config.minOrder && orderType === 'delivery')
@@ -92,6 +104,12 @@ export default function Cart() {
       if (!address.trim()) e.address = 'العنوان التفصيلي مطلوب'
     }
     if (orderType === 'table' && !tableNumber) e.tableNumber = 'رقم الطاولة مطلوب'
+    if (payment === 'card') {
+      if (!cardNumber || cardNumber.replace(/\s/g, '').length < 16) e.cardNumber = 'رقم البطاقة غير مكتمل'
+      if (!cardName.trim()) e.cardName = 'اسم حامل البطاقة مطلوب'
+      if (!cardExpiry || !/^\d{2}\/\d{2}$/.test(cardExpiry)) e.cardExpiry = 'تاريخ انتهاء غير صحيح'
+      if (!cardCvv || cardCvv.length < 3) e.cardCvv = 'CVV غير صحيح'
+    }
     setErrors(e)
     if (Object.keys(e).length) { window.scrollTo({ top: 0, behavior: 'smooth' }); return }
 
@@ -360,6 +378,117 @@ export default function Cart() {
                 <span style={{ fontSize: 14, fontWeight: 700, color: payment === opt.key ? color : 'var(--text)' }}>{opt.label}</span>
               </button>
             ))}
+
+            {/* ── Card form ── */}
+            {payment === 'card' && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12, paddingTop: 4 }}>
+
+                {/* Visual card mockup */}
+                <div style={{ background: 'linear-gradient(135deg, #0f172a 0%, #1e3a5f 55%, #0c2a4a 100%)', borderRadius: 18, padding: '20px 20px 16px', position: 'relative', overflow: 'hidden', minHeight: 150, boxShadow: '0 10px 36px rgba(0,0,0,0.35)' }}>
+                  <div style={{ position: 'absolute', top: -28, right: -28, width: 120, height: 120, borderRadius: '50%', background: 'rgba(255,255,255,0.06)' }} />
+                  <div style={{ position: 'absolute', bottom: -40, left: 20, width: 140, height: 140, borderRadius: '50%', background: 'rgba(255,255,255,0.04)' }} />
+                  {/* Chip */}
+                  <div style={{ width: 38, height: 28, borderRadius: 6, background: 'linear-gradient(135deg, #c8a84b, #f0d060)', marginBottom: 18, boxShadow: '0 2px 6px rgba(0,0,0,0.4)', position: 'relative', zIndex: 1 }} />
+                  {/* Number */}
+                  <p dir="ltr" style={{ fontFamily: 'Inter, monospace', fontSize: 17, color: 'rgba(255,255,255,0.92)', letterSpacing: '0.18em', marginBottom: 14, fontWeight: 600, position: 'relative', zIndex: 1 }}>
+                    {cardNumber ? cardNumber.padEnd(19, '•').slice(0, 19) : '•••• •••• •••• ••••'}
+                  </p>
+                  {/* Footer row */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', position: 'relative', zIndex: 1 }}>
+                    <div>
+                      <p style={{ fontSize: 9, color: 'rgba(255,255,255,0.4)', marginBottom: 3, letterSpacing: '0.1em' }}>CARDHOLDER</p>
+                      <p dir="ltr" style={{ fontSize: 13, color: 'white', fontFamily: 'Inter, sans-serif', fontWeight: 700, letterSpacing: '0.06em' }}>{cardName || 'YOUR NAME'}</p>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                      <div style={{ textAlign: 'center' }}>
+                        <p style={{ fontSize: 9, color: 'rgba(255,255,255,0.4)', marginBottom: 3, letterSpacing: '0.1em' }}>EXPIRES</p>
+                        <p dir="ltr" style={{ fontSize: 13, color: 'white', fontFamily: 'Inter, sans-serif', fontWeight: 700 }}>{cardExpiry || 'MM/YY'}</p>
+                      </div>
+                      {cardBrand === 'visa' && (
+                        <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 22, fontWeight: 900, color: 'white', fontStyle: 'italic', letterSpacing: '-1px', lineHeight: 1 }}>VISA</p>
+                      )}
+                      {cardBrand === 'mc' && (
+                        <div style={{ position: 'relative', width: 40, height: 24 }}>
+                          <div style={{ position: 'absolute', left: 0, width: 24, height: 24, borderRadius: '50%', background: '#EB001B' }} />
+                          <div style={{ position: 'absolute', right: 0, width: 24, height: 24, borderRadius: '50%', background: '#F79E1B', mixBlendMode: 'screen' }} />
+                        </div>
+                      )}
+                      {!cardBrand && <div style={{ width: 40 }} />}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Card number */}
+                <div>
+                  <Label error={errors.cardNumber}>رقم البطاقة *</Label>
+                  <input
+                    type="text" inputMode="numeric" dir="ltr"
+                    value={cardNumber}
+                    onChange={e => { setCardNumber(formatCardNumber(e.target.value)); setErrors(p => ({ ...p, cardNumber: '' })) }}
+                    placeholder="0000 0000 0000 0000"
+                    style={{ ...baseInput, fontFamily: 'Inter, monospace', letterSpacing: '0.12em', borderColor: errors.cardNumber ? '#EF4444' : 'var(--border-strong)' }}
+                    onFocus={e => focusInput(e, color)} onBlur={blurInput}
+                  />
+                  <ErrorMsg msg={errors.cardNumber} />
+                </div>
+
+                {/* Cardholder name */}
+                <div>
+                  <Label error={errors.cardName}>اسم حامل البطاقة *</Label>
+                  <input
+                    type="text" dir="ltr"
+                    value={cardName}
+                    onChange={e => { setCardName(e.target.value.toUpperCase()); setErrors(p => ({ ...p, cardName: '' })) }}
+                    placeholder="FULL NAME"
+                    style={{ ...baseInput, fontFamily: 'Inter, sans-serif', letterSpacing: '0.04em', borderColor: errors.cardName ? '#EF4444' : 'var(--border-strong)' }}
+                    onFocus={e => focusInput(e, color)} onBlur={blurInput}
+                  />
+                  <ErrorMsg msg={errors.cardName} />
+                </div>
+
+                {/* Expiry + CVV */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                  <div>
+                    <Label error={errors.cardExpiry}>تاريخ الانتهاء *</Label>
+                    <input
+                      type="text" inputMode="numeric" dir="ltr"
+                      value={cardExpiry}
+                      onChange={e => { setCardExpiry(formatExpiry(e.target.value)); setErrors(p => ({ ...p, cardExpiry: '' })) }}
+                      placeholder="MM/YY"
+                      style={{ ...baseInput, fontFamily: 'Inter, sans-serif', borderColor: errors.cardExpiry ? '#EF4444' : 'var(--border-strong)' }}
+                      onFocus={e => focusInput(e, color)} onBlur={blurInput}
+                    />
+                    <ErrorMsg msg={errors.cardExpiry} />
+                  </div>
+                  <div>
+                    <Label error={errors.cardCvv}>CVV *</Label>
+                    <div style={{ position: 'relative' }}>
+                      <input
+                        type={showCvv ? 'text' : 'password'} inputMode="numeric" dir="ltr"
+                        value={cardCvv}
+                        onChange={e => { setCardCvv(e.target.value.replace(/\D/g, '').slice(0, 4)); setErrors(p => ({ ...p, cardCvv: '' })) }}
+                        placeholder="•••"
+                        style={{ ...baseInput, fontFamily: 'Inter, sans-serif', paddingLeft: 40, borderColor: errors.cardCvv ? '#EF4444' : 'var(--border-strong)' }}
+                        onFocus={e => focusInput(e, color)} onBlur={blurInput}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowCvv(v => !v)}
+                        style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', padding: 4, display: 'flex', alignItems: 'center', color: 'var(--text-3)' }}
+                      >
+                        {showCvv ? <Eye size={16} /> : <EyeSlash size={16} />}
+                      </button>
+                    </div>
+                    <ErrorMsg msg={errors.cardCvv} />
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '10px 12px', background: '#F0F9FF', borderRadius: 10, border: '1px solid #BAE6FD' }}>
+                  <span style={{ fontSize: 14 }}>🔒</span>
+                  <p style={{ fontSize: 11, color: '#0369A1', fontWeight: 600 }}>بياناتك محمية بتشفير SSL آمن</p>
+                </div>
+              </div>
+            )}
           </div>
         </Card>
 

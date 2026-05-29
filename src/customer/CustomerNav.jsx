@@ -24,6 +24,9 @@ export default function CustomerNav() {
     { label: 'حسابي',   icon: User,         path: '/my-profile' },
   ]
 
+  const mainTabPaths = ['/landing', '/explore', '/cart', '/my-profile']
+  const showTabBar = mainTabPaths.includes(pathname)
+
   return (
     <>
       {/* ── Sidebar overlay ── */}
@@ -152,7 +155,7 @@ export default function CustomerNav() {
       )}
 
       {/* ── Bottom tab bar ── */}
-      <nav
+      {showTabBar && <nav
         dir="rtl"
         style={{
           position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 100,
@@ -193,7 +196,7 @@ export default function CustomerNav() {
             </button>
           )
         })}
-      </nav>
+      </nav>}
     </>
   )
 }
