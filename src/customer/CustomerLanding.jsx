@@ -577,24 +577,6 @@ export default function CustomerLanding() {
         {/* Testimonials — slider */}
         <TestimonialsSlider testimonials={testimonials} color={color} />
 
-        {/* App download — full width */}
-        <div style={{ marginTop: 36 }}>
-          <div style={{ background: 'var(--surface)', borderRadius: 24, padding: '28px 20px', textAlign: 'center', border: '1px solid var(--border)', boxShadow: '0 4px 16px rgba(0,0,0,0.06)' }}>
-            <div style={{ fontSize: 52, marginBottom: 12 }}>📱</div>
-            <h3 style={{ fontSize: 20, fontWeight: 900, color: 'var(--text)', marginBottom: 8, marginTop: 0 }}>حمّل التطبيق الآن</h3>
-            <p style={{ fontSize: 13, color: 'var(--text-2)', lineHeight: 1.75, marginBottom: 24, marginTop: 0 }}>
-              تجربة أسرع وأسهل — إشعارات فورية، تتبع مباشر، ووصول لعروض حصرية
-            </p>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-              <button style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '13px', borderRadius: 14, background: '#1a1a1a', color: 'white', fontWeight: 700, fontSize: 13, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>
-                🍎 App Shop
-              </button>
-              <button style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '13px', borderRadius: 14, background: '#1a1a1a', color: 'white', fontWeight: 700, fontSize: 13, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>
-                🤖 Google Play
-              </button>
-            </div>
-          </div>
-        </div>
 
       </div>
 

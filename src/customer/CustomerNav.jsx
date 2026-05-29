@@ -107,15 +107,6 @@ export default function CustomerNav() {
 
                   <div style={{ margin: '8px 16px', height: 1, background: 'var(--border)' }} />
 
-                  {/* App download */}
-                  <div style={{ padding: '4px 12px 12px' }}>
-                    <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-3)', padding: '8px 4px', letterSpacing: '0.05em' }}>حمّل التطبيق</p>
-                    <div style={{ display: 'flex', gap: 8 }}>
-                      <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '9px', borderRadius: 10, background: 'var(--surface-2)', color: 'var(--text)', fontSize: 12, fontWeight: 600, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>🍎 App Shop</button>
-                      <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '9px', borderRadius: 10, background: 'var(--surface-2)', color: 'var(--text)', fontSize: 12, fontWeight: 600, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>🤖 Google Play</button>
-                    </div>
-                  </div>
-
                   {/* Contact info */}
                   <div style={{ padding: '0 16px 16px' }}>
                     <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-3)', marginBottom: 8, letterSpacing: '0.05em' }}>تواصل معنا</p>
@@ -153,13 +144,6 @@ export default function CustomerNav() {
                   >
                     إنشاء حساب جديد
                   </button>
-                </div>
-                <div style={{ padding: '12px 16px', borderTop: '1px solid var(--border)' }}>
-                  <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-3)', marginBottom: 10, textAlign: 'center', letterSpacing: '0.05em' }}>حمّل التطبيق</p>
-                  <div style={{ display: 'flex', gap: 8 }}>
-                    <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '9px', borderRadius: 10, background: 'var(--surface-2)', color: 'var(--text)', fontSize: 12, fontWeight: 600, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>🍎 App Shop</button>
-                    <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '9px', borderRadius: 10, background: 'var(--surface-2)', color: 'var(--text)', fontSize: 12, fontWeight: 600, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>🤖 Google Play</button>
-                  </div>
                 </div>
               </div>
             )}

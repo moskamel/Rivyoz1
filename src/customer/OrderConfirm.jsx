@@ -40,7 +40,7 @@ export default function OrderConfirm() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg)', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '40px 20px 60px', fontFamily: 'Zain, sans-serif' }} dir="rtl">
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', display: 'flex', flexDirection: 'column', padding: '40px 16px 60px', fontFamily: 'Zain, sans-serif' }} dir="rtl">
       <style>{`
         @keyframes spring-in {
           0% { transform: scale(0.3); opacity: 0; }
@@ -64,7 +64,7 @@ export default function OrderConfirm() {
         }
       `}</style>
 
-      <div style={{ width: '100%', maxWidth: 400 }}>
+      <div style={{ width: '100%' }}>
 
         {/* ── Success animation area ── */}
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
