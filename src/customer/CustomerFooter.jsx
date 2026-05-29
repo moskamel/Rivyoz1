@@ -8,7 +8,7 @@ export default function CustomerFooter({ noNav = false }) {
   const accentColor = config.color
 
   return (
-    <div style={{ background: '#1a1a1a', color: 'white', padding: `32px 20px ${noNav ? '32px' : '100px'}`, direction: 'rtl', fontFamily: 'Zain, sans-serif' }}>
+    <div style={{ background: '#1a1a1a', color: 'white', padding: `32px 20px ${noNav ? '32px' : '100px'}`, direction: 'rtl', fontFamily: 'Zain, sans-serif', marginTop: 32 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
         <div style={{ width: 36, height: 36, borderRadius: 10, background: accentColor, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, fontWeight: 900 }}>ر</div>
         <div>
