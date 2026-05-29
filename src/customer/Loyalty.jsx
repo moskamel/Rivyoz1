@@ -55,7 +55,7 @@ export default function Loyalty() {
   ]
 
   return (
-    <div style={{ minHeight: '100vh', background: '#F9FAFB', fontFamily: 'Cairo, sans-serif', direction: 'rtl' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', fontFamily: 'Cairo, sans-serif', direction: 'rtl' }}>
       {/* Header */}
       <div style={{
         background: `linear-gradient(135deg, ${color} 0%, ${color}cc 100%)`,
@@ -92,7 +92,7 @@ export default function Loyalty() {
       <div style={{ padding: '16px 14px 88px', display: 'flex', flexDirection: 'column', gap: 14 }}>
 
         {/* Points hero card */}
-        <div style={{ background: 'white', borderRadius: 20, boxShadow: '0 4px 16px rgba(0,0,0,0.08)', padding: '28px 20px 24px', textAlign: 'center' }}>
+        <div style={{ background: 'var(--surface)', borderRadius: 20, boxShadow: '0 4px 16px rgba(0,0,0,0.08)', padding: '28px 20px 24px', textAlign: 'center' }}>
           <div style={{
             width: 110, height: 110, borderRadius: '50%',
             background: 'linear-gradient(135deg, #FFF7ED, #FFEDD5)',
@@ -104,11 +104,11 @@ export default function Loyalty() {
             <span style={{ fontSize: 26, fontWeight: 900, color: '#EA580C', lineHeight: 1.1, fontFamily: 'Inter, sans-serif' }}>
               {pts.balance.toLocaleString()}
             </span>
-            <span style={{ fontSize: 10, color: '#9CA3AF', fontWeight: 600 }}>نقطة</span>
+            <span style={{ fontSize: 10, color: 'var(--text-3)', fontWeight: 600 }}>نقطة</span>
           </div>
 
           {pts.balance === 0 ? (
-            <p style={{ fontSize: 13, color: '#9CA3AF', marginBottom: 16 }}>
+            <p style={{ fontSize: 13, color: 'var(--text-3)', marginBottom: 16 }}>
               اطلب وجبتك الأولى لتبدأ في جمع النقاط!
             </p>
           ) : (
@@ -119,17 +119,17 @@ export default function Loyalty() {
               {NEXT_MILESTONE && (
                 <div style={{ marginTop: 4 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-                    <span style={{ fontSize: 12, color: '#6B7280', fontWeight: 600 }}>
+                    <span style={{ fontSize: 12, color: 'var(--text-2)', fontWeight: 600 }}>
                       {NEXT_MILESTONE.points - pts.balance} نقطة لمكافأتك التالية
                     </span>
                     <span style={{ fontSize: 12, color: color, fontWeight: 700, fontFamily: 'Inter, sans-serif' }}>{PROGRESS}%</span>
                   </div>
-                  <div style={{ height: 10, background: '#F3F4F6', borderRadius: 99, overflow: 'hidden' }}>
+                  <div style={{ height: 10, background: 'var(--surface-2)', borderRadius: 99, overflow: 'hidden' }}>
                     <div style={{ height: '100%', width: `${PROGRESS}%`, background: `linear-gradient(90deg, ${color}, ${color}cc)`, borderRadius: 99, transition: 'width 0.8s ease' }} />
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6 }}>
-                    <span style={{ fontSize: 11, color: '#9CA3AF', fontFamily: 'Inter, sans-serif' }}>{pts.balance.toLocaleString()}</span>
-                    <span style={{ fontSize: 11, color: '#9CA3AF', fontFamily: 'Inter, sans-serif' }}>{NEXT_MILESTONE.points.toLocaleString()}</span>
+                    <span style={{ fontSize: 11, color: 'var(--text-3)', fontFamily: 'Inter, sans-serif' }}>{pts.balance.toLocaleString()}</span>
+                    <span style={{ fontSize: 11, color: 'var(--text-3)', fontFamily: 'Inter, sans-serif' }}>{NEXT_MILESTONE.points.toLocaleString()}</span>
                   </div>
                 </div>
               )}
@@ -144,23 +144,23 @@ export default function Loyalty() {
             { label: 'متاحة', value: pts.balance.toLocaleString() },
             { label: 'مُستبدلة', value: pts.spent.toLocaleString() },
           ].map((stat, i) => (
-            <div key={i} style={{ background: 'white', borderRadius: 14, boxShadow: '0 2px 8px rgba(0,0,0,0.06)', padding: '14px 10px', textAlign: 'center' }}>
-              <p style={{ fontSize: 14, fontWeight: 800, color: '#1a1a1a', marginBottom: 4, fontFamily: 'Inter, sans-serif' }}>{stat.value}</p>
-              <p style={{ fontSize: 10, color: '#9CA3AF', fontWeight: 600 }}>{stat.label}</p>
+            <div key={i} style={{ background: 'var(--surface)', borderRadius: 14, boxShadow: '0 2px 8px rgba(0,0,0,0.06)', padding: '14px 10px', textAlign: 'center' }}>
+              <p style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 4, fontFamily: 'Inter, sans-serif' }}>{stat.value}</p>
+              <p style={{ fontSize: 10, color: 'var(--text-3)', fontWeight: 600 }}>{stat.label}</p>
             </div>
           ))}
         </div>
 
         {/* Available rewards */}
         <div>
-          <h2 style={{ fontSize: 15, fontWeight: 800, color: '#1a1a1a', marginBottom: 10, paddingRight: 2 }}>المكافآت المتاحة</h2>
+          <h2 style={{ fontSize: 15, fontWeight: 800, color: 'var(--text)', marginBottom: 10, paddingRight: 2 }}>المكافآت المتاحة</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {REWARDS.map(reward => {
               const canAfford = pts.balance >= reward.points
               const redeemed = redeemedIds.includes(reward.id)
               return (
                 <div key={reward.id} style={{
-                  background: 'white', borderRadius: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+                  background: 'var(--surface)', borderRadius: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
                   padding: '14px', display: 'flex', alignItems: 'center', gap: 12,
                   opacity: !canAfford && !redeemed ? 0.6 : 1,
                 }}>
@@ -168,7 +168,7 @@ export default function Loyalty() {
                     {reward.icon}
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{ fontWeight: 700, color: '#1a1a1a', fontSize: 13, marginBottom: 3 }}>{reward.title}</p>
+                    <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 13, marginBottom: 3 }}>{reward.title}</p>
                     <p style={{ fontSize: 12, color: color, fontWeight: 700, fontFamily: 'Inter, sans-serif' }}>
                       {reward.points.toLocaleString()} نقطة
                     </p>
@@ -194,14 +194,14 @@ export default function Loyalty() {
 
         {/* How to earn */}
         <div>
-          <h2 style={{ fontSize: 15, fontWeight: 800, color: '#1a1a1a', marginBottom: 10, paddingRight: 2 }}>كيف تكسب النقاط</h2>
-          <div style={{ background: 'white', borderRadius: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.06)', overflow: 'hidden' }}>
+          <h2 style={{ fontSize: 15, fontWeight: 800, color: 'var(--text)', marginBottom: 10, paddingRight: 2 }}>كيف تكسب النقاط</h2>
+          <div style={{ background: 'var(--surface)', borderRadius: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.06)', overflow: 'hidden' }}>
             {EARN_RULES.map((item, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px', borderBottom: i < EARN_RULES.length - 1 ? '1px solid #F9FAFB' : 'none' }}>
                 <div style={{ width: 40, height: 40, borderRadius: 12, background: '#FFF7ED', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0 }}>
                   {item.icon}
                 </div>
-                <p style={{ fontSize: 13, fontWeight: 600, color: '#374151', flex: 1 }}>{item.text}</p>
+                <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', flex: 1 }}>{item.text}</p>
               </div>
             ))}
           </div>
@@ -210,8 +210,8 @@ export default function Loyalty() {
         {/* Transaction history */}
         {pts.history.length > 0 && (
           <div>
-            <h2 style={{ fontSize: 15, fontWeight: 800, color: '#1a1a1a', marginBottom: 10, paddingRight: 2 }}>سجل النقاط</h2>
-            <div style={{ background: 'white', borderRadius: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.06)', overflow: 'hidden' }}>
+            <h2 style={{ fontSize: 15, fontWeight: 800, color: 'var(--text)', marginBottom: 10, paddingRight: 2 }}>سجل النقاط</h2>
+            <div style={{ background: 'var(--surface)', borderRadius: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.06)', overflow: 'hidden' }}>
               {pts.history.slice(0, 10).map((tx, i) => (
                 <div key={tx.id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '13px 14px', borderBottom: i < pts.history.length - 1 ? '1px solid #F9FAFB' : 'none' }}>
                   <div style={{ width: 40, height: 40, borderRadius: 12, background: tx.delta > 0 ? '#F0FDF4' : '#FEF2F2', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -219,7 +219,7 @@ export default function Loyalty() {
                   </div>
                   <div style={{ flex: 1 }}>
                     <p style={{ fontSize: 13, fontWeight: 700, color: '#1a1a1a', marginBottom: 2 }}>{tx.label}</p>
-                    <p style={{ fontSize: 11, color: '#9CA3AF', fontWeight: 500 }}>{tx.time}</p>
+                    <p style={{ fontSize: 11, color: 'var(--text-3)', fontWeight: 500 }}>{tx.time}</p>
                   </div>
                   <span style={{ fontSize: 14, fontWeight: 800, color: tx.delta > 0 ? '#16A34A' : '#DC2626', fontFamily: 'Inter, sans-serif' }}>
                     {tx.delta > 0 ? '+' : ''}{tx.delta}
@@ -231,9 +231,9 @@ export default function Loyalty() {
         )}
 
         {pts.history.length === 0 && (
-          <div style={{ background: 'white', borderRadius: 16, padding: '28px', textAlign: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+          <div style={{ background: 'var(--surface)', borderRadius: 16, padding: '28px', textAlign: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
             <p style={{ fontSize: 32, marginBottom: 10 }}>📭</p>
-            <p style={{ fontSize: 13, color: '#9CA3AF' }}>لا يوجد سجل بعد — اطلب وجبتك الأولى!</p>
+            <p style={{ fontSize: 13, color: 'var(--text-3)' }}>لا يوجد سجل بعد — اطلب وجبتك الأولى!</p>
           </div>
         )}
       </div>
@@ -249,19 +249,19 @@ export default function Loyalty() {
         >
           <div
             onClick={e => e.stopPropagation()}
-            style={{ background: 'white', borderRadius: '24px 24px 0 0', padding: '28px 20px 40px', width: '100%', maxWidth: 480, textAlign: 'center' }}
+            style={{ background: 'var(--surface)', borderRadius: '24px 24px 0 0', padding: '28px 20px 40px', width: '100%', maxWidth: 480, textAlign: 'center' }}
           >
             <div style={{ fontSize: 52, marginBottom: 14 }}>{confirmReward.icon}</div>
-            <p style={{ fontWeight: 800, color: '#1a1a1a', fontSize: 18, marginBottom: 8 }}>استبدال المكافأة</p>
-            <p style={{ color: '#6B7280', fontSize: 14, marginBottom: 6 }}>{confirmReward.title}</p>
+            <p style={{ fontWeight: 800, color: 'var(--text)', fontSize: 18, marginBottom: 8 }}>استبدال المكافأة</p>
+            <p style={{ color: 'var(--text-2)', fontSize: 14, marginBottom: 6 }}>{confirmReward.title}</p>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#FFF7ED', border: '1.5px solid #FED7AA', borderRadius: 20, padding: '5px 16px', fontSize: 13, fontWeight: 700, color: '#EA580C', marginBottom: 8 }}>
               ★ {confirmReward.points.toLocaleString()} نقطة
             </div>
-            <p style={{ color: '#9CA3AF', fontSize: 12, marginBottom: 24 }}>
+            <p style={{ color: 'var(--text-3)', fontSize: 12, marginBottom: 24 }}>
               رصيدك الحالي: {pts.balance.toLocaleString()} نقطة → بعد الاستبدال: {(pts.balance - confirmReward.points).toLocaleString()} نقطة
             </p>
             <div style={{ display: 'flex', gap: 10 }}>
-              <button onClick={() => setConfirmReward(null)} style={{ flex: 1, padding: '14px', borderRadius: 14, border: '1.5px solid #E5E7EB', fontSize: 14, fontWeight: 700, color: '#6B7280', background: 'white', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>
+              <button onClick={() => setConfirmReward(null)} style={{ flex: 1, padding: '14px', borderRadius: 14, border: '1.5px solid #E5E7EB', fontSize: 14, fontWeight: 700, color: 'var(--text-2)', background: 'white', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>
                 إلغاء
               </button>
               <button onClick={() => handleRedeem(confirmReward)} style={{ flex: 1, padding: '14px', borderRadius: 14, border: 'none', fontSize: 14, fontWeight: 700, color: 'white', background: color, cursor: 'pointer', fontFamily: 'Cairo, sans-serif', boxShadow: `0 4px 14px ${color}44` }}>

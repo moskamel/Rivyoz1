@@ -25,6 +25,7 @@ import Loyalty from './customer/Loyalty'
 import CustomerAuth from './customer/CustomerAuth'
 import MyOrders from './customer/MyOrders'
 import CustomerProfile from './customer/CustomerProfile'
+import { CustomerThemeWrapper } from './lib/ThemeContext'
 
 function ProtectedRoute({ children }) {
   if (!localStorage.getItem('auth_role')) return <Navigate to="/login" replace />
@@ -92,25 +93,25 @@ export default function App() {
       <Route path="/inventory" element={<ProtectedRoute><Inventory /></ProtectedRoute>} />
       <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
 
-      {/* Customer-facing routes */}
-      <Route path="/customer-login" element={<CustomerAuth />} />
-      <Route path="/my-orders" element={<MyOrders />} />
-      <Route path="/my-profile" element={<CustomerProfile />} />
-      <Route path="/loyalty" element={<Loyalty />} />
-      <Route path="/chef-ahmed" element={<StoreFront />} />
-      <Route path="/cart" element={<Cart />} />
-      <Route path="/checkout" element={<Checkout />} />
-      <Route path="/order-confirm" element={<OrderConfirm />} />
-      <Route path="/track/:orderId" element={<OrderTracking />} />
-      <Route path="/explore" element={<Explore />} />
-
-      {/* Restaurant listing pages */}
-      <Route path="/pizza-plaza" element={<RestaurantPage />} />
-      <Route path="/metro-cafe" element={<RestaurantPage />} />
-      <Route path="/shawarma-king" element={<RestaurantPage />} />
-      <Route path="/sushi-house" element={<RestaurantPage />} />
-      <Route path="/burger-factory" element={<RestaurantPage />} />
-      <Route path="/r/:slug" element={<RestaurantPage />} />
+      {/* Customer-facing routes wrapped in theme provider */}
+      <Route element={<CustomerThemeWrapper />}>
+        <Route path="/customer-login" element={<CustomerAuth />} />
+        <Route path="/my-orders" element={<MyOrders />} />
+        <Route path="/my-profile" element={<CustomerProfile />} />
+        <Route path="/loyalty" element={<Loyalty />} />
+        <Route path="/chef-ahmed" element={<StoreFront />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/order-confirm" element={<OrderConfirm />} />
+        <Route path="/track/:orderId" element={<OrderTracking />} />
+        <Route path="/explore" element={<Explore />} />
+        <Route path="/pizza-plaza" element={<RestaurantPage />} />
+        <Route path="/metro-cafe" element={<RestaurantPage />} />
+        <Route path="/shawarma-king" element={<RestaurantPage />} />
+        <Route path="/sushi-house" element={<RestaurantPage />} />
+        <Route path="/burger-factory" element={<RestaurantPage />} />
+        <Route path="/r/:slug" element={<RestaurantPage />} />
+      </Route>
     </Routes>
     </>
   )

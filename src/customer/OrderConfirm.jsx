@@ -24,10 +24,10 @@ export default function OrderConfirm() {
 
   if (!order) {
     return (
-      <div style={{ minHeight: '100vh', background: '#F9FAFB', display: 'flex', alignItems: 'center', justifyContent: 'center' }} dir="rtl">
+      <div style={{ minHeight: '100vh', background: 'var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center' }} dir="rtl">
         <div style={{ textAlign: 'center', padding: 32 }}>
           <p style={{ fontSize: 48, marginBottom: 16 }}>😕</p>
-          <p style={{ color: '#6B7280', marginBottom: 20, fontSize: 15 }}>لم يتم العثور على الطلب</p>
+          <p style={{ color: 'var(--text-2)', marginBottom: 20, fontSize: 15 }}>لم يتم العثور على الطلب</p>
           <button
             onClick={() => navigate(-1)}
             style={{ padding: '12px 28px', borderRadius: 14, color: 'white', fontWeight: 700, fontSize: 14, border: 'none', cursor: 'pointer', background: config.color }}
@@ -40,7 +40,7 @@ export default function OrderConfirm() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#F9FAFB', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '40px 20px 60px', fontFamily: 'Cairo, sans-serif' }} dir="rtl">
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '40px 20px 60px', fontFamily: 'Cairo, sans-serif' }} dir="rtl">
       <style>{`
         @keyframes spring-in {
           0% { transform: scale(0.3); opacity: 0; }
@@ -93,7 +93,7 @@ export default function OrderConfirm() {
 
           {/* Title */}
           <h1 style={{
-            fontSize: 22, fontWeight: 900, color: '#111827', marginBottom: 8,
+            fontSize: 22, fontWeight: 900, color: 'var(--text)', marginBottom: 8,
             opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(12px)',
             transition: 'all 0.4s ease 0.2s',
           }}>
@@ -109,7 +109,7 @@ export default function OrderConfirm() {
           </p>
 
           <p style={{
-            fontSize: 13, color: '#6B7280', lineHeight: 1.6, marginBottom: 20,
+            fontSize: 13, color: 'var(--text-2)', lineHeight: 1.6, marginBottom: 20,
             opacity: visible ? 1 : 0, transition: 'opacity 0.4s ease 0.35s',
           }}>
             سيبدأ المطعم بتحضير طلبك الآن
@@ -131,17 +131,17 @@ export default function OrderConfirm() {
         <div
           className={cardVisible ? 'confirm-card' : ''}
           style={{
-            background: 'white', borderRadius: 20, padding: 20, marginBottom: 14,
+            background: 'var(--surface)', borderRadius: 20, padding: 20, marginBottom: 14,
             boxShadow: '0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04)',
-            border: '1px solid #F3F4F6',
+            border: '1px solid var(--border)',
             opacity: cardVisible ? 1 : 0,
           }}
         >
           {/* Header row */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16, paddingBottom: 16, borderBottom: '1px solid #F3F4F6' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16, paddingBottom: 16, borderBottom: '1px solid var(--border)' }}>
             <div>
-              <p style={{ fontSize: 11, fontWeight: 600, color: '#9CA3AF', letterSpacing: '0.06em', marginBottom: 3 }}>رقم الطلب</p>
-              <p style={{ fontSize: 22, fontWeight: 900, color: '#111827', fontFamily: 'Inter, monospace', direction: 'ltr' }}>#{order.id}</p>
+              <p style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-3)', letterSpacing: '0.06em', marginBottom: 3 }}>رقم الطلب</p>
+              <p style={{ fontSize: 22, fontWeight: 900, color: 'var(--text)', fontFamily: 'Inter, monospace', direction: 'ltr' }}>#{order.id}</p>
             </div>
             <div style={{ padding: '6px 14px', borderRadius: 10, background: '#F0FDF4', border: '1px solid #BBF7D0' }}>
               <p style={{ fontSize: 12, fontWeight: 700, color: '#16A34A' }}>مؤكد ✓</p>
@@ -155,9 +155,9 @@ export default function OrderConfirm() {
                 <div style={{ width: 32, height: 32, borderRadius: 10, background: '#FFF7ED', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <MapPin size={14} color={config.color} />
                 </div>
-                <span style={{ fontSize: 13, color: '#6B7280' }}>المطعم</span>
+                <span style={{ fontSize: 13, color: 'var(--text-2)' }}>المطعم</span>
               </div>
-              <span style={{ fontSize: 13, fontWeight: 600, color: '#111827' }}>{config.name}</span>
+              <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>{config.name}</span>
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -165,22 +165,22 @@ export default function OrderConfirm() {
                 <div style={{ width: 32, height: 32, borderRadius: 10, background: '#FFF7ED', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <Clock size={14} color={config.color} />
                 </div>
-                <span style={{ fontSize: 13, color: '#6B7280' }}>الوقت المتوقع</span>
+                <span style={{ fontSize: 13, color: 'var(--text-2)' }}>الوقت المتوقع</span>
               </div>
-              <span style={{ fontSize: 13, fontWeight: 700, color: '#111827' }}>{config.deliveryTime}-{config.deliveryTime + 10} دقيقة</span>
+              <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>{config.deliveryTime}-{config.deliveryTime + 10} دقيقة</span>
             </div>
 
             {/* Order items */}
             {order.details && order.details.length > 0 && (
-              <div style={{ paddingTop: 12, borderTop: '1px solid #F3F4F6' }}>
+              <div style={{ paddingTop: 12, borderTop: '1px solid var(--border)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10 }}>
                   <UtensilsCrossed size={13} color="#9CA3AF" />
-                  <span style={{ fontSize: 12, fontWeight: 700, color: '#9CA3AF' }}>الأصناف</span>
+                  <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-3)' }}>الأصناف</span>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                   {order.details.map((item, idx) => (
                     <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, color: '#374151' }}>
-                      <span>{item.name} <span style={{ color: '#9CA3AF' }}>× {item.qty}</span></span>
+                      <span>{item.name} <span style={{ color: 'var(--text-3)' }}>× {item.qty}</span></span>
                       <span style={{ fontWeight: 600, fontFamily: 'Inter, sans-serif' }}>{item.price * item.qty} ج</span>
                     </div>
                   ))}
@@ -188,8 +188,8 @@ export default function OrderConfirm() {
               </div>
             )}
 
-            <div style={{ paddingTop: 12, borderTop: '1px solid #F3F4F6', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <span style={{ fontSize: 14, fontWeight: 700, color: '#111827' }}>الإجمالي</span>
+            <div style={{ paddingTop: 12, borderTop: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)' }}>الإجمالي</span>
               <span style={{ fontSize: 20, fontWeight: 900, color: config.color, fontFamily: 'Inter, monospace', direction: 'ltr' }}>{order.total} ج</span>
             </div>
           </div>
@@ -197,9 +197,9 @@ export default function OrderConfirm() {
 
         {/* ── Mini progress strip ── */}
         <div style={{
-          background: 'white', borderRadius: 20, padding: '16px 20px', marginBottom: 20,
+          background: 'var(--surface)', borderRadius: 20, padding: '16px 20px', marginBottom: 20,
           boxShadow: '0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04)',
-          border: '1px solid #F3F4F6',
+          border: '1px solid var(--border)',
           opacity: cardVisible ? 1 : 0, transition: 'opacity 0.4s ease 0.15s',
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', textAlign: 'center' }}>

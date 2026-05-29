@@ -233,11 +233,11 @@ export default function Explore() {
   })
 
   return (
-    <div style={{ height: '100dvh', display: 'flex', flexDirection: 'column', background: '#F9FAFB', fontFamily: 'Cairo, sans-serif', overflow: 'hidden' }} dir="rtl">
+    <div style={{ height: '100dvh', display: 'flex', flexDirection: 'column', background: 'var(--bg)', fontFamily: 'Cairo, sans-serif', overflow: 'hidden' }} dir="rtl">
       <style>{`@keyframes slideUp { from { transform:translateY(100%); opacity:0; } to { transform:translateY(0); opacity:1; } }`}</style>
 
       {/* ── Sticky header ── */}
-      <div style={{ background: 'white', borderBottom: '1px solid #F3F4F6', flexShrink: 0 }}>
+      <div style={{ background: 'var(--surface)', borderBottom: '1px solid var(--border)', flexShrink: 0 }}>
         <div style={{ padding: '14px 16px 0' }}>
 
           {/* Top bar */}
@@ -245,13 +245,13 @@ export default function Explore() {
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <div style={{ width: 40, height: 40, borderRadius: 12, background: 'linear-gradient(135deg, #F97316, #EA580C)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0 }}>🍽️</div>
               <div>
-                <h1 style={{ fontSize: 17, fontWeight: 900, color: '#111827', letterSpacing: '-0.02em' }}>اكتشف المطاعم</h1>
+                <h1 style={{ fontSize: 17, fontWeight: 900, color: 'var(--text)', letterSpacing: '-0.02em' }}>اكتشف المطاعم</h1>
                 <p style={{ fontSize: 11, color: '#9CA3AF', marginTop: 1 }}>{mockRestaurants.filter(r => r.isOpen).length} مطعم مفتوح</p>
               </div>
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <button style={{ display: 'flex', alignItems: 'center', gap: 5, background: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: 10, padding: '7px 11px', cursor: 'pointer' }}>
+              <button style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'var(--surface-2)', border: '1px solid var(--border-strong)', borderRadius: 10, padding: '7px 11px', cursor: 'pointer' }}>
                 <MapPin size={13} color="#F97316" />
                 <div style={{ textAlign: 'right' }}>
                   <p style={{ fontSize: 10, fontWeight: 700, color: '#374151' }}>التجمع الخامس</p>
@@ -309,8 +309,8 @@ export default function Explore() {
                 style={{
                   flexShrink: 0, display: 'flex', alignItems: 'center', gap: 5,
                   padding: '7px 14px', borderRadius: 10, fontSize: 13, fontWeight: 600, cursor: 'pointer',
-                  border: `1.5px solid ${activeFilter === f.key ? '#F97316' : '#E5E7EB'}`,
-                  background: activeFilter === f.key ? '#FFF7ED' : 'white',
+                  border: `1.5px solid ${activeFilter === f.key ? '#F97316' : 'var(--border-strong)'}`,
+                  background: activeFilter === f.key ? '#FFF7ED' : 'var(--surface)',
                   color: activeFilter === f.key ? '#EA580C' : '#6B7280',
                   transition: 'all 0.15s', fontFamily: 'Cairo, sans-serif',
                 }}
@@ -384,7 +384,7 @@ export default function Explore() {
                     style={{
                       flexShrink: 0, padding: '8px 16px', borderRadius: 20, fontSize: 12, fontWeight: 700,
                       cursor: 'pointer', border: 'none',
-                      background: active ? '#F97316' : '#F3F4F6', color: active ? 'white' : '#6B7280',
+                      background: active ? '#F97316' : 'var(--surface-2)', color: active ? 'white' : 'var(--text-2)',
                       transition: 'all 0.15s', fontFamily: 'Cairo, sans-serif',
                       boxShadow: active ? '0 4px 12px rgba(249,115,22,0.3)' : 'none',
                     }}
@@ -449,8 +449,8 @@ export default function Explore() {
                   <div
                     key={r.id} onClick={() => navigate(`/${r.slug}`)}
                     style={{
-                      background: 'white', borderRadius: 16, overflow: 'hidden', cursor: 'pointer',
-                      border: '1px solid #F3F4F6',
+                      background: 'var(--surface)', borderRadius: 16, overflow: 'hidden', cursor: 'pointer',
+                      border: '1px solid var(--border)',
                       boxShadow: '0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04)',
                       opacity: r.isOpen ? 1 : 0.7, transition: 'transform 0.15s, box-shadow 0.15s',
                       display: 'flex', alignItems: 'stretch',
@@ -464,7 +464,7 @@ export default function Explore() {
                     <div style={{ flex: 1, padding: '12px 14px 12px 12px', minWidth: 0 }}>
                       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 3 }}>
                         <div style={{ flex: 1, minWidth: 0 }}>
-                          <p style={{ fontSize: 14, fontWeight: 700, color: '#111827', marginBottom: 1 }}>{r.name}</p>
+                          <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 1 }}>{r.name}</p>
                           <p style={{ fontSize: 11, color: '#9CA3AF', marginBottom: 5 }}>{r.category}</p>
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 3, flexShrink: 0, marginRight: 8 }}>

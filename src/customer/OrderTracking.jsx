@@ -58,11 +58,11 @@ export default function OrderTracking() {
 
   if (!order) {
     return (
-      <div style={{ minHeight: '100vh', background: '#F9FAFB', display: 'flex', alignItems: 'center', justifyContent: 'center' }} dir="rtl">
+      <div style={{ minHeight: '100vh', background: 'var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center' }} dir="rtl">
         <div style={{ textAlign: 'center', padding: 32 }}>
           <p style={{ fontSize: 48, marginBottom: 16 }}>🔍</p>
-          <p style={{ fontSize: 16, fontWeight: 700, color: '#111827', marginBottom: 8 }}>لم نجد الطلب</p>
-          <p style={{ color: '#6B7280', fontSize: 13, marginBottom: 20 }}>تحقق من رقم الطلب وحاول مرة أخرى</p>
+          <p style={{ fontSize: 16, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>لم نجد الطلب</p>
+          <p style={{ color: 'var(--text-2)', fontSize: 13, marginBottom: 20 }}>تحقق من رقم الطلب وحاول مرة أخرى</p>
           <button
             onClick={() => navigate('/')}
             style={{ padding: '12px 28px', borderRadius: 14, color: 'white', fontWeight: 700, fontSize: 14, border: 'none', cursor: 'pointer', background: config.color }}
@@ -75,7 +75,7 @@ export default function OrderTracking() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#F9FAFB', fontFamily: 'Cairo, sans-serif' }} dir="rtl">
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', fontFamily: 'Cairo, sans-serif' }} dir="rtl">
       <style>{`
         @keyframes pulse-ring {
           0% { box-shadow: 0 0 0 0 ${config.color}60; }
@@ -169,7 +169,7 @@ export default function OrderTracking() {
 
         {/* ── DONE — Rating card ── */}
         {isDone && (
-          <div style={{ background: 'white', borderRadius: 20, padding: 20, boxShadow: '0 4px 24px rgba(34,197,94,0.12)', border: '1.5px solid #BBF7D0', textAlign: 'center' }}>
+          <div style={{ background: 'var(--surface)', borderRadius: 20, padding: 20, boxShadow: '0 4px 24px rgba(34,197,94,0.12)', border: '1.5px solid #BBF7D0', textAlign: 'center' }}>
             <p style={{ fontSize: 14, fontWeight: 700, color: '#16A34A', marginBottom: 12 }}>🎉 كيف كانت تجربتك؟</p>
             <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginBottom: 8 }}>
               {[1, 2, 3, 4, 5].map(s => (
@@ -194,8 +194,8 @@ export default function OrderTracking() {
 
         {/* ── Progress Timeline ── */}
         {!isCancelled && (
-          <div style={{ background: 'white', borderRadius: 20, padding: 20, boxShadow: '0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04)', border: '1px solid #F3F4F6' }}>
-            <p style={{ fontWeight: 800, color: '#111827', fontSize: 14, marginBottom: 20 }}>مراحل الطلب</p>
+          <div style={{ background: 'var(--surface)', borderRadius: 20, padding: 20, boxShadow: '0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04)', border: '1px solid var(--border)' }}>
+            <p style={{ fontWeight: 800, color: 'var(--text)', fontSize: 14, marginBottom: 20 }}>مراحل الطلب</p>
             <div>
               {steps.map((step, idx) => {
                 const done = idx < currentStep
@@ -276,15 +276,15 @@ export default function OrderTracking() {
         )}
 
         {/* ── Order Info Card ── */}
-        <div style={{ background: 'white', borderRadius: 20, padding: 20, boxShadow: '0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04)', border: '1px solid #F3F4F6' }}>
+        <div style={{ background: 'var(--surface)', borderRadius: 20, padding: 20, boxShadow: '0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04)', border: '1px solid var(--border)' }}>
           {/* Restaurant header */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16, paddingBottom: 16, borderBottom: '1px solid #F3F4F6' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16, paddingBottom: 16, borderBottom: '1px solid var(--border)' }}>
             <div style={{ width: 44, height: 44, borderRadius: 14, background: `linear-gradient(135deg, ${config.color}, ${config.color}cc)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: 18, color: 'white', flexShrink: 0 }}>
               {config.name.charAt(0)}
             </div>
             <div style={{ flex: 1 }}>
-              <p style={{ fontSize: 14, fontWeight: 800, color: '#111827' }}>{config.name}</p>
-              <p style={{ fontSize: 12, color: '#9CA3AF', marginTop: 2 }}>رقم الطلب: <span style={{ fontFamily: 'Inter, monospace', direction: 'ltr', display: 'inline-block' }}>#{order.id}</span></p>
+              <p style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)' }}>{config.name}</p>
+              <p style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 2 }}>رقم الطلب: <span style={{ fontFamily: 'Inter, monospace', direction: 'ltr', display: 'inline-block' }}>#{order.id}</span></p>
             </div>
             <div style={{
               padding: '5px 12px', borderRadius: 10,
@@ -307,32 +307,32 @@ export default function OrderTracking() {
                       <span style={{ fontSize: 10, fontWeight: 800, color: config.color, fontFamily: 'Inter', direction: 'ltr' }}>×{item.qty}</span>
                     </div>
                     <div>
-                      <p style={{ fontSize: 13, fontWeight: 600, color: '#374151' }}>{item.name}</p>
-                      {item.note && <p style={{ fontSize: 11, color: '#9CA3AF', marginTop: 1 }}>ملاحظة: {item.note}</p>}
+                      <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>{item.name}</p>
+                      {item.note && <p style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 1 }}>ملاحظة: {item.note}</p>}
                     </div>
                   </div>
-                  <span style={{ fontSize: 13, fontWeight: 700, color: '#111827', flexShrink: 0, fontFamily: 'Inter', direction: 'ltr' }}>{item.price} ج</span>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', flexShrink: 0, fontFamily: 'Inter', direction: 'ltr' }}>{item.price} ج</span>
                 </div>
               ))}
             </div>
           )}
 
           {/* Total + delivery */}
-          <div style={{ borderTop: '1px solid #F3F4F6', paddingTop: 14 }}>
+          <div style={{ borderTop: '1px solid var(--border)', paddingTop: 14 }}>
             {order.address && (
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
                 <span style={{ fontSize: 14 }}>📍</span>
-                <span style={{ fontSize: 12, color: '#6B7280' }}>{order.address}</span>
+                <span style={{ fontSize: 12, color: 'var(--text-2)' }}>{order.address}</span>
               </div>
             )}
             {order.paymentMethod && (
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
                 <span style={{ fontSize: 14 }}>💳</span>
-                <span style={{ fontSize: 12, color: '#6B7280' }}>{order.paymentMethod}</span>
+                <span style={{ fontSize: 12, color: 'var(--text-2)' }}>{order.paymentMethod}</span>
               </div>
             )}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontSize: 14, fontWeight: 700, color: '#111827' }}>الإجمالي</span>
+              <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)' }}>الإجمالي</span>
               <span style={{ fontSize: 18, fontWeight: 900, color: config.color, fontFamily: 'Inter', direction: 'ltr' }}>{order.total} ج</span>
             </div>
           </div>
@@ -358,7 +358,7 @@ export default function OrderTracking() {
             onClick={() => navigate('/explore')}
             style={{
               width: '100%', padding: '13px', borderRadius: 14, fontWeight: 700, fontSize: 14, cursor: 'pointer',
-              background: 'white', border: `2px solid ${config.color}`, color: config.color,
+              background: 'var(--surface)', border: `2px solid ${config.color}`, color: config.color,
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
               fontFamily: 'Cairo, sans-serif',
             }}

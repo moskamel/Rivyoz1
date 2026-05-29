@@ -8,8 +8,8 @@ import { useCart } from './CartContext'
 function makeInputStyle() {
   return {
     width: '100%', padding: '13px 14px', borderRadius: 12,
-    border: '1.5px solid #E5E7EB', fontSize: 14, outline: 'none',
-    fontFamily: 'Cairo, sans-serif', background: 'white', color: '#1a1a1a',
+    border: '1.5px solid var(--border-strong)', fontSize: 14, outline: 'none',
+    fontFamily: 'Cairo, sans-serif', background: 'var(--surface)', color: 'var(--text)',
     boxSizing: 'border-box', transition: 'border-color 0.2s, box-shadow 0.2s',
   }
 }
@@ -19,7 +19,7 @@ function focusInput(e, color) {
   e.target.style.boxShadow = `0 0 0 3px ${color}22`
 }
 function blurInput(e) {
-  e.target.style.borderColor = '#E5E7EB'
+  e.target.style.borderColor = 'var(--border-strong)'
   e.target.style.boxShadow = 'none'
 }
 
@@ -69,22 +69,22 @@ function StepIndicator({ step, color }) {
 function CompactSummary({ cartItems, total, deliveryFee, couponDiscount, couponApplied, color }) {
   const finalTotal = Math.max(0, total + deliveryFee - couponDiscount)
   return (
-    <div style={{ background: '#F9FAFB', borderRadius: 14, padding: '12px 14px', marginBottom: 16 }}>
-      <p style={{ fontWeight: 700, color: '#374151', fontSize: 13, marginBottom: 10 }}>ملخص الطلب</p>
+    <div style={{ background: 'var(--surface-2)', borderRadius: 14, padding: '12px 14px', marginBottom: 16 }}>
+      <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 13, marginBottom: 10 }}>ملخص الطلب</p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
         {cartItems.map(item => (
-          <div key={item.cartId} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, color: '#6B7280' }}>
+          <div key={item.cartId} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, color: 'var(--text-2)' }}>
             <span>{item.name} × {item.qty}</span>
             <span style={{ fontWeight: 600, fontFamily: 'Inter, sans-serif' }}>{item.price * item.qty} ج</span>
           </div>
         ))}
-        <div style={{ borderTop: '1px dashed #E5E7EB', paddingTop: 8, marginTop: 4, display: 'flex', flexDirection: 'column', gap: 5 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: '#9CA3AF' }}>
+        <div style={{ borderTop: '1px dashed var(--border-strong)', paddingTop: 8, marginTop: 4, display: 'flex', flexDirection: 'column', gap: 5 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: 'var(--text-3)' }}>
             <span>المجموع الفرعي</span>
             <span style={{ fontFamily: 'Inter, sans-serif' }}>{total} ج</span>
           </div>
           {deliveryFee > 0 && (
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: '#9CA3AF' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: 'var(--text-3)' }}>
               <span>رسوم التوصيل</span>
               <span style={{ fontFamily: 'Inter, sans-serif' }}>{deliveryFee} ج</span>
             </div>
@@ -95,7 +95,7 @@ function CompactSummary({ cartItems, total, deliveryFee, couponDiscount, couponA
               <span style={{ fontFamily: 'Inter, sans-serif', fontWeight: 700 }}>− {couponDiscount} ج</span>
             </div>
           )}
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 800, fontSize: 15, color: '#1a1a1a', paddingTop: 4 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 800, fontSize: 15, color: 'var(--text)', paddingTop: 4 }}>
             <span>الإجمالي</span>
             <span style={{ color: color, fontFamily: 'Inter, sans-serif' }}>{finalTotal} ج</span>
           </div>
@@ -225,7 +225,7 @@ export default function Checkout() {
 
   // ── Shared UI helpers ──
   const Label = ({ children, error }) => (
-    <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: error ? '#EF4444' : '#374151', marginBottom: 6 }}>
+    <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: error ? '#EF4444' : 'var(--text-2)', marginBottom: 6 }}>
       {children}
     </label>
   )
@@ -235,7 +235,7 @@ export default function Checkout() {
     : null
 
   const BackBtn = ({ onClick }) => (
-    <button onClick={onClick} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '10px 0', background: 'none', border: 'none', cursor: 'pointer', color: '#6B7280', fontWeight: 700, fontSize: 14, fontFamily: 'Cairo, sans-serif' }}>
+    <button onClick={onClick} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '10px 0', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-2)', fontWeight: 700, fontSize: 14, fontFamily: 'Cairo, sans-serif' }}>
       <ArrowRight size={16} />
       رجوع
     </button>
@@ -273,7 +273,7 @@ export default function Checkout() {
 
   // ── RENDER ───────────────────────────────────────────────────────────────
   return (
-    <div style={{ minHeight: '100vh', background: '#F9FAFB', fontFamily: 'Cairo, sans-serif', direction: 'rtl' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', fontFamily: 'Cairo, sans-serif', direction: 'rtl' }}>
 
       {/* Step content */}
       <div style={{ padding: '16px 14px 100px', opacity: animating ? 0 : 1, transition: 'opacity 0.18s ease' }}>
@@ -284,8 +284,8 @@ export default function Checkout() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
 
             {/* Name & phone */}
-            <div style={{ background: 'white', borderRadius: 16, padding: '16px 16px', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
-              <p style={{ fontWeight: 800, fontSize: 14, color: '#1a1a1a', marginBottom: 14 }}>بياناتك الشخصية</p>
+            <div style={{ background: 'var(--surface)', borderRadius: 16, padding: '16px 16px', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
+              <p style={{ fontWeight: 800, fontSize: 14, color: 'var(--text)', marginBottom: 14 }}>بياناتك الشخصية</p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                 <div>
                   <Label error={step1Errors.name}>الاسم الكامل *</Label>
@@ -318,8 +318,8 @@ export default function Checkout() {
             </div>
 
             {/* Order type */}
-            <div style={{ background: 'white', borderRadius: 16, padding: '16px 16px', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
-              <p style={{ fontWeight: 800, fontSize: 14, color: '#1a1a1a', marginBottom: 12 }}>نوع الطلب</p>
+            <div style={{ background: 'var(--surface)', borderRadius: 16, padding: '16px 16px', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
+              <p style={{ fontWeight: 800, fontSize: 14, color: 'var(--text)', marginBottom: 12 }}>نوع الطلب</p>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8 }}>
                 {orderTypeOpts.map(opt => (
                   <button
@@ -331,8 +331,8 @@ export default function Checkout() {
                       cursor: opt.enabled ? 'pointer' : 'not-allowed',
                       display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5,
                       transition: 'all 0.15s',
-                      border: `2px solid ${orderType === opt.key ? accentColor : '#E5E7EB'}`,
-                      background: orderType === opt.key ? accentColor + '12' : '#FAFAFA',
+                      border: `2px solid ${orderType === opt.key ? accentColor : 'var(--border-strong)'}`,
+                      background: orderType === opt.key ? accentColor + '12' : 'var(--surface-2)',
                       color: orderType === opt.key ? accentColor : '#6B7280',
                       opacity: opt.enabled ? 1 : 0.4,
                       fontFamily: 'Cairo, sans-serif',
@@ -347,8 +347,8 @@ export default function Checkout() {
 
             {/* Delivery address */}
             {orderType === 'delivery' && (
-              <div style={{ background: 'white', borderRadius: 16, padding: '16px 16px', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
-                <p style={{ fontWeight: 800, fontSize: 14, color: '#1a1a1a', marginBottom: 14 }}>بيانات التوصيل</p>
+              <div style={{ background: 'var(--surface)', borderRadius: 16, padding: '16px 16px', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
+                <p style={{ fontWeight: 800, fontSize: 14, color: 'var(--text)', marginBottom: 14 }}>بيانات التوصيل</p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
 
                   {/* Saved addresses shortcut */}
@@ -433,8 +433,8 @@ export default function Checkout() {
 
             {/* Table number */}
             {orderType === 'table' && (
-              <div style={{ background: 'white', borderRadius: 16, padding: '16px 16px', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
-                <p style={{ fontWeight: 800, fontSize: 14, color: '#1a1a1a', marginBottom: 12 }}>رقم الطاولة</p>
+              <div style={{ background: 'var(--surface)', borderRadius: 16, padding: '16px 16px', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
+                <p style={{ fontWeight: 800, fontSize: 14, color: 'var(--text)', marginBottom: 12 }}>رقم الطاولة</p>
                 <div>
                   <input
                     type="number"
@@ -467,8 +467,8 @@ export default function Checkout() {
             />
 
             {/* Payment cards */}
-            <div style={{ background: 'white', borderRadius: 16, padding: '16px 16px', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
-              <p style={{ fontWeight: 800, fontSize: 14, color: '#1a1a1a', marginBottom: 14 }}>طريقة الدفع</p>
+            <div style={{ background: 'var(--surface)', borderRadius: 16, padding: '16px 16px', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
+              <p style={{ fontWeight: 800, fontSize: 14, color: 'var(--text)', marginBottom: 14 }}>طريقة الدفع</p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 {paymentOptions.map(opt => (
                   <button
@@ -504,12 +504,12 @@ export default function Checkout() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
 
             {/* Items list */}
-            <div style={{ background: 'white', borderRadius: 16, overflow: 'hidden', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
-              <div style={{ padding: '14px 16px', borderBottom: '1px solid #F3F4F6' }}>
-                <p style={{ fontWeight: 800, fontSize: 14, color: '#1a1a1a' }}>أصناف الطلب</p>
+            <div style={{ background: 'var(--surface)', borderRadius: 16, overflow: 'hidden', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
+              <div style={{ padding: '14px 16px', borderBottom: '1px solid var(--border)' }}>
+                <p style={{ fontWeight: 800, fontSize: 14, color: 'var(--text)' }}>أصناف الطلب</p>
               </div>
               {cartItems.map((item, idx) => (
-                <div key={item.cartId} style={{ padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: idx < cartItems.length - 1 ? '1px solid #F9FAFB' : 'none' }}>
+                <div key={item.cartId} style={{ padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: idx < cartItems.length - 1 ? '1px solid var(--border)' : 'none' }}>
                   <div style={{ flex: 1 }}>
                     <p style={{ fontWeight: 600, color: '#1a1a1a', fontSize: 13 }}>{item.name}</p>
                     {item.modifiers && item.modifiers.length > 0 && (
@@ -527,8 +527,8 @@ export default function Checkout() {
             </div>
 
             {/* Coupon */}
-            <div style={{ background: 'white', borderRadius: 16, padding: '16px 16px', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
-              <p style={{ fontWeight: 800, fontSize: 14, color: '#1a1a1a', marginBottom: 12 }}>كود الخصم</p>
+            <div style={{ background: 'var(--surface)', borderRadius: 16, padding: '16px 16px', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
+              <p style={{ fontWeight: 800, fontSize: 14, color: 'var(--text)', marginBottom: 12 }}>كود الخصم</p>
               <div style={{ display: 'flex', gap: 8 }}>
                 <input
                   type="text"
@@ -554,14 +554,14 @@ export default function Checkout() {
             </div>
 
             {/* Totals breakdown */}
-            <div style={{ background: 'white', borderRadius: 16, padding: '16px 16px', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
-              <p style={{ fontWeight: 800, fontSize: 14, color: '#1a1a1a', marginBottom: 12 }}>ملخص المدفوعات</p>
+            <div style={{ background: 'var(--surface)', borderRadius: 16, padding: '16px 16px', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
+              <p style={{ fontWeight: 800, fontSize: 14, color: 'var(--text)', marginBottom: 12 }}>ملخص المدفوعات</p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, color: '#6B7280' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, color: 'var(--text-2)' }}>
                   <span>المجموع الفرعي</span>
                   <span style={{ fontFamily: 'Inter, sans-serif' }}>{total} ج</span>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, color: '#6B7280' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, color: 'var(--text-2)' }}>
                   <span>رسوم التوصيل</span>
                   <span style={{ fontFamily: 'Inter, sans-serif' }}>
                     {orderType === 'delivery' ? `${config.deliveryFee} ج` : 'مجاني'}
@@ -573,8 +573,8 @@ export default function Checkout() {
                     <span style={{ fontFamily: 'Inter, sans-serif', fontWeight: 700 }}>− {couponDiscount} ج</span>
                   </div>
                 )}
-                <div style={{ borderTop: '1.5px dashed #E5E7EB', paddingTop: 10, display: 'flex', justifyContent: 'space-between', fontWeight: 800, fontSize: 18 }}>
-                  <span style={{ color: '#1a1a1a' }}>الإجمالي</span>
+                <div style={{ borderTop: '1.5px dashed var(--border-strong)', paddingTop: 10, display: 'flex', justifyContent: 'space-between', fontWeight: 800, fontSize: 18 }}>
+                  <span style={{ color: 'var(--text)' }}>الإجمالي</span>
                   <span style={{ color: accentColor, fontFamily: 'Inter, sans-serif' }}>{finalTotal} ج</span>
                 </div>
               </div>
@@ -582,7 +582,7 @@ export default function Checkout() {
 
             {/* Delivery address summary */}
             {orderType === 'delivery' && address && (
-              <div style={{ background: 'white', borderRadius: 16, padding: '14px 16px', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
+              <div style={{ background: 'var(--surface)', borderRadius: 16, padding: '14px 16px', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
                 <p style={{ fontWeight: 800, fontSize: 13, color: '#374151', marginBottom: 6 }}>📍 عنوان التوصيل</p>
                 {governorate && <p style={{ fontSize: 12, color: accentColor, fontWeight: 700, marginBottom: 2 }}>{governorate}</p>}
                 <p style={{ fontSize: 13, color: '#6B7280', lineHeight: 1.6 }}>{address}</p>
@@ -591,7 +591,7 @@ export default function Checkout() {
             )}
 
             {/* Payment method summary */}
-            <div style={{ background: 'white', borderRadius: 16, padding: '14px 16px', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
+            <div style={{ background: 'var(--surface)', borderRadius: 16, padding: '14px 16px', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
               <p style={{ fontWeight: 800, fontSize: 13, color: '#374151', marginBottom: 6 }}>💳 طريقة الدفع</p>
               <p style={{ fontSize: 14, color: '#1a1a1a', fontWeight: 600 }}>
                 {paymentOptions.find(p => p.key === payment)?.icon}{' '}

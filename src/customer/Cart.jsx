@@ -54,7 +54,6 @@ export default function Cart() {
 
   const handleProceed = () => {
     if (!canProceed) return
-    // persist coupon state so Checkout can read it
     localStorage.setItem('cart_coupon', JSON.stringify({
       coupon: couponApplied ? coupon.trim().toUpperCase() : '',
       couponApplied,
@@ -64,14 +63,13 @@ export default function Cart() {
     navigate('/checkout')
   }
 
-  // ── Empty state ──────────────────────────────────────────────────────
   if (itemCount === 0) {
     return (
-      <div style={{ minHeight: '100vh', background: '#F9FAFB', fontFamily: 'Cairo, sans-serif', direction: 'rtl' }}>
+      <div style={{ minHeight: '100vh', background: 'var(--bg)', fontFamily: 'Cairo, sans-serif', direction: 'rtl' }}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 48, textAlign: 'center', minHeight: 'calc(100vh - 64px)' }}>
           <div style={{ fontSize: 72, marginBottom: 20, lineHeight: 1 }}>🛒</div>
-          <p style={{ fontWeight: 800, color: '#1a1a1a', fontSize: 22, marginBottom: 8 }}>سلتك فارغة</p>
-          <p style={{ color: '#9CA3AF', fontSize: 14, marginBottom: 32 }}>لم تضف أي أصناف بعد</p>
+          <p style={{ fontWeight: 800, color: 'var(--text)', fontSize: 22, marginBottom: 8 }}>سلتك فارغة</p>
+          <p style={{ color: 'var(--text-3)', fontSize: 14, marginBottom: 32 }}>لم تضف أي أصناف بعد</p>
           <button onClick={() => navigate(-1)} style={{ padding: '14px 32px', borderRadius: 16, background: config.color, color: 'white', fontWeight: 700, fontSize: 15, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif', boxShadow: `0 6px 20px ${config.color}40` }}>
             تصفح القائمة
           </button>
@@ -81,61 +79,51 @@ export default function Cart() {
     )
   }
 
-  // ── Main cart ────────────────────────────────────────────────────────
   return (
-    <div style={{ minHeight: '100vh', background: '#F9FAFB', fontFamily: 'Cairo, sans-serif', direction: 'rtl' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', fontFamily: 'Cairo, sans-serif', direction: 'rtl' }}>
 
       <div style={{ padding: '16px 14px 88px', display: 'flex', flexDirection: 'column', gap: 12 }}>
 
-        {/* ── SECTION A: Items list ── */}
-        <div style={{ background: 'white', borderRadius: 16, overflow: 'hidden', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
+        {/* ── Items list ── */}
+        <div style={{ background: 'var(--surface)', borderRadius: 16, overflow: 'hidden', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
           {cartItems.map((item, idx) => (
             <div key={item.cartId} style={{ position: 'relative', overflow: 'hidden' }}>
               <div style={{
                 padding: '14px 14px', display: 'flex', alignItems: 'center', gap: 12,
-                borderBottom: idx < cartItems.length - 1 ? '1px solid #F9FAFB' : 'none',
-                background: 'white',
+                borderBottom: idx < cartItems.length - 1 ? '1px solid var(--border)' : 'none',
+                background: 'var(--surface)',
               }}>
-                {/* Item image/emoji circle */}
                 <div style={{ width: 44, height: 44, borderRadius: '50%', background: config.color + '18', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0 }}>
                   {item.image ? <img src={item.image} alt="" style={{ width: 44, height: 44, borderRadius: '50%', objectFit: 'cover' }} /> : '🍽️'}
                 </div>
-
-                {/* Item info */}
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <p style={{ fontWeight: 700, color: '#1a1a1a', fontSize: 14, marginBottom: 2 }}>{item.name}</p>
-                  {/* Modifiers */}
+                  <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14, marginBottom: 2 }}>{item.name}</p>
                   {item.modifiers && item.modifiers.length > 0 && (
-                    <p style={{ fontSize: 11, color: '#9CA3AF', marginBottom: 3 }}>
+                    <p style={{ fontSize: 11, color: 'var(--text-3)', marginBottom: 3 }}>
                       {item.modifiers.map(m => m.name).filter(Boolean).join('، ')}
                     </p>
                   )}
-                  {/* Price row */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <span style={{ fontSize: 12, color: '#9CA3AF', fontFamily: 'Inter, sans-serif' }}>
+                    <span style={{ fontSize: 12, color: 'var(--text-3)', fontFamily: 'Inter, sans-serif' }}>
                       {item.price} ج × {item.qty}
                     </span>
-                    <span style={{ fontSize: 12, color: '#9CA3AF' }}>=</span>
+                    <span style={{ fontSize: 12, color: 'var(--text-3)' }}>=</span>
                     <span style={{ fontSize: 13, fontWeight: 800, color: config.color, fontFamily: 'Inter, sans-serif' }}>
                       {item.price * item.qty} ج
                     </span>
                   </div>
                 </div>
-
-                {/* Qty controls */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
                   <button
                     onClick={() => handleQtyChange(item.cartId, item.qty - 1)}
-                    style={{ width: 30, height: 30, borderRadius: '50%', border: '1.5px solid #E5E7EB', background: 'white', cursor: 'pointer', fontSize: 16, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#374151' }}
+                    style={{ width: 30, height: 30, borderRadius: '50%', border: '1.5px solid var(--border-strong)', background: 'var(--surface)', cursor: 'pointer', fontSize: 16, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text)' }}
                   >−</button>
-                  <span style={{ fontWeight: 700, fontSize: 15, minWidth: 22, textAlign: 'center', fontFamily: 'Inter, sans-serif' }}>{item.qty}</span>
+                  <span style={{ fontWeight: 700, fontSize: 15, minWidth: 22, textAlign: 'center', fontFamily: 'Inter, sans-serif', color: 'var(--text)' }}>{item.qty}</span>
                   <button
                     onClick={() => updateQty(item.cartId, item.qty + 1)}
                     style={{ width: 30, height: 30, borderRadius: '50%', background: config.color, border: 'none', cursor: 'pointer', fontSize: 16, fontWeight: 700, color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                   >+</button>
                 </div>
-
-                {/* Delete button on right edge */}
                 <button
                   onClick={() => setConfirmDelete(item.cartId)}
                   style={{ width: 30, height: 30, borderRadius: '50%', background: '#FEF2F2', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginRight: -2 }}
@@ -147,12 +135,12 @@ export default function Cart() {
           ))}
         </div>
 
-        {/* ── SECTION B: Order summary card ── */}
-        <div style={{ background: 'white', borderRadius: '20px 20px 16px 16px', boxShadow: '0 2px 10px rgba(0,0,0,0.06)', overflow: 'hidden' }}>
+        {/* ── Order summary card ── */}
+        <div style={{ background: 'var(--surface)', borderRadius: '20px 20px 16px 16px', boxShadow: '0 2px 10px rgba(0,0,0,0.06)', overflow: 'hidden' }}>
 
-          {/* Order type selector */}
-          <div style={{ padding: '16px 14px 12px', borderBottom: '1px solid #F3F4F6' }}>
-            <p style={{ fontSize: 13, fontWeight: 700, color: '#374151', marginBottom: 10 }}>طريقة الطلب</p>
+          {/* Order type */}
+          <div style={{ padding: '16px 14px 12px', borderBottom: '1px solid var(--border)' }}>
+            <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>طريقة الطلب</p>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8 }}>
               {[
                 { key: 'delivery', label: 'توصيل', icon: '🚗', enabled: config.allowDelivery },
@@ -168,9 +156,9 @@ export default function Cart() {
                     cursor: opt.enabled ? 'pointer' : 'not-allowed',
                     display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
                     transition: 'all 0.15s',
-                    border: `2px solid ${orderType === opt.key ? config.color : '#E5E7EB'}`,
-                    background: orderType === opt.key ? config.color + '12' : '#FAFAFA',
-                    color: orderType === opt.key ? config.color : '#6B7280',
+                    border: `2px solid ${orderType === opt.key ? config.color : 'var(--border-strong)'}`,
+                    background: orderType === opt.key ? config.color + '12' : 'var(--surface-2)',
+                    color: orderType === opt.key ? config.color : 'var(--text-2)',
                     opacity: opt.enabled ? 1 : 0.4,
                     fontFamily: 'Cairo, sans-serif',
                   }}
@@ -182,26 +170,24 @@ export default function Cart() {
             </div>
           </div>
 
-          {/* Coupon row */}
-          <div style={{ padding: '14px 14px 12px', borderBottom: '1px solid #F3F4F6' }}>
+          {/* Coupon */}
+          <div style={{ padding: '14px 14px 12px', borderBottom: '1px solid var(--border)' }}>
             <div style={{ display: 'flex', gap: 8 }}>
               <input
                 type="text"
                 value={coupon}
                 onChange={e => { setCoupon(e.target.value); setCouponError('') }}
                 placeholder="أدخل كود الخصم"
-                style={{ flex: 1, padding: '11px 14px', borderRadius: 12, border: `1.5px solid ${couponApplied ? '#22C55E' : '#E5E7EB'}`, fontSize: 13, outline: 'none', fontFamily: 'Cairo, sans-serif', background: 'white', color: '#1a1a1a', boxSizing: 'border-box', direction: 'ltr' }}
+                style={{ flex: 1, padding: '11px 14px', borderRadius: 12, border: `1.5px solid ${couponApplied ? '#22C55E' : 'var(--border-strong)'}`, fontSize: 13, outline: 'none', fontFamily: 'Cairo, sans-serif', background: 'var(--surface)', color: 'var(--text)', boxSizing: 'border-box', direction: 'ltr' }}
                 onFocus={e => { e.target.style.borderColor = config.color; e.target.style.boxShadow = `0 0 0 3px ${config.color}22` }}
-                onBlur={e => { e.target.style.borderColor = couponApplied ? '#22C55E' : '#E5E7EB'; e.target.style.boxShadow = 'none' }}
+                onBlur={e => { e.target.style.borderColor = couponApplied ? '#22C55E' : 'var(--border-strong)'; e.target.style.boxShadow = 'none' }}
               />
               <button
                 onClick={applyCoupon}
                 style={{ padding: '11px 18px', borderRadius: 12, background: config.color, color: 'white', fontWeight: 700, fontSize: 13, border: 'none', cursor: 'pointer', flexShrink: 0, fontFamily: 'Cairo, sans-serif' }}
               >تطبيق</button>
             </div>
-            {couponError && (
-              <p style={{ color: '#EF4444', fontSize: 12, marginTop: 6, fontWeight: 600 }}>{couponError}</p>
-            )}
+            {couponError && <p style={{ color: '#EF4444', fontSize: 12, marginTop: 6, fontWeight: 600 }}>{couponError}</p>}
             {couponApplied && (
               <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 6, background: '#F0FDF4', padding: '6px 10px', borderRadius: 8 }}>
                 <CheckCircle size={13} color="#22C55E" />
@@ -212,24 +198,24 @@ export default function Cart() {
 
           {/* Summary rows */}
           <div style={{ padding: '14px 14px 8px', display: 'flex', flexDirection: 'column', gap: 10 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, color: '#6B7280' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, color: 'var(--text-2)' }}>
               <span>المجموع الفرعي</span>
-              <span style={{ fontWeight: 600, color: '#374151', fontFamily: 'Inter, sans-serif' }}>{total} ج</span>
+              <span style={{ fontWeight: 600, color: 'var(--text)', fontFamily: 'Inter, sans-serif' }}>{total} ج</span>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, color: '#6B7280' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, color: 'var(--text-2)' }}>
               <span>رسوم التوصيل</span>
-              <span style={{ fontWeight: 600, color: '#374151', fontFamily: 'Inter, sans-serif' }}>
+              <span style={{ fontWeight: 600, color: 'var(--text)', fontFamily: 'Inter, sans-serif' }}>
                 {orderType === 'delivery' ? `${config.deliveryFee} ج` : 'مجاني'}
               </span>
             </div>
             {couponApplied && (
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, color: '#6B7280' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, color: 'var(--text-2)' }}>
                 <span>الخصم</span>
                 <span style={{ fontWeight: 700, color: '#22C55E', fontFamily: 'Inter, sans-serif' }}>− {couponDiscount} ج</span>
               </div>
             )}
-            <div style={{ borderTop: '1.5px dashed #E5E7EB', paddingTop: 12, display: 'flex', justifyContent: 'space-between', fontWeight: 800, fontSize: 18 }}>
-              <span style={{ color: '#1a1a1a' }}>الإجمالي</span>
+            <div style={{ borderTop: '1.5px dashed var(--border-strong)', paddingTop: 12, display: 'flex', justifyContent: 'space-between', fontWeight: 800, fontSize: 18 }}>
+              <span style={{ color: 'var(--text)' }}>الإجمالي</span>
               <span style={{ color: config.color, fontFamily: 'Inter, sans-serif' }}>{finalTotal} ج</span>
             </div>
           </div>
@@ -244,15 +230,14 @@ export default function Cart() {
             </div>
           )}
 
-          {/* Proceed button */}
           <div style={{ padding: '0 14px 16px' }}>
             <button
               onClick={handleProceed}
               disabled={!canProceed}
               style={{
                 width: '100%', padding: '16px', borderRadius: 18,
-                background: canProceed ? config.color : '#E5E7EB',
-                color: canProceed ? 'white' : '#9CA3AF',
+                background: canProceed ? config.color : 'var(--surface-2)',
+                color: canProceed ? 'white' : 'var(--text-3)',
                 fontWeight: 800, fontSize: 16, border: 'none',
                 cursor: canProceed ? 'pointer' : 'not-allowed',
                 fontFamily: 'Cairo, sans-serif',
@@ -266,30 +251,30 @@ export default function Cart() {
         </div>
       </div>
 
-      {/* ── Delete single item confirm ── */}
+      {/* Delete item confirm */}
       {confirmDelete && (
         <div onClick={() => setConfirmDelete(null)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 50, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
-          <div onClick={e => e.stopPropagation()} style={{ background: 'white', borderRadius: '20px 20px 0 0', padding: '24px 20px 32px', width: '100%', maxWidth: 480, textAlign: 'center' }}>
+          <div onClick={e => e.stopPropagation()} style={{ background: 'var(--surface)', borderRadius: '20px 20px 0 0', padding: '24px 20px 32px', width: '100%', maxWidth: 480, textAlign: 'center' }}>
             <div style={{ fontSize: 40, marginBottom: 12 }}>🗑️</div>
-            <p style={{ fontWeight: 800, color: '#1a1a1a', fontSize: 17, marginBottom: 6 }}>تحذف هذا الصنف؟</p>
-            <p style={{ color: '#9CA3AF', fontSize: 13, marginBottom: 20 }}>سيتم إزالة الصنف من سلتك</p>
+            <p style={{ fontWeight: 800, color: 'var(--text)', fontSize: 17, marginBottom: 6 }}>تحذف هذا الصنف؟</p>
+            <p style={{ color: 'var(--text-3)', fontSize: 13, marginBottom: 20 }}>سيتم إزالة الصنف من سلتك</p>
             <div style={{ display: 'flex', gap: 10 }}>
-              <button onClick={() => setConfirmDelete(null)} style={{ flex: 1, padding: '13px', borderRadius: 14, border: '1.5px solid #E5E7EB', fontSize: 14, fontWeight: 700, color: '#6B7280', background: 'white', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>إلغاء</button>
+              <button onClick={() => setConfirmDelete(null)} style={{ flex: 1, padding: '13px', borderRadius: 14, border: '1.5px solid var(--border-strong)', fontSize: 14, fontWeight: 700, color: 'var(--text-2)', background: 'var(--surface)', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>إلغاء</button>
               <button onClick={() => { removeItem(confirmDelete); setConfirmDelete(null) }} style={{ flex: 1, padding: '13px', borderRadius: 14, border: 'none', fontSize: 14, fontWeight: 700, color: 'white', background: '#EF4444', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>احذف</button>
             </div>
           </div>
         </div>
       )}
 
-      {/* ── Clear all confirm ── */}
+      {/* Clear all confirm */}
       {confirmClearAll && (
         <div onClick={() => setConfirmClearAll(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 50, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
-          <div onClick={e => e.stopPropagation()} style={{ background: 'white', borderRadius: '20px 20px 0 0', padding: '24px 20px 32px', width: '100%', maxWidth: 480, textAlign: 'center' }}>
+          <div onClick={e => e.stopPropagation()} style={{ background: 'var(--surface)', borderRadius: '20px 20px 0 0', padding: '24px 20px 32px', width: '100%', maxWidth: 480, textAlign: 'center' }}>
             <div style={{ fontSize: 40, marginBottom: 12 }}>🗑️</div>
-            <p style={{ fontWeight: 800, color: '#1a1a1a', fontSize: 17, marginBottom: 6 }}>تفريغ السلة؟</p>
-            <p style={{ color: '#9CA3AF', fontSize: 13, marginBottom: 20 }}>سيتم حذف جميع المنتجات من سلتك</p>
+            <p style={{ fontWeight: 800, color: 'var(--text)', fontSize: 17, marginBottom: 6 }}>تفريغ السلة؟</p>
+            <p style={{ color: 'var(--text-3)', fontSize: 13, marginBottom: 20 }}>سيتم حذف جميع المنتجات من سلتك</p>
             <div style={{ display: 'flex', gap: 10 }}>
-              <button onClick={() => setConfirmClearAll(false)} style={{ flex: 1, padding: '13px', borderRadius: 14, border: '1.5px solid #E5E7EB', fontSize: 14, fontWeight: 700, color: '#6B7280', background: 'white', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>إلغاء</button>
+              <button onClick={() => setConfirmClearAll(false)} style={{ flex: 1, padding: '13px', borderRadius: 14, border: '1.5px solid var(--border-strong)', fontSize: 14, fontWeight: 700, color: 'var(--text-2)', background: 'var(--surface)', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>إلغاء</button>
               <button onClick={() => { clearCart(); setConfirmClearAll(false) }} style={{ flex: 1, padding: '13px', borderRadius: 14, border: 'none', fontSize: 14, fontWeight: 700, color: 'white', background: '#EF4444', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>افرغ السلة</button>
             </div>
           </div>

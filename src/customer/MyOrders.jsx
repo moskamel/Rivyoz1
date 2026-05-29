@@ -28,9 +28,9 @@ function OrderCard({ order, config, onClick }) {
     <div
       onClick={onClick}
       style={{
-        background: 'white', borderRadius: 18, padding: '16px', cursor: 'pointer',
+        background: 'var(--surface)', borderRadius: 18, padding: '16px', cursor: 'pointer',
         boxShadow: '0 2px 12px rgba(0,0,0,0.05)',
-        border: isActive ? `1.5px solid ${config.color}35` : '1px solid #F3F4F6',
+        border: isActive ? `1.5px solid ${config.color}35` : '1px solid var(--border)',
         position: 'relative', overflow: 'hidden', transition: 'transform 0.1s',
       }}
       onTouchStart={e => (e.currentTarget.style.transform = 'scale(0.985)')}
@@ -50,7 +50,7 @@ function OrderCard({ order, config, onClick }) {
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 5 }}>
-            <p style={{ fontWeight: 800, fontSize: 14, color: '#111827' }}>{config.name}</p>
+            <p style={{ fontWeight: 800, fontSize: 14, color: 'var(--text)' }}>{config.name}</p>
             <span style={{
               padding: '3px 10px', borderRadius: 8, fontSize: 11, fontWeight: 700,
               background: STATUS_BG[status], color: STATUS_COLOR[status],
@@ -94,20 +94,20 @@ export default function MyOrders() {
   const past = orders.filter(o => ['done', 'cancelled'].includes(o.status))
 
   return (
-    <div style={{ minHeight: '100vh', background: '#F9FAFB', fontFamily: 'Cairo, sans-serif', direction: 'rtl' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', fontFamily: 'Cairo, sans-serif', direction: 'rtl' }}>
       {/* Header */}
       <div style={{
-        background: 'white', borderBottom: '1px solid #F3F4F6', padding: '14px 16px',
+        background: 'var(--surface)', borderBottom: '1px solid var(--border)', padding: '14px 16px',
         position: 'sticky', top: 0, zIndex: 10, display: 'flex', alignItems: 'center', gap: 12,
         boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
       }}>
         <button
           onClick={() => navigate(-1)}
-          style={{ width: 38, height: 38, borderRadius: 12, background: '#F9FAFB', border: '1px solid #F3F4F6', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+          style={{ width: 38, height: 38, borderRadius: 12, background: 'var(--surface-2)', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
         >
           <ArrowRight size={18} color="#374151" />
         </button>
-        <h1 style={{ fontWeight: 800, fontSize: 18, color: '#111827', flex: 1 }}>طلباتي</h1>
+        <h1 style={{ fontWeight: 800, fontSize: 18, color: 'var(--text)', flex: 1 }}>طلباتي</h1>
         {orders.length > 0 && (
           <span style={{ fontSize: 12, color: '#6B7280', background: '#F3F4F6', padding: '3px 10px', borderRadius: 20, fontFamily: 'Inter, sans-serif' }}>
             {orders.length}
@@ -119,7 +119,7 @@ export default function MyOrders() {
         {orders.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '72px 20px' }}>
             <p style={{ fontSize: 56, marginBottom: 16 }}>🍽️</p>
-            <p style={{ fontWeight: 800, fontSize: 17, color: '#111827', marginBottom: 8 }}>لا توجد طلبات بعد</p>
+            <p style={{ fontWeight: 800, fontSize: 17, color: 'var(--text)', marginBottom: 8 }}>لا توجد طلبات بعد</p>
             <p style={{ fontSize: 13, color: '#9CA3AF', marginBottom: 28, lineHeight: 1.6 }}>
               اطلب وجبتك الأولى وستظهر هنا
             </p>

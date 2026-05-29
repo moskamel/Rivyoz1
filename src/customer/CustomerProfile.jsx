@@ -59,7 +59,7 @@ export default function CustomerProfile() {
     : { label: 'مبتدئ 🌟' }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#F9FAFB', fontFamily: 'Cairo, sans-serif', direction: 'rtl' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', fontFamily: 'Cairo, sans-serif', direction: 'rtl' }}>
       {/* Gradient header */}
       <div style={{
         background: `linear-gradient(135deg, ${color} 0%, ${color}cc 100%)`,
@@ -121,9 +121,9 @@ export default function CustomerProfile() {
             { label: 'المصروف', value: `${totalSpent} ج` },
             { label: 'النقاط', value: pts.balance.toLocaleString() },
           ].map((s, i) => (
-            <div key={i} style={{ background: 'white', borderRadius: 16, padding: '14px 10px', textAlign: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', border: '1px solid #F3F4F6' }}>
-              <p style={{ fontSize: 17, fontWeight: 900, color: '#111827', marginBottom: 3, fontFamily: 'Inter, sans-serif' }}>{s.value}</p>
-              <p style={{ fontSize: 10, color: '#9CA3AF', fontWeight: 600 }}>{s.label}</p>
+            <div key={i} style={{ background: 'var(--surface)', borderRadius: 16, padding: '14px 10px', textAlign: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', border: '1px solid var(--border)' }}>
+              <p style={{ fontSize: 17, fontWeight: 900, color: 'var(--text)', marginBottom: 3, fontFamily: 'Inter, sans-serif' }}>{s.value}</p>
+              <p style={{ fontSize: 10, color: 'var(--text-3)', fontWeight: 600 }}>{s.label}</p>
             </div>
           ))}
         </div>
@@ -171,15 +171,15 @@ export default function CustomerProfile() {
         </div>
 
         {/* طلباتي link */}
-        <div style={{ background: 'white', borderRadius: 18, overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', border: '1px solid #F3F4F6' }}>
+        <div style={{ background: 'var(--surface)', borderRadius: 18, overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', border: '1px solid var(--border)' }}>
           <button
             onClick={() => navigate('/my-orders')}
             style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 14, padding: '17px 16px', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'right', fontFamily: 'Cairo, sans-serif' }}
           >
             <span style={{ fontSize: 22 }}>📋</span>
             <div style={{ flex: 1 }}>
-              <p style={{ fontSize: 14, fontWeight: 700, color: '#111827' }}>طلباتي</p>
-              <p style={{ fontSize: 12, color: '#9CA3AF', marginTop: 2 }}>{orders.length} طلب</p>
+              <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)' }}>طلباتي</p>
+              <p style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 2 }}>{orders.length} طلب</p>
             </div>
             <span style={{ fontSize: 16, color: '#D1D5DB' }}>←</span>
           </button>
@@ -188,7 +188,7 @@ export default function CustomerProfile() {
         {/* Saved addresses */}
         <div>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10, padding: '0 2px' }}>
-            <h2 style={{ fontSize: 15, fontWeight: 800, color: '#111827' }}>عناويني المحفوظة</h2>
+            <h2 style={{ fontSize: 15, fontWeight: 800, color: 'var(--text)' }}>عناويني المحفوظة</h2>
             <button
               onClick={() => setAddingAddress(true)}
               style={{
@@ -205,22 +205,22 @@ export default function CustomerProfile() {
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {(profile.addresses || []).length === 0 && !addingAddress && (
-              <div style={{ background: 'white', borderRadius: 16, padding: '22px', textAlign: 'center', border: '1px dashed #E5E7EB' }}>
+              <div style={{ background: 'var(--surface)', borderRadius: 16, padding: '22px', textAlign: 'center', border: '1px dashed var(--border-strong)' }}>
                 <p style={{ fontSize: 28, marginBottom: 8 }}>📍</p>
-                <p style={{ fontSize: 13, color: '#9CA3AF' }}>لم تضف أي عنوان بعد</p>
+                <p style={{ fontSize: 13, color: 'var(--text-3)' }}>لم تضف أي عنوان بعد</p>
               </div>
             )}
             {(profile.addresses || []).map((addr, i) => (
-              <div key={i} style={{ background: 'white', borderRadius: 14, padding: '13px 14px', display: 'flex', alignItems: 'center', gap: 12, boxShadow: '0 2px 6px rgba(0,0,0,0.04)', border: '1px solid #F3F4F6' }}>
+              <div key={i} style={{ background: 'var(--surface)', borderRadius: 14, padding: '13px 14px', display: 'flex', alignItems: 'center', gap: 12, boxShadow: '0 2px 6px rgba(0,0,0,0.04)', border: '1px solid var(--border)' }}>
                 <span style={{ fontSize: 20 }}>📍</span>
-                <p style={{ flex: 1, fontSize: 13, fontWeight: 600, color: '#374151', lineHeight: 1.4 }}>{addr}</p>
+                <p style={{ flex: 1, fontSize: 13, fontWeight: 600, color: 'var(--text)', lineHeight: 1.4 }}>{addr}</p>
                 <button onClick={() => removeAddress(i)} style={{ width: 32, height: 32, borderRadius: 8, background: '#FEF2F2', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   <Trash2 size={14} color="#EF4444" />
                 </button>
               </div>
             ))}
             {addingAddress && (
-              <div style={{ background: 'white', borderRadius: 16, padding: '16px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', border: '1px solid #F3F4F6' }}>
+              <div style={{ background: 'var(--surface)', borderRadius: 16, padding: '16px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', border: '1px solid var(--border)' }}>
                 <input
                   autoFocus
                   value={newAddress}
@@ -236,7 +236,7 @@ export default function CustomerProfile() {
                 <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
                   <button
                     onClick={() => { setAddingAddress(false); setNewAddress('') }}
-                    style={{ flex: 1, padding: '10px', borderRadius: 12, background: '#F9FAFB', border: '1px solid #E5E7EB', color: '#6B7280', fontWeight: 600, fontSize: 13, cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}
+                    style={{ flex: 1, padding: '10px', borderRadius: 12, background: '#F9FAFB', border: '1px solid #E5E7EB', color: 'var(--text-2)', fontWeight: 600, fontSize: 13, cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}
                   >
                     إلغاء
                   </button>
@@ -274,9 +274,9 @@ export default function CustomerProfile() {
         >
           <div
             onClick={e => e.stopPropagation()}
-            style={{ background: 'white', borderRadius: '24px 24px 0 0', padding: '28px 20px 40px', width: '100%', maxWidth: 480 }}
+            style={{ background: 'var(--surface)', borderRadius: '24px 24px 0 0', padding: '28px 20px 40px', width: '100%', maxWidth: 480 }}
           >
-            <p style={{ fontWeight: 800, fontSize: 16, color: '#111827', marginBottom: 16 }}>تعديل الاسم</p>
+            <p style={{ fontWeight: 800, fontSize: 16, color: 'var(--text)', marginBottom: 16 }}>تعديل الاسم</p>
             <input
               autoFocus
               value={newName}
@@ -285,7 +285,7 @@ export default function CustomerProfile() {
               style={{ width: '100%', padding: '13px 14px', borderRadius: 14, border: `1.5px solid ${color}`, fontSize: 15, fontFamily: 'Cairo, sans-serif', boxSizing: 'border-box', outline: 'none' }}
             />
             <div style={{ display: 'flex', gap: 10, marginTop: 14 }}>
-              <button onClick={() => setEditingName(false)} style={{ flex: 1, padding: '13px', borderRadius: 14, background: '#F9FAFB', border: '1px solid #E5E7EB', color: '#6B7280', fontWeight: 600, fontSize: 14, cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>إلغاء</button>
+              <button onClick={() => setEditingName(false)} style={{ flex: 1, padding: '13px', borderRadius: 14, background: '#F9FAFB', border: '1px solid #E5E7EB', color: 'var(--text-2)', fontWeight: 600, fontSize: 14, cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>إلغاء</button>
               <button onClick={saveNameEdit} style={{ flex: 1, padding: '13px', borderRadius: 14, background: color, color: 'white', fontWeight: 700, fontSize: 14, border: 'none', cursor: 'pointer', fontFamily: 'Cairo, sans-serif' }}>حفظ</button>
             </div>
           </div>
