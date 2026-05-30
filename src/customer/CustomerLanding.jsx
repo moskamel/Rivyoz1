@@ -483,7 +483,7 @@ export default function CustomerLanding() {
         </div>
 
         {/* How it works */}
-        <div style={{ paddingTop: 36 }}>
+        <div style={{ paddingTop: 36, display: 'none' }}>
           <div style={{ textAlign: 'center', marginBottom: 20 }}>
             <p style={{ fontSize: 11, fontWeight: 700, color, letterSpacing: '0.08em', marginBottom: 6 }}>كيف يعمل؟</p>
             <h2 style={{ fontSize: 22, fontWeight: 900, color: 'var(--text)', margin: 0 }}>ثلاث خطوات بسيطة</h2>
@@ -511,7 +511,7 @@ export default function CustomerLanding() {
         </div>
 
         {/* Features grid */}
-        <div style={{ paddingTop: 36 }}>
+        <div style={{ paddingTop: 36, display: 'none' }}>
           <div style={{ textAlign: 'center', marginBottom: 20 }}>
             <p style={{ fontSize: 11, fontWeight: 700, color, letterSpacing: '0.08em', marginBottom: 6 }}>لماذا ريفيو؟</p>
             <h2 style={{ fontSize: 22, fontWeight: 900, color: 'var(--text)', margin: 0 }}>تجربة طلب لا مثيل لها</h2>
@@ -575,7 +575,7 @@ export default function CustomerLanding() {
         </div>
 
         {/* Testimonials — slider */}
-        <TestimonialsSlider testimonials={testimonials} color={color} />
+        <div style={{ display: 'none' }}><TestimonialsSlider testimonials={testimonials} color={color} /></div>
 
 
       </div>
