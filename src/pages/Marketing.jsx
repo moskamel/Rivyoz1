@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Add, Copy, Tag, People, TrendUp, Flash, Message, Gift, Check, Trash, Star1 } from 'iconsax-react'
+import ConfirmDialog from '../components/ConfirmDialog'
 import Layout from '../components/layout/Layout'
 import { getCoupons, setCoupons } from '../lib/restaurantStore'
 
@@ -439,6 +440,7 @@ function CouponsTab() {
   const [coupons, setCouponsState] = useState(getCoupons)
   const [showForm, setShowForm] = useState(false)
   const [form, setForm] = useState({ code: '', type: 'percent', value: '', maxUses: '', minOrder: '', expiry: '' })
+  const [confirmDeleteId, setConfirmDeleteId] = useState(null)
 
   const generateCode = () => {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
@@ -497,7 +499,7 @@ function CouponsTab() {
                 </button>
                 <span className="badge badge-green badge-pill badge-lg">{c.discount}</span>
                 {isExpired && <span className="badge badge-red badge-pill badge-sm">منتهي</span>}
-                <button onClick={() => remove(c.id)} style={{ marginRight: 'auto', background: 'none', border: 'none', cursor: 'pointer', padding: 2 }}>
+                <button onClick={() => setConfirmDeleteId(c.id)} style={{ marginRight: 'auto', background: 'none', border: 'none', cursor: 'pointer', padding: 2 }}>
                   <Trash size={13} style={{ color: 'var(--text-3)' }} />
                 </button>
               </div>
@@ -607,6 +609,14 @@ function CouponsTab() {
         )}
       </div>
     </div>
+    <ConfirmDialog
+      open={confirmDeleteId !== null}
+      title="حذف الكوبون؟"
+      message="سيتم حذف هذا الكوبون نهائياً."
+      confirmLabel="احذف"
+      onConfirm={() => { remove(confirmDeleteId); setConfirmDeleteId(null) }}
+      onCancel={() => setConfirmDeleteId(null)}
+    />
   )
 }
 

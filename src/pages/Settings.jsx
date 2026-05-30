@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
 import { Import, Scanner, Shop, Car, Card, Camera, Trash, Profile, Lock, Shield, Logout } from 'iconsax-react'
+import ConfirmDialog from '../components/ConfirmDialog'
 import { useNavigate } from 'react-router-dom'
 import QRCode from 'react-qr-code'
 import Layout from '../components/layout/Layout'
@@ -79,6 +80,7 @@ function resizeImage(file, maxW, maxH, quality = 0.85) {
 function ImageUpload({ label, hint, value, onChange, aspect = 'banner' }) {
   const inputRef = useRef(null)
   const [dragging, setDragging] = useState(false)
+  const [confirmDelete, setConfirmDelete] = useState(false)
 
   const handleFile = async (file) => {
     if (!file || !file.type.startsWith('image/')) return
@@ -95,7 +97,7 @@ function ImageUpload({ label, hint, value, onChange, aspect = 'banner' }) {
         <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-2)', letterSpacing: '0.04em' }}>{label}</label>
         {value && (
           <button
-            onClick={() => onChange('')}
+            onClick={() => setConfirmDelete(true)}
             style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, color: 'var(--red)', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
           >
             <Trash size={12} /> حذف
@@ -162,6 +164,14 @@ function ImageUpload({ label, hint, value, onChange, aspect = 'banner' }) {
         onChange={e => { handleFile(e.target.files[0]); e.target.value = '' }}
       />
     </div>
+    <ConfirmDialog
+      open={confirmDelete}
+      title={`حذف ${label}؟`}
+      message="سيتم حذف الصورة نهائياً."
+      confirmLabel="احذف"
+      onConfirm={() => { onChange(''); setConfirmDelete(false) }}
+      onCancel={() => setConfirmDelete(false)}
+    />
   )
 }
 
@@ -400,6 +410,7 @@ function QRTab() {
 }
 
 function SubscriptionTab() {
+  const [confirmCancel, setConfirmCancel] = useState(false)
   return (
     <div className="animate-fade-in" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -417,7 +428,7 @@ function SubscriptionTab() {
           </div>
           <div style={{ display: 'flex', gap: 8 }}>
             <button className="btn-subtle" style={{ flex: 1 }}>تغيير طريقة الدفع</button>
-            <button className="btn-danger" style={{ flex: 1 }}>إلغاء الاشتراك</button>
+            <button className="btn-danger" onClick={() => setConfirmCancel(true)} style={{ flex: 1 }}>إلغاء الاشتراك</button>
           </div>
         </div>
       </div>
@@ -439,6 +450,14 @@ function SubscriptionTab() {
         ))}
       </div>
     </div>
+    <ConfirmDialog
+      open={confirmCancel}
+      title="إلغاء الاشتراك؟"
+      message="سيتم إلغاء اشتراكك في نهاية الفترة الحالية وستفقد جميع مميزات Pro."
+      confirmLabel="نعم، ألغِ الاشتراك"
+      onConfirm={() => setConfirmCancel(false)}
+      onCancel={() => setConfirmCancel(false)}
+    />
   )
 }
 
@@ -552,6 +571,7 @@ function SessionTab() {
   const role = localStorage.getItem('auth_role') || 'owner'
   const accentColor = roleColors[role] || '#F97316'
   const roleLabel = roleLabels[role] || 'صاحب المطعم'
+  const [confirmLogout, setConfirmLogout] = useState(false)
 
   function handleLogout() {
     localStorage.removeItem('auth_role')
@@ -575,7 +595,7 @@ function SessionTab() {
               </div>
             </div>
           </div>
-          <button onClick={handleLogout} style={{ padding: '10px 20px', borderRadius: 10, border: '1px solid rgba(239,68,68,0.3)', background: 'rgba(239,68,68,0.08)', color: '#EF4444', fontSize: 14, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, transition: 'all 0.15s', fontFamily: 'Zain, sans-serif' }}
+          <button onClick={() => setConfirmLogout(true)} style={{ padding: '10px 20px', borderRadius: 10, border: '1px solid rgba(239,68,68,0.3)', background: 'rgba(239,68,68,0.08)', color: '#EF4444', fontSize: 14, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, transition: 'all 0.15s', fontFamily: 'Zain, sans-serif' }}
             onMouseEnter={e => e.currentTarget.style.background = 'rgba(239,68,68,0.15)'}
             onMouseLeave={e => e.currentTarget.style.background = 'rgba(239,68,68,0.08)'}>
             <Logout size={14} strokeWidth={2} /> تسجيل الخروج
@@ -583,6 +603,14 @@ function SessionTab() {
         </div>
       </div>
     </div>
+    <ConfirmDialog
+      open={confirmLogout}
+      title="تسجيل الخروج؟"
+      message="هل تريد تسجيل الخروج من حسابك؟"
+      confirmLabel="تسجيل الخروج"
+      onConfirm={handleLogout}
+      onCancel={() => setConfirmLogout(false)}
+    />
   )
 }
 

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Add, Trash, Edit2, CloseCircle, Check, ColorSwatch, Image, Tag, LayoutMaximize, Mobile, ArrowDown2 } from 'iconsax-react'
+import ConfirmDialog from '../components/ConfirmDialog'
 import Layout from '../components/layout/Layout'
 import {
   getConfig, setConfig,
@@ -55,6 +56,7 @@ const presetColors = [
 function ColorTab() {
   const [color, setColor] = useState(() => getConfig().color || '#F97316')
   const { toast, showToast } = useToast()
+  const [confirmDeleteLogo, setConfirmDeleteLogo] = useState(false)
 
   return (
     <div className="split-panel">
@@ -80,7 +82,7 @@ function ColorTab() {
             <div style={{ width: 64, height: 64, background: 'var(--surface-2)', borderRadius: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 26, border: '2px dashed var(--border)' }}>🍽️</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               <button style={{ padding: '7px 16px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 13, fontWeight: 600, color: 'var(--text-2)', background: 'transparent', cursor: 'pointer' }}>رفع لوجو جديد</button>
-              <button style={{ padding: '7px 16px', border: '1px solid var(--red-muted)', borderRadius: 10, fontSize: 13, fontWeight: 600, color: 'var(--red)', background: 'transparent', cursor: 'pointer' }}>حذف</button>
+              <button onClick={() => setConfirmDeleteLogo(true)} style={{ padding: '7px 16px', border: '1px solid var(--red-muted)', borderRadius: 10, fontSize: 13, fontWeight: 600, color: 'var(--red)', background: 'transparent', cursor: 'pointer' }}>حذف</button>
             </div>
           </div>
         </div>
@@ -116,6 +118,14 @@ function ColorTab() {
       </div>
       {toast && <Toast message={toast} />}
     </div>
+    <ConfirmDialog
+      open={confirmDeleteLogo}
+      title="حذف اللوجو؟"
+      message="سيتم حذف لوجو المطعم نهائياً."
+      confirmLabel="احذف"
+      onConfirm={() => { setConfig({ logo: '' }); setConfirmDeleteLogo(false) }}
+      onCancel={() => setConfirmDeleteLogo(false)}
+    />
   )
 }
 
@@ -130,6 +140,7 @@ function BannersTab() {
   const [editing, setEditing] = useState(null)
   const [form, setForm] = useState({ title: '', subtitle: '', color: ['#F97316', '#EA580C'], active: true, imageUrl: '' })
   const { toast, showToast } = useToast()
+  const [confirmDeleteId, setConfirmDeleteId] = useState(null)
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0]
@@ -238,7 +249,7 @@ function BannersTab() {
                   <div onClick={e => { e.stopPropagation(); toggle(b.id) }}>
                     <Toggle value={b.active} onChange={() => toggle(b.id)} />
                   </div>
-                  <button onClick={e => { e.stopPropagation(); remove(b.id) }} style={{ padding: 5, borderRadius: 7, background: 'rgba(0,0,0,0.25)', border: 'none', cursor: 'pointer', color: 'white', display: 'flex' }}><Trash size={12} /></button>
+                  <button onClick={e => { e.stopPropagation(); setConfirmDeleteId(b.id) }} style={{ padding: 5, borderRadius: 7, background: 'rgba(0,0,0,0.25)', border: 'none', cursor: 'pointer', color: 'white', display: 'flex' }}><Trash size={12} /></button>
                 </div>
               </div>
             </div>
@@ -407,6 +418,14 @@ function ItemsPicker({ selected, onChange }) {
         </>
       )}
     </div>
+    <ConfirmDialog
+      open={confirmDeleteId !== null}
+      title="حذف البانر؟"
+      message="سيتم حذف هذا البانر نهائياً."
+      confirmLabel="احذف"
+      onConfirm={() => { remove(confirmDeleteId); setConfirmDeleteId(null) }}
+      onCancel={() => setConfirmDeleteId(null)}
+    />
   )
 }
 
@@ -415,6 +434,7 @@ function CombosTab() {
   const [editing, setEditing] = useState(null)
   const [form, setForm] = useState({ name: '', selectedItems: [], price: '', originalPrice: '', image: '🍔', active: true })
   const { toast, showToast } = useToast()
+  const [confirmDeleteId, setConfirmDeleteId] = useState(null)
 
   const itemsLabel = (selectedItems) => selectedItems.map(i => i.name).join(' + ')
 
@@ -474,7 +494,7 @@ function CombosTab() {
                 </div>
                 <Toggle value={c.active} onChange={() => toggle(c.id)} />
                 <button onClick={() => startEdit(c)} style={{ padding: 6, borderRadius: 8, background: 'var(--surface-2)', border: 'none', cursor: 'pointer', color: 'var(--text-2)', display: 'flex' }}><Edit2 size={13} /></button>
-                <button onClick={() => remove(c.id)} style={{ padding: 6, borderRadius: 8, background: 'var(--red-muted)', border: 'none', cursor: 'pointer', color: 'var(--red)', display: 'flex' }}><Trash size={13} /></button>
+                <button onClick={() => setConfirmDeleteId(c.id)} style={{ padding: 6, borderRadius: 8, background: 'var(--red-muted)', border: 'none', cursor: 'pointer', color: 'var(--red)', display: 'flex' }}><Trash size={13} /></button>
               </div>
             )
           })}
@@ -558,6 +578,14 @@ function CombosTab() {
       )}
       {toast && <Toast message={toast} />}
     </div>
+    <ConfirmDialog
+      open={confirmDeleteId !== null}
+      title="حذف الكومبو؟"
+      message="سيتم حذف هذا الكومبو نهائياً."
+      confirmLabel="احذف"
+      onConfirm={() => { remove(confirmDeleteId); setConfirmDeleteId(null) }}
+      onCancel={() => setConfirmDeleteId(null)}
+    />
   )
 }
 

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
+import ConfirmDialog from '../components/ConfirmDialog'
 import { Add, More, CloseCircle, Sort, Star1 } from 'iconsax-react'
 import Layout from '../components/layout/Layout'
 import { getMenuItems, setMenuItems, getCategories, setCategories as setCategories_store } from '../lib/restaurantStore'
@@ -25,6 +26,7 @@ export default function HambergerMenu() {
   const [form, setForm] = useState({ name: '', price: '', categoryId: 1, description: '', active: true, bestseller: false, discountTag: '' })
   const [openMenuId, setOpenMenuId] = useState(null)
   const [menuPos, setMenuPos] = useState(null)
+  const [confirmDeleteId, setConfirmDeleteId] = useState(null)
   const [formErrors, setFormErrors] = useState({})
   const [showCatForm, setShowCatForm] = useState(false)
   const [newCatName, setNewCatName] = useState('')
@@ -337,7 +339,7 @@ export default function HambergerMenu() {
                         onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                       >📋 نسخ</button>
                       <div style={{ height: 1, background: 'var(--border)', margin: '2px 0' }} />
-                      <button onClick={() => { deleteItem(item.id); setOpenMenuId(null) }}
+                      <button onClick={() => { setConfirmDeleteId(item.id); setOpenMenuId(null) }}
                         style={{ width: '100%', textAlign: 'right', padding: '10px 16px', fontSize: 13, color: 'var(--red)', background: 'transparent', border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', display: 'flex', alignItems: 'center', gap: 8 }}
                         onMouseEnter={e => e.currentTarget.style.background = 'var(--red-muted)'}
                         onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
@@ -525,5 +527,13 @@ export default function HambergerMenu() {
         </div>
       )}
     </Layout>
+    <ConfirmDialog
+      open={confirmDeleteId !== null}
+      title="حذف الأكلة؟"
+      message="سيتم حذف هذه الأكلة نهائياً ولا يمكن التراجع."
+      confirmLabel="احذف"
+      onConfirm={() => { deleteItem(confirmDeleteId); setConfirmDeleteId(null) }}
+      onCancel={() => setConfirmDeleteId(null)}
+    />
   )
 }

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { HambergerMenu, Add, Trash, Edit2 } from 'iconsax-react'
+import ConfirmDialog from '../components/ConfirmDialog'
 import {
   getCustomerProfile, setCustomerProfile, clearCustomerProfile,
   getCustomerPoints, getCustomerOrders, getConfig,
@@ -21,6 +22,8 @@ export default function CustomerProfile() {
   const [addingAddress, setAddingAddress] = useState(false)
   const [newAddress, setNewAddress] = useState('')
   const [addressError, setAddressError] = useState('')
+  const [confirmDeleteAddr, setConfirmDeleteAddr] = useState(null)
+  const [confirmLogout, setConfirmLogout] = useState(false)
 
   if (!profile) {
     return (
@@ -289,7 +292,7 @@ export default function CustomerProfile() {
               <div key={i} style={{ background: 'var(--surface)', borderRadius: 14, padding: '13px 14px', display: 'flex', alignItems: 'center', gap: 12, boxShadow: '0 2px 6px rgba(0,0,0,0.04)', border: '1px solid var(--border)' }}>
                 <span style={{ fontSize: 20 }}>📍</span>
                 <p style={{ flex: 1, fontSize: 13, fontWeight: 600, color: 'var(--text)', lineHeight: 1.4 }}>{addr}</p>
-                <button onClick={() => removeAddress(i)} style={{ width: 32, height: 32, borderRadius: 8, background: '#FEF2F2', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <button onClick={() => setConfirmDeleteAddr(i)} style={{ width: 32, height: 32, borderRadius: 8, background: '#FEF2F2', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   <Trash size={14} color="#EF4444" />
                 </button>
               </div>
@@ -330,7 +333,7 @@ export default function CustomerProfile() {
 
         {/* Logout */}
         <button
-          onClick={() => { clearCustomerProfile(); navigate('/explore') }}
+          onClick={() => setConfirmLogout(true)}
           style={{
             width: '100%', padding: '14px', borderRadius: 14,
             background: '#FEF2F2', color: '#DC2626',
@@ -371,6 +374,22 @@ export default function CustomerProfile() {
 
       <CustomerFooter />
       <CustomerNav />
+      <ConfirmDialog
+        open={confirmDeleteAddr !== null}
+        title="حذف العنوان؟"
+        message="سيتم حذف هذا العنوان نهائياً."
+        confirmLabel="احذف"
+        onConfirm={() => { removeAddress(confirmDeleteAddr); setConfirmDeleteAddr(null) }}
+        onCancel={() => setConfirmDeleteAddr(null)}
+      />
+      <ConfirmDialog
+        open={confirmLogout}
+        title="تسجيل الخروج؟"
+        message="هل تريد تسجيل الخروج من حسابك؟"
+        confirmLabel="تسجيل الخروج"
+        onConfirm={() => { clearCustomerProfile(); navigate('/explore') }}
+        onCancel={() => setConfirmLogout(false)}
+      />
     </div>
   )
 }

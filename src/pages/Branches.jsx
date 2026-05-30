@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Add, CloseCircle, Trash, Edit2, Location, Call, Clock, SearchNormal1 } from 'iconsax-react'
+import ConfirmDialog from '../components/ConfirmDialog'
 import Layout from '../components/layout/Layout'
 import { getBranches, setBranches } from '../lib/restaurantStore'
 
@@ -114,6 +115,7 @@ export default function Branches() {
   const [branches, setBranchesState] = useState(getBranches)
   const [search, setSearch]         = useState('')
   const [modal, setModal]           = useState(null) // null | 'add' | branch-object
+  const [confirmDeleteId, setConfirmDeleteId] = useState(null)
 
   const save = (form) => {
     const updated = modal === 'add'
@@ -256,7 +258,7 @@ export default function Branches() {
                         </button>
                         <button
                           className="btn-icon sm"
-                          onClick={() => remove(branch.id)}
+                          onClick={() => setConfirmDeleteId(branch.id)}
                           title="حذف"
                           onMouseEnter={e => { e.currentTarget.style.background = 'var(--red-muted)'; e.currentTarget.style.borderColor = 'rgba(248,113,113,0.30)'; e.currentTarget.style.color = 'var(--red)' }}
                           onMouseLeave={e => { e.currentTarget.style.background = 'var(--surface-2)'; e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-2)' }}
@@ -281,5 +283,13 @@ export default function Branches() {
         />
       )}
     </Layout>
+    <ConfirmDialog
+      open={confirmDeleteId !== null}
+      title="حذف الفرع؟"
+      message="سيتم حذف هذا الفرع نهائياً ولا يمكن التراجع."
+      confirmLabel="احذف"
+      onConfirm={() => { remove(confirmDeleteId); setConfirmDeleteId(null) }}
+      onCancel={() => setConfirmDeleteId(null)}
+    />
   )
 }
