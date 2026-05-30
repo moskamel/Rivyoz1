@@ -677,9 +677,9 @@ function RestaurantSlider() {
 
 function RestCard({ r, C }) {
   return (
-    <div className="rest-card" style={{ background: C.white, border: `1.5px solid ${C.gray200}`, borderRadius: 16, padding: '14px 18px', display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0, width: 230, marginRight: 14, boxShadow: '0 2px 8px rgba(0,0,0,0.04)', transition: 'border-color .2s,box-shadow .2s', cursor: 'default' }}>
+    <div dir="rtl" className="rest-card" style={{ background: C.white, border: `1.5px solid ${C.gray200}`, borderRadius: 16, padding: '14px 18px', display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0, width: 230, marginRight: 14, boxShadow: '0 2px 8px rgba(0,0,0,0.04)', transition: 'border-color .2s,box-shadow .2s', cursor: 'default' }}>
       <div style={{ width: 46, height: 46, borderRadius: 13, flexShrink: 0, background: C.orangeLight, border: `1.5px solid ${C.orangeBorder}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22 }}>{r.emoji}</div>
-      <div style={{ minWidth: 0, flex: 1 }}>
+      <div style={{ minWidth: 0, flex: 1, textAlign: 'right' }}>
         <p style={{ fontFamily: F, fontWeight: 800, fontSize: 13, color: C.navy, marginBottom: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.name}</p>
         <p style={{ fontFamily: F, fontSize: 11, color: C.gray600, whiteSpace: 'nowrap' }}>{r.cat} · {r.city}</p>
         <p style={{ fontFamily: F, fontSize: 10, color: C.orange, fontWeight: 700, marginTop: 3 }}>✓ انضم {r.joined}</p>
