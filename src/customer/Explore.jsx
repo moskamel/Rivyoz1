@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { SearchNormal1, Star1, Clock, Location, TextalignJustifyleft, Map1, HambergerMenu } from 'iconsax-react'
 import { useSidebar } from '../lib/ThemeContext'
+import { getConfig } from '../lib/restaurantStore'
 import CustomerNav from './CustomerNav'
 import CustomerFooter from './CustomerFooter'
 
@@ -22,7 +23,7 @@ const categoryFilters = [
   { key: 'سوشي', icon: '🍣' },
 ]
 
-const featured = mockRestaurants.filter(r => r.isOpen).slice(0, 3)
+// featured is computed inside the component after config merge
 
 /* ── Pure-CSS pin map ── */
 function PinMap({ restaurants, selected, onSelect }) {
@@ -114,7 +115,21 @@ export default function Explore() {
   const [viewMode, setViewMode] = useState('list')
   const [selectedOnMap, setSelectedOnMap] = useState(null)
 
-  const filtered = mockRestaurants.filter(r => {
+  // Merge admin-uploaded images into the matching restaurant
+  const storedCfg = getConfig()
+  const restaurants = mockRestaurants.map(r =>
+    r.slug === storedCfg.slug
+      ? {
+          ...r,
+          name: storedCfg.name || r.name,
+          imageUrl: storedCfg.bannerUrl || r.imageUrl,
+          logoUrl: storedCfg.logoUrl || r.imageUrl,
+        }
+      : r
+  )
+  const featured = restaurants.filter(r => r.isOpen).slice(0, 3)
+
+  const filtered = restaurants.filter(r => {
     const matchSearch = !search || r.name.includes(search) || r.category.includes(search)
     const matchCat = activeFilter === 'الكل' || r.category === activeFilter
     const matchTab = filterTab === 'الكل' ||
@@ -138,7 +153,7 @@ export default function Explore() {
               <div style={{ width: 40, height: 40, borderRadius: 12, background: 'linear-gradient(135deg, #F97316, #EA580C)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0 }}>🍽️</div>
               <div>
                 <h1 style={{ fontSize: 17, fontWeight: 900, color: 'var(--text)', letterSpacing: '-0.02em' }}>اكتشف المطاعم</h1>
-                <p style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 1 }}>{mockRestaurants.filter(r => r.isOpen).length} مطعم مفتوح</p>
+                <p style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 1 }}>{restaurants.filter(r => r.isOpen).length} مطعم مفتوح</p>
               </div>
             </div>
 

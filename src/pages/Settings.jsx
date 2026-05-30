@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Import, Scanner, Shop, Car, Card } from 'iconsax-react'
+import { useState, useRef } from 'react'
+import { Import, Scanner, Shop, Car, Card, Camera, Trash } from 'iconsax-react'
 import QRCode from 'react-qr-code'
 import Layout from '../components/layout/Layout'
 import { getConfig, setConfig } from '../lib/restaurantStore'
@@ -52,6 +52,116 @@ function Field({ label, value, onChange, type = 'text', error }) {
   )
 }
 
+/* Resize + convert an image File to a base64 JPEG string */
+function resizeImage(file, maxW, maxH, quality = 0.85) {
+  return new Promise((resolve) => {
+    const reader = new FileReader()
+    reader.onload = (ev) => {
+      const img = new Image()
+      img.onload = () => {
+        const ratio = Math.min(maxW / img.width, maxH / img.height, 1)
+        const canvas = document.createElement('canvas')
+        canvas.width  = Math.round(img.width  * ratio)
+        canvas.height = Math.round(img.height * ratio)
+        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height)
+        resolve(canvas.toDataURL('image/jpeg', quality))
+      }
+      img.src = ev.target.result
+    }
+    reader.readAsDataURL(file)
+  })
+}
+
+function ImageUpload({ label, hint, value, onChange, aspect = 'banner' }) {
+  const inputRef = useRef(null)
+  const [dragging, setDragging] = useState(false)
+
+  const handleFile = async (file) => {
+    if (!file || !file.type.startsWith('image/')) return
+    const [maxW, maxH, q] = aspect === 'logo' ? [300, 300, 0.88] : [900, 340, 0.82]
+    const b64 = await resizeImage(file, maxW, maxH, q)
+    onChange(b64)
+  }
+
+  const isBanner = aspect === 'banner'
+  const h = isBanner ? 120 : 96
+
+  return (
+    <div>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+        <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-2)', letterSpacing: '0.04em' }}>{label}</label>
+        {value && (
+          <button
+            onClick={() => onChange('')}
+            style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, color: 'var(--red)', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+          >
+            <Trash size={12} /> حذف
+          </button>
+        )}
+      </div>
+
+      <div
+        onClick={() => inputRef.current.click()}
+        onDragOver={e => { e.preventDefault(); setDragging(true) }}
+        onDragLeave={() => setDragging(false)}
+        onDrop={e => { e.preventDefault(); setDragging(false); handleFile(e.dataTransfer.files[0]) }}
+        style={{
+          width: '100%', height: h, borderRadius: 'var(--radius-lg)',
+          border: `2px dashed ${dragging ? 'var(--accent)' : value ? 'transparent' : 'var(--border-strong)'}`,
+          background: dragging ? 'var(--accent-muted)' : value ? 'transparent' : 'var(--surface-2)',
+          cursor: 'pointer', overflow: 'hidden', position: 'relative',
+          transition: 'border-color 0.15s, background 0.15s',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}
+      >
+        {value ? (
+          <>
+            <img
+              src={value}
+              alt=""
+              style={{
+                width: '100%', height: '100%', objectFit: 'cover',
+                display: 'block',
+                borderRadius: 'var(--radius-lg)',
+                ...(aspect === 'logo' ? { objectPosition: 'center' } : {}),
+              }}
+            />
+            {/* Overlay on hover */}
+            <div style={{
+              position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.42)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              opacity: 0, transition: 'opacity 0.15s', borderRadius: 'var(--radius-lg)',
+            }}
+            onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
+            onMouseLeave={e => (e.currentTarget.style.opacity = '0')}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'white', fontSize: 13, fontWeight: 700 }}>
+                <Camera size={16} /> تغيير الصورة
+              </div>
+            </div>
+          </>
+        ) : (
+          <div style={{ textAlign: 'center', padding: 16 }}>
+            <Camera size={22} color="var(--text-3)" style={{ marginBottom: 8 }} />
+            <p style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-2)', marginBottom: 3 }}>
+              {dragging ? 'أفلت الصورة هنا' : 'اضغط أو اسحب صورة'}
+            </p>
+            <p style={{ fontSize: 10, color: 'var(--text-3)' }}>{hint}</p>
+          </div>
+        )}
+      </div>
+
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/*"
+        style={{ display: 'none' }}
+        onChange={e => { handleFile(e.target.files[0]); e.target.value = '' }}
+      />
+    </div>
+  )
+}
+
 function RestaurantTab() {
   const storedConfig = getConfig()
   const [form, setForm] = useState({
@@ -61,6 +171,8 @@ function RestaurantTab() {
     phone: storedConfig.phone || '01012345678',
     email: 'chef@email.com',
   })
+  const [bannerUrl, setBannerUrl] = useState(storedConfig.bannerUrl || '')
+  const [logoUrl, setLogoUrl] = useState(storedConfig.logoUrl || '')
   const [errors, setErrors] = useState({})
   const { toast, showToast } = useToast()
 
@@ -75,8 +187,41 @@ function RestaurantTab() {
     return e
   }
 
+  const handleSave = () => {
+    const e = validate()
+    setErrors(e)
+    if (Object.keys(e).length) return
+    setConfig({ ...form, bannerUrl, logoUrl })
+    showToast('تم الحفظ ✓')
+  }
+
   return (
     <div className="animate-fade-in">
+
+      {/* ── Image uploads row ── */}
+      <div className="glass" style={{ padding: 20, marginBottom: 16 }}>
+        <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 16 }}>
+          صور المطعم
+          <span style={{ fontSize: 11, fontWeight: 500, color: 'var(--text-3)', marginRight: 8 }}>تظهر في صفحة الاستكشاف وموقعك</span>
+        </p>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 200px', gap: 16 }}>
+          <ImageUpload
+            label="صورة الغلاف"
+            hint="JPG / PNG · يُفضل 900×340 · حجم أقصى 5 ميجا"
+            value={bannerUrl}
+            onChange={setBannerUrl}
+            aspect="banner"
+          />
+          <ImageUpload
+            label="شعار المطعم"
+            hint="مربع · JPG / PNG"
+            value={logoUrl}
+            onChange={setLogoUrl}
+            aspect="logo"
+          />
+        </div>
+      </div>
+
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
         <div className="glass" style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>
           <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 0 }}>معلومات المطعم</p>
@@ -112,10 +257,7 @@ function RestaurantTab() {
           </div>
         </div>
       </div>
-      <button
-        className="btn-primary"
-        onClick={() => { const e = validate(); setErrors(e); if (!Object.keys(e).length) { setConfig(form); showToast('تم الحفظ ✓') } }}
-      >
+      <button className="btn-primary" onClick={handleSave}>
         حفظ التغييرات
       </button>
       {toast && <Toast message={toast} />}
