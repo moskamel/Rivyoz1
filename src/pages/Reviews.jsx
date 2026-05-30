@@ -7,7 +7,7 @@ function Stars({ rating, size = 14 }) {
   return (
     <span>
       {[1, 2, 3, 4, 5].map(s => (
-        <span key={s} style={{ color: s <= rating ? '#F59E0B' : 'var(--border-strong)', fontSize: size }}>★</span>
+        <span key={s} style={{ color: s <= rating ? '#f97316' : 'var(--border-strong)', fontSize: size }}>★</span>
       ))}
     </span>
   )
@@ -53,8 +53,8 @@ export default function Reviews() {
         {/* Stats row */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginBottom: 28 }}>
           {[
-            { label: 'إجمالي التقييمات', value: total, emoji: '⭐', color: '#F59E0B' },
-            { label: 'متوسط التقييم', value: avg.toFixed(1) + ' / 5', emoji: '📊', color: '#3B82F6' },
+            { label: 'إجمالي التقييمات', value: total, emoji: '⭐', color: '#f97316' },
+            { label: 'متوسط التقييم', value: avg.toFixed(1) + ' / 5', emoji: '📊', color: '#f97316' },
             { label: 'بانتظار الرد', value: pendingCount, emoji: '💬', color: '#F97316' },
             { label: 'مخفية', value: hiddenCount, emoji: '🙈', color: '#6B7280' },
           ].map(stat => (
@@ -71,7 +71,7 @@ export default function Reviews() {
         {/* Rating distribution */}
         <div style={{ background: 'var(--surface)', borderRadius: 16, padding: '20px', border: '1px solid var(--border)', marginBottom: 24, display: 'flex', gap: 28, alignItems: 'center', flexWrap: 'wrap' }}>
           <div style={{ textAlign: 'center', flexShrink: 0 }}>
-            <div style={{ fontSize: 48, fontWeight: 900, color: '#F59E0B', lineHeight: 1 }}>{avg.toFixed(1)}</div>
+            <div style={{ fontSize: 48, fontWeight: 900, color: '#f97316', lineHeight: 1 }}>{avg.toFixed(1)}</div>
             <div style={{ marginTop: 6 }}><Stars rating={Math.round(avg)} size={16} /></div>
             <div style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 4 }}>{total} تقييم</div>
           </div>
@@ -82,9 +82,9 @@ export default function Reviews() {
               return (
                 <div key={s} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
                   <span style={{ fontSize: 12, color: 'var(--text-2)', width: 10, textAlign: 'right', flexShrink: 0 }}>{s}</span>
-                  <span style={{ color: '#F59E0B', fontSize: 12, flexShrink: 0 }}>★</span>
+                  <span style={{ color: '#f97316', fontSize: 12, flexShrink: 0 }}>★</span>
                   <div style={{ flex: 1, height: 8, background: 'var(--surface-2)', borderRadius: 4, overflow: 'hidden' }}>
-                    <div style={{ width: `${pct}%`, height: '100%', background: '#F59E0B', borderRadius: 4, transition: 'width 0.5s' }} />
+                    <div style={{ width: `${pct}%`, height: '100%', background: '#f97316', borderRadius: 4, transition: 'width 0.5s' }} />
                   </div>
                   <span style={{ fontSize: 11, color: 'var(--text-3)', width: 22, flexShrink: 0 }}>{cnt}</span>
                 </div>
