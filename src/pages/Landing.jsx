@@ -613,6 +613,7 @@ function Pricing() {
               position: 'relative',
               boxShadow: p.featured ? `0 20px 48px rgba(26,26,46,.2)` : 'none',
               transition: 'transform .2s',
+              display: 'flex', flexDirection: 'column',
             }}
             onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-6px)'}
             onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
@@ -639,7 +640,7 @@ function Pricing() {
                 }
               </div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 28 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12, flex: 1, paddingBottom: 28 }}>
                 {p.features.map((f, j) => (
                   <div key={j} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                     <TickCircle size={19} color={p.featured ? C.orange : C.green} variant="Bold" style={{ flexShrink: 0 }} />
@@ -651,7 +652,7 @@ function Pricing() {
               <button
                 className={p.featured ? 'fazz-btn-primary' : 'fazz-btn-outline'}
                 onClick={() => navigate('/login')}
-                style={{ width: '100%', justifyContent: 'center', fontSize: 15, padding: '14px' }}>
+                style={{ width: '100%', justifyContent: 'center', fontSize: 15, padding: '14px', marginTop: 'auto' }}>
                 {p.cta}
               </button>
             </div>
