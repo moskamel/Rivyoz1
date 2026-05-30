@@ -317,7 +317,7 @@ export default function HambergerMenu() {
                           setOpenMenuId(null)
                         } else {
                           const rect = e.currentTarget.getBoundingClientRect()
-                          setMenuPos({ top: rect.bottom + 4, right: window.innerWidth - rect.right })
+                          setMenuPos({ top: rect.bottom + 4, left: rect.left })
                           setOpenMenuId(item.id)
                         }
                       }}
@@ -327,7 +327,7 @@ export default function HambergerMenu() {
                       <More size={15} />
                     </button>
                     {openMenuId === item.id && menuPos && (
-                      <div ref={menuRef} style={{ position: 'fixed', top: menuPos.top, right: menuPos.right, background: 'var(--surface)', border: '1px solid var(--border-strong)', borderRadius: 10, overflow: 'hidden', zIndex: 9999, minWidth: 130, boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}>
+                      <div ref={menuRef} style={{ position: 'fixed', top: menuPos.top, left: menuPos.left, background: 'var(--surface)', border: '1px solid var(--border-strong)', borderRadius: 10, overflow: 'hidden', zIndex: 9999, minWidth: 130, boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}>
                         <button onClick={() => { openEdit(item); setOpenMenuId(null) }}
                           style={{ width: '100%', textAlign: 'right', padding: '10px 16px', fontSize: 13, color: 'var(--text)', background: 'transparent', border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', display: 'flex', alignItems: 'center', gap: 8 }}
                           onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-2)'}
