@@ -2,13 +2,6 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Flash, Sun, Moon } from 'iconsax-react'
 
-const roles = [
-  { id: 'owner', label: 'صاحب المطعم' },
-  { id: 'manager', label: 'مدير الفرع' },
-  { id: 'cashier', label: 'كاشير' },
-  { id: 'kitchen', label: 'مطبخ' },
-]
-
 function Toast({ message, visible }) {
   return (
     <div style={{
@@ -75,7 +68,6 @@ function FieldInput({ label, value, onChange, placeholder, type = 'text', dir, p
 export default function Login() {
   const navigate = useNavigate()
   const [mode, setMode] = useState('login') // 'login' | 'signup'
-  const [selectedRole, setSelectedRole] = useState('owner')
   const [step, setStep] = useState(1) // 1 = form, 2 = otp
   const [phone, setPhone] = useState('')
   // sign-up extra fields
@@ -184,13 +176,13 @@ export default function Login() {
     setLoading(true)
     setTimeout(() => {
       setLoading(false)
-      localStorage.setItem('auth_role', selectedRole)
+      localStorage.setItem('auth_role', 'owner')
       navigate('/')
     }, 800)
   }
 
   function demoLogin() {
-    localStorage.setItem('auth_role', selectedRole)
+    localStorage.setItem('auth_role', 'owner')
     navigate('/')
   }
 
@@ -202,7 +194,6 @@ export default function Login() {
     setTimerActive(false)
     setRestaurantName('')
     setOwnerName('')
-    if (m === 'login') setSelectedRole('owner')
   }
 
   // Brand panel bullets
@@ -335,25 +326,6 @@ export default function Login() {
                     placeholder="الاسم الكامل"
                   />
                 </>
-              )}
-
-              {/* Role selector — login only */}
-              {mode === 'login' && (
-                <div style={{ marginBottom: 20 }}>
-                  <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-3)', letterSpacing: '0.07em', marginBottom: 10, fontFamily: 'Zain, sans-serif' }}>اختر دورك</p>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-                    {roles.map(role => (
-                      <button key={role.id} type="button" onClick={() => setSelectedRole(role.id)} style={{
-                        padding: '10px 14px', borderRadius: 999, fontSize: 13, fontWeight: 600,
-                        cursor: 'pointer', transition: 'all 0.15s',
-                        border: `1.5px solid ${selectedRole === role.id ? 'var(--accent)' : 'var(--border)'}`,
-                        background: selectedRole === role.id ? 'var(--accent-muted)' : 'var(--surface)',
-                        color: selectedRole === role.id ? 'var(--accent)' : 'var(--text-2)',
-                        fontFamily: 'Zain, sans-serif',
-                      }}>{role.label}</button>
-                    ))}
-                  </div>
-                </div>
               )}
 
               {/* Phone field */}
