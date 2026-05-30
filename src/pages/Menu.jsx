@@ -23,14 +23,12 @@ export default function HambergerMenu() {
   const [editItem, setEditItem] = useState(null)
   const [form, setForm] = useState({ name: '', price: '', categoryId: 1, description: '', active: true, bestseller: false, discountTag: '' })
   const [openMenuId, setOpenMenuId] = useState(null)
-  const [menuPos, setMenuPos] = useState(null)
   const [formErrors, setFormErrors] = useState({})
   const [showCatForm, setShowCatForm] = useState(false)
   const [newCatName, setNewCatName] = useState('')
   const [catNameError, setCatNameError] = useState('')
   const [deleteCatId, setDeleteCatId] = useState(null)
   const menuRef = useRef(null)
-  const menuTriggerRef = useRef(null)
 
   useEffect(() => {
     const t = setTimeout(() => setLoading(false), 1000)
@@ -39,10 +37,7 @@ export default function HambergerMenu() {
 
   useEffect(() => {
     function handleOutside(e) {
-      if (
-        menuRef.current && !menuRef.current.contains(e.target) &&
-        !(menuTriggerRef.current && menuTriggerRef.current.contains(e.target))
-      ) setOpenMenuId(null)
+      if (menuRef.current && !menuRef.current.contains(e.target)) setOpenMenuId(null)
     }
     document.addEventListener('mousedown', handleOutside)
     return () => document.removeEventListener('mousedown', handleOutside)
@@ -310,24 +305,17 @@ export default function HambergerMenu() {
                   </button>
                   <div style={{ position: 'relative' }}>
                     <button
-                      ref={openMenuId === item.id ? menuTriggerRef : null}
                       onClick={(e) => {
                         e.stopPropagation()
-                        if (openMenuId === item.id) {
-                          setOpenMenuId(null)
-                        } else {
-                          const rect = e.currentTarget.getBoundingClientRect()
-                          setMenuPos({ top: rect.bottom + 4, left: rect.left })
-                          setOpenMenuId(item.id)
-                        }
+                        setOpenMenuId(prev => prev === item.id ? null : item.id)
                       }}
                       className="btn-icon sm"
                       style={{ background: openMenuId === item.id ? 'var(--surface-2)' : 'transparent', border: 'none', color: 'var(--text-3)' }}
                     >
                       <More size={15} />
                     </button>
-                    {openMenuId === item.id && menuPos && (
-                      <div ref={menuRef} style={{ position: 'fixed', top: menuPos.top, left: menuPos.left, background: 'var(--surface)', border: '1px solid var(--border-strong)', borderRadius: 10, overflow: 'hidden', zIndex: 9999, minWidth: 130, boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}>
+                    {openMenuId === item.id && (
+                      <div ref={menuRef} style={{ position: 'absolute', top: 'calc(100% + 4px)', left: 0, background: 'var(--surface)', border: '1px solid var(--border-strong)', borderRadius: 10, overflow: 'hidden', zIndex: 9999, minWidth: 130, boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}>
                         <button onClick={() => { openEdit(item); setOpenMenuId(null) }}
                           style={{ width: '100%', textAlign: 'right', padding: '10px 16px', fontSize: 13, color: 'var(--text)', background: 'transparent', border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', display: 'flex', alignItems: 'center', gap: 8 }}
                           onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-2)'}
