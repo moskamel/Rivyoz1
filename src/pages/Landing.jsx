@@ -639,7 +639,7 @@ function RestaurantSlider() {
       </div>
 
       {/* Single seamless row */}
-      <div style={{ position: 'relative', overflow: 'hidden', padding: '6px 0' }}>
+      <div dir="ltr" style={{ position: 'relative', overflow: 'hidden', padding: '6px 0' }}>
         <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 120, background: `linear-gradient(to left,${C.gray50},transparent)`, zIndex: 10, pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 120, background: `linear-gradient(to right,${C.gray50},transparent)`, zIndex: 10, pointerEvents: 'none' }} />
         <div style={{
