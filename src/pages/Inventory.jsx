@@ -323,13 +323,13 @@ export default function Inventory() {
                       {/* Name */}
                       <td style={{ padding: '12px 16px' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+                          <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>{item.name}</p>
                           {isLow && (
                             <Warning2
                               size={13}
                               style={{ color: item.qty === 0 ? 'var(--red)' : 'var(--yellow)', flexShrink: 0 }}
                             />
                           )}
-                          <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>{item.name}</p>
                         </div>
                       </td>
 
