@@ -391,7 +391,7 @@ export default function Cart() {
                   <div style={{ width: 38, height: 28, borderRadius: 6, background: 'linear-gradient(135deg, #c8a84b, #f0d060)', marginBottom: 18, boxShadow: '0 2px 6px rgba(0,0,0,0.4)', position: 'relative', zIndex: 1 }} />
                   {/* Number */}
                   <p dir="ltr" style={{ fontFamily: 'Inter, monospace', fontSize: 17, color: 'rgba(255,255,255,0.92)', letterSpacing: '0.18em', marginBottom: 14, fontWeight: 600, position: 'relative', zIndex: 1 }}>
-                    {cardNumber ? cardNumber.padEnd(19, '•').slice(0, 19) : '•••• •••• •••• ••••'}
+                    {(() => { const d = cardNumber.replace(/\s/g, '').padEnd(16, '•'); return `${d.slice(0,4)} ${d.slice(4,8)} ${d.slice(8,12)} ${d.slice(12,16)}` })()}
                   </p>
                   {/* Footer row */}
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', position: 'relative', zIndex: 1 }}>

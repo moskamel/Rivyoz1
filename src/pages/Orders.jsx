@@ -66,6 +66,8 @@ export default function Orders() {
   const [noForm, setNoForm] = useState(emptyNO)
   const [noQtys, setNoQtys] = useState({})
   const [noErrors, setNoErrors] = useState({})
+  const [noSearch, setNoSearch] = useState('')
+  const [noActiveCat, setNoActiveCat] = useState('all')
 
   useEffect(() => {
     const t = setTimeout(() => setLoading(false), 1000)
@@ -126,6 +128,8 @@ export default function Orders() {
     setNoForm(emptyNO)
     setNoQtys({})
     setNoErrors({})
+    setNoSearch('')
+    setNoActiveCat('all')
     setActiveTab('new')
   }
 
@@ -202,7 +206,7 @@ export default function Orders() {
         <button
           className="btn-primary"
           style={{ height: 36, fontSize: 13, padding: '0 14px' }}
-          onClick={() => { setNoForm(emptyNO); setNoQtys({}); setNoErrors({}); setShowNewOrder(true) }}
+          onClick={() => { setNoForm(emptyNO); setNoQtys({}); setNoErrors({}); setNoSearch(''); setNoActiveCat('all'); setShowNewOrder(true) }}
         >
           طلب جديد +
         </button>
@@ -748,42 +752,62 @@ export default function Orders() {
                 <div>
                   <p style={{ ...F, fontSize: 13, fontWeight: 700, color: 'var(--text-2)', marginBottom: 8 }}>الأصناف</p>
                   {noErrors.items && <p style={{ ...F, color: 'var(--red)', fontSize: 12, marginBottom: 8 }}>{noErrors.items}</p>}
-                  <div style={{ border: '1px solid var(--border)', borderRadius: 12, overflow: 'hidden' }}>
-                    {cats.map((cat, ci) => {
-                      const catItems = allMenuItems.filter(i => i.categoryId === cat.id)
-                      if (!catItems.length) return null
-                      return (
-                        <div key={cat.id}>
-                          <div style={{ padding: '8px 14px', background: 'var(--surface-2)', borderTop: ci > 0 ? '1px solid var(--border)' : 'none' }}>
-                            <span style={{ ...F, fontSize: 11, fontWeight: 700, color: 'var(--text-3)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{cat.name}</span>
-                          </div>
-                          {catItems.map((item, ii) => {
-                            const qty = noQtys[item.id] || 0
-                            return (
-                              <div key={item.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', borderTop: ii > 0 ? '1px solid var(--border)' : 'none', background: qty > 0 ? 'rgba(249,115,22,0.04)' : 'transparent', transition: 'background 0.15s' }}>
-                                <div style={{ flex: 1 }}>
-                                  <p style={{ ...F, fontSize: 13, fontWeight: qty > 0 ? 700 : 500, color: 'var(--text)', marginBottom: 1 }}>{item.name}</p>
-                                  <p style={{ ...F, fontSize: 12, color: 'var(--accent)', fontWeight: 600 }}>{item.price} ج</p>
-                                </div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                                  {qty > 0 && (
-                                    <button onClick={() => setNoQtys(q => ({ ...q, [item.id]: Math.max(0, qty - 1) }))}
-                                      style={{ width: 28, height: 28, borderRadius: 8, border: '1px solid var(--border)', background: 'var(--surface-2)', color: 'var(--text-2)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                      <Minus size={13} />
-                                    </button>
-                                  )}
-                                  {qty > 0 && <span style={{ ...F, fontSize: 14, fontWeight: 700, color: 'var(--text)', minWidth: 20, textAlign: 'center' }}>{qty}</span>}
-                                  <button onClick={() => setNoQtys(q => ({ ...q, [item.id]: qty + 1 }))}
-                                    style={{ width: 28, height: 28, borderRadius: 8, border: 'none', background: qty > 0 ? 'var(--accent)' : 'var(--surface-2)', color: qty > 0 ? 'white' : 'var(--text-2)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s' }}>
-                                    <Add size={13} />
-                                  </button>
-                                </div>
-                              </div>
-                            )
-                          })}
-                        </div>
+
+                  {/* Search */}
+                  <input
+                    type="text"
+                    placeholder="🔍  ابحث عن صنف..."
+                    value={noSearch}
+                    onChange={e => setNoSearch(e.target.value)}
+                    style={{ ...inp, marginBottom: 8 }}
+                  />
+
+                  {/* Category filter tabs */}
+                  <div className="no-scrollbar" style={{ display: 'flex', gap: 6, overflowX: 'auto', paddingBottom: 4, marginBottom: 10 }}>
+                    {[{ id: 'all', name: 'الكل' }, ...cats.filter(c => allMenuItems.some(i => i.categoryId === c.id))].map(cat => (
+                      <button key={cat.id} onClick={() => setNoActiveCat(cat.id)}
+                        style={{ ...F, flexShrink: 0, height: 28, padding: '0 12px', borderRadius: 14, fontSize: 12, fontWeight: 600, cursor: 'pointer', transition: 'all 0.15s', border: noActiveCat === cat.id ? 'none' : '1px solid var(--border)', background: noActiveCat === cat.id ? 'var(--accent)' : 'var(--surface-2)', color: noActiveCat === cat.id ? 'white' : 'var(--text-2)' }}>
+                        {cat.name}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Filtered items */}
+                  <div style={{ border: '1px solid var(--border)', borderRadius: 12, overflow: 'hidden', maxHeight: 260, overflowY: 'auto' }}>
+                    {(() => {
+                      const visibleItems = allMenuItems.filter(i => {
+                        const matchCat = noActiveCat === 'all' || i.categoryId === noActiveCat
+                        const matchSearch = !noSearch.trim() || i.name.includes(noSearch.trim())
+                        return matchCat && matchSearch
+                      })
+                      if (!visibleItems.length) return (
+                        <div style={{ padding: 24, textAlign: 'center', color: 'var(--text-3)', ...F, fontSize: 13 }}>لا توجد أصناف</div>
                       )
-                    })}
+                      return visibleItems.map((item, ii) => {
+                        const qty = noQtys[item.id] || 0
+                        return (
+                          <div key={item.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', borderTop: ii > 0 ? '1px solid var(--border)' : 'none', background: qty > 0 ? 'rgba(249,115,22,0.04)' : 'transparent', transition: 'background 0.15s' }}>
+                            <div style={{ flex: 1 }}>
+                              <p style={{ ...F, fontSize: 13, fontWeight: qty > 0 ? 700 : 500, color: 'var(--text)', marginBottom: 1 }}>{item.name}</p>
+                              <p style={{ ...F, fontSize: 12, color: 'var(--accent)', fontWeight: 600 }}>{item.price} ج</p>
+                            </div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                              {qty > 0 && (
+                                <button onClick={() => setNoQtys(q => ({ ...q, [item.id]: Math.max(0, qty - 1) }))}
+                                  style={{ width: 28, height: 28, borderRadius: 8, border: '1px solid var(--border)', background: 'var(--surface-2)', color: 'var(--text-2)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                  <Minus size={13} />
+                                </button>
+                              )}
+                              {qty > 0 && <span style={{ ...F, fontSize: 14, fontWeight: 700, color: 'var(--text)', minWidth: 20, textAlign: 'center' }}>{qty}</span>}
+                              <button onClick={() => setNoQtys(q => ({ ...q, [item.id]: qty + 1 }))}
+                                style={{ width: 28, height: 28, borderRadius: 8, border: 'none', background: qty > 0 ? 'var(--accent)' : 'var(--surface-2)', color: qty > 0 ? 'white' : 'var(--text-2)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s' }}>
+                                <Add size={13} />
+                              </button>
+                            </div>
+                          </div>
+                        )
+                      })
+                    })()}
                   </div>
                 </div>
 
