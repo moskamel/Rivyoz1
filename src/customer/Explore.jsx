@@ -223,9 +223,9 @@ export default function Explore() {
                 style={{
                   flexShrink: 0, display: 'flex', alignItems: 'center', gap: 5,
                   padding: '7px 14px', borderRadius: 10, fontSize: 13, fontWeight: 600, cursor: 'pointer',
-                  border: `1.5px solid ${activeFilter === f.key ? 'var(--accent)' : 'var(--border)'}`,
-                  background: activeFilter === f.key ? 'var(--accent-muted)' : 'var(--surface-2)',
-                  color: activeFilter === f.key ? 'var(--accent)' : 'var(--text-2)',
+                  border: `1.5px solid ${activeFilter === f.key ? '#ef4444' : 'var(--border)'}`,
+                  background: activeFilter === f.key ? 'rgba(239,68,68,0.10)' : 'var(--surface-2)',
+                  color: activeFilter === f.key ? '#ef4444' : 'var(--text-2)',
                   transition: 'all 0.15s', fontFamily: 'Zain, sans-serif',
                 }}
               >
@@ -245,7 +245,7 @@ export default function Explore() {
               const active = filterTab === tabKey
               return (
                 <button key={tab} onClick={() => setFilterTab(tabKey)}
-                  style={{ pointerEvents: 'all', flexShrink: 0, padding: '8px 14px', borderRadius: 20, fontSize: 12, fontWeight: 700, cursor: 'pointer', border: 'none', background: active ? 'var(--accent)' : 'var(--surface)', color: active ? 'white' : 'var(--text-2)', transition: 'all 0.15s', fontFamily: 'Zain, sans-serif', boxShadow: active ? '0 4px 14px rgba(249,115,22,0.40)' : '0 2px 8px rgba(0,0,0,0.10)' }}>
+                  style={{ pointerEvents: 'all', flexShrink: 0, padding: '8px 14px', borderRadius: 20, fontSize: 12, fontWeight: 700, cursor: 'pointer', border: 'none', background: active ? '#ef4444' : 'var(--surface)', color: active ? 'white' : 'var(--text-2)', transition: 'all 0.15s', fontFamily: 'Zain, sans-serif', boxShadow: active ? '0 4px 14px rgba(239,68,68,0.40)' : '0 2px 8px rgba(0,0,0,0.10)' }}>
                   {tab}
                 </button>
               )
@@ -269,7 +269,7 @@ export default function Explore() {
                 const active = filterTab === tabKey
                 return (
                   <button key={tab} onClick={() => setFilterTab(tabKey)}
-                    style={{ flexShrink: 0, padding: '8px 16px', borderRadius: 20, fontSize: 12, fontWeight: 700, cursor: 'pointer', border: 'none', background: active ? 'var(--accent)' : 'var(--surface-2)', color: active ? 'white' : 'var(--text-2)', transition: 'all 0.15s', fontFamily: 'Zain, sans-serif', boxShadow: active ? '0 4px 12px rgba(249,115,22,0.3)' : 'none' }}>
+                    style={{ flexShrink: 0, padding: '8px 16px', borderRadius: 20, fontSize: 12, fontWeight: 700, cursor: 'pointer', border: 'none', background: active ? '#ef4444' : 'var(--surface-2)', color: active ? 'white' : 'var(--text-2)', transition: 'all 0.15s', fontFamily: 'Zain, sans-serif', boxShadow: active ? '0 4px 12px rgba(239,68,68,0.30)' : 'none' }}>
                     {tab}
                   </button>
                 )
