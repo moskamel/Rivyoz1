@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { createPortal } from 'react-dom'
 import { Add, More, CloseCircle, Sort, Star1 } from 'iconsax-react'
 import Layout from '../components/layout/Layout'
 import { getMenuItems, setMenuItems, getCategories, setCategories as setCategories_store } from '../lib/restaurantStore'
@@ -23,6 +24,7 @@ export default function HambergerMenu() {
   const [editItem, setEditItem] = useState(null)
   const [form, setForm] = useState({ name: '', price: '', categoryId: 1, description: '', active: true, bestseller: false, discountTag: '' })
   const [openMenuId, setOpenMenuId] = useState(null)
+  const [menuPos, setMenuPos] = useState(null)
   const [formErrors, setFormErrors] = useState({})
   const [showCatForm, setShowCatForm] = useState(false)
   const [newCatName, setNewCatName] = useState('')
@@ -307,35 +309,42 @@ export default function HambergerMenu() {
                     <button
                       onClick={(e) => {
                         e.stopPropagation()
-                        setOpenMenuId(prev => prev === item.id ? null : item.id)
+                        if (openMenuId === item.id) {
+                          setOpenMenuId(null)
+                        } else {
+                          const rect = e.currentTarget.getBoundingClientRect()
+                          setMenuPos({ top: rect.bottom + 4, left: rect.left })
+                          setOpenMenuId(item.id)
+                        }
                       }}
                       className="btn-icon sm"
                       style={{ background: openMenuId === item.id ? 'var(--surface-2)' : 'transparent', border: 'none', color: 'var(--text-3)' }}
                     >
                       <More size={15} />
                     </button>
-                    {openMenuId === item.id && (
-                      <div ref={menuRef} style={{ position: 'absolute', top: 'calc(100% + 4px)', left: 0, background: 'var(--surface)', border: '1px solid var(--border-strong)', borderRadius: 10, overflow: 'hidden', zIndex: 9999, minWidth: 130, boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}>
-                        <button onClick={() => { openEdit(item); setOpenMenuId(null) }}
-                          style={{ width: '100%', textAlign: 'right', padding: '10px 16px', fontSize: 13, color: 'var(--text)', background: 'transparent', border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', display: 'flex', alignItems: 'center', gap: 8 }}
-                          onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-2)'}
-                          onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-                        >✏️ تعديل</button>
-                        <button
-                          onClick={() => { setItems(prev => { const next = [...prev, { ...item, id: Date.now(), name: item.name + ' (نسخة)' }]; setMenuItems(next); return next }); setOpenMenuId(null) }}
-                          style={{ width: '100%', textAlign: 'right', padding: '10px 16px', fontSize: 13, color: 'var(--text)', background: 'transparent', border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', display: 'flex', alignItems: 'center', gap: 8 }}
-                          onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-2)'}
-                          onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-                        >📋 نسخ</button>
-                        <div style={{ height: 1, background: 'var(--border)', margin: '2px 0' }} />
-                        <button onClick={() => { deleteItem(item.id); setOpenMenuId(null) }}
-                          style={{ width: '100%', textAlign: 'right', padding: '10px 16px', fontSize: 13, color: 'var(--red)', background: 'transparent', border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', display: 'flex', alignItems: 'center', gap: 8 }}
-                          onMouseEnter={e => e.currentTarget.style.background = 'var(--red-muted)'}
-                          onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-                        >🗑️ حذف</button>
-                      </div>
-                    )}
                   </div>
+                  {openMenuId === item.id && menuPos && createPortal(
+                    <div ref={menuRef} style={{ position: 'fixed', top: menuPos.top, left: menuPos.left, background: 'var(--surface)', border: '1px solid var(--border-strong)', borderRadius: 10, overflow: 'hidden', zIndex: 99999, minWidth: 130, boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}>
+                      <button onClick={() => { openEdit(item); setOpenMenuId(null) }}
+                        style={{ width: '100%', textAlign: 'right', padding: '10px 16px', fontSize: 13, color: 'var(--text)', background: 'transparent', border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', display: 'flex', alignItems: 'center', gap: 8 }}
+                        onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-2)'}
+                        onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                      >✏️ تعديل</button>
+                      <button
+                        onClick={() => { setItems(prev => { const next = [...prev, { ...item, id: Date.now(), name: item.name + ' (نسخة)' }]; setMenuItems(next); return next }); setOpenMenuId(null) }}
+                        style={{ width: '100%', textAlign: 'right', padding: '10px 16px', fontSize: 13, color: 'var(--text)', background: 'transparent', border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', display: 'flex', alignItems: 'center', gap: 8 }}
+                        onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-2)'}
+                        onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                      >📋 نسخ</button>
+                      <div style={{ height: 1, background: 'var(--border)', margin: '2px 0' }} />
+                      <button onClick={() => { deleteItem(item.id); setOpenMenuId(null) }}
+                        style={{ width: '100%', textAlign: 'right', padding: '10px 16px', fontSize: 13, color: 'var(--red)', background: 'transparent', border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', display: 'flex', alignItems: 'center', gap: 8 }}
+                        onMouseEnter={e => e.currentTarget.style.background = 'var(--red-muted)'}
+                        onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                      >🗑️ حذف</button>
+                    </div>,
+                    document.body
+                  )}
                 </div>
               ))}
             </div>
