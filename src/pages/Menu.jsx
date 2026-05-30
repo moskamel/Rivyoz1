@@ -28,6 +28,7 @@ export default function HambergerMenu() {
   const [showCatForm, setShowCatForm] = useState(false)
   const [newCatName, setNewCatName] = useState('')
   const [catNameError, setCatNameError] = useState('')
+  const [deleteCatId, setDeleteCatId] = useState(null)
   const menuRef = useRef(null)
   const menuTriggerRef = useRef(null)
 
@@ -131,6 +132,22 @@ export default function HambergerMenu() {
     setCatNameError('')
   }
 
+  const deleteCategory = (catId) => {
+    const remaining = categories.filter(c => c.id !== catId)
+    setCategories(prev => {
+      const next = prev.filter(c => c.id !== catId)
+      setCategories_store(next)
+      return next
+    })
+    setItems(prev => {
+      const next = prev.filter(i => i.categoryId !== catId)
+      setMenuItems(next)
+      return next
+    })
+    if (activeCategory === catId) setActiveCategory(remaining[0]?.id ?? null)
+    setDeleteCatId(null)
+  }
+
   if (loading) {
     return (
       <Layout title="إدارة القائمة">
@@ -203,6 +220,13 @@ export default function HambergerMenu() {
                 }}>
                   {count}
                 </span>
+                <span
+                  onClick={e => { e.stopPropagation(); setDeleteCatId(cat.id) }}
+                  title="حذف القسم"
+                  style={{ fontSize: 13, lineHeight: 1, fontWeight: 700, marginRight: -2, padding: '1px 3px', borderRadius: 4, color: active ? 'rgba(255,255,255,0.6)' : 'var(--text-3)', cursor: 'pointer' }}
+                  onMouseEnter={e => e.currentTarget.style.color = active ? 'white' : 'var(--red)'}
+                  onMouseLeave={e => e.currentTarget.style.color = active ? 'rgba(255,255,255,0.6)' : 'var(--text-3)'}
+                >×</span>
               </button>
             )
           })}
@@ -436,6 +460,41 @@ export default function HambergerMenu() {
           </div>
         </div>
       )}
+
+      {/* ── DELETE CATEGORY CONFIRM ── */}
+      {deleteCatId && (() => {
+        const cat = categories.find(c => c.id === deleteCatId)
+        const catItemCount = items.filter(i => i.categoryId === deleteCatId).length
+        return (
+          <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(4px)', zIndex: 70, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }} onClick={() => setDeleteCatId(null)}>
+            <div style={{ background: 'var(--surface)', border: '1px solid var(--border-strong)', borderRadius: 16, width: '100%', maxWidth: 380, padding: 24, textAlign: 'center', boxShadow: '0 24px 60px rgba(0,0,0,0.5)' }} onClick={e => e.stopPropagation()}>
+              <div style={{ fontSize: 44, marginBottom: 14 }}>🗂️</div>
+              <p style={{ fontWeight: 800, fontSize: 16, color: 'var(--text)', marginBottom: 10 }}>
+                حذف قسم "{cat?.name}"؟
+              </p>
+              {catItemCount > 0 ? (
+                <p style={{ fontSize: 13, color: 'var(--text-2)', marginBottom: 24, lineHeight: 1.75 }}>
+                  يوجد{' '}
+                  <span style={{ fontWeight: 800, color: 'var(--red)' }}>{catItemCount} أكلة</span>
+                  {' '}في هذا القسم — ستُحذف جميعها عند تأكيد الحذف.
+                </p>
+              ) : (
+                <p style={{ fontSize: 13, color: 'var(--text-2)', marginBottom: 24 }}>
+                  القسم فارغ، هل أنت متأكد من الحذف؟
+                </p>
+              )}
+              <div style={{ display: 'flex', gap: 10 }}>
+                <button onClick={() => setDeleteCatId(null)} style={{ flex: 1, padding: '12px', borderRadius: 12, border: '1px solid var(--border)', background: 'var(--surface-2)', color: 'var(--text-2)', fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>
+                  إلغاء
+                </button>
+                <button onClick={() => deleteCategory(deleteCatId)} style={{ flex: 1, padding: '12px', borderRadius: 12, border: 'none', background: 'var(--red)', color: 'white', fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>
+                  {catItemCount > 0 ? `احذف القسم والـ ${catItemCount} أكلة` : 'تأكيد الحذف'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )
+      })()}
 
       {/* ── NEW CATEGORY MODAL ── */}
       {showCatForm && (
