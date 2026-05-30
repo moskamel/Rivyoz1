@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
-import { Import, Scanner, Shop, Car, Card, Camera, Trash } from 'iconsax-react'
+import { Import, Scanner, Shop, Car, Card, Camera, Trash, Profile, Lock, Shield, Logout } from 'iconsax-react'
+import { useNavigate } from 'react-router-dom'
 import QRCode from 'react-qr-code'
 import Layout from '../components/layout/Layout'
 import { getConfig, setConfig } from '../lib/restaurantStore'
@@ -9,6 +10,9 @@ const tabs = [
   { label: 'التوصيل',  icon: Car },
   { label: 'QR Code',  icon: Scanner },
   { label: 'الاشتراك', icon: Card },
+  { label: 'حسابي',    icon: Profile },
+  { label: 'الأمان',   icon: Lock },
+  { label: 'الجلسة',   icon: Shield },
 ]
 
 function Toast({ message }) {
@@ -438,7 +442,151 @@ function SubscriptionTab() {
   )
 }
 
-const tabComponents = [RestaurantTab, DeliveryTab, QRTab, SubscriptionTab]
+const roleLabels = { owner: 'صاحب المطعم', manager: 'مدير الفرع', cashier: 'كاشير', kitchen: 'مطبخ' }
+const roleColors = { owner: '#F97316', manager: '#8B5CF6', cashier: '#06B6D4', kitchen: '#22C55E' }
+
+const profileInputStyle = {
+  width: '100%', padding: '11px 14px', borderRadius: 10,
+  border: '1px solid var(--border)', background: 'var(--surface-2)',
+  color: 'var(--text)', fontSize: 14, fontFamily: 'Zain, sans-serif',
+  outline: 'none', boxSizing: 'border-box', transition: 'border-color 0.15s',
+}
+
+function ProfileField({ label, value, onChange, type = 'text', error }) {
+  return (
+    <div style={{ marginBottom: 16 }}>
+      <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: 'var(--text-2)', marginBottom: 6 }}>{label}</label>
+      <input type={type} value={value} onChange={e => onChange(e.target.value)}
+        style={{ ...profileInputStyle, ...(error ? { borderColor: '#EF4444' } : {}) }}
+        onFocus={e => e.target.style.borderColor = 'var(--accent)'}
+        onBlur={e => e.target.style.borderColor = error ? '#EF4444' : 'var(--border)'} />
+      {error && <p style={{ color: '#EF4444', fontSize: 11, marginTop: 4, fontWeight: 600 }}>{error}</p>}
+    </div>
+  )
+}
+
+function ProfileToggle({ label, description, enabled, onToggle }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 0', borderBottom: '1px solid var(--border)' }}>
+      <div>
+        <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)', marginBottom: 2 }}>{label}</p>
+        {description && <p style={{ fontSize: 12, color: 'var(--text-2)' }}>{description}</p>}
+      </div>
+      <button onClick={onToggle} style={{ width: 44, height: 24, borderRadius: 12, background: enabled ? 'var(--accent)' : 'var(--surface-3)', border: 'none', cursor: 'pointer', position: 'relative', transition: 'background 0.2s', flexShrink: 0 }}>
+        <span style={{ position: 'absolute', top: 3, right: enabled ? 3 : 23, width: 18, height: 18, borderRadius: '50%', background: 'white', transition: 'right 0.2s', display: 'block', boxShadow: '0 1px 4px rgba(0,0,0,0.3)' }} />
+      </button>
+    </div>
+  )
+}
+
+function AccountTab() {
+  const role = localStorage.getItem('auth_role') || 'owner'
+  const accentColor = roleColors[role] || '#F97316'
+  const roleLabel = roleLabels[role] || 'صاحب المطعم'
+  const initials = (roleLabels[role] || 'ص').split(' ').map(w => w[0]).join('')
+
+  const [info, setInfo] = useState({ name: 'أحمد العمري', email: 'ahmed@restaurant.com', phone: '0512345678' })
+  const [errors, setErrors] = useState({})
+  const [saved, setSaved] = useState(false)
+
+  function handleSave() {
+    const e = {}
+    if (!info.name.trim()) e.name = 'الاسم مطلوب'
+    if (!info.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(info.email)) e.email = 'بريد إلكتروني غير صحيح'
+    if (!/^\d{10,15}$/.test(info.phone.replace(/[\s\-()+]/g, ''))) e.phone = 'رقم غير صحيح'
+    setErrors(e)
+    if (Object.keys(e).length) return
+    setSaved(true); setTimeout(() => setSaved(false), 2000)
+  }
+
+  return (
+    <div className="animate-fade-in">
+      <div className="glass" style={{ padding: 20, marginBottom: 16 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
+          <div style={{ position: 'relative', flexShrink: 0 }}>
+            <div style={{ width: 64, height: 64, borderRadius: '50%', background: `${accentColor}22`, border: `2px solid ${accentColor}55`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, fontWeight: 900, color: accentColor, fontFamily: 'Zain, sans-serif' }}>{initials}</div>
+            <button style={{ position: 'absolute', bottom: -2, left: -2, width: 22, height: 22, borderRadius: '50%', background: 'var(--accent)', border: '2px solid var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'white' }}>
+              <Camera size={10} strokeWidth={2.5} />
+            </button>
+          </div>
+          <div style={{ flex: 1 }}>
+            <h3 style={{ fontSize: 16, fontWeight: 900, color: 'var(--text)', marginBottom: 4 }}>{info.name}</h3>
+            <span style={{ display: 'inline-flex', padding: '3px 10px', borderRadius: 20, background: `${accentColor}18`, border: `1px solid ${accentColor}35`, color: accentColor, fontSize: 11, fontWeight: 700, fontFamily: 'Zain, sans-serif' }}>{roleLabel}</span>
+          </div>
+        </div>
+      </div>
+      <div className="glass" style={{ padding: 20 }}>
+        <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 16, paddingBottom: 12, borderBottom: '1px solid var(--border)' }}>المعلومات الشخصية</p>
+        <ProfileField label="الاسم الكامل *" value={info.name} onChange={v => { setInfo(p => ({ ...p, name: v })); setErrors(p => ({ ...p, name: '' })) }} error={errors.name} />
+        <ProfileField label="البريد الإلكتروني *" type="email" value={info.email} onChange={v => { setInfo(p => ({ ...p, email: v })); setErrors(p => ({ ...p, email: '' })) }} error={errors.email} />
+        <ProfileField label="رقم الجوال *" type="tel" value={info.phone} onChange={v => { setInfo(p => ({ ...p, phone: v })); setErrors(p => ({ ...p, phone: '' })) }} error={errors.phone} />
+        <button onClick={handleSave} style={{ padding: '10px 24px', borderRadius: 10, background: saved ? '#22C55E' : 'var(--accent)', border: 'none', color: 'white', fontSize: 14, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, transition: 'all 0.2s', fontFamily: 'Zain, sans-serif' }}>
+          {saved ? '✓ تم الحفظ' : 'حفظ التغييرات'}
+        </button>
+      </div>
+    </div>
+  )
+}
+
+function SecurityTab() {
+  const [security, setSecurity] = useState({ twoFactor: false, notifications: true })
+  return (
+    <div className="animate-fade-in">
+      <div className="glass" style={{ padding: 20 }}>
+        <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 4, paddingBottom: 12, borderBottom: '1px solid var(--border)' }}>الأمان والخصوصية</p>
+        <ProfileToggle label="تغيير كلمة المرور" description="تحديث كلمة المرور الخاصة بحسابك" enabled={false} onToggle={() => {}} />
+        <ProfileToggle label="رمز التحقق الثنائي" description="حماية إضافية عند تسجيل الدخول" enabled={security.twoFactor} onToggle={() => setSecurity(s => ({ ...s, twoFactor: !s.twoFactor }))} />
+        <ProfileToggle label="إشعارات الأمان" description="تلقّي تنبيهات عند الدخول من جهاز جديد" enabled={security.notifications} onToggle={() => setSecurity(s => ({ ...s, notifications: !s.notifications }))} />
+        <button style={{ marginTop: 16, padding: '10px 20px', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--surface-2)', color: 'var(--text-2)', fontSize: 14, fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, transition: 'all 0.15s', fontFamily: 'Zain, sans-serif' }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.color = 'var(--accent)' }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-2)' }}>
+          <Lock size={14} strokeWidth={2} /> تغيير كلمة المرور
+        </button>
+      </div>
+    </div>
+  )
+}
+
+function SessionTab() {
+  const navigate = useNavigate()
+  const role = localStorage.getItem('auth_role') || 'owner'
+  const accentColor = roleColors[role] || '#F97316'
+  const roleLabel = roleLabels[role] || 'صاحب المطعم'
+
+  function handleLogout() {
+    localStorage.removeItem('auth_role')
+    navigate('/login')
+  }
+
+  return (
+    <div className="animate-fade-in">
+      <div className="glass" style={{ padding: 20 }}>
+        <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 16, paddingBottom: 12, borderBottom: '1px solid var(--border)' }}>الجلسة الحالية</p>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{ width: 42, height: 42, borderRadius: 12, background: `${accentColor}18`, border: `1px solid ${accentColor}35`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Shield size={18} color={accentColor} strokeWidth={2} />
+            </div>
+            <div>
+              <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)', marginBottom: 2 }}>جلسة نشطة</p>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ display: 'inline-flex', padding: '2px 10px', borderRadius: 20, background: `${accentColor}18`, border: `1px solid ${accentColor}35`, color: accentColor, fontSize: 11, fontWeight: 700, fontFamily: 'Zain, sans-serif' }}>{roleLabel}</span>
+                <span style={{ fontSize: 11, color: 'var(--text-3)' }}>متصل الآن</span>
+              </div>
+            </div>
+          </div>
+          <button onClick={handleLogout} style={{ padding: '10px 20px', borderRadius: 10, border: '1px solid rgba(239,68,68,0.3)', background: 'rgba(239,68,68,0.08)', color: '#EF4444', fontSize: 14, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, transition: 'all 0.15s', fontFamily: 'Zain, sans-serif' }}
+            onMouseEnter={e => e.currentTarget.style.background = 'rgba(239,68,68,0.15)'}
+            onMouseLeave={e => e.currentTarget.style.background = 'rgba(239,68,68,0.08)'}>
+            <Logout size={14} strokeWidth={2} /> تسجيل الخروج
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const tabComponents = [RestaurantTab, DeliveryTab, QRTab, SubscriptionTab, AccountTab, SecurityTab, SessionTab]
 
 export default function Settings() {
   const [activeTab, setActiveTab] = useState(0)
