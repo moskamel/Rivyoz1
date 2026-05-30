@@ -194,14 +194,14 @@ export default function CustomerLanding() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <button
             onClick={() => navigate('/explore')}
-            style={{ width: '100%', padding: '16px', borderRadius: 16, background: 'white', color, fontWeight: 800, fontSize: 16, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', boxShadow: '0 8px 28px rgba(0,0,0,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, boxSizing: 'border-box' }}
+            style={{ width: '100%', padding: '16px', borderRadius: 999, background: 'white', color, fontWeight: 800, fontSize: 16, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', boxShadow: '0 8px 28px rgba(0,0,0,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, boxSizing: 'border-box' }}
           >
             🍴 اكتشف المطاعم
           </button>
           {!isLoggedIn && (
             <button
               onClick={() => navigate('/customer-login')}
-              style={{ width: '100%', padding: '14px', borderRadius: 16, background: 'rgba(255,255,255,0.2)', color: 'white', fontWeight: 700, fontSize: 15, border: '2px solid rgba(255,255,255,0.5)', cursor: 'pointer', fontFamily: 'Zain, sans-serif', backdropFilter: 'blur(8px)', boxSizing: 'border-box' }}
+              style={{ width: '100%', padding: '14px', borderRadius: 999, background: 'rgba(255,255,255,0.2)', color: 'white', fontWeight: 700, fontSize: 15, border: '2px solid rgba(255,255,255,0.5)', cursor: 'pointer', fontFamily: 'Zain, sans-serif', backdropFilter: 'blur(8px)', boxSizing: 'border-box' }}
             >
               سجّل مجاناً
             </button>
@@ -302,7 +302,7 @@ export default function CustomerLanding() {
               </div>
               <button
                 onClick={e => { e.stopPropagation(); navigate('/chef-ahmed') }}
-                style={{ padding: '9px 16px', borderRadius: 12, background: color, color: 'white', fontWeight: 700, fontSize: 12, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', flexShrink: 0, whiteSpace: 'nowrap' }}
+                style={{ padding: '9px 16px', borderRadius: 999, background: color, color: 'white', fontWeight: 700, fontSize: 12, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', flexShrink: 0, whiteSpace: 'nowrap' }}
               >
                 اطلب تاني
               </button>
@@ -467,7 +467,7 @@ export default function CustomerLanding() {
 
                 <button
                   onClick={e => { e.stopPropagation(); navigate(`/${r.slug}`) }}
-                  style={{ padding: '8px 16px', borderRadius: 12, background: r.isOpen ? r.color : 'var(--border)', color: r.isOpen ? 'white' : 'var(--text-3)', fontWeight: 700, fontSize: 12, border: 'none', cursor: r.isOpen ? 'pointer' : 'default', fontFamily: 'Zain, sans-serif', flexShrink: 0 }}
+                  style={{ padding: '8px 16px', borderRadius: 999, background: r.isOpen ? r.color : 'var(--border)', color: r.isOpen ? 'white' : 'var(--text-3)', fontWeight: 700, fontSize: 12, border: 'none', cursor: r.isOpen ? 'pointer' : 'default', fontFamily: 'Zain, sans-serif', flexShrink: 0 }}
                 >
                   {r.isOpen ? 'اطلب' : 'مغلق'}
                 </button>
@@ -606,7 +606,7 @@ export default function CustomerLanding() {
             </div>
             <button
               onClick={() => navigate('/customer-login')}
-              style={{ padding: '8px 14px', borderRadius: 10, background: color, color: 'white', fontWeight: 700, fontSize: 12, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', flexShrink: 0, whiteSpace: 'nowrap' }}
+              style={{ padding: '8px 14px', borderRadius: 999, background: color, color: 'white', fontWeight: 700, fontSize: 12, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', flexShrink: 0, whiteSpace: 'nowrap' }}
             >
               سجّل دلوقتي
             </button>

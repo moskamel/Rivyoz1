@@ -220,7 +220,7 @@ export default function Dashboard() {
             style={{
               display: 'flex', alignItems: 'center', gap: 5,
               fontSize: 11, fontWeight: 600, padding: '5px 10px',
-              borderRadius: 'var(--radius)',
+              borderRadius: 999,
               cursor: 'pointer',
               border: 'none',
               background: isOpen ? 'var(--red-muted)' : 'var(--green-muted)',

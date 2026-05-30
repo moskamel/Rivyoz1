@@ -76,7 +76,7 @@ const GlobalStyles = () => {
         display:inline-flex; align-items:center; gap:8px;
         background:${C.orange}; color:#fff; border:none;
         font-family:${F}; font-weight:800; font-size:16px;
-        border-radius:12px; padding:14px 28px; cursor:pointer;
+        border-radius:999px; padding:14px 28px; cursor:pointer;
         transition:background .18s,transform .15s,box-shadow .18s;
         text-decoration:none;
       }
@@ -85,7 +85,7 @@ const GlobalStyles = () => {
         display:inline-flex; align-items:center; gap:8px;
         background:transparent; color:${C.navy}; border:2px solid ${C.gray200};
         font-family:${F}; font-weight:700; font-size:15px;
-        border-radius:12px; padding:13px 24px; cursor:pointer;
+        border-radius:999px; padding:13px 24px; cursor:pointer;
         transition:border-color .18s,color .18s,transform .15s;
         text-decoration:none;
       }
@@ -139,7 +139,7 @@ function Navbar() {
         transition: 'background .3s, border-color .3s, box-shadow .3s',
         boxShadow: scrolled ? '0 2px 16px rgba(26,26,46,.07)' : 'none',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '0 clamp(16px,5vw,72px)',
+        padding: '0 clamp(16px,6vw,80px)',
       }}>
         {/* Logo */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer' }} onClick={() => scrollTo('hero')}>
@@ -175,7 +175,7 @@ function Navbar() {
 
           {/* Dark/Light toggle */}
           <button onClick={toggle} style={{
-            width: 36, height: 36, borderRadius: 10,
+            width: 36, height: 36, borderRadius: 999,
             background: C.gray100, border: `1.5px solid ${C.gray200}`,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             cursor: 'pointer', transition: 'all .15s',
@@ -187,7 +187,7 @@ function Navbar() {
           </button>
 
           <button className="fazz-btn-primary" onClick={() => navigate('/login')}
-            style={{ fontSize: 14, padding: '10px 22px', borderRadius: 10 }}>
+            style={{ fontSize: 14, padding: '10px 22px' }}>
             ابدأ مجاناً
           </button>
         </div>
@@ -195,7 +195,7 @@ function Navbar() {
         {/* Mobile: toggle + hamburger */}
         <div style={{ display: 'none', alignItems: 'center', gap: 8 }} className="fazz-mobile-right">
           <button onClick={toggle} style={{
-            width: 34, height: 34, borderRadius: 10,
+            width: 34, height: 34, borderRadius: 999,
             background: C.gray100, border: `1.5px solid ${C.gray200}`,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             cursor: 'pointer',
@@ -952,7 +952,7 @@ function FinalCTA() {
         </p>
 
         <button className="fazz-btn-primary" onClick={() => navigate('/login')}
-          style={{ fontSize: 18, padding: '18px 52px', borderRadius: 14, boxShadow: `0 16px 48px rgba(232,87,42,.5)` }}>
+          style={{ fontSize: 18, padding: '18px 52px', boxShadow: `0 16px 48px rgba(232,87,42,.5)` }}>
           ابدأ دلوقتي — مجاناً <ArrowLeft2 size={22} />
         </button>
 
@@ -1004,7 +1004,7 @@ function Footer() {
                 { Icon: Facebook,  href: '#' },
               ].map(({ Icon, href }, i) => (
                 <a key={i} href={href} style={{
-                  width: 38, height: 38, borderRadius: 10,
+                  width: 38, height: 38, borderRadius: 999,
                   background: C.gray100, border: `1.5px solid ${C.gray200}`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   textDecoration: 'none', transition: 'border-color .15s, background .15s',
