@@ -628,17 +628,8 @@ function RestaurantSlider() {
     { name: 'بيت الكشري',        cat: 'مصري',          emoji: '🫙', city: 'الجيزة',        joined: 'منذ ٦ أشهر' },
     { name: 'فطير مشلتيت',       cat: 'فطير',          emoji: '🥞', city: 'طنطا',          joined: 'منذ ٤ أشهر' },
   ]
-  const row2 = [...restaurants].reverse()
   return (
     <section style={{ padding: 'clamp(64px,8vw,100px) 0', background: C.gray50, borderTop: `1.5px solid ${C.gray200}`, overflow: 'hidden' }}>
-      <style>{`
-        @keyframes mq-fwd  { 0%{transform:translateX(0)}    100%{transform:translateX(-50%)} }
-        @keyframes mq-back { 0%{transform:translateX(-50%)} 100%{transform:translateX(0)}    }
-        .mq-fwd  { display:flex; flex-wrap:nowrap; width:max-content; animation:mq-fwd  36s linear infinite; will-change:transform; }
-        .mq-back { display:flex; flex-wrap:nowrap; width:max-content; animation:mq-back 42s linear infinite; will-change:transform; }
-        .mq-fwd:hover, .mq-back:hover { animation-play-state:paused; }
-        .rest-card:hover { border-color:${C.orange} !important; box-shadow:0 8px 28px rgba(249,115,22,0.14) !important; }
-      `}</style>
 
       {/* Header */}
       <div dir="rtl" style={{ maxWidth: 1100, margin: '0 auto', padding: '0 clamp(16px,6vw,80px)', marginBottom: 48, textAlign: 'center' }}>
@@ -647,21 +638,19 @@ function RestaurantSlider() {
         <p style={{ fontFamily: F, fontSize: 16, color: C.gray600, maxWidth: 480, margin: '0 auto' }}>+٥٠٠ مطعم من كل مصر بيستخدموا Fazz كل يوم — وبيوفّروا عمولتهم</p>
       </div>
 
-      {/* Row 1 — forward */}
-      <div style={{ position: 'relative', overflow: 'hidden', marginBottom: 14 }}>
+      {/* Single seamless row */}
+      <div style={{ position: 'relative', overflow: 'hidden', padding: '6px 0' }}>
         <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 120, background: `linear-gradient(to left,${C.gray50},transparent)`, zIndex: 10, pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 120, background: `linear-gradient(to right,${C.gray50},transparent)`, zIndex: 10, pointerEvents: 'none' }} />
-        <div className="mq-fwd">
+        <div style={{
+          display: 'flex', flexWrap: 'nowrap', width: 'max-content',
+          animation: 'mq-scroll 40s linear infinite',
+          willChange: 'transform',
+        }}
+          onMouseEnter={e => e.currentTarget.style.animationPlayState = 'paused'}
+          onMouseLeave={e => e.currentTarget.style.animationPlayState = 'running'}
+        >
           {[...restaurants, ...restaurants].map((r, i) => <RestCard key={i} r={r} C={C} />)}
-        </div>
-      </div>
-
-      {/* Row 2 — backward */}
-      <div style={{ position: 'relative', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 120, background: `linear-gradient(to left,${C.gray50},transparent)`, zIndex: 10, pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 120, background: `linear-gradient(to right,${C.gray50},transparent)`, zIndex: 10, pointerEvents: 'none' }} />
-        <div className="mq-back">
-          {[...row2, ...row2].map((r, i) => <RestCard key={i} r={r} C={C} />)}
         </div>
       </div>
 
