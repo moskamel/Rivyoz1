@@ -416,6 +416,135 @@ function FeaturesGrid() {
   )
 }
 
+/* ─── Restaurant Slider ──────────────────────────────────────── */
+function RestaurantSlider() {
+  const { C } = useContext(LandingThemeCtx)
+
+  const restaurants = [
+    { name: 'مطعم الشيف أحمد',  cat: 'مشويات',         emoji: '🍖', city: 'التجمع الخامس', joined: 'منذ ٦ أشهر' },
+    { name: 'بيتزا بلازا',       cat: 'بيتزا',           emoji: '🍕', city: 'مدينة نصر',     joined: 'منذ ٣ أشهر' },
+    { name: 'كافيه ميترو',       cat: 'كافيه',           emoji: '☕', city: 'وسط البلد',     joined: 'منذ ٨ أشهر' },
+    { name: 'شاورما كينج',       cat: 'مشويات',         emoji: '🌯', city: 'المعادي',       joined: 'منذ سنة'    },
+    { name: 'سوشي هاوس',         cat: 'سوشي',           emoji: '🍣', city: 'الزمالك',       joined: 'منذ ٢ شهر'  },
+    { name: 'برجر فاكتوري',      cat: 'برجر',            emoji: '🍔', city: 'الدقي',         joined: 'منذ ٥ أشهر' },
+    { name: 'مطعم الفلاح',       cat: 'أكل بيتي',       emoji: '🍲', city: 'شبرا',          joined: 'منذ سنة'    },
+    { name: 'سيفود بلاس',        cat: 'مأكولات بحرية', emoji: '🦞', city: 'الإسكندرية',   joined: 'منذ ٤ أشهر' },
+    { name: 'كنافة الشام',       cat: 'حلويات',         emoji: '🍯', city: 'عابدين',        joined: 'منذ ٧ أشهر' },
+    { name: 'مطعم سلامة',        cat: 'مصري',           emoji: '🥘', city: 'بولاق',         joined: 'منذ ١١ شهر' },
+    { name: 'توست هاوس',         cat: 'إفطار',           emoji: '🥐', city: 'المهندسين',     joined: 'منذ ٣ أشهر' },
+    { name: 'حلويات النيل',      cat: 'حلويات',         emoji: '🎂', city: 'أسيوط',         joined: 'منذ ٢ شهر'  },
+    { name: 'مطعم كبابجي',       cat: 'مشويات',         emoji: '🥩', city: 'مصر الجديدة',  joined: 'منذ ١٠ أشهر'},
+    { name: 'ليمون ودجاج',       cat: 'دجاج',           emoji: '🍗', city: 'الشروق',        joined: 'منذ شهر'    },
+    { name: 'بيت الكشري',        cat: 'مصري',           emoji: '🫙', city: 'الجيزة',        joined: 'منذ ٦ أشهر' },
+    { name: 'فطير مشلتيت',       cat: 'فطير',           emoji: '🥞', city: 'طنطا',          joined: 'منذ ٤ أشهر' },
+  ]
+
+  return (
+    <section dir="rtl" style={{
+      padding: 'clamp(64px,8vw,100px) 0',
+      background: C.gray50,
+      borderTop: `1.5px solid ${C.gray200}`,
+      overflow: 'hidden',
+    }}>
+      <style>{`
+        @keyframes marquee-ltr {
+          0%   { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        @keyframes marquee-rtl {
+          0%   { transform: translateX(-50%); }
+          100% { transform: translateX(0); }
+        }
+        .marquee-track { animation: marquee-ltr 38s linear infinite; }
+        .marquee-track-rev { animation: marquee-rtl 42s linear infinite; }
+        .marquee-track:hover,
+        .marquee-track-rev:hover { animation-play-state: paused; }
+        .rest-card:hover { border-color: ${C.orange} !important; box-shadow: 0 8px 28px rgba(249,115,22,0.14) !important; }
+      `}</style>
+
+      {/* Heading */}
+      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 clamp(16px,6vw,80px)', marginBottom: 48, textAlign: 'center' }}>
+        <div className="fazz-section-badge" style={{ marginBottom: 16 }}>🏪 مجتمعنا</div>
+        <h2 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(26px,4vw,44px)', color: C.navy, letterSpacing: '-0.5px', margin: '0 0 12px' }}>
+          مطاعم انضمت لـ Fazz
+        </h2>
+        <p style={{ fontFamily: F, fontSize: 16, color: C.gray600, maxWidth: 480, margin: '0 auto' }}>
+          +٥٠٠ مطعم من كل مصر بيستخدموا Fazz كل يوم — وبيوفّروا عمولتهم
+        </p>
+      </div>
+
+      {/* Row 1 — scrolls right */}
+      <div style={{ position: 'relative', overflow: 'hidden', marginBottom: 16 }}>
+        <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 140, background: `linear-gradient(to left, ${C.gray50}, transparent)`, zIndex: 10, pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 140, background: `linear-gradient(to right, ${C.gray50}, transparent)`, zIndex: 10, pointerEvents: 'none' }} />
+        <div className="marquee-track" style={{ display: 'flex', gap: 14, width: 'max-content', padding: '6px 0' }}>
+          {[...restaurants, ...restaurants].map((r, i) => (
+            <RestCard key={i} r={r} C={C} />
+          ))}
+        </div>
+      </div>
+
+      {/* Row 2 — scrolls left (reverse) */}
+      <div style={{ position: 'relative', overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 140, background: `linear-gradient(to left, ${C.gray50}, transparent)`, zIndex: 10, pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 140, background: `linear-gradient(to right, ${C.gray50}, transparent)`, zIndex: 10, pointerEvents: 'none' }} />
+        <div className="marquee-track-rev" style={{ display: 'flex', gap: 14, width: 'max-content', padding: '6px 0' }}>
+          {[...[...restaurants].reverse(), ...[...restaurants].reverse()].map((r, i) => (
+            <RestCard key={i} r={r} C={C} />
+          ))}
+        </div>
+      </div>
+
+      {/* Stats row */}
+      <div style={{ maxWidth: 1100, margin: '44px auto 0', padding: '0 clamp(16px,6vw,80px)' }}>
+        <div style={{ display: 'flex', gap: 0, background: C.white, border: `1.5px solid ${C.gray200}`, borderRadius: 20, overflow: 'hidden', flexWrap: 'wrap' }}>
+          {[
+            { val: '+٥٠٠', label: 'مطعم مسجل', icon: '🏪' },
+            { val: '+١٥', label: 'محافظة مصرية', icon: '📍' },
+            { val: '+١٢٠٠٠', label: 'طلب يومي', icon: '🛵' },
+            { val: '٩٨٪', label: 'نسبة الرضا', icon: '⭐' },
+          ].map((s, i) => (
+            <div key={i} style={{
+              flex: '1 1 140px', padding: '24px 20px', textAlign: 'center',
+              borderLeft: i > 0 ? `1px solid ${C.gray200}` : 'none',
+            }}>
+              <p style={{ fontSize: 24, marginBottom: 6 }}>{s.icon}</p>
+              <p style={{ fontFamily: "'Zain',sans-serif", fontWeight: 900, fontSize: 30, color: C.orange, marginBottom: 4, lineHeight: 1 }}>{s.val}</p>
+              <p style={{ fontFamily: F, fontSize: 13, color: C.gray600 }}>{s.label}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function RestCard({ r, C }) {
+  return (
+    <div className="rest-card" style={{
+      background: C.white, border: `1.5px solid ${C.gray200}`,
+      borderRadius: 16, padding: '14px 18px',
+      display: 'flex', alignItems: 'center', gap: 12,
+      flexShrink: 0, width: 230,
+      boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+      transition: 'border-color .2s, box-shadow .2s',
+      cursor: 'default',
+    }}>
+      <div style={{
+        width: 46, height: 46, borderRadius: 13, flexShrink: 0,
+        background: C.orangeLight, border: `1.5px solid ${C.orangeBorder}`,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        fontSize: 22,
+      }}>{r.emoji}</div>
+      <div style={{ minWidth: 0, flex: 1 }}>
+        <p style={{ fontFamily: F, fontWeight: 800, fontSize: 13, color: C.navy, marginBottom: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.name}</p>
+        <p style={{ fontFamily: F, fontSize: 11, color: C.gray600, whiteSpace: 'nowrap' }}>{r.cat} · {r.city}</p>
+        <p style={{ fontFamily: F, fontSize: 10, color: C.orange, fontWeight: 700, marginTop: 3 }}>✓ انضم {r.joined}</p>
+      </div>
+    </div>
+  )
+}
+
 /* ─── Pricing ────────────────────────────────────────────────── */
 function Pricing() {
   const { C } = useContext(LandingThemeCtx)
@@ -784,6 +913,7 @@ export default function Landing() {
         <PainSection />
         <HowItWorks />
         <FeaturesGrid />
+        <RestaurantSlider />
         <Pricing />
         <Testimonials />
         <FinalCTA />
