@@ -650,7 +650,7 @@ function RestaurantSlider() {
           onMouseEnter={e => e.currentTarget.style.animationPlayState = 'paused'}
           onMouseLeave={e => e.currentTarget.style.animationPlayState = 'running'}
         >
-          {[...restaurants, ...restaurants].map((r, i) => <RestCard key={i} r={r} C={C} />)}
+          {[...restaurants, ...restaurants, ...restaurants, ...restaurants].map((r, i) => <RestCard key={i} r={r} C={C} />)}
         </div>
       </div>
 

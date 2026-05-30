@@ -231,7 +231,7 @@ html, body {
 }
 @keyframes mq-scroll {
   0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  100% { transform: translateX(-25%); }
 }
 
 /* ── Animation classes ── */
