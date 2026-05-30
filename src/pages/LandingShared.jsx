@@ -318,21 +318,6 @@ export function Footer() {
               ))}
             </div>
             <div>
-              <p style={{ fontFamily: F, fontWeight: 800, fontSize: 14, color: C.navy, marginBottom: 16 }}>الحساب</p>
-              {['إنشاء حساب مجاني'].map(l => (
-                <div key={l} style={{ marginBottom: 12 }}>
-                  <button onClick={() => navigate('/login')} style={{
-                    background: 'none', border: 'none', cursor: 'pointer',
-                    fontFamily: F, fontSize: 14, color: C.gray600, padding: 0,
-                    transition: 'color .15s',
-                  }}
-                  onMouseEnter={e => e.target.style.color = C.orange}
-                  onMouseLeave={e => e.target.style.color = C.gray600}
-                  >{l}</button>
-                </div>
-              ))}
-            </div>
-            <div>
               <p style={{ fontFamily: F, fontWeight: 800, fontSize: 14, color: C.navy, marginBottom: 16 }}>تواصل معنا</p>
               <div style={{ fontFamily: F, fontSize: 14, color: C.gray600, lineHeight: 2.2 }}>
                 <div>📞 ٠١٠٠٠٠٠٠٠٠٠</div>
