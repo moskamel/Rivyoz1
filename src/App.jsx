@@ -26,6 +26,9 @@ import CustomerAuth from './customer/CustomerAuth'
 import MyOrders from './customer/MyOrders'
 import CustomerProfile from './customer/CustomerProfile'
 import CustomerLanding from './customer/CustomerLanding'
+import About from './pages/About'
+import Privacy from './pages/Privacy'
+import Terms from './pages/Terms'
 import { CustomerThemeWrapper } from './lib/ThemeContext'
 
 function ProtectedRoute({ children }) {
@@ -80,6 +83,9 @@ export default function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/kds" element={<KDS />} />
       <Route path="/rivyo" element={<Landing />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/privacy" element={<Privacy />} />
+      <Route path="/terms" element={<Terms />} />
 
       {/* Protected admin routes */}
       <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />

@@ -1076,11 +1076,15 @@ function Footer() {
         }}>
           <span style={{ fontFamily: F, fontSize: 13, color: C.gray600 }}>© 2025 Fazz — جميع الحقوق محفوظة</span>
           <div style={{ display: 'flex', gap: 20 }}>
-            {['سياسة الخصوصية', 'شروط الاستخدام', 'عن المنصة'].map(l => (
-              <span key={l} style={{ fontFamily: F, fontSize: 13, color: C.gray600, cursor: 'pointer' }}
+            {[
+              { label: 'سياسة الخصوصية', path: '/privacy' },
+              { label: 'شروط الاستخدام',  path: '/terms'   },
+              { label: 'عن المنصة',        path: '/about'   },
+            ].map(({ label, path }) => (
+              <button key={path} onClick={() => navigate(path)} style={{ background: 'none', border: 'none', padding: 0, fontFamily: F, fontSize: 13, color: C.gray600, cursor: 'pointer', transition: 'color .15s' }}
                 onMouseEnter={e => e.target.style.color = C.orange}
                 onMouseLeave={e => e.target.style.color = C.gray600}
-              >{l}</span>
+              >{label}</button>
             ))}
           </div>
         </div>
