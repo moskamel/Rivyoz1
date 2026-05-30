@@ -384,6 +384,9 @@ export default function StoreFront() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [selectedModifiers, setSelectedModifiers] = useState({})
   const [conflictPending, setConflictPending] = useState(null) // stores the addItem call to execute after confirm
+  const [dismissedBanner, setDismissedBanner] = useState(false)
+
+  const showLoginBanner = !customerProfile && !dismissedBanner
 
   const isDifferentRestaurant = cartRestaurant && cartRestaurant.id !== config.slug && itemCount > 0
 
@@ -735,7 +738,7 @@ export default function StoreFront() {
 
       {/* ─── Floating Cart Button ─── */}
       {itemCount > 0 && (
-        <div style={{ position: 'fixed', bottom: 24, left: 0, right: 0, zIndex: 30, padding: '0 16px' }}>
+        <div style={{ position: 'fixed', bottom: showLoginBanner ? 92 : 24, left: 0, right: 0, zIndex: 30, padding: '0 16px', transition: 'bottom 0.2s ease' }}>
           <button
             onClick={() => navigate('/cart')}
             style={{ width: '100%', padding: '14px', borderRadius: 18, background: config.color, color: 'white', fontWeight: 800, fontSize: 14, boxShadow: `0 8px 30px ${config.color}60`, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}
@@ -869,6 +872,31 @@ export default function StoreFront() {
             </div>
           </div>
         </>
+      )}
+
+      {/* ─── Guest login banner ─── */}
+      {showLoginBanner && (
+        <div style={{ position: 'fixed', bottom: 0, right: 0, left: 0, zIndex: 29, padding: '0 12px 12px', pointerEvents: 'none' }}>
+          <div style={{ background: 'var(--surface)', border: `1.5px solid ${config.color}40`, borderRadius: 18, padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 12, boxShadow: '0 -4px 24px rgba(0,0,0,0.14)', pointerEvents: 'all' }}>
+            <div style={{ width: 40, height: 40, borderRadius: 12, background: `${config.color}18`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0 }}>🎁</div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <p style={{ fontWeight: 800, fontSize: 13, color: 'var(--text)', margin: '0 0 2px' }}>سجّل دخول واكسب نقاط مع كل طلب</p>
+              <p style={{ fontSize: 11, color: 'var(--text-2)', margin: 0 }}>مكافآت وخصومات حصرية للمسجلين</p>
+            </div>
+            <button
+              onClick={() => navigate('/customer-login')}
+              style={{ padding: '8px 14px', borderRadius: 10, background: config.color, color: 'white', fontWeight: 700, fontSize: 12, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', flexShrink: 0, whiteSpace: 'nowrap' }}
+            >
+              سجّل الآن
+            </button>
+            <button
+              onClick={() => setDismissedBanner(true)}
+              style={{ width: 28, height: 28, borderRadius: '50%', background: 'var(--surface-2)', border: '1px solid var(--border)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, color: 'var(--text-2)', flexShrink: 0 }}
+            >
+              ✕
+            </button>
+          </div>
+        </div>
       )}
 
       {/* ─── Restaurant conflict dialog ─── */}
