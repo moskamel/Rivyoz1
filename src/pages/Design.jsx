@@ -59,6 +59,7 @@ function ColorTab() {
   const [confirmDeleteLogo, setConfirmDeleteLogo] = useState(false)
 
   return (
+    <>
     <div className="split-panel">
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
         <div className="glass" style={{ padding: 24 }}>
@@ -126,6 +127,7 @@ function ColorTab() {
       onConfirm={() => { setConfig({ logo: '' }); setConfirmDeleteLogo(false) }}
       onCancel={() => setConfirmDeleteLogo(false)}
     />
+    </>
   )
 }
 
@@ -190,6 +192,7 @@ function BannersTab() {
   const previewColors = editing === 'new' ? form.color : (previewBanner?.color || ['#F97316', '#EA580C'])
 
   return (
+    <>
     <div className="split-panel">
       {/* Left: storefront preview */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -426,6 +429,7 @@ function ItemsPicker({ selected, onChange }) {
       onConfirm={() => { remove(confirmDeleteId); setConfirmDeleteId(null) }}
       onCancel={() => setConfirmDeleteId(null)}
     />
+    </>
   )
 }
 
@@ -469,6 +473,7 @@ function CombosTab() {
   const autoPrice = form.selectedItems.reduce((sum, i) => sum + i.price, 0)
 
   return (
+    <>
     <div className="split-panel">
       {/* TextalignJustifyleft */}
       <div>
@@ -586,6 +591,7 @@ function CombosTab() {
       onConfirm={() => { remove(confirmDeleteId); setConfirmDeleteId(null) }}
       onCancel={() => setConfirmDeleteId(null)}
     />
+    </>
   )
 }
 

@@ -473,6 +473,7 @@ function CouponsTab() {
   const totalRevenue = coupons.reduce((a, _, i) => a + (mockRevenue[i] || 0), 0)
 
   return (
+    <>
     <div className="animate-fade-in" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
       {/* Left: list */}
       <div className="glass" style={{ overflow: 'hidden' }}>
@@ -617,6 +618,7 @@ function CouponsTab() {
       onConfirm={() => { remove(confirmDeleteId); setConfirmDeleteId(null) }}
       onCancel={() => setConfirmDeleteId(null)}
     />
+    </>
   )
 }
 

@@ -92,6 +92,7 @@ function ImageUpload({ label, hint, value, onChange, aspect = 'banner' }) {
   const h = 120
 
   return (
+    <>
     <div>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
         <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-2)', letterSpacing: '0.04em' }}>{label}</label>
@@ -172,6 +173,7 @@ function ImageUpload({ label, hint, value, onChange, aspect = 'banner' }) {
       onConfirm={() => { onChange(''); setConfirmDelete(false) }}
       onCancel={() => setConfirmDelete(false)}
     />
+    </>
   )
 }
 
@@ -412,6 +414,7 @@ function QRTab() {
 function SubscriptionTab() {
   const [confirmCancel, setConfirmCancel] = useState(false)
   return (
+    <>
     <div className="animate-fade-in" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
         <div className="glass" style={{ padding: 20 }}>
@@ -458,6 +461,7 @@ function SubscriptionTab() {
       onConfirm={() => setConfirmCancel(false)}
       onCancel={() => setConfirmCancel(false)}
     />
+    </>
   )
 }
 
@@ -579,6 +583,7 @@ function SessionTab() {
   }
 
   return (
+    <>
     <div className="animate-fade-in">
       <div className="glass" style={{ padding: 20 }}>
         <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 16, paddingBottom: 12, borderBottom: '1px solid var(--border)' }}>الجلسة الحالية</p>
@@ -611,6 +616,7 @@ function SessionTab() {
       onConfirm={handleLogout}
       onCancel={() => setConfirmLogout(false)}
     />
+    </>
   )
 }
 
