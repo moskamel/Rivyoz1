@@ -763,7 +763,6 @@ function Pricing() {
                           <span style={{ fontFamily: "'Zain',sans-serif", fontWeight: 900, fontSize: 46, color: C.orange }}>{price}</span>
                           <span style={{ fontFamily: F, fontSize: 16, color: p.featured ? 'rgba(255,255,255,.7)' : C.gray600 }}>ج / شهر</span>
                         </div>
-                        {annual && <p style={{ fontFamily: F, fontSize: 12, color: C.green, fontWeight: 700, marginTop: 4 }}>✓ توفير {p.monthlyPrice - price} ج/شهر مع الاشتراك السنوي</p>}
                       </div>
                   }
                 </div>
