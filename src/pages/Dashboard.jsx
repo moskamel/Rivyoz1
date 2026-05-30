@@ -253,7 +253,7 @@ export default function Dashboard() {
               {periodOptions.map(opt => (
                 <button key={opt} onClick={() => setPeriod(opt)}
                   style={{
-                    flex: 1, fontSize: 11, fontWeight: 600, padding: '5px 0',
+                    flexShrink: 0, fontSize: 11, fontWeight: 600, padding: '5px 14px',
                     borderRadius: 'var(--radius-full)', border: 'none', cursor: 'pointer',
                     transition: 'all 0.15s', fontFamily: 'Zain, sans-serif',
                     background: period === opt ? 'var(--accent)' : 'transparent',

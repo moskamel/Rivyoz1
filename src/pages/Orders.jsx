@@ -220,7 +220,9 @@ export default function Orders() {
           alignItems: 'center',
           gap: 4,
           marginBottom: 16,
+          overflowX: 'auto',
         }}
+        className="no-scrollbar"
       >
         {tabs.map(tab => {
           const isActive = activeTab === tab.key
@@ -230,10 +232,10 @@ export default function Orders() {
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
               style={{
-                flex: 1,
+                flexShrink: 0,
                 height: 34,
                 borderRadius: 'var(--radius-full)',
-                padding: '0 4px',
+                padding: '0 12px',
                 fontSize: 12,
                 fontWeight: 600,
                 cursor: 'pointer',
