@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Flash } from 'iconsax-react'
+import { Flash, Sun, Moon } from 'iconsax-react'
 
 const roles = [
   { id: 'owner', label: 'صاحب المطعم' },
@@ -200,11 +200,39 @@ export default function Login() {
     navigate('/')
   }
 
+  const [isDark, setIsDark] = useState(() => localStorage.getItem('c_theme') === 'dark')
+  const toggleTheme = () => {
+    const next = !isDark
+    setIsDark(next)
+    localStorage.setItem('c_theme', next ? 'dark' : 'light')
+  }
+
   const phoneValid = phone.replace(/\D/g, '').length >= 10
   const otpComplete = otp.join('').length === 6
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', background: 'var(--bg)' }} dir="rtl">
+    <div data-theme={isDark ? undefined : 'light'} style={{ minHeight: '100vh', display: 'flex', background: 'var(--bg)' }} dir="rtl">
+      <button
+        onClick={toggleTheme}
+        style={{
+          position: 'fixed',
+          top: 16,
+          left: 16,
+          width: 38,
+          height: 38,
+          borderRadius: 10,
+          background: 'var(--surface-2)',
+          border: '1.5px solid var(--border)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+          zIndex: 100,
+          transition: 'all .15s',
+        }}
+      >
+        {isDark ? <Sun size={18} color="#F97316" /> : <Moon size={18} color="#6C757D" />}
+      </button>
       <Toast message={toast.message} visible={toast.visible} />
 
       {/* Left panel — brand (hidden on mobile, shown on desktop) */}
