@@ -4,7 +4,7 @@ import { TrendUp, TrendDown, ShoppingBag, People, DollarSquare, ArrowLeft, Toggl
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import Layout from '../components/layout/Layout'
 import { mockStats, mockSalesData, mockTopItems, statusMap } from '../lib/mock'
-import { getOrders, getConfig, setConfig } from '../lib/restaurantStore'
+import { getOrders, getConfig, setConfig, updateOrderStatus } from '../lib/restaurantStore'
 
 function Skel({ w = '100%', h = 16, r = 8, mb = 0 }) {
   return <div style={{ width: w, height: h, borderRadius: r, marginBottom: mb, background: 'var(--surface-3)', animation: 'skel-pulse 1.5s ease-in-out infinite' }} />
@@ -59,13 +59,23 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true)
   const [isOpen, setIsOpen] = useState(() => getConfig().isOpen)
   const [period, setPeriod] = useState('7 أيام')
+  const [refreshKey, setRefreshKey] = useState(0)
+  const [dismissed, setDismissed] = useState(new Set())
 
   useEffect(() => {
     const t = setTimeout(() => setLoading(false), 1000)
     return () => clearTimeout(t)
   }, [])
+
   const orders = getOrders()
-  const newOrders = orders.filter(o => o.status === 'new')
+  const newOrders = orders.filter(o => o.status === 'new' && !dismissed.has(o.id))
+  const firstNew = newOrders[0]
+
+  const handleAccept = (id) => {
+    updateOrderStatus(id, 'preparing')
+    setRefreshKey(k => k + 1)
+  }
+  const handleDismiss = (id) => setDismissed(prev => new Set([...prev, id]))
   const recentOrders = orders.slice(0, 4)
 
   const statusBadgeClass = {
@@ -154,22 +164,115 @@ export default function Dashboard() {
       {/* ── HERO ROW ── */}
       <div className="flex gap-3 animate-fade-in" style={{ flexWrap: 'wrap', marginBottom: 20, direction: 'rtl' }}>
 
-        {/* New orders alert — first (rightmost in RTL), full flex width */}
-        {newOrders.length > 0 && (
-          <Link to="/orders" className="glass-accent pulse-accent"
-            style={{
-              padding: '14px 22px', textDecoration: 'none',
-              flex: 1, minWidth: 220,
+        {/* New orders alert — interactive card */}
+        {newOrders.length > 0 && firstNew && (
+          <div
+            className="glass-accent"
+            style={{ flex: 1, minWidth: 240, borderRadius: 'var(--radius-lg)', overflow: 'hidden', position: 'relative' }}
+          >
+            <style>{`
+              @keyframes bell-ring {
+                0%,60%,100% { transform: rotate(0); }
+                10%,30%,50% { transform: rotate(14deg); }
+                20%,40% { transform: rotate(-14deg); }
+              }
+              @keyframes order-dot-pulse {
+                0%,100% { box-shadow: 0 0 0 0 rgba(249,115,22,0.45); }
+                60% { box-shadow: 0 0 0 7px rgba(249,115,22,0); }
+              }
+            `}</style>
+
+            {/* Header strip */}
+            <div style={{
+              padding: '8px 14px',
+              background: 'var(--accent)',
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <span className="badge badge-pill badge-accent" style={{ fontSize: 15, padding: '5px 13px', fontWeight: 800 }}>
-                {newOrders.length}
-              </span>
-              <span style={{ fontSize: 15, fontWeight: 800, color: 'var(--accent)' }}>طلب جديد</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+                <span style={{ fontSize: 15, display: 'inline-block', animation: 'bell-ring 1.2s ease-in-out infinite' }}>🔔</span>
+                <span style={{ fontSize: 13, fontWeight: 800, color: 'white' }}>
+                  {newOrders.length} {newOrders.length === 1 ? 'طلب جديد' : 'طلبات جديدة'}
+                </span>
+              </div>
+              <Link to="/orders" style={{ fontSize: 11, color: 'rgba(255,255,255,0.85)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 3, fontWeight: 600 }}>
+                عرض الكل <ArrowLeft size={11} />
+              </Link>
             </div>
-            <ArrowLeft size={16} style={{ color: 'var(--accent)' }} />
-          </Link>
+
+            {/* Order preview row */}
+            <div style={{ padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 10 }}>
+              <div style={{
+                width: 38, height: 38, borderRadius: 10, flexShrink: 0,
+                background: 'var(--accent-muted)', border: '1.5px solid var(--border-accent)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 11, fontWeight: 800, color: 'var(--accent)',
+                animation: 'order-dot-pulse 1.5s ease-in-out infinite',
+              }}>
+                #{firstNew.id}
+              </div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <p className="truncate-1" style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 2 }}>
+                  {firstNew.items}
+                </p>
+                <p style={{ fontSize: 11, color: 'var(--text-3)' }}>
+                  {firstNew.table} · <span style={{ fontWeight: 700, color: 'var(--accent)', fontFamily: 'Zain, sans-serif' }}>{firstNew.total} ج</span>
+                </p>
+              </div>
+              <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
+                <button
+                  onClick={() => handleAccept(firstNew.id)}
+                  style={{
+                    padding: '7px 13px', borderRadius: 'var(--radius-full)',
+                    background: 'var(--accent)', color: 'white',
+                    border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 700,
+                    whiteSpace: 'nowrap', transition: 'opacity 0.15s',
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
+                  onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+                >
+                  ✓ استلام
+                </button>
+                <button
+                  onClick={() => handleDismiss(firstNew.id)}
+                  style={{
+                    width: 30, height: 30, borderRadius: 'var(--radius-full)',
+                    background: 'var(--surface-3)', border: '1px solid var(--border)',
+                    cursor: 'pointer', fontSize: 16, lineHeight: 1, color: 'var(--text-3)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    transition: 'color 0.15s',
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.color = 'var(--text)')}
+                  onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-3)')}
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+
+            {/* Extra order chips when multiple new orders */}
+            {newOrders.length > 1 && (
+              <div style={{ padding: '0 14px 10px', display: 'flex', gap: 5, flexWrap: 'wrap' }}>
+                {newOrders.slice(1).map(o => (
+                  <button
+                    key={o.id}
+                    onClick={() => handleAccept(o.id)}
+                    style={{
+                      fontSize: 11, fontWeight: 700, padding: '3px 9px',
+                      borderRadius: 'var(--radius-full)', cursor: 'pointer',
+                      background: 'var(--accent-muted)', color: 'var(--accent)',
+                      border: '1px solid var(--border-accent)',
+                      transition: 'background 0.15s',
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.background = 'var(--accent)', e.currentTarget.style.color = 'white')}
+                    onMouseLeave={e => (e.currentTarget.style.background = 'var(--accent-muted)', e.currentTarget.style.color = 'var(--accent)')}
+                    title="استلام"
+                  >
+                    #{o.id} ✓
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         )}
 
         {/* Status card */}
