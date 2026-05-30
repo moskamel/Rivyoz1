@@ -392,7 +392,7 @@ function Hero() {
           <div className="fazz-fadeup" style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginBottom: 32, animationDelay: '.24s' }}>
             <button className="fazz-btn-primary" onClick={() => navigate('/login')}
               style={{ fontSize: 16, padding: '15px 32px' }}>
-              ابدأ مجاناً — ١٤ يوم <ArrowLeft2 size={18} />
+              ابدأ مجاناً — ١٤ يوم
             </button>
             <button className="fazz-btn-outline" onClick={() => scrollTo('how')}>
               شوف بيشتغل إزاي
@@ -493,10 +493,10 @@ function PainSection() {
         </div>
 
         {/* Calculator */}
+        <h3 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(20px,3vw,28px)', color: C.navy, textAlign: 'center', margin: '0 0 24px' }}>
+          احسب كم بتخسر كل شهر 👇
+        </h3>
         <div style={{ background: C.white, border: `1.5px solid ${C.gray200}`, borderRadius: 20, padding: 'clamp(24px,4vw,40px)', maxWidth: 680, margin: '0 auto' }}>
-          <h3 style={{ fontFamily: F, fontWeight: 800, fontSize: 20, color: C.navy, textAlign: 'center', margin: '0 0 28px' }}>
-            احسب كم بتخسر كل شهر 👇
-          </h3>
           {[
             { label: 'عدد الطلبات في اليوم', val: monthly, set: setMonthly, min: 5, max: 200, unit: 'طلب' },
             { label: 'متوسط قيمة الطلب',     val: avg,     set: setAvg,     min: 30, max: 400, unit: 'ج' },
@@ -602,7 +602,7 @@ function HowItWorks() {
         <div style={{ textAlign: 'center', marginTop: 44 }}>
           <button className="fazz-btn-primary" onClick={() => navigate('/login')}
             style={{ fontSize: 16, padding: '15px 40px' }}>
-            ابدأ مجاناً دلوقتي <ArrowLeft2 size={18} />
+            ابدأ مجاناً دلوقتي
           </button>
         </div>
       </div>
@@ -953,7 +953,7 @@ function FinalCTA() {
 
         <button className="fazz-btn-primary" onClick={() => navigate('/login')}
           style={{ fontSize: 18, padding: '18px 52px', boxShadow: `0 16px 48px rgba(232,87,42,.5)` }}>
-          ابدأ دلوقتي — مجاناً <ArrowLeft2 size={22} />
+          ابدأ دلوقتي — مجاناً
         </button>
 
         <div style={{ display: 'flex', gap: 28, justifyContent: 'center', marginTop: 28, flexWrap: 'wrap' }}>
