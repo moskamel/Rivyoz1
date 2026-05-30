@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Layout from '../components/layout/Layout'
-import { Camera, Save2, Lock, Shield, Logout, ArrowLeft2 } from 'iconsax-react'
+import { Camera, Save2, Lock, Shield, Logout } from 'iconsax-react'
 
 const roleLabels = {
   owner: 'صاحب المطعم',
@@ -153,6 +153,7 @@ export default function Profile() {
     notifications: true,
   })
 
+  const [activeTab, setActiveTab] = useState('personal')
   const [savedPersonal, setSavedPersonal] = useState(false)
   const [savedRestaurant, setSavedRestaurant] = useState(false)
   const [personalErrors, setPersonalErrors] = useState({})
@@ -291,213 +292,104 @@ export default function Profile() {
           </div>
         </SectionCard>
 
-        {/* Personal info form */}
-        <SectionCard title="المعلومات الشخصية">
-          <FormField
-            label="الاسم الكامل *"
-            value={personalInfo.name}
-            onChange={v => { setPersonalInfo(p => ({ ...p, name: v })); clearPersonalErr('name') }}
-            placeholder="الاسم الكامل"
-            error={personalErrors.name}
-          />
-          <FormField
-            label="البريد الإلكتروني *"
-            type="email"
-            value={personalInfo.email}
-            onChange={v => { setPersonalInfo(p => ({ ...p, email: v })); clearPersonalErr('email') }}
-            placeholder="example@restaurant.com"
-            error={personalErrors.email}
-          />
-          <FormField
-            label="رقم الجوال *"
-            type="tel"
-            value={personalInfo.phone}
-            onChange={v => { setPersonalInfo(p => ({ ...p, phone: v })); clearPersonalErr('phone') }}
-            placeholder="05xxxxxxxx"
-            error={personalErrors.phone}
-          />
-          <button
-            onClick={handleSavePersonal}
-            style={{
-              padding: '10px 24px',
-              borderRadius: 10,
-              background: savedPersonal ? '#22C55E' : 'var(--accent)',
-              border: 'none',
-              color: 'white',
-              fontSize: 14,
-              fontWeight: 700,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 6,
-              transition: 'all 0.2s',
-              fontFamily: 'Zain, sans-serif',
-              boxShadow: '0 4px 14px rgba(249,115,22,0.2)',
-            }}
-          >
-            <Save2 size={14} strokeWidth={2.5} />
-            {savedPersonal ? 'تم الحفظ ✓' : 'حفظ التغييرات'}
-          </button>
-        </SectionCard>
+        {/* ── Tab bar ── */}
+        <div style={{ display: 'flex', gap: 4, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 14, padding: 4, marginBottom: 16 }}>
+          {[
+            { k: 'personal',    l: 'المعلومات الشخصية' },
+            { k: 'restaurant',  l: 'معلومات المطعم' },
+            { k: 'security',    l: 'الأمان والخصوصية' },
+            { k: 'session',     l: 'الجلسة الحالية' },
+          ].map(t => (
+            <button key={t.k} onClick={() => setActiveTab(t.k)} style={{
+              flex: 1, padding: '9px 8px', borderRadius: 10, border: 'none', cursor: 'pointer',
+              fontFamily: 'Zain, sans-serif', fontSize: 13, fontWeight: 700,
+              background: activeTab === t.k ? 'var(--accent)' : 'transparent',
+              color: activeTab === t.k ? 'white' : 'var(--text-3)',
+              transition: 'all 0.18s',
+              boxShadow: activeTab === t.k ? '0 4px 12px rgba(249,115,22,0.25)' : 'none',
+              whiteSpace: 'nowrap',
+            }}>{t.l}</button>
+          ))}
+        </div>
 
-        {/* Restaurant info */}
-        <SectionCard title="معلومات المطعم">
-          <FormField
-            label="اسم المطعم *"
-            value={restaurantInfo.name}
-            onChange={v => { setRestaurantInfo(r => ({ ...r, name: v })); clearRestaurantErr('name') }}
-            placeholder="اسم المطعم"
-            error={restaurantErrors.name}
-          />
-          <FormField
-            label="العنوان *"
-            value={restaurantInfo.address}
-            onChange={v => { setRestaurantInfo(r => ({ ...r, address: v })); clearRestaurantErr('address') }}
-            placeholder="المدينة، الحي، الشارع"
-            error={restaurantErrors.address}
-          />
-          <FormField
-            label="رقم هاتف المطعم *"
-            type="tel"
-            value={restaurantInfo.phone}
-            onChange={v => { setRestaurantInfo(r => ({ ...r, phone: v })); clearRestaurantErr('phone') }}
-            placeholder="011xxxxxxx"
-            error={restaurantErrors.phone}
-          />
-          <button
-            onClick={handleSaveRestaurant}
-            style={{
-              padding: '10px 24px',
-              borderRadius: 10,
-              background: savedRestaurant ? '#22C55E' : 'var(--accent)',
-              border: 'none',
-              color: 'white',
-              fontSize: 14,
-              fontWeight: 700,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 6,
-              transition: 'all 0.2s',
-              fontFamily: 'Zain, sans-serif',
-              boxShadow: '0 4px 14px rgba(249,115,22,0.2)',
-            }}
-          >
-            <Save2 size={14} strokeWidth={2.5} />
-            {savedRestaurant ? 'تم الحفظ ✓' : 'حفظ التغييرات'}
-          </button>
-        </SectionCard>
+        {/* ── Personal info ── */}
+        {activeTab === 'personal' && (
+          <SectionCard title="المعلومات الشخصية">
+            <FormField label="الاسم الكامل *" value={personalInfo.name}
+              onChange={v => { setPersonalInfo(p => ({ ...p, name: v })); clearPersonalErr('name') }}
+              placeholder="الاسم الكامل" error={personalErrors.name} />
+            <FormField label="البريد الإلكتروني *" type="email" value={personalInfo.email}
+              onChange={v => { setPersonalInfo(p => ({ ...p, email: v })); clearPersonalErr('email') }}
+              placeholder="example@restaurant.com" error={personalErrors.email} />
+            <FormField label="رقم الجوال *" type="tel" value={personalInfo.phone}
+              onChange={v => { setPersonalInfo(p => ({ ...p, phone: v })); clearPersonalErr('phone') }}
+              placeholder="05xxxxxxxx" error={personalErrors.phone} />
+            <button onClick={handleSavePersonal} style={{ padding: '10px 24px', borderRadius: 10, background: savedPersonal ? '#22C55E' : 'var(--accent)', border: 'none', color: 'white', fontSize: 14, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, transition: 'all 0.2s', fontFamily: 'Zain, sans-serif', boxShadow: '0 4px 14px rgba(249,115,22,0.2)' }}>
+              <Save2 size={14} strokeWidth={2.5} />
+              {savedPersonal ? 'تم الحفظ ✓' : 'حفظ التغييرات'}
+            </button>
+          </SectionCard>
+        )}
 
-        {/* Security section */}
-        <SectionCard title="الأمان والخصوصية">
-          <Toggle
-            label="تغيير كلمة المرور"
-            description="تحديث كلمة المرور الخاصة بحسابك"
-            enabled={false}
-            onToggle={() => {}}
-          />
-          <Toggle
-            label="رمز التحقق الثنائي"
-            description="حماية إضافية عند تسجيل الدخول"
-            enabled={security.twoFactor}
-            onToggle={() => setSecurity(s => ({ ...s, twoFactor: !s.twoFactor }))}
-          />
-          <Toggle
-            label="إشعارات الأمان"
-            description="تلقّي تنبيهات عند الدخول من جهاز جديد"
-            enabled={security.notifications}
-            onToggle={() => setSecurity(s => ({ ...s, notifications: !s.notifications }))}
-          />
+        {/* ── Restaurant info ── */}
+        {activeTab === 'restaurant' && (
+          <SectionCard title="معلومات المطعم">
+            <FormField label="اسم المطعم *" value={restaurantInfo.name}
+              onChange={v => { setRestaurantInfo(r => ({ ...r, name: v })); clearRestaurantErr('name') }}
+              placeholder="اسم المطعم" error={restaurantErrors.name} />
+            <FormField label="العنوان *" value={restaurantInfo.address}
+              onChange={v => { setRestaurantInfo(r => ({ ...r, address: v })); clearRestaurantErr('address') }}
+              placeholder="المدينة، الحي، الشارع" error={restaurantErrors.address} />
+            <FormField label="رقم هاتف المطعم *" type="tel" value={restaurantInfo.phone}
+              onChange={v => { setRestaurantInfo(r => ({ ...r, phone: v })); clearRestaurantErr('phone') }}
+              placeholder="011xxxxxxx" error={restaurantErrors.phone} />
+            <button onClick={handleSaveRestaurant} style={{ padding: '10px 24px', borderRadius: 10, background: savedRestaurant ? '#22C55E' : 'var(--accent)', border: 'none', color: 'white', fontSize: 14, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, transition: 'all 0.2s', fontFamily: 'Zain, sans-serif', boxShadow: '0 4px 14px rgba(249,115,22,0.2)' }}>
+              <Save2 size={14} strokeWidth={2.5} />
+              {savedRestaurant ? 'تم الحفظ ✓' : 'حفظ التغييرات'}
+            </button>
+          </SectionCard>
+        )}
 
-          <button
-            style={{
-              marginTop: 16,
-              padding: '10px 20px',
-              borderRadius: 10,
-              border: '1px solid var(--border)',
-              background: 'var(--surface-2)',
-              color: 'var(--text-2)',
-              fontSize: 14,
-              fontWeight: 600,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 6,
-              transition: 'all 0.15s',
-              fontFamily: 'Zain, sans-serif',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.color = 'var(--accent)' }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-2)' }}
-          >
-            <Lock size={14} strokeWidth={2} />
-            تغيير كلمة المرور
-          </button>
-        </SectionCard>
+        {/* ── Security ── */}
+        {activeTab === 'security' && (
+          <SectionCard title="الأمان والخصوصية">
+            <Toggle label="تغيير كلمة المرور" description="تحديث كلمة المرور الخاصة بحسابك" enabled={false} onToggle={() => {}} />
+            <Toggle label="رمز التحقق الثنائي" description="حماية إضافية عند تسجيل الدخول"
+              enabled={security.twoFactor} onToggle={() => setSecurity(s => ({ ...s, twoFactor: !s.twoFactor }))} />
+            <Toggle label="إشعارات الأمان" description="تلقّي تنبيهات عند الدخول من جهاز جديد"
+              enabled={security.notifications} onToggle={() => setSecurity(s => ({ ...s, notifications: !s.notifications }))} />
+            <button style={{ marginTop: 16, padding: '10px 20px', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--surface-2)', color: 'var(--text-2)', fontSize: 14, fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, transition: 'all 0.15s', fontFamily: 'Zain, sans-serif' }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.color = 'var(--accent)' }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-2)' }}>
+              <Lock size={14} strokeWidth={2} /> تغيير كلمة المرور
+            </button>
+          </SectionCard>
+        )}
 
-        {/* Session info */}
-        <SectionCard title="الجلسة الحالية">
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <div style={{
-                width: 42,
-                height: 42,
-                borderRadius: 12,
-                background: `${accentColor}18`,
-                border: `1px solid ${accentColor}35`,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-                <Shield size={18} color={accentColor} strokeWidth={2} />
-              </div>
-              <div>
-                <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)', marginBottom: 2 }}>
-                  جلسة نشطة
-                </p>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <span style={{
-                    display: 'inline-flex',
-                    padding: '2px 10px',
-                    borderRadius: 20,
-                    background: `${accentColor}18`,
-                    border: `1px solid ${accentColor}35`,
-                    color: accentColor,
-                    fontSize: 11,
-                    fontWeight: 700,
-                    fontFamily: 'Zain, sans-serif',
-                  }}>
-                    {roleLabel}
-                  </span>
-                  <span style={{ fontSize: 11, color: 'var(--text-3)' }}>متصل الآن</span>
+        {/* ── Session ── */}
+        {activeTab === 'session' && (
+          <SectionCard title="الجلسة الحالية">
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <div style={{ width: 42, height: 42, borderRadius: 12, background: `${accentColor}18`, border: `1px solid ${accentColor}35`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Shield size={18} color={accentColor} strokeWidth={2} />
+                </div>
+                <div>
+                  <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)', marginBottom: 2 }}>جلسة نشطة</p>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <span style={{ display: 'inline-flex', padding: '2px 10px', borderRadius: 20, background: `${accentColor}18`, border: `1px solid ${accentColor}35`, color: accentColor, fontSize: 11, fontWeight: 700, fontFamily: 'Zain, sans-serif' }}>{roleLabel}</span>
+                    <span style={{ fontSize: 11, color: 'var(--text-3)' }}>متصل الآن</span>
+                  </div>
                 </div>
               </div>
+              <button onClick={handleLogout} style={{ padding: '10px 20px', borderRadius: 10, border: '1px solid rgba(239,68,68,0.3)', background: 'rgba(239,68,68,0.08)', color: '#EF4444', fontSize: 14, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, transition: 'all 0.15s', fontFamily: 'Zain, sans-serif' }}
+                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(239,68,68,0.15)' }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(239,68,68,0.08)' }}>
+                <Logout size={14} strokeWidth={2} /> تسجيل الخروج
+              </button>
             </div>
-
-            <button
-              onClick={handleLogout}
-              style={{
-                padding: '10px 20px',
-                borderRadius: 10,
-                border: '1px solid rgba(239,68,68,0.3)',
-                background: 'rgba(239,68,68,0.08)',
-                color: '#EF4444',
-                fontSize: 14,
-                fontWeight: 700,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 6,
-                transition: 'all 0.15s',
-                fontFamily: 'Zain, sans-serif',
-              }}
-              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(239,68,68,0.15)' }}
-              onMouseLeave={e => { e.currentTarget.style.background = 'rgba(239,68,68,0.08)' }}
-            >
-              <Logout size={14} strokeWidth={2} />
-              تسجيل الخروج
-            </button>
-          </div>
-        </SectionCard>
+          </SectionCard>
+        )}
 
       </div>
     </Layout>
