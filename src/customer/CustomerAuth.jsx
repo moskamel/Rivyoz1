@@ -48,16 +48,18 @@ export default function CustomerAuth() {
 
   const inputBase = {
     width: '100%', padding: '14px', borderRadius: 14,
-    border: '1.5px solid #E5E7EB', fontSize: 15,
+    border: '1.5px solid var(--border-strong)', fontSize: 15,
     fontFamily: 'Zain, sans-serif', outline: 'none',
     transition: 'border-color 0.2s, box-shadow 0.2s',
-    boxSizing: 'border-box', background: 'white', color: '#111827',
+    boxSizing: 'border-box',
+    background: 'var(--surface-2)',
+    color: 'var(--text)',
   }
 
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'linear-gradient(180deg, #FFF7ED 0%, #F9FAFB 55%)',
+      background: 'var(--bg)',
       display: 'flex', flexDirection: 'column',
       alignItems: 'center', justifyContent: 'center',
       padding: '24px 20px', fontFamily: 'Zain, sans-serif', direction: 'rtl',
@@ -72,24 +74,24 @@ export default function CustomerAuth() {
         }}>
           🍽️
         </div>
-        <h1 style={{ fontWeight: 900, fontSize: 24, color: '#111827', marginBottom: 6 }}>
+        <h1 style={{ fontWeight: 900, fontSize: 24, color: 'var(--text)', marginBottom: 6 }}>
           {step === 'phone' ? 'مرحباً بك' : 'أهلاً! 👋'}
         </h1>
-        <p style={{ fontSize: 14, color: '#6B7280', lineHeight: 1.7 }}>
+        <p style={{ fontSize: 14, color: 'var(--text-2)', lineHeight: 1.7 }}>
           {step === 'phone' ? 'أدخل رقم هاتفك المصري للمتابعة' : 'أخبرنا باسمك لنكمل طلبك'}
         </p>
       </div>
 
       <div style={{
         width: '100%', maxWidth: 390,
-        background: 'white', borderRadius: 24,
+        background: 'var(--surface)', borderRadius: 24,
         padding: '28px 24px', boxSizing: 'border-box',
-        boxShadow: '0 8px 48px rgba(0,0,0,0.09)',
-        border: '1px solid #F3F4F6',
+        boxShadow: 'var(--shadow-lg)',
+        border: '1px solid var(--border)',
       }}>
         {step === 'phone' ? (
           <>
-            <label style={{ display: 'block', fontSize: 13, fontWeight: 700, color: '#374151', marginBottom: 8 }}>
+            <label style={{ display: 'block', fontSize: 13, fontWeight: 700, color: 'var(--text-2)', marginBottom: 8 }}>
               رقم الهاتف
             </label>
             <input
@@ -100,11 +102,11 @@ export default function CustomerAuth() {
               placeholder="01xxxxxxxxx"
               autoFocus
               dir="ltr"
-              style={{ ...inputBase, borderColor: errors.phone ? '#EF4444' : '#E5E7EB', textAlign: 'right' }}
+              style={{ ...inputBase, borderColor: errors.phone ? 'var(--red)' : 'var(--border-strong)', textAlign: 'right' }}
               onFocus={e => { e.target.style.borderColor = color; e.target.style.boxShadow = `0 0 0 3px ${color}22` }}
-              onBlur={e => { e.target.style.borderColor = errors.phone ? '#EF4444' : '#E5E7EB'; e.target.style.boxShadow = 'none' }}
+              onBlur={e => { e.target.style.borderColor = errors.phone ? 'var(--red)' : 'var(--border-strong)'; e.target.style.boxShadow = 'none' }}
             />
-            {errors.phone && <p style={{ fontSize: 12, color: '#EF4444', marginTop: 6, fontWeight: 600 }}>{errors.phone}</p>}
+            {errors.phone && <p style={{ fontSize: 12, color: 'var(--red)', marginTop: 6, fontWeight: 600 }}>{errors.phone}</p>}
             <button
               onClick={handlePhoneNext}
               style={{
@@ -112,7 +114,10 @@ export default function CustomerAuth() {
                 borderRadius: 14, background: color, color: 'white',
                 fontWeight: 800, fontSize: 15, border: 'none', cursor: 'pointer',
                 fontFamily: 'Zain, sans-serif', boxShadow: `0 6px 20px ${color}44`,
+                transition: 'opacity 0.15s, transform 0.15s',
               }}
+              onMouseEnter={e => { e.currentTarget.style.opacity = '0.9'; e.currentTarget.style.transform = 'translateY(-1px)' }}
+              onMouseLeave={e => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.transform = 'translateY(0)' }}
             >
               متابعة ←
             </button>
@@ -120,15 +125,16 @@ export default function CustomerAuth() {
         ) : (
           <>
             <div style={{
-              background: '#F9FAFB', borderRadius: 12, padding: '10px 14px',
+              background: 'var(--surface-2)', borderRadius: 12, padding: '10px 14px',
               marginBottom: 18, display: 'flex', alignItems: 'center', gap: 10,
+              border: '1px solid var(--border)',
             }}>
               <span style={{ fontSize: 18 }}>📱</span>
-              <span style={{ fontSize: 14, color: '#374151', fontWeight: 600, fontFamily: 'Inter, monospace', direction: 'ltr' }}>
+              <span style={{ fontSize: 14, color: 'var(--text-2)', fontWeight: 600, fontFamily: 'Zain, sans-serif', direction: 'ltr' }}>
                 {phone}
               </span>
             </div>
-            <label style={{ display: 'block', fontSize: 13, fontWeight: 700, color: '#374151', marginBottom: 8 }}>
+            <label style={{ display: 'block', fontSize: 13, fontWeight: 700, color: 'var(--text-2)', marginBottom: 8 }}>
               اسمك الكريم
             </label>
             <input
@@ -138,11 +144,11 @@ export default function CustomerAuth() {
               onKeyDown={e => e.key === 'Enter' && handleSubmit()}
               placeholder="مثال: محمد أحمد"
               autoFocus
-              style={{ ...inputBase, borderColor: errors.name ? '#EF4444' : '#E5E7EB' }}
+              style={{ ...inputBase, borderColor: errors.name ? 'var(--red)' : 'var(--border-strong)' }}
               onFocus={e => { e.target.style.borderColor = color; e.target.style.boxShadow = `0 0 0 3px ${color}22` }}
-              onBlur={e => { e.target.style.borderColor = errors.name ? '#EF4444' : '#E5E7EB'; e.target.style.boxShadow = 'none' }}
+              onBlur={e => { e.target.style.borderColor = errors.name ? 'var(--red)' : 'var(--border-strong)'; e.target.style.boxShadow = 'none' }}
             />
-            {errors.name && <p style={{ fontSize: 12, color: '#EF4444', marginTop: 6, fontWeight: 600 }}>{errors.name}</p>}
+            {errors.name && <p style={{ fontSize: 12, color: 'var(--red)', marginTop: 6, fontWeight: 600 }}>{errors.name}</p>}
             <button
               onClick={handleSubmit}
               style={{
@@ -150,7 +156,10 @@ export default function CustomerAuth() {
                 borderRadius: 14, background: color, color: 'white',
                 fontWeight: 800, fontSize: 15, border: 'none', cursor: 'pointer',
                 fontFamily: 'Zain, sans-serif', boxShadow: `0 6px 20px ${color}44`,
+                transition: 'opacity 0.15s, transform 0.15s',
               }}
+              onMouseEnter={e => { e.currentTarget.style.opacity = '0.9'; e.currentTarget.style.transform = 'translateY(-1px)' }}
+              onMouseLeave={e => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.transform = 'translateY(0)' }}
             >
               ابدأ الطلب 🚀
             </button>
@@ -158,10 +167,13 @@ export default function CustomerAuth() {
               onClick={() => setStep('phone')}
               style={{
                 width: '100%', marginTop: 10, padding: '12px',
-                borderRadius: 14, background: 'transparent', color: '#9CA3AF',
-                fontWeight: 600, fontSize: 13, border: '1px solid #E5E7EB',
+                borderRadius: 14, background: 'transparent', color: 'var(--text-3)',
+                fontWeight: 600, fontSize: 13, border: '1px solid var(--border-strong)',
                 cursor: 'pointer', fontFamily: 'Zain, sans-serif',
+                transition: 'background 0.15s, color 0.15s',
               }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'var(--surface-2)'; e.currentTarget.style.color = 'var(--text-2)' }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--text-3)' }}
             >
               تغيير الرقم
             </button>
@@ -170,7 +182,7 @@ export default function CustomerAuth() {
       </div>
 
       <p style={{
-        fontSize: 12, color: '#9CA3AF', marginTop: 24,
+        fontSize: 12, color: 'var(--text-3)', marginTop: 24,
         textAlign: 'center', lineHeight: 1.7, maxWidth: 300,
       }}>
         بالمتابعة، أنت توافق على شروط الاستخدام وسياسة الخصوصية

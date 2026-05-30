@@ -6,52 +6,52 @@ import {
 
 /* ─── Design Tokens ──────────────────────────────────────────── */
 export const C_light = {
-  orange:      '#E8572A',
-  orangeHov:   '#D04B22',
-  orangeLight: '#FFF1EC',
-  orangeMid:   'rgba(232,87,42,0.12)',
-  orangeBorder:'rgba(232,87,42,0.25)',
-  navy:        '#1A1A2E',
-  navyLight:   '#2A2A45',
+  orange:      '#F97316',
+  orangeHov:   '#EA6C10',
+  orangeLight: 'rgba(249,115,22,0.08)',
+  orangeMid:   'rgba(249,115,22,0.12)',
+  orangeBorder:'rgba(249,115,22,0.25)',
+  navy:        '#111827',
+  navyLight:   '#1F2937',
   white:       '#FFFFFF',
-  gray50:      '#F8F9FA',
-  gray100:     '#F1F3F5',
-  gray200:     '#E9ECEF',
-  gray400:     '#ADB5BD',
-  gray600:     '#6C757D',
-  gray700:     '#495057',
-  gray900:     '#1A1A2E',
-  green:       '#198754',
-  greenLight:  '#D1E7DD',
-  red:         '#DC3545',
-  redLight:    '#F8D7DA',
+  gray50:      '#F4F4F5',
+  gray100:     '#F3F4F6',
+  gray200:     '#E5E7EB',
+  gray400:     '#9CA3AF',
+  gray600:     '#6B7280',
+  gray700:     '#374151',
+  gray900:     '#111827',
+  green:       '#16A34A',
+  greenLight:  'rgba(22,163,74,0.10)',
+  red:         '#EF4444',
+  redLight:    'rgba(239,68,68,0.10)',
 }
 
 export const C_dark = {
-  orange:      '#E8572A',
-  orangeHov:   '#D04B22',
-  orangeLight: 'rgba(232,87,42,0.18)',
-  orangeMid:   'rgba(232,87,42,0.15)',
-  orangeBorder:'rgba(232,87,42,0.35)',
-  navy:        '#EEEDF8',
-  navyLight:   '#D0CEF0',
-  white:       '#111119',
-  gray50:      '#0D0D18',
-  gray100:     '#1A1A28',
-  gray200:     'rgba(255,255,255,0.1)',
-  gray400:     'rgba(255,255,255,0.3)',
-  gray600:     '#9A98B8',
-  gray700:     '#C4C2DC',
-  gray900:     '#EEEDF8',
-  green:       '#34D399',
-  greenLight:  'rgba(52,211,153,0.15)',
+  orange:      '#F97316',
+  orangeHov:   '#EA6C10',
+  orangeLight: 'rgba(249,115,22,0.18)',
+  orangeMid:   'rgba(249,115,22,0.15)',
+  orangeBorder:'rgba(249,115,22,0.35)',
+  navy:        '#F0F0F0',
+  navyLight:   '#C0C0C0',
+  white:       '#111111',
+  gray50:      '#080808',
+  gray100:     '#111111',
+  gray200:     'rgba(255,255,255,0.07)',
+  gray400:     'rgba(255,255,255,0.30)',
+  gray600:     '#8A8A8A',
+  gray700:     '#C8C8C8',
+  gray900:     '#F0F0F0',
+  green:       '#22C55E',
+  greenLight:  'rgba(34,197,94,0.12)',
   red:         '#F87171',
   redLight:    'rgba(248,113,113,0.12)',
 }
 
 export const LandingThemeCtx = createContext({ C: C_light, isDark: false, toggle: () => {} })
 
-export const F = "'Tajawal', 'Zain', sans-serif"
+export const F = "'Zain', sans-serif"
 export const scrollTo = id => {
   const el = document.getElementById(id)
   if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -78,7 +78,7 @@ export function GlobalStyles() {
         transition:background .18s,transform .15s,box-shadow .18s;
         text-decoration:none;
       }
-      .fazz-btn-primary:hover { background:${C.orangeHov}; transform:translateY(-2px); box-shadow:0 8px 24px rgba(232,87,42,.35); }
+      .fazz-btn-primary:hover { background:${C.orangeHov}; transform:translateY(-2px); box-shadow:0 8px 24px rgba(249,115,22,.35); }
       .fazz-btn-outline {
         display:inline-flex; align-items:center; gap:8px;
         background:transparent; color:${C.navy}; border:2px solid ${C.gray200};
@@ -92,7 +92,7 @@ export function GlobalStyles() {
         background:${C.white}; border:1.5px solid ${C.gray200};
         border-radius:16px; transition:border-color .2s, transform .2s, box-shadow .2s;
       }
-      .fazz-card:hover { border-color:${C.orangeBorder}; transform:translateY(-4px); box-shadow:0 12px 32px rgba(232,87,42,.10); }
+      .fazz-card:hover { border-color:${C.orangeBorder}; transform:translateY(-4px); box-shadow:0 12px 32px rgba(249,115,22,.10); }
       .fazz-section-badge {
         display:inline-flex; align-items:center; gap:6px;
         background:${C.orangeLight}; color:${C.orange};
@@ -388,11 +388,15 @@ export function Footer() {
 
 /* ─── Page Wrapper ───────────────────────────────────────────── */
 export function LandingPageWrapper({ children, title }) {
-  const [isDark, setIsDark] = useState(() => localStorage.getItem('c_theme') === 'dark')
+  const [isDark, setIsDark] = useState(() => {
+    const saved = localStorage.getItem('theme') || localStorage.getItem('c_theme')
+    return saved === 'dark'
+  })
 
   const toggle = () => {
     const next = !isDark
     setIsDark(next)
+    localStorage.setItem('theme', next ? 'dark' : 'light')
     localStorage.setItem('c_theme', next ? 'dark' : 'light')
   }
 

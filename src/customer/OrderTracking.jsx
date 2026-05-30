@@ -125,7 +125,7 @@ export default function OrderTracking() {
           </div>
           {/* Order badge */}
           <div style={{ padding: '6px 14px', borderRadius: 20, background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.3)' }}>
-            <p style={{ fontSize: 13, fontWeight: 800, color: 'white', fontFamily: 'Inter, monospace', direction: 'ltr' }}>#{order.id}</p>
+            <p style={{ fontSize: 13, fontWeight: 800, color: 'white', fontFamily: 'Zain, sans-serif', direction: 'ltr' }}>#{order.id}</p>
           </div>
         </div>
 
@@ -203,9 +203,9 @@ export default function OrderTracking() {
                 const future = idx > currentStep
                 const isLast = idx === steps.length - 1
 
-                const dotBg = done ? '#22C55E' : active ? config.color : 'white'
-                const dotBorder = done ? '#22C55E' : active ? config.color : '#E5E7EB'
-                const lineColor = done ? '#22C55E' : '#E5E7EB'
+                const dotBg = done ? 'var(--green)' : active ? config.color : 'var(--surface-3)'
+                const dotBorder = done ? 'var(--green)' : active ? config.color : 'var(--border-strong)'
+                const lineColor = done ? 'var(--green)' : 'var(--border-strong)'
                 const lineDashed = future
 
                 return (
@@ -231,7 +231,7 @@ export default function OrderTracking() {
                         ) : active ? (
                           <span style={{ width: 10, height: 10, borderRadius: '50%', background: 'white', display: 'block' }} />
                         ) : (
-                          <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#D1D5DB', display: 'block' }} />
+                          <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--text-3)', display: 'block' }} />
                         )}
                       </div>
                       {/* Connector line */}
@@ -241,7 +241,7 @@ export default function OrderTracking() {
                           height: 60,
                           marginTop: 4,
                           background: lineDashed
-                            ? 'repeating-linear-gradient(to bottom, #E5E7EB 0px, #E5E7EB 4px, transparent 4px, transparent 8px)'
+                            ? 'repeating-linear-gradient(to bottom, var(--border-strong) 0px, var(--border-strong) 4px, transparent 4px, transparent 8px)'
                             : lineColor,
                           transition: 'background 0.4s',
                           borderRadius: 2,
@@ -253,19 +253,19 @@ export default function OrderTracking() {
                     <div style={{ paddingBottom: isLast ? 0 : 20, flex: 1, paddingTop: 6 }}>
                       <p style={{
                         fontSize: 14, fontWeight: done || active ? 800 : 500,
-                        color: done ? '#16A34A' : active ? '#111827' : '#9CA3AF',
+                        color: done ? 'var(--green)' : active ? 'var(--text)' : 'var(--text-3)',
                         transition: 'color 0.3s',
                         marginBottom: 3,
                       }}>
                         {step.label}
                       </p>
                       {(done || active) && (
-                        <p style={{ fontSize: 12, color: active ? config.color : '#6B7280', transition: 'color 0.3s', lineHeight: 1.4 }}>
+                        <p style={{ fontSize: 12, color: active ? config.color : 'var(--text-2)', transition: 'color 0.3s', lineHeight: 1.4 }}>
                           {active ? 'جاري الآن...' : step.sub}
                         </p>
                       )}
                       {future && (
-                        <p style={{ fontSize: 11, color: '#D1D5DB' }}>في انتظار التحديث</p>
+                        <p style={{ fontSize: 11, color: 'var(--text-3)' }}>في انتظار التحديث</p>
                       )}
                     </div>
                   </div>

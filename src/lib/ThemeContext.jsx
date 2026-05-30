@@ -8,11 +8,15 @@ const SidebarCtx = createContext({ sidebarOpen: false, setSidebarOpen: () => {} 
 export const useSidebar = () => useContext(SidebarCtx)
 
 export function CustomerThemeWrapper() {
-  const [isDark, setIsDark] = useState(() => localStorage.getItem('c_theme') === 'dark')
+  const [isDark, setIsDark] = useState(() => {
+    const saved = localStorage.getItem('theme') || localStorage.getItem('c_theme')
+    return saved === 'dark'
+  })
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   const toggle = () => setIsDark(d => {
     const n = !d
+    localStorage.setItem('theme', n ? 'dark' : 'light')
     localStorage.setItem('c_theme', n ? 'dark' : 'light')
     return n
   })

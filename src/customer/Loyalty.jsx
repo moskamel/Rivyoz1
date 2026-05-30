@@ -177,8 +177,8 @@ export default function Loyalty() {
                     onClick={() => !redeemed && canAfford && setConfirmReward(reward)}
                     style={{
                       padding: '9px 16px', borderRadius: 12, flexShrink: 0,
-                      background: redeemed ? '#F0FDF4' : canAfford ? color : '#F3F4F6',
-                      color: redeemed ? '#16A34A' : canAfford ? 'white' : '#9CA3AF',
+                      background: redeemed ? 'var(--green-muted)' : canAfford ? color : 'var(--surface-3)',
+                      color: redeemed ? 'var(--green)' : canAfford ? 'white' : 'var(--text-3)',
                       fontWeight: 700, fontSize: 12, border: 'none',
                       cursor: redeemed || !canAfford ? 'default' : 'pointer',
                       fontFamily: 'Zain, sans-serif', transition: 'all 0.2s',
@@ -197,8 +197,8 @@ export default function Loyalty() {
           <h2 style={{ fontSize: 15, fontWeight: 800, color: 'var(--text)', marginBottom: 10, paddingRight: 2 }}>كيف تكسب النقاط</h2>
           <div style={{ background: 'var(--surface)', borderRadius: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.06)', overflow: 'hidden' }}>
             {EARN_RULES.map((item, i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px', borderBottom: i < EARN_RULES.length - 1 ? '1px solid #F9FAFB' : 'none' }}>
-                <div style={{ width: 40, height: 40, borderRadius: 12, background: '#FFF7ED', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0 }}>
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px', borderBottom: i < EARN_RULES.length - 1 ? '1px solid var(--border)' : 'none' }}>
+                <div style={{ width: 40, height: 40, borderRadius: 12, background: 'var(--accent-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0 }}>
                   {item.icon}
                 </div>
                 <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', flex: 1 }}>{item.text}</p>
@@ -213,15 +213,15 @@ export default function Loyalty() {
             <h2 style={{ fontSize: 15, fontWeight: 800, color: 'var(--text)', marginBottom: 10, paddingRight: 2 }}>سجل النقاط</h2>
             <div style={{ background: 'var(--surface)', borderRadius: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.06)', overflow: 'hidden' }}>
               {pts.history.slice(0, 10).map((tx, i) => (
-                <div key={tx.id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '13px 14px', borderBottom: i < pts.history.length - 1 ? '1px solid #F9FAFB' : 'none' }}>
-                  <div style={{ width: 40, height: 40, borderRadius: 12, background: tx.delta > 0 ? '#F0FDF4' : '#FEF2F2', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <div key={tx.id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '13px 14px', borderBottom: i < pts.history.length - 1 ? '1px solid var(--border)' : 'none' }}>
+                  <div style={{ width: 40, height: 40, borderRadius: 12, background: tx.delta > 0 ? 'var(--green-muted)' : 'var(--red-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <span style={{ fontSize: 18 }}>{tx.delta > 0 ? '💚' : '🔴'}</span>
                   </div>
                   <div style={{ flex: 1 }}>
-                    <p style={{ fontSize: 13, fontWeight: 700, color: '#1a1a1a', marginBottom: 2 }}>{tx.label}</p>
+                    <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 2 }}>{tx.label}</p>
                     <p style={{ fontSize: 11, color: 'var(--text-3)', fontWeight: 500 }}>{tx.time}</p>
                   </div>
-                  <span style={{ fontSize: 14, fontWeight: 800, color: tx.delta > 0 ? '#16A34A' : '#DC2626', fontFamily: 'Inter, sans-serif' }}>
+                  <span style={{ fontSize: 14, fontWeight: 800, color: tx.delta > 0 ? 'var(--green)' : 'var(--red)', fontFamily: 'Zain, sans-serif' }}>
                     {tx.delta > 0 ? '+' : ''}{tx.delta}
                   </span>
                 </div>
@@ -261,7 +261,7 @@ export default function Loyalty() {
               رصيدك الحالي: {pts.balance.toLocaleString()} نقطة → بعد الاستبدال: {(pts.balance - confirmReward.points).toLocaleString()} نقطة
             </p>
             <div style={{ display: 'flex', gap: 10 }}>
-              <button onClick={() => setConfirmReward(null)} style={{ flex: 1, padding: '14px', borderRadius: 14, border: '1.5px solid #E5E7EB', fontSize: 14, fontWeight: 700, color: 'var(--text-2)', background: 'white', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>
+              <button onClick={() => setConfirmReward(null)} style={{ flex: 1, padding: '14px', borderRadius: 14, border: '1.5px solid var(--border-strong)', fontSize: 14, fontWeight: 700, color: 'var(--text-2)', background: 'var(--surface-2)', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>
                 إلغاء
               </button>
               <button onClick={() => handleRedeem(confirmReward)} style={{ flex: 1, padding: '14px', borderRadius: 14, border: 'none', fontSize: 14, fontWeight: 700, color: 'white', background: color, cursor: 'pointer', fontFamily: 'Zain, sans-serif', boxShadow: `0 4px 14px ${color}44` }}>

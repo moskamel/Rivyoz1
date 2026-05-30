@@ -37,16 +37,16 @@ function StepIndicator({ step, color }) {
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, flexShrink: 0 }}>
             <div style={{
               width: 32, height: 32, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontWeight: 800, fontSize: 13, fontFamily: 'Inter, sans-serif',
-              background: s.num < step ? '#22C55E' : s.num === step ? color : '#E5E7EB',
-              color: s.num <= step ? 'white' : '#9CA3AF',
+              fontWeight: 800, fontSize: 13, fontFamily: 'Zain, sans-serif',
+              background: s.num < step ? 'var(--green)' : s.num === step ? color : 'var(--border-strong)',
+              color: s.num <= step ? 'white' : 'var(--text-3)',
               transition: 'all 0.3s',
             }}>
               {s.num < step ? <TickCircle size={15} /> : s.num}
             </div>
             <span style={{
               fontSize: 10, fontWeight: 700,
-              color: s.num === step ? color : s.num < step ? '#22C55E' : '#9CA3AF',
+              color: s.num === step ? color : s.num < step ? 'var(--green)' : 'var(--text-3)',
               whiteSpace: 'nowrap', fontFamily: 'Zain, sans-serif', transition: 'color 0.3s',
             }}>
               {s.label}
@@ -55,7 +55,7 @@ function StepIndicator({ step, color }) {
           {idx < steps.length - 1 && (
             <div style={{
               flex: 1, height: 2,
-              background: s.num < step ? '#22C55E' : '#E5E7EB',
+              background: s.num < step ? 'var(--green)' : 'var(--border-strong)',
               margin: '0 6px', marginBottom: 20, transition: 'background 0.3s', minWidth: 20,
             }} />
           )}
@@ -75,29 +75,29 @@ function CompactSummary({ cartItems, total, deliveryFee, couponDiscount, couponA
         {cartItems.map(item => (
           <div key={item.cartId} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, color: 'var(--text-2)' }}>
             <span>{item.name} × {item.qty}</span>
-            <span style={{ fontWeight: 600, fontFamily: 'Inter, sans-serif' }}>{item.price * item.qty} ج</span>
+            <span style={{ fontWeight: 600, fontFamily: 'Zain, sans-serif' }}>{item.price * item.qty} ج</span>
           </div>
         ))}
         <div style={{ borderTop: '1px dashed var(--border-strong)', paddingTop: 8, marginTop: 4, display: 'flex', flexDirection: 'column', gap: 5 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: 'var(--text-3)' }}>
             <span>المجموع الفرعي</span>
-            <span style={{ fontFamily: 'Inter, sans-serif' }}>{total} ج</span>
+            <span style={{ fontFamily: 'Zain, sans-serif' }}>{total} ج</span>
           </div>
           {deliveryFee > 0 && (
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: 'var(--text-3)' }}>
               <span>رسوم التوصيل</span>
-              <span style={{ fontFamily: 'Inter, sans-serif' }}>{deliveryFee} ج</span>
+              <span style={{ fontFamily: 'Zain, sans-serif' }}>{deliveryFee} ج</span>
             </div>
           )}
           {couponApplied && couponDiscount > 0 && (
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: '#22C55E' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: 'var(--green)' }}>
               <span>الخصم</span>
-              <span style={{ fontFamily: 'Inter, sans-serif', fontWeight: 700 }}>− {couponDiscount} ج</span>
+              <span style={{ fontFamily: 'Zain, sans-serif', fontWeight: 700 }}>− {couponDiscount} ج</span>
             </div>
           )}
           <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 800, fontSize: 15, color: 'var(--text)', paddingTop: 4 }}>
             <span>الإجمالي</span>
-            <span style={{ color: color, fontFamily: 'Inter, sans-serif' }}>{finalTotal} ج</span>
+            <span style={{ color: color, fontFamily: 'Zain, sans-serif' }}>{finalTotal} ج</span>
           </div>
         </div>
       </div>
@@ -308,7 +308,7 @@ export default function Checkout() {
                     onChange={e => { setPhone(e.target.value); setStep1Errors(p => ({ ...p, phone: '' })) }}
                     placeholder="01XXXXXXXXX"
                     dir="ltr"
-                    style={{ ...inputStyle, borderColor: step1Errors.phone ? '#EF4444' : '#E5E7EB', fontFamily: 'Inter, sans-serif' }}
+                    style={{ ...inputStyle, borderColor: step1Errors.phone ? '#EF4444' : '#E5E7EB', fontFamily: 'Zain, sans-serif' }}
                     onFocus={e => focusInput(e, accentColor)}
                     onBlur={blurInput}
                   />
@@ -441,7 +441,7 @@ export default function Checkout() {
                     value={tableNumber}
                     onChange={e => { setTableNumber(e.target.value); setStep1Errors(p => ({ ...p, tableNumber: '' })) }}
                     placeholder="مثال: 5"
-                    style={{ ...inputStyle, borderColor: step1Errors.tableNumber ? '#EF4444' : '#E5E7EB', fontFamily: 'Inter, sans-serif' }}
+                    style={{ ...inputStyle, borderColor: step1Errors.tableNumber ? '#EF4444' : '#E5E7EB', fontFamily: 'Zain, sans-serif' }}
                     onFocus={e => focusInput(e, accentColor)}
                     onBlur={blurInput}
                   />
@@ -519,8 +519,8 @@ export default function Checkout() {
                     )}
                   </div>
                   <div style={{ textAlign: 'left', display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <span style={{ fontSize: 12, color: '#9CA3AF', fontFamily: 'Inter, sans-serif' }}>× {item.qty}</span>
-                    <span style={{ fontSize: 13, fontWeight: 700, color: accentColor, fontFamily: 'Inter, sans-serif' }}>{item.price * item.qty} ج</span>
+                    <span style={{ fontSize: 12, color: '#9CA3AF', fontFamily: 'Zain, sans-serif' }}>× {item.qty}</span>
+                    <span style={{ fontSize: 13, fontWeight: 700, color: accentColor, fontFamily: 'Zain, sans-serif' }}>{item.price * item.qty} ج</span>
                   </div>
                 </div>
               ))}
@@ -559,23 +559,23 @@ export default function Checkout() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, color: 'var(--text-2)' }}>
                   <span>المجموع الفرعي</span>
-                  <span style={{ fontFamily: 'Inter, sans-serif' }}>{total} ج</span>
+                  <span style={{ fontFamily: 'Zain, sans-serif' }}>{total} ج</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, color: 'var(--text-2)' }}>
                   <span>رسوم التوصيل</span>
-                  <span style={{ fontFamily: 'Inter, sans-serif' }}>
+                  <span style={{ fontFamily: 'Zain, sans-serif' }}>
                     {orderType === 'delivery' ? `${config.deliveryFee} ج` : 'مجاني'}
                   </span>
                 </div>
                 {couponApplied && couponDiscount > 0 && (
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, color: '#22C55E' }}>
                     <span>الخصم</span>
-                    <span style={{ fontFamily: 'Inter, sans-serif', fontWeight: 700 }}>− {couponDiscount} ج</span>
+                    <span style={{ fontFamily: 'Zain, sans-serif', fontWeight: 700 }}>− {couponDiscount} ج</span>
                   </div>
                 )}
                 <div style={{ borderTop: '1.5px dashed var(--border-strong)', paddingTop: 10, display: 'flex', justifyContent: 'space-between', fontWeight: 800, fontSize: 18 }}>
                   <span style={{ color: 'var(--text)' }}>الإجمالي</span>
-                  <span style={{ color: accentColor, fontFamily: 'Inter, sans-serif' }}>{finalTotal} ج</span>
+                  <span style={{ color: accentColor, fontFamily: 'Zain, sans-serif' }}>{finalTotal} ج</span>
                 </div>
               </div>
             </div>

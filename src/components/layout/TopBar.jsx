@@ -2,114 +2,169 @@ import { useState, useEffect } from 'react'
 import { Sun, Moon, SearchNormal1 } from 'iconsax-react'
 import { useNavigate } from 'react-router-dom'
 import NotificationBell from '../NotificationBell'
+import { getConfig } from '../../lib/restaurantStore'
 
 const roleLabels = {
-  owner: 'صاحب المطعم',
+  owner:   'صاحب المطعم',
   manager: 'مدير الفرع',
   cashier: 'كاشير',
   kitchen: 'مطبخ',
 }
 
+function useClock() {
+  const [time, setTime] = useState(() => new Date())
+  useEffect(() => {
+    const id = setInterval(() => setTime(new Date()), 60000)
+    return () => clearInterval(id)
+  }, [])
+  return time
+}
+
 export default function TopBar({ title }) {
-  const navigate = useNavigate()
-  const role = localStorage.getItem('auth_role') || 'owner'
+  const navigate  = useNavigate()
+  const role      = localStorage.getItem('auth_role') || 'owner'
   const roleLabel = roleLabels[role] || 'صاحب المطعم'
-  const userInitial = roleLabel.charAt(0)
+  const config    = getConfig()
 
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark')
+  const now = useClock()
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme === 'light' ? 'light' : '')
     localStorage.setItem('theme', theme)
+    localStorage.setItem('c_theme', theme)
   }, [theme])
 
   const toggleTheme = () => setTheme(t => (t === 'dark' ? 'light' : 'dark'))
-  const isLight = theme === 'light'
+  const isLight     = theme === 'light'
+
+  const weekdays = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت']
+  const dayName   = weekdays[now.getDay()]
+  const timeStr   = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' })
+
+  const restaurantInitial = (config.name || 'م').charAt(0)
 
   return (
     <header
       style={{
         height: 56,
-        background: isLight ? 'rgba(255,255,255,0.85)' : 'rgba(8,8,8,0.85)',
+        background: isLight ? 'rgba(255,255,255,0.90)' : 'rgba(8,8,8,0.90)',
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
         borderBottom: '1px solid var(--border)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '0 24px',
+        padding: '0 20px 0 16px',
         position: 'sticky',
         top: 0,
         zIndex: 50,
+        gap: 12,
       }}
     >
-      {/* Page title — left side in RTL = visual left */}
-      <h1
-        style={{
-          fontSize: 16,
-          fontWeight: 700,
-          color: 'var(--text)',
-          letterSpacing: '-0.01em',
-          margin: 0,
-        }}
-      >
-        {title}
-      </h1>
-
-      {/* Right controls */}
-      <div className="flex items-center gap-2">
-        {/* SearchNormal1 */}
-        <button
-          className="btn-icon md"
-          title="بحث"
-          style={{ cursor: 'pointer' }}
+      {/* Right: title + clock */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, minWidth: 0, flex: 1 }}>
+        <h1
+          style={{
+            fontSize: 15,
+            fontWeight: 700,
+            color: 'var(--text)',
+            letterSpacing: '-0.01em',
+            margin: 0,
+            whiteSpace: 'nowrap',
+          }}
         >
+          {title}
+        </h1>
+        <span
+          style={{
+            fontSize: 11,
+            color: 'var(--text-3)',
+            fontWeight: 500,
+            whiteSpace: 'nowrap',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 6,
+          }}
+        >
+          <span
+            className={`status-dot ${config.isOpen ? 'live' : 'idle'}`}
+            style={{ width: 6, height: 6 }}
+          />
+          {config.isOpen ? 'مفتوح' : 'مغلق'}
+          <span style={{ color: 'var(--border-strong)' }}>·</span>
+          {dayName} {timeStr}
+        </span>
+      </div>
+
+      {/* Left: controls */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+        {/* Search */}
+        <button className="btn-icon md" title="بحث" style={{ cursor: 'pointer' }}>
           <SearchNormal1 size={15} strokeWidth={2} />
         </button>
 
-        {/* Notification bell */}
+        {/* Notifications */}
         <NotificationBell />
 
         {/* Theme toggle */}
         <button
           onClick={toggleTheme}
           className="btn-icon md"
-          title={isLight ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح'}
-          style={{
-            cursor: 'pointer',
-            color: isLight ? '#F59E0B' : '#60A5FA',
-          }}
+          title={isLight ? 'الوضع الداكن' : 'الوضع الفاتح'}
+          style={{ cursor: 'pointer', color: isLight ? '#F59E0B' : '#60A5FA' }}
         >
           {isLight ? <Sun size={15} strokeWidth={2} /> : <Moon size={15} strokeWidth={2} />}
         </button>
 
-        {/* Separator */}
         <div style={{ width: 1, height: 20, background: 'var(--border)', margin: '0 2px' }} />
 
-        {/* Avatar — navigates to /profile */}
+        {/* Role chip */}
         <div
-          onClick={() => navigate('/profile')}
           style={{
-            width: 32,
-            height: 32,
-            borderRadius: '50%',
-            background: 'var(--accent-muted)',
-            border: '1px solid var(--border-accent)',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            color: 'var(--accent)',
-            fontSize: 13,
-            fontWeight: 700,
+            gap: 8,
+            padding: '0 10px',
+            height: 34,
+            borderRadius: 'var(--radius-lg)',
+            background: 'var(--surface-2)',
+            border: '1px solid var(--border)',
             cursor: 'pointer',
-            flexShrink: 0,
-            transition: 'border-color 0.15s, box-shadow 0.15s',
+            transition: 'border-color var(--dur-normal) ease',
           }}
+          onClick={() => navigate('/profile')}
           title={`${roleLabel} — الملف الشخصي`}
-          onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.boxShadow = '0 0 0 2px rgba(249,115,22,0.2)' }}
-          onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border-accent)'; e.currentTarget.style.boxShadow = 'none' }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)' }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)' }}
         >
-          {userInitial}
+          {/* Avatar circle */}
+          <div
+            style={{
+              width: 22,
+              height: 22,
+              borderRadius: '50%',
+              background: 'var(--accent-muted)',
+              border: '1px solid var(--border-accent)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'var(--accent)',
+              fontSize: 11,
+              fontWeight: 800,
+              flexShrink: 0,
+            }}
+          >
+            {restaurantInitial}
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.2 }}>
+            <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--text)', whiteSpace: 'nowrap' }}>
+              {config.name?.split(' ').slice(0, 2).join(' ') || 'المطعم'}
+            </span>
+            <span style={{ fontSize: 10, color: 'var(--text-3)', whiteSpace: 'nowrap' }}>
+              {roleLabel}
+            </span>
+          </div>
         </div>
       </div>
     </header>

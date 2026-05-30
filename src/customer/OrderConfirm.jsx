@@ -174,14 +174,14 @@ export default function OrderConfirm() {
             {order.details && order.details.length > 0 && (
               <div style={{ paddingTop: 12, borderTop: '1px solid var(--border)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10 }}>
-                  <Cup size={13} color="#9CA3AF" />
+                  <Cup size={13} color="var(--text-3)" />
                   <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-3)' }}>الأصناف</span>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                   {order.details.map((item, idx) => (
-                    <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, color: '#374151' }}>
+                    <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, color: 'var(--text-2)' }}>
                       <span>{item.name} <span style={{ color: 'var(--text-3)' }}>× {item.qty}</span></span>
-                      <span style={{ fontWeight: 600, fontFamily: 'Inter, sans-serif' }}>{item.price * item.qty} ج</span>
+                      <span style={{ fontWeight: 600, fontFamily: 'Zain, sans-serif' }}>{item.price * item.qty} ج</span>
                     </div>
                   ))}
                 </div>
@@ -190,7 +190,7 @@ export default function OrderConfirm() {
 
             <div style={{ paddingTop: 12, borderTop: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)' }}>الإجمالي</span>
-              <span style={{ fontSize: 20, fontWeight: 900, color: config.color, fontFamily: 'Inter, monospace', direction: 'ltr' }}>{order.total} ج</span>
+              <span style={{ fontSize: 20, fontWeight: 900, color: config.color, fontFamily: 'Zain, sans-serif', direction: 'ltr' }}>{order.total} ج</span>
             </div>
           </div>
         </div>
@@ -210,19 +210,19 @@ export default function OrderConfirm() {
             ].map((s, i) => (
               <div key={i} style={{ flex: 1, position: 'relative' }}>
                 {i < 2 && (
-                  <div style={{ position: 'absolute', top: 16, right: '50%', left: 0, height: 2, background: i === 0 ? config.color : '#E5E7EB' }} />
+                  <div style={{ position: 'absolute', top: 16, right: '50%', left: 0, height: 2, background: i === 0 ? config.color : 'var(--border-strong)' }} />
                 )}
                 <div style={{ position: 'relative', zIndex: 1 }}>
                   <div style={{
                     width: 36, height: 36, borderRadius: '50%', margin: '0 auto 6px',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16,
-                    background: s.done ? config.color : '#F3F4F6',
+                    background: s.done ? config.color : 'var(--surface-3)',
                     boxShadow: s.done ? `0 4px 12px ${config.color}40` : 'none',
                     transition: 'all 0.3s',
                   }}>
                     {s.icon}
                   </div>
-                  <p style={{ fontSize: 10, color: s.done ? '#111827' : '#9CA3AF', fontWeight: s.done ? 700 : 500 }}>{s.label}</p>
+                  <p style={{ fontSize: 10, color: s.done ? 'var(--text)' : 'var(--text-3)', fontWeight: s.done ? 700 : 500 }}>{s.label}</p>
                 </div>
               </div>
             ))}
@@ -251,7 +251,7 @@ export default function OrderConfirm() {
             onClick={() => navigate(`/${config.slug || 'chef-ahmed'}`)}
             style={{
               width: '100%', padding: '13px', borderRadius: 14, fontWeight: 700, fontSize: 14, cursor: 'pointer',
-              background: 'white', border: `2px solid ${config.color}`, color: config.color,
+              background: 'var(--surface)', border: `2px solid ${config.color}`, color: config.color,
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
               fontFamily: 'Zain, sans-serif',
             }}

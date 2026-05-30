@@ -58,16 +58,16 @@ function OrderCard({ order, config, onClick }) {
               {STATUS_LABEL[status]}
             </span>
           </div>
-          <p style={{ fontSize: 12, color: '#6B7280', marginBottom: 5 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-2)', marginBottom: 5 }}>
             {itemCount > 0 ? `${itemCount} عنصر · ` : ''}{order.total} ج
           </p>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ fontSize: 11, color: '#D1D5DB', fontFamily: 'Inter, monospace' }}>#{order.id}</span>
+            <span style={{ fontSize: 11, color: 'var(--text-3)', fontFamily: 'Zain, sans-serif' }}>#{order.id}</span>
             {isActive
               ? <span style={{ fontSize: 12, color: config.color, fontWeight: 700 }}>تتبع الطلب ←</span>
               : order.rating
                 ? <span style={{ fontSize: 12 }}>{'⭐'.repeat(order.rating)}</span>
-                : <span style={{ fontSize: 11, color: '#D1D5DB' }}>لم يتم التقييم</span>
+                : <span style={{ fontSize: 11, color: 'var(--text-3)' }}>لم يتم التقييم</span>
             }
           </div>
         </div>
@@ -105,11 +105,11 @@ export default function MyOrders() {
           onClick={() => navigate(-1)}
           style={{ width: 38, height: 38, borderRadius: 12, background: 'var(--surface-2)', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
         >
-          <ArrowRight size={18} color="#374151" />
+          <ArrowRight size={18} color="var(--text-2)" />
         </button>
         <h1 style={{ fontWeight: 800, fontSize: 18, color: 'var(--text)', flex: 1 }}>طلباتي</h1>
         {orders.length > 0 && (
-          <span style={{ fontSize: 12, color: '#6B7280', background: '#F3F4F6', padding: '3px 10px', borderRadius: 20, fontFamily: 'Inter, sans-serif' }}>
+          <span style={{ fontSize: 12, color: 'var(--text-2)', background: 'var(--surface-2)', padding: '3px 10px', borderRadius: 20, fontFamily: 'Zain, sans-serif', border: '1px solid var(--border)' }}>
             {orders.length}
           </span>
         )}
@@ -120,7 +120,7 @@ export default function MyOrders() {
           <div style={{ textAlign: 'center', padding: '72px 20px' }}>
             <p style={{ fontSize: 56, marginBottom: 16 }}>🍽️</p>
             <p style={{ fontWeight: 800, fontSize: 17, color: 'var(--text)', marginBottom: 8 }}>لا توجد طلبات بعد</p>
-            <p style={{ fontSize: 13, color: '#9CA3AF', marginBottom: 28, lineHeight: 1.6 }}>
+            <p style={{ fontSize: 13, color: 'var(--text-3)', marginBottom: 28, lineHeight: 1.6 }}>
               اطلب وجبتك الأولى وستظهر هنا
             </p>
             <button
@@ -139,7 +139,7 @@ export default function MyOrders() {
           <>
             {active.length > 0 && (
               <>
-                <p style={{ fontSize: 11, fontWeight: 700, color: '#9CA3AF', letterSpacing: '0.07em', padding: '4px 2px 2px' }}>
+                <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-3)', letterSpacing: '0.07em', padding: '4px 2px 2px' }}>
                   جاري التنفيذ
                 </p>
                 {active.map(order => (
@@ -149,7 +149,7 @@ export default function MyOrders() {
             )}
             {past.length > 0 && (
               <>
-                <p style={{ fontSize: 11, fontWeight: 700, color: '#9CA3AF', letterSpacing: '0.07em', padding: '10px 2px 2px' }}>
+                <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-3)', letterSpacing: '0.07em', padding: '10px 2px 2px' }}>
                   الطلبات السابقة
                 </p>
                 {past.map(order => (

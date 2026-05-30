@@ -25,7 +25,7 @@ export default function RestaurantPage() {
   const others = mockRestaurants.filter(r => r.slug !== slug)
 
   return (
-    <div style={{ minHeight: '100vh', background: '#F9FAFB', fontFamily: 'Zain, sans-serif' }} dir="rtl">
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', fontFamily: 'Zain, sans-serif' }} dir="rtl">
 
       {/* ── Header ── */}
       <div style={{
@@ -147,28 +147,28 @@ export default function RestaurantPage() {
           {restaurant.emoji}
         </div>
 
-        <p style={{ fontSize: 22, fontWeight: 900, color: '#111827', marginBottom: 6, letterSpacing: '-0.02em' }}>{restaurant.name}</p>
-        <p style={{ fontSize: 14, color: '#6B7280', marginBottom: 12, fontWeight: 600 }}>{restaurant.category}</p>
+        <p style={{ fontSize: 22, fontWeight: 900, color: 'var(--text)', marginBottom: 6, letterSpacing: '-0.02em' }}>{restaurant.name}</p>
+        <p style={{ fontSize: 14, color: 'var(--text-2)', marginBottom: 12, fontWeight: 600 }}>{restaurant.category}</p>
 
         {/* Delivery info pills */}
         <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginBottom: 24, flexWrap: 'wrap' }}>
-          <div style={{ padding: '6px 14px', borderRadius: 20, background: '#F3F4F6', display: 'flex', alignItems: 'center', gap: 5 }}>
+          <div style={{ padding: '6px 14px', borderRadius: 20, background: 'var(--surface-2)', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 5 }}>
             <span style={{ fontSize: 13 }}>🕐</span>
-            <span style={{ fontSize: 12, fontWeight: 600, color: '#374151' }}>{restaurant.deliveryTime} دقيقة</span>
+            <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-2)' }}>{restaurant.deliveryTime} دقيقة</span>
           </div>
-          <div style={{ padding: '6px 14px', borderRadius: 20, background: restaurant.deliveryFee === 0 ? '#F0FDF4' : '#F3F4F6', display: 'flex', alignItems: 'center', gap: 5 }}>
+          <div style={{ padding: '6px 14px', borderRadius: 20, background: restaurant.deliveryFee === 0 ? 'var(--green-muted)' : 'var(--surface-2)', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 5 }}>
             <span style={{ fontSize: 13 }}>🛵</span>
-            <span style={{ fontSize: 12, fontWeight: 600, color: restaurant.deliveryFee === 0 ? '#16A34A' : '#374151' }}>
+            <span style={{ fontSize: 12, fontWeight: 600, color: restaurant.deliveryFee === 0 ? 'var(--green)' : 'var(--text-2)' }}>
               {restaurant.deliveryFee === 0 ? 'توصيل مجاني' : `${restaurant.deliveryFee} ج توصيل`}
             </span>
           </div>
         </div>
 
         {/* Coming soon card */}
-        <div style={{ background: 'white', borderRadius: 20, padding: '20px 24px', marginBottom: 20, width: '100%', boxSizing: 'border-box', boxShadow: '0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04)', border: '1px solid #F3F4F6' }}>
+        <div style={{ background: 'var(--surface)', borderRadius: 20, padding: '20px 24px', marginBottom: 20, width: '100%', boxSizing: 'border-box', boxShadow: 'var(--shadow-md)', border: '1px solid var(--border)' }}>
           <p style={{ fontSize: 28, marginBottom: 10 }}>🚀</p>
-          <p style={{ fontSize: 16, fontWeight: 800, color: '#111827', marginBottom: 8 }}>قريباً على ريڤيو</p>
-          <p style={{ fontSize: 13, color: '#6B7280', lineHeight: 1.7 }}>
+          <p style={{ fontSize: 16, fontWeight: 800, color: 'var(--text)', marginBottom: 8 }}>قريباً على ريڤيو</p>
+          <p style={{ fontSize: 13, color: 'var(--text-2)', lineHeight: 1.7 }}>
             هذا المطعم متاح قريباً على منصة ريڤيو<br />سجّل اهتمامك وسنخطرك عند الإطلاق
           </p>
         </div>
@@ -187,7 +187,7 @@ export default function RestaurantPage() {
         <button
           onClick={() => navigate('/explore')}
           style={{
-            background: 'none', border: 'none', color: '#9CA3AF', fontSize: 13, cursor: 'pointer',
+            background: 'none', border: 'none', color: 'var(--text-3)', fontSize: 13, cursor: 'pointer',
             fontFamily: 'Zain, sans-serif', padding: '8px',
           }}
         >

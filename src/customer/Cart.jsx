@@ -544,7 +544,7 @@ export default function Cart() {
             <p style={{ color: 'var(--text-3)', fontSize: 13, marginBottom: 20 }}>سيتم إزالة الصنف من سلتك</p>
             <div style={{ display: 'flex', gap: 10 }}>
               <button onClick={() => setConfirmDelete(null)} style={{ flex: 1, padding: '13px', borderRadius: 14, border: '1.5px solid var(--border-strong)', fontSize: 14, fontWeight: 700, color: 'var(--text-2)', background: 'var(--surface)', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>إلغاء</button>
-              <button onClick={() => { removeItem(confirmDelete); setConfirmDelete(null) }} style={{ flex: 1, padding: '13px', borderRadius: 14, border: 'none', fontSize: 14, fontWeight: 700, color: 'white', background: '#EF4444', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>احذف</button>
+              <button onClick={() => { removeItem(confirmDelete); setConfirmDelete(null) }} style={{ flex: 1, padding: '13px', borderRadius: 14, border: 'none', fontSize: 14, fontWeight: 700, color: 'white', background: 'var(--red)', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>احذف</button>
             </div>
           </div>
         </div>
@@ -559,7 +559,7 @@ export default function Cart() {
             <p style={{ color: 'var(--text-3)', fontSize: 13, marginBottom: 20 }}>سيتم حذف جميع الأصناف من سلتك</p>
             <div style={{ display: 'flex', gap: 10 }}>
               <button onClick={() => setConfirmClear(false)} style={{ flex: 1, padding: '13px', borderRadius: 14, border: '1.5px solid var(--border-strong)', fontSize: 14, fontWeight: 700, color: 'var(--text-2)', background: 'var(--surface)', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>إلغاء</button>
-              <button onClick={() => { clearCart(); setConfirmClear(false) }} style={{ flex: 1, padding: '13px', borderRadius: 14, border: 'none', fontSize: 14, fontWeight: 700, color: 'white', background: '#EF4444', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>افرغ السلة</button>
+              <button onClick={() => { clearCart(); setConfirmClear(false) }} style={{ flex: 1, padding: '13px', borderRadius: 14, border: 'none', fontSize: 14, fontWeight: 700, color: 'white', background: 'var(--red)', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>افرغ السلة</button>
             </div>
           </div>
         </div>
