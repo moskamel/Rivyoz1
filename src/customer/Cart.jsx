@@ -367,15 +367,12 @@ export default function Cart() {
         {/* ── 6. Payment ── */}
         <Card>
           <CardHead title="طريقة الدفع" />
-          <div style={{ padding: '12px 16px 16px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div style={{ padding: '12px 16px 16px', display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 10 }}>
             {payOpts.map(opt => (
               <button key={opt.key} onClick={() => setPayment(opt.key)}
-                style={{ padding: '16px 18px', borderRadius: 14, border: `2px solid ${payment === opt.key ? color : 'var(--border-strong)'}`, background: payment === opt.key ? color + '08' : 'var(--surface)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 14, transition: 'all 0.15s', fontFamily: 'Zain, sans-serif', textAlign: 'right' }}>
-                <div style={{ width: 22, height: 22, borderRadius: '50%', border: `2.5px solid ${payment === opt.key ? color : 'var(--border-strong)'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'border-color 0.15s' }}>
-                  {payment === opt.key && <div style={{ width: 10, height: 10, borderRadius: '50%', background: color }} />}
-                </div>
-                <span style={{ fontSize: 24 }}>{opt.icon}</span>
-                <span style={{ fontSize: 14, fontWeight: 700, color: payment === opt.key ? color : 'var(--text)' }}>{opt.label}</span>
+                style={{ padding: '14px 10px', borderRadius: 14, border: `2px solid ${payment === opt.key ? color : 'var(--border-strong)'}`, background: payment === opt.key ? color + '10' : 'var(--surface-2)', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, transition: 'all 0.15s', fontFamily: 'Zain, sans-serif', textAlign: 'center' }}>
+                <span style={{ fontSize: 28 }}>{opt.icon}</span>
+                <span style={{ fontSize: 12, fontWeight: 700, color: payment === opt.key ? color : 'var(--text-2)', lineHeight: 1.3 }}>{opt.label}</span>
               </button>
             ))}
 

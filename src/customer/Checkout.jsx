@@ -469,24 +469,21 @@ export default function Checkout() {
             {/* Payment cards */}
             <div style={{ background: 'var(--surface)', borderRadius: 16, padding: '16px 16px', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
               <p style={{ fontWeight: 800, fontSize: 14, color: 'var(--text)', marginBottom: 14 }}>طريقة الدفع</p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 10 }}>
                 {paymentOptions.map(opt => (
                   <button
                     key={opt.key}
                     onClick={() => setPayment(opt.key)}
                     style={{
-                      padding: '16px 18px', borderRadius: 14,
+                      padding: '14px 10px', borderRadius: 14,
                       border: `2px solid ${payment === opt.key ? accentColor : '#E5E7EB'}`,
-                      background: payment === opt.key ? accentColor + '08' : 'white',
-                      cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 14,
-                      transition: 'all 0.15s', fontFamily: 'Zain, sans-serif', textAlign: 'right',
+                      background: payment === opt.key ? accentColor + '10' : '#F9FAFB',
+                      cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
+                      transition: 'all 0.15s', fontFamily: 'Zain, sans-serif', textAlign: 'center',
                     }}
                   >
-                    <div style={{ width: 22, height: 22, borderRadius: '50%', border: `2.5px solid ${payment === opt.key ? accentColor : '#D1D5DB'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'border-color 0.15s' }}>
-                      {payment === opt.key && <div style={{ width: 10, height: 10, borderRadius: '50%', background: accentColor }} />}
-                    </div>
-                    <span style={{ fontSize: 26 }}>{opt.icon}</span>
-                    <span style={{ fontSize: 14, fontWeight: 700, color: payment === opt.key ? accentColor : '#374151' }}>{opt.label}</span>
+                    <span style={{ fontSize: 28 }}>{opt.icon}</span>
+                    <span style={{ fontSize: 12, fontWeight: 700, color: payment === opt.key ? accentColor : '#6B7280', lineHeight: 1.3 }}>{opt.label}</span>
                   </button>
                 ))}
               </div>
