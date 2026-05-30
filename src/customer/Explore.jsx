@@ -48,7 +48,7 @@ function PinMap({ restaurants, selected, onSelect }) {
             </div>
             <div style={{ width: 0, height: 0, borderLeft: '6px solid transparent', borderRight: '6px solid transparent', borderTop: `8px solid ${r.isOpen ? r.color : '#9CA3AF'}`, margin: '0 auto', filter: 'drop-shadow(0 2px 2px rgba(0,0,0,0.18))' }} />
             {isSelected && (
-              <div style={{ position: 'absolute', bottom: '110%', left: '50%', transform: 'translateX(-50%)', background: 'white', borderRadius: 10, padding: '5px 10px', fontSize: 11, fontWeight: 700, color: '#111827', whiteSpace: 'nowrap', boxShadow: '0 4px 14px rgba(0,0,0,0.14)', border: `1.5px solid ${r.color}40`, fontFamily: 'Zain, sans-serif' }}>
+              <div style={{ position: 'absolute', bottom: '110%', left: '50%', transform: 'translateX(-50%)', background: 'var(--surface)', borderRadius: 10, padding: '5px 10px', fontSize: 11, fontWeight: 700, color: 'var(--text)', whiteSpace: 'nowrap', boxShadow: '0 4px 14px rgba(0,0,0,0.18)', border: '1.5px solid var(--border-accent)', fontFamily: 'Zain, sans-serif' }}>
                 {r.name}
               </div>
             )}
@@ -57,7 +57,7 @@ function PinMap({ restaurants, selected, onSelect }) {
       })}
 
       <div style={{ position: 'absolute', top: 12, left: 12, width: 32, height: 32, background: 'white', borderRadius: '50%', boxShadow: '0 2px 8px rgba(0,0,0,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16 }}>🧭</div>
-      <div style={{ position: 'absolute', bottom: 12, left: 12, background: 'white', borderRadius: 8, padding: '4px 10px', fontSize: 10, fontWeight: 700, color: '#6B7280', boxShadow: '0 2px 8px rgba(0,0,0,0.12)', fontFamily: 'Inter, sans-serif' }}>1 km</div>
+      <div style={{ position: 'absolute', bottom: 12, left: 12, background: 'var(--surface)', borderRadius: 8, padding: '4px 10px', fontSize: 10, fontWeight: 700, color: 'var(--text-2)', boxShadow: '0 2px 8px rgba(0,0,0,0.12)', fontFamily: 'Zain, sans-serif', border: '1px solid var(--border)' }}>1 km</div>
     </div>
   )
 }
@@ -65,38 +65,38 @@ function PinMap({ restaurants, selected, onSelect }) {
 function MapBottomSheet({ restaurant, onClose, onNavigate }) {
   if (!restaurant) return null
   return (
-    <div style={{ position: 'absolute', bottom: 64, left: 0, right: 0, zIndex: 1000, background: 'white', borderRadius: '20px 20px 0 0', padding: '12px 16px 24px', boxShadow: '0 -8px 32px rgba(0,0,0,0.14)', animation: 'slideUp 0.22s cubic-bezier(0.16,1,0.3,1)', fontFamily: 'Zain, sans-serif' }} dir="rtl">
-      <div style={{ width: 36, height: 4, borderRadius: 2, background: '#E5E7EB', margin: '0 auto 14px' }} />
+    <div style={{ position: 'absolute', bottom: 64, left: 0, right: 0, zIndex: 1000, background: 'var(--surface)', borderRadius: '20px 20px 0 0', padding: '12px 16px 24px', boxShadow: '0 -8px 32px rgba(0,0,0,0.18)', animation: 'slideUp 0.22s cubic-bezier(0.16,1,0.3,1)', fontFamily: 'Zain, sans-serif', borderTop: '1px solid var(--border)' }} dir="rtl">
+      <div style={{ width: 36, height: 4, borderRadius: 2, background: 'var(--border-strong)', margin: '0 auto 14px' }} />
       <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-        <div style={{ width: 56, height: 56, borderRadius: 16, flexShrink: 0, background: `linear-gradient(135deg,${restaurant.color}22,${restaurant.color}44)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28, border: `2px solid ${restaurant.color}30` }}>
+        <div style={{ width: 56, height: 56, borderRadius: 16, flexShrink: 0, background: 'var(--accent-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28, border: '2px solid var(--border-accent)' }}>
           {restaurant.emoji}
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <p style={{ fontSize: 16, fontWeight: 800, color: '#111827' }}>{restaurant.name}</p>
-            <span style={{ fontSize: 10, fontWeight: 700, padding: '3px 9px', borderRadius: 8, background: restaurant.isOpen ? '#F0FDF4' : '#FEF2F2', color: restaurant.isOpen ? '#16A34A' : '#DC2626', border: `1px solid ${restaurant.isOpen ? '#BBF7D0' : '#FECACA'}` }}>
+            <p style={{ fontSize: 16, fontWeight: 800, color: 'var(--text)' }}>{restaurant.name}</p>
+            <span style={{ fontSize: 10, fontWeight: 700, padding: '3px 9px', borderRadius: 8, background: restaurant.isOpen ? 'var(--green-muted)' : 'var(--red-muted)', color: restaurant.isOpen ? 'var(--green)' : 'var(--red)', border: `1px solid ${restaurant.isOpen ? 'var(--green)' : 'var(--red)'}30` }}>
               {restaurant.isOpen ? 'مفتوح' : 'مغلق'}
             </span>
           </div>
-          <p style={{ fontSize: 12, color: '#9CA3AF', marginTop: 1 }}>{restaurant.category}</p>
+          <p style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 1 }}>{restaurant.category}</p>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 5 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
               <Star1 size={12} color="#F59E0B" fill="#F59E0B" />
-              <span style={{ fontSize: 12, fontWeight: 700, color: '#111827', fontFamily: 'Inter' }}>{restaurant.rating}</span>
+              <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)', fontFamily: 'Zain, sans-serif' }}>{restaurant.rating}</span>
             </div>
-            <span style={{ color: '#D1D5DB' }}>·</span>
-            <Clock size={11} color="#9CA3AF" />
-            <span style={{ fontSize: 12, color: '#6B7280' }}>{restaurant.deliveryTime} دقيقة</span>
-            <span style={{ color: '#D1D5DB' }}>·</span>
-            <span style={{ fontSize: 12, color: restaurant.deliveryFee === 0 ? '#16A34A' : '#6B7280', fontWeight: restaurant.deliveryFee === 0 ? 700 : 400 }}>
+            <span style={{ color: 'var(--border-strong)' }}>·</span>
+            <Clock size={11} color="var(--text-3)" />
+            <span style={{ fontSize: 12, color: 'var(--text-2)' }}>{restaurant.deliveryTime} دقيقة</span>
+            <span style={{ color: 'var(--border-strong)' }}>·</span>
+            <span style={{ fontSize: 12, color: restaurant.deliveryFee === 0 ? 'var(--green)' : 'var(--text-2)', fontWeight: restaurant.deliveryFee === 0 ? 700 : 400 }}>
               {restaurant.deliveryFee === 0 ? 'توصيل مجاني' : `${restaurant.deliveryFee} ج`}
             </span>
           </div>
         </div>
       </div>
       <div style={{ display: 'flex', gap: 10, marginTop: 14 }}>
-        <button onClick={onClose} style={{ flex: 1, padding: '13px', borderRadius: 12, fontSize: 13, fontWeight: 700, border: '1.5px solid #E5E7EB', background: 'white', color: '#6B7280', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>إغلاق</button>
-        <button onClick={() => onNavigate(restaurant.slug)} style={{ flex: 2, padding: '13px', borderRadius: 12, fontSize: 14, fontWeight: 700, border: 'none', background: restaurant.color, color: 'white', cursor: 'pointer', fontFamily: 'Zain, sans-serif', boxShadow: `0 6px 20px ${restaurant.color}44` }}>
+        <button onClick={onClose} style={{ flex: 1, padding: '13px', borderRadius: 12, fontSize: 13, fontWeight: 700, border: '1.5px solid var(--border-strong)', background: 'var(--surface-2)', color: 'var(--text-2)', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}>إغلاق</button>
+        <button onClick={() => onNavigate(restaurant.slug)} style={{ flex: 2, padding: '13px', borderRadius: 12, fontSize: 14, fontWeight: 700, border: 'none', background: 'var(--accent)', color: 'white', cursor: 'pointer', fontFamily: 'Zain, sans-serif', boxShadow: '0 6px 20px rgba(249,115,22,0.35)' }}>
           {restaurant.isOpen ? 'اطلب الآن 🛵' : 'عرض المطعم'}
         </button>
       </div>
@@ -144,7 +144,7 @@ export default function Explore() {
 
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <button style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'var(--surface-2)', border: '1px solid var(--border-strong)', borderRadius: 10, padding: '7px 11px', cursor: 'pointer' }}>
-                <Location size={13} color="#F97316" />
+                <Location size={13} color="var(--accent)" />
                 <div style={{ textAlign: 'right' }}>
                   <p style={{ fontSize: 10, fontWeight: 700, color: 'var(--text)' }}>التجمع الخامس</p>
                   <p style={{ fontSize: 9, color: 'var(--text-3)' }}>القاهرة</p>
@@ -160,7 +160,7 @@ export default function Explore() {
                     style={{
                       padding: '6px 9px', borderRadius: 8, border: 'none', cursor: 'pointer',
                       background: viewMode === mode ? 'var(--surface)' : 'transparent',
-                      color: viewMode === mode ? '#F97316' : 'var(--text-3)',
+                      color: viewMode === mode ? 'var(--accent)' : 'var(--text-3)',
                       boxShadow: viewMode === mode ? '0 1px 4px rgba(0,0,0,0.10)' : 'none',
                       transition: 'all 0.15s', display: 'flex', alignItems: 'center',
                     }}
@@ -182,12 +182,12 @@ export default function Explore() {
           {/* Search */}
           <div style={{
             position: 'relative', marginBottom: 12,
-            borderRadius: 50, border: `1.5px solid ${searchFocused ? '#F97316' : 'var(--border)'}`,
+            borderRadius: 50, border: `1.5px solid ${searchFocused ? 'var(--accent)' : 'var(--border)'}`,
             background: searchFocused ? 'var(--surface)' : 'var(--surface-2)',
-            boxShadow: searchFocused ? '0 0 0 3px rgba(249,115,22,0.12)' : 'none',
+            boxShadow: searchFocused ? '0 0 0 3px var(--accent-muted)' : 'none',
             transition: 'all 0.2s',
           }}>
-            <SearchNormal1 size={15} style={{ position: 'absolute', right: 16, top: '50%', transform: 'translateY(-50%)', color: searchFocused ? '#F97316' : 'var(--text-3)', transition: 'color 0.2s' }} />
+            <SearchNormal1 size={15} style={{ position: 'absolute', right: 16, top: '50%', transform: 'translateY(-50%)', color: searchFocused ? 'var(--accent)' : 'var(--text-3)', transition: 'color 0.2s' }} />
             <input
               type="text" placeholder="ابحث عن مطعم أو أكلة..."
               value={search} onChange={e => setSearch(e.target.value)}
@@ -208,9 +208,9 @@ export default function Explore() {
                 style={{
                   flexShrink: 0, display: 'flex', alignItems: 'center', gap: 5,
                   padding: '7px 14px', borderRadius: 10, fontSize: 13, fontWeight: 600, cursor: 'pointer',
-                  border: `1.5px solid ${activeFilter === f.key ? '#F97316' : 'var(--border)'}`,
-                  background: activeFilter === f.key ? 'rgba(249,115,22,0.1)' : 'var(--surface-2)',
-                  color: activeFilter === f.key ? '#F97316' : 'var(--text-2)',
+                  border: `1.5px solid ${activeFilter === f.key ? 'var(--accent)' : 'var(--border)'}`,
+                  background: activeFilter === f.key ? 'var(--accent-muted)' : 'var(--surface-2)',
+                  color: activeFilter === f.key ? 'var(--accent)' : 'var(--text-2)',
                   transition: 'all 0.15s', fontFamily: 'Zain, sans-serif',
                 }}
               >
@@ -230,14 +230,14 @@ export default function Explore() {
               const active = filterTab === tabKey
               return (
                 <button key={tab} onClick={() => setFilterTab(tabKey)}
-                  style={{ pointerEvents: 'all', flexShrink: 0, padding: '8px 14px', borderRadius: 20, fontSize: 12, fontWeight: 700, cursor: 'pointer', border: 'none', background: active ? '#F97316' : 'white', color: active ? 'white' : '#6B7280', transition: 'all 0.15s', fontFamily: 'Zain, sans-serif', boxShadow: active ? '0 4px 14px rgba(249,115,22,0.40)' : '0 2px 8px rgba(0,0,0,0.14)' }}>
+                  style={{ pointerEvents: 'all', flexShrink: 0, padding: '8px 14px', borderRadius: 20, fontSize: 12, fontWeight: 700, cursor: 'pointer', border: 'none', background: active ? 'var(--accent)' : 'var(--surface)', color: active ? 'white' : 'var(--text-2)', transition: 'all 0.15s', fontFamily: 'Zain, sans-serif', boxShadow: active ? '0 4px 14px rgba(249,115,22,0.40)' : '0 2px 8px rgba(0,0,0,0.10)' }}>
                   {tab}
                 </button>
               )
             })}
           </div>
-          <div style={{ position: 'absolute', bottom: selectedOnMap ? 260 : 84, right: 16, zIndex: 500, background: 'white', borderRadius: 12, padding: '7px 13px', boxShadow: '0 2px 10px rgba(0,0,0,0.14)', fontSize: 12, fontWeight: 700, color: '#374151', fontFamily: 'Zain, sans-serif', transition: 'bottom 0.25s', display: 'flex', alignItems: 'center', gap: 5 }}>
-            <span style={{ color: '#F97316' }}>📍</span>{filtered.length} مطعم
+          <div style={{ position: 'absolute', bottom: selectedOnMap ? 260 : 84, right: 16, zIndex: 500, background: 'var(--surface)', borderRadius: 12, padding: '7px 13px', boxShadow: '0 2px 10px rgba(0,0,0,0.14)', fontSize: 12, fontWeight: 700, color: 'var(--text)', fontFamily: 'Zain, sans-serif', transition: 'bottom 0.25s', display: 'flex', alignItems: 'center', gap: 5, border: '1px solid var(--border)' }}>
+            <span style={{ color: 'var(--accent)' }}>📍</span>{filtered.length} مطعم
           </div>
           <PinMap restaurants={filtered} selected={selectedOnMap} onSelect={r => setSelectedOnMap(r)} />
           <MapBottomSheet restaurant={selectedOnMap} onClose={() => setSelectedOnMap(null)} onNavigate={slug => navigate(`/${slug}`)} />
@@ -254,7 +254,7 @@ export default function Explore() {
                 const active = filterTab === tabKey
                 return (
                   <button key={tab} onClick={() => setFilterTab(tabKey)}
-                    style={{ flexShrink: 0, padding: '8px 16px', borderRadius: 20, fontSize: 12, fontWeight: 700, cursor: 'pointer', border: 'none', background: active ? '#F97316' : 'var(--surface-2)', color: active ? 'white' : 'var(--text-2)', transition: 'all 0.15s', fontFamily: 'Zain, sans-serif', boxShadow: active ? '0 4px 12px rgba(249,115,22,0.3)' : 'none' }}>
+                    style={{ flexShrink: 0, padding: '8px 16px', borderRadius: 20, fontSize: 12, fontWeight: 700, cursor: 'pointer', border: 'none', background: active ? 'var(--accent)' : 'var(--surface-2)', color: active ? 'white' : 'var(--text-2)', transition: 'all 0.15s', fontFamily: 'Zain, sans-serif', boxShadow: active ? '0 4px 12px rgba(249,115,22,0.3)' : 'none' }}>
                     {tab}
                   </button>
                 )
@@ -280,8 +280,8 @@ export default function Explore() {
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                             <Star1 size={10} color="#FCD34D" fill="#FCD34D" />
-                            <span style={{ fontSize: 11, color: 'white', fontFamily: 'Inter', fontWeight: 700 }}>{r.rating}</span>
-                            <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.7)', fontFamily: 'Inter' }}>· {r.deliveryTime} د</span>
+                            <span style={{ fontSize: 11, color: 'white', fontFamily: 'Zain, sans-serif', fontWeight: 700 }}>{r.rating}</span>
+                            <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.7)', fontFamily: 'Zain, sans-serif' }}>· {r.deliveryTime} د</span>
                           </div>
                           <button onClick={e => { e.stopPropagation(); navigate(`/${r.slug}`) }}
                             style={{ padding: '3px 10px', background: 'rgba(255,255,255,0.25)', border: '1px solid rgba(255,255,255,0.5)', borderRadius: 8, color: 'white', fontSize: 10, fontWeight: 700, cursor: 'pointer', fontFamily: 'Zain, sans-serif', backdropFilter: 'blur(4px)' }}>
@@ -315,7 +315,7 @@ export default function Explore() {
                     onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(0,0,0,0.09)' }}
                     onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.06)' }}
                   >
-                    <div style={{ width: 80, flexShrink: 0, background: r.imageUrl ? 'none' : `linear-gradient(135deg, ${r.color}22, ${r.color}44)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32, borderLeft: `3px solid ${r.color}30`, overflow: 'hidden' }}>
+                    <div style={{ width: 80, flexShrink: 0, background: r.imageUrl ? 'none' : 'var(--accent-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32, borderLeft: '3px solid var(--border-accent)', overflow: 'hidden' }}>
                       {r.imageUrl
                         ? <img src={r.imageUrl} alt={r.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         : r.emoji}
@@ -334,8 +334,8 @@ export default function Explore() {
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 3, flexShrink: 0, marginRight: 8 }}>
                           <Star1 size={12} color="#F59E0B" fill="#F59E0B" />
-                          <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)', fontFamily: 'Inter' }}>{r.rating}</span>
-                          <span style={{ fontSize: 10, color: 'var(--text-3)', fontFamily: 'Inter' }}>({r.reviews})</span>
+                          <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)', fontFamily: 'Zain, sans-serif' }}>{r.rating}</span>
+                          <span style={{ fontSize: 10, color: 'var(--text-3)', fontFamily: 'Zain, sans-serif' }}>({r.reviews})</span>
                         </div>
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
@@ -351,7 +351,7 @@ export default function Explore() {
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
                           {r.tags.map(tag => (
-                            <span key={tag} style={{ fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 6, background: `${r.color}18`, color: r.color }}>{tag}</span>
+                            <span key={tag} style={{ fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 6, background: 'var(--accent-muted)', color: 'var(--accent)' }}>{tag}</span>
                           ))}
                         </div>
                         <span style={{ fontSize: 10, fontWeight: 700, padding: '3px 9px', borderRadius: 8, background: r.isOpen ? '#F0FDF4' : '#FEF2F2', color: r.isOpen ? '#16A34A' : '#DC2626', border: `1px solid ${r.isOpen ? '#BBF7D0' : '#FECACA'}`, flexShrink: 0 }}>
