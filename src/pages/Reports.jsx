@@ -372,10 +372,10 @@ function SalesTab({ period }) {
       <div className="glass" style={{ padding: 20 }}>
         <SectionTitle sub="الإيراد والطلبات">المبيعات حسب الفئة</SectionTitle>
         <ResponsiveContainer width="100%" height={180}>
-          <BarChart data={categoryData} layout="vertical" margin={{ top: 0, right: 60, left: 10, bottom: 0 }}>
+          <BarChart data={categoryData} layout="vertical" margin={{ top: 0, right: 10, left: 0, bottom: 0 }}>
             <CartesianGrid stroke="var(--border)" strokeDasharray="4 4" horizontal={false} />
             <XAxis type="number" tick={{ fontSize: 10, fill: 'var(--text-3)', fontFamily: 'Inter' }} axisLine={false} tickLine={false} />
-            <YAxis dataKey="name" type="category" tick={{ fontSize: 12, fontFamily: 'Zain', fill: 'var(--text-2)' }} axisLine={false} tickLine={false} width={70} />
+            <YAxis dataKey="name" type="category" tick={{ fontSize: 12, fontFamily: 'Zain', fill: 'var(--text-2)' }} axisLine={false} tickLine={false} width={100} />
             <Tooltip content={<Tip />} />
             <Bar dataKey="rev" radius={[0, 4, 4, 0]} name="الإيراد">
               {categoryData.map((c, i) => <Cell key={i} fill={c.color} />)}
