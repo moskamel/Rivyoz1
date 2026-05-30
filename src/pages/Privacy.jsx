@@ -9,7 +9,7 @@ function PrivacyContent() {
 
       {/* Hero */}
       <div style={{
-        background: `linear-gradient(135deg, ${C.navy} 0%, ${C.navyLight} 100%)`,
+        background: 'linear-gradient(135deg, #1A1A2E 0%, #2A2A45 100%)',
         padding: 'clamp(56px,7vw,88px) clamp(16px,6vw,80px)',
         color: '#fff',
       }}>
