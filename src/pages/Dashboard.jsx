@@ -236,10 +236,10 @@ export default function Dashboard() {
 
       {/* ── STAT CARDS ── */}
       <div className="stagger" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 20 }}>
-        <StatCard label="مبيعات اليوم"  value={mockStats.revenue}      change={mockStats.revenueChange} icon={DollarSquare}   color="#F97316" />
-        <StatCard label="طلبات اليوم"   value={mockStats.orders}       change={mockStats.ordersChange}  icon={ShoppingBag}  color="#3B82F6" />
-        <StatCard label="متوسط الطلب"   value={mockStats.avgOrder}                                      icon={ExportSquare}  color="#8B5CF6" />
-        <StatCard label="زبائن جدد"     value={mockStats.newCustomers}                                  icon={People}         color="#22C55E" />
+        <StatCard label="مبيعات اليوم"  value={mockStats.revenue}      change={mockStats.revenueChange} icon={DollarSquare}   color="#f97316" />
+        <StatCard label="طلبات اليوم"   value={mockStats.orders}       change={mockStats.ordersChange}  icon={ShoppingBag}  color="#f97316" />
+        <StatCard label="متوسط الطلب"   value={mockStats.avgOrder}                                      icon={ExportSquare}  color="#f97316" />
+        <StatCard label="زبائن جدد"     value={mockStats.newCustomers}                                  icon={People}         color="#f97316" />
       </div>
 
       {/* ── CHART + TOP ITEMS ── */}
