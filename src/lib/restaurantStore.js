@@ -61,7 +61,19 @@ export function setCategories(categories) {
 export function getOrders() {
   try {
     const raw = localStorage.getItem('orders_list')
-    if (raw) return JSON.parse(raw)
+    if (raw) {
+      const orders = JSON.parse(raw)
+      // Migrate: renumber any timestamp-style IDs (>1000) to sequential
+      if (orders.some(o => Number(o.id) > 1000)) {
+        const fixed = [...orders]
+          .sort((a, b) => Number(a.id) - Number(b.id))
+          .map((o, i) => ({ ...o, id: i + 1 }))
+          .reverse()
+        localStorage.setItem('orders_list', JSON.stringify(fixed))
+        return fixed
+      }
+      return orders
+    }
   } catch (e) { /* ignore */ }
   return mockOrders
 }
