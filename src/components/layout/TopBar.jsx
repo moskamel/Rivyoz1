@@ -133,8 +133,8 @@ export default function TopBar({ title }) {
             cursor: 'pointer',
             transition: 'border-color var(--dur-normal) ease',
           }}
-          onClick={() => navigate('/profile')}
-          title={`${roleLabel} — الملف الشخصي`}
+          onClick={() => navigate('/settings')}
+          title="الإعدادات"
           onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)' }}
           onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)' }}
         >
