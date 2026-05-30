@@ -70,7 +70,7 @@ export function addOrder(order) {
   const orders = getOrders()
   const newOrder = {
     ...order,
-    id: Date.now(),
+    id: orders.length > 0 ? Math.max(...orders.map(o => Number(o.id))) + 1 : 1,
     time: 'الآن',
     status: 'new',
   }
