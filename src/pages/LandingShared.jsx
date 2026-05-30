@@ -124,9 +124,9 @@ export function Navbar() {
   }, [])
 
   const links = [
+    { label: 'كيف يعمل', id: 'how'      },
     { label: 'المميزات', id: 'features' },
     { label: 'الأسعار',  id: 'pricing'  },
-    { label: 'كيف يعمل', id: 'how'     },
   ]
 
   const handleLink = id => {
