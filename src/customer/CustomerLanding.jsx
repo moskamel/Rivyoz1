@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Star1, Clock, ArrowLeft2, TickCircle } from 'iconsax-react'
+import { Star1, Clock, ArrowLeft2, TickCircle, HambergerMenu } from 'iconsax-react'
 import { getConfig, getCustomerProfile, getCustomerPoints, getCustomerOrders, getMenuItems } from '../lib/restaurantStore'
+import { useSidebar } from '../lib/ThemeContext'
 import CustomerNav from './CustomerNav'
 import CustomerFooter from './CustomerFooter'
 
@@ -98,6 +99,7 @@ export default function CustomerLanding() {
   const color   = config.color
   const profile = getCustomerProfile()
   const isLoggedIn = !!profile
+  const { setSidebarOpen } = useSidebar()
 
   const [dismissedBanner, setDismissedBanner] = useState(false)
   const [activeCategory,  setActiveCategory]  = useState('الكل')
@@ -160,6 +162,12 @@ export default function CustomerLanding() {
       }}>
         <div style={{ position: 'absolute', top: -40, right: -40, width: 200, height: 200, borderRadius: '50%', background: 'rgba(255,255,255,0.08)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', bottom: -60, left: -30, width: 160, height: 160, borderRadius: '50%', background: 'rgba(255,255,255,0.06)', pointerEvents: 'none' }} />
+        <button
+          onClick={() => setSidebarOpen(true)}
+          style={{ position: 'absolute', top: 16, left: 16, zIndex: 10, width: 40, height: 40, borderRadius: 12, background: 'rgba(255,255,255,0.2)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(8px)' }}
+        >
+          <HambergerMenu size={20} color="white" />
+        </button>
 
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(8px)', borderRadius: 20, padding: '5px 14px', marginBottom: 20, border: '1px solid rgba(255,255,255,0.3)' }}>
           <span style={{ fontSize: 14 }}>🍽️</span>
