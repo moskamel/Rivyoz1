@@ -226,6 +226,18 @@ export function getCustomerOrders(phone) {
   return getOrders().filter(o => o.phone === phone)
 }
 
+/* ─── Branches ────────────────────────────────────────────── */
+const defaultBranches = [
+  { id: 1, name: 'الفرع الرئيسي',     address: 'التجمع الخامس، القاهرة', phone: '01012345678', manager: 'أحمد رضا',    isOpen: true,  opensAt: '10:00', closesAt: '23:00' },
+  { id: 2, name: 'فرع المعادي',       address: 'المعادي، القاهرة',        phone: '01098765432', manager: 'محمد حسين',  isOpen: true,  opensAt: '10:00', closesAt: '23:00' },
+  { id: 3, name: 'فرع الشيخ زايد',   address: 'الشيخ زايد، الجيزة',     phone: '01155443322', manager: 'سارة علي',   isOpen: false, opensAt: '12:00', closesAt: '00:00' },
+]
+export function getBranches() {
+  try { const r = localStorage.getItem('restaurant_branches'); if (r) return JSON.parse(r) } catch (e) {}
+  return defaultBranches
+}
+export function setBranches(branches) { localStorage.setItem('restaurant_branches', JSON.stringify(branches)) }
+
 /* ─── Reviews ─────────────────────────────────────────────── */
 const mockReviews = [
   { id: 1, customerName: 'محمد عبد الله', customerPhone: '01012345678', rating: 5, comment: 'أكل رائع وتوصيل سريع! أنصح الجميع بتجربة الكفتة المشوية، طعمها لا يوصف.', date: '٢٠ مايو', reply: 'شكراً جزيلاً على كلماتك الطيبة! يسعدنا دائماً خدمتك.', replyDate: '٢٠ مايو', isVisible: true },

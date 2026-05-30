@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
-import { Category, Task, Cup, Speaker, Chart, Settings, Export, People, UserTick, Box, Monitor, ArrowDown2, Check, Flash, ExportSquare, ColorSwatch, Logout, Star1 } from 'iconsax-react'
-import { getConfig, getOrders } from '../../lib/restaurantStore'
+import { Category, Task, Cup, Speaker, Chart, Settings, Export, People, UserTick, Box, Monitor, ArrowDown2, Check, Flash, ExportSquare, ColorSwatch, Logout, Star1, Building } from 'iconsax-react'
+import { getConfig, getOrders, getBranches } from '../../lib/restaurantStore'
 
 const navGrowth = [
   { to: '/customers', label: 'الزبائن', icon: People },
@@ -10,12 +10,11 @@ const navGrowth = [
   { to: '/reports', label: 'التقارير', icon: Chart },
 ]
 const navSystem = [
-  { to: '/staff', label: 'الموظفون', icon: UserTick },
-  { to: '/design', label: 'تصميم الموقع', icon: ColorSwatch },
-  { to: '/settings', label: 'الإعدادات', icon: Settings },
+  { to: '/staff',    label: 'الموظفون',     icon: UserTick   },
+  { to: '/branches', label: 'الفروع',       icon: Building   },
+  { to: '/design',   label: 'تصميم الموقع', icon: ColorSwatch },
+  { to: '/settings', label: 'الإعدادات',    icon: Settings   },
 ]
-
-const branches = ['الفرع الرئيسي', 'فرع المعادي', 'فرع الشيخ زايد']
 
 function NavGroup({ label, items }) {
   return (
@@ -112,7 +111,8 @@ function NavGroup({ label, items }) {
 }
 
 export default function Sidebar() {
-  const [selectedBranch, setSelectedBranch] = useState(branches[0])
+  const [branchList, setBranchList] = useState(getBranches)
+  const [selectedBranch, setSelectedBranch] = useState(() => getBranches()[0]?.name || '')
   const [branchOpen, setBranchOpen] = useState(false)
   const [config, setConfigState] = useState(getConfig)
   const [newOrderCount, setNewOrderCount] = useState(() => getOrders().filter(o => o.status === 'new').length)
@@ -122,7 +122,10 @@ export default function Sidebar() {
     const id = setInterval(() => {
       setNewOrderCount(getOrders().filter(o => o.status === 'new').length)
       setConfigState(getConfig())
-    }, 5000)
+      const latest = getBranches()
+      setBranchList(latest)
+      setSelectedBranch(prev => latest.find(b => b.name === prev) ? prev : (latest[0]?.name || ''))
+    }, 3000)
     return () => clearInterval(id)
   }, [])
 
@@ -255,10 +258,10 @@ export default function Sidebar() {
                 boxShadow: 'var(--shadow-lg)',
               }}
             >
-              {branches.map(b => (
+              {branchList.map(b => (
                 <button
-                  key={b}
-                  onClick={() => { setSelectedBranch(b); setBranchOpen(false) }}
+                  key={b.id}
+                  onClick={() => { setSelectedBranch(b.name); setBranchOpen(false) }}
                   style={{
                     width: '100%',
                     textAlign: 'right',
@@ -268,7 +271,7 @@ export default function Sidebar() {
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     cursor: 'pointer',
-                    color: selectedBranch === b ? 'var(--accent)' : 'var(--text-2)',
+                    color: selectedBranch === b.name ? 'var(--accent)' : 'var(--text-2)',
                     background: 'transparent',
                     border: 'none',
                     transition: 'background var(--dur-normal) var(--ease-default)',
@@ -277,8 +280,11 @@ export default function Sidebar() {
                   onMouseEnter={e => (e.currentTarget.style.background = 'var(--surface-2)')}
                   onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
                 >
-                  <span>{b}</span>
-                  {selectedBranch === b && <Check size={13} color="var(--accent)" />}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <span className={`status-dot ${b.isOpen ? 'live' : 'idle'}`} style={{ width: 6, height: 6, flexShrink: 0 }} />
+                    <span>{b.name}</span>
+                  </div>
+                  {selectedBranch === b.name && <Check size={13} color="var(--accent)" />}
                 </button>
               ))}
             </div>

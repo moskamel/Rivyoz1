@@ -14,6 +14,7 @@ import Customers from './pages/Customers'
 import Staff from './pages/Staff'
 import Inventory from './pages/Inventory'
 import Profile from './pages/Profile'
+import Branches from './pages/Branches'
 import Reviews from './pages/Reviews'
 import StoreFront from './customer/StoreFront'
 import Cart from './customer/Cart'
@@ -99,6 +100,7 @@ export default function App() {
       <Route path="/staff" element={<ProtectedRoute><Staff /></ProtectedRoute>} />
       <Route path="/inventory" element={<ProtectedRoute><Inventory /></ProtectedRoute>} />
       <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+      <Route path="/branches" element={<ProtectedRoute><Branches /></ProtectedRoute>} />
       <Route path="/reviews" element={<ProtectedRoute><Reviews /></ProtectedRoute>} />
 
       {/* Customer-facing routes wrapped in theme provider */}
