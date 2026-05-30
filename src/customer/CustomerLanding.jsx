@@ -339,14 +339,14 @@ export default function CustomerLanding() {
 
         {/* ── Categories row (both states) ── */}
         <div style={{ paddingTop: 28 }}>
-          <div className="hide-scroll" style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 4 }}>
+          <div style={{ display: 'flex', gap: 6 }}>
             {categories.map(cat => (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
                 style={{
-                  flexShrink: 0,
-                  padding: '8px 18px',
+                  flex: 1,
+                  padding: '9px 4px',
                   borderRadius: 99,
                   fontFamily: 'Zain, sans-serif',
                   fontSize: 13,

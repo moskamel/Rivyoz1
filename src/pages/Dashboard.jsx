@@ -247,15 +247,15 @@ export default function Dashboard() {
 
         {/* Area chart */}
         <div className="glass" style={{ padding: '20px' }}>
-          <div className="flex items-center justify-between" style={{ marginBottom: 20 }}>
-            <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>المبيعات</p>
+          <div style={{ marginBottom: 16 }}>
+            <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>المبيعات</p>
             <div className="flex items-center gap-1" style={{ background: 'var(--surface-2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-full)', padding: 3 }}>
               {periodOptions.map(opt => (
                 <button key={opt} onClick={() => setPeriod(opt)}
                   style={{
-                    fontSize: 11, fontWeight: 600, padding: '4px 12px',
+                    flex: 1, fontSize: 11, fontWeight: 600, padding: '5px 0',
                     borderRadius: 'var(--radius-full)', border: 'none', cursor: 'pointer',
-                    transition: 'all 0.15s',
+                    transition: 'all 0.15s', fontFamily: 'Zain, sans-serif',
                     background: period === opt ? 'var(--accent)' : 'transparent',
                     color: period === opt ? 'white' : 'var(--text-3)',
                   }}>

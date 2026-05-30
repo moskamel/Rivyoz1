@@ -108,6 +108,7 @@ export default function Orders() {
   const submitNewOrder = () => {
     const errs = {}
     if (noForm.type === 'طاولة' && !noForm.table.trim()) errs.table = 'رقم الطاولة مطلوب'
+    if (noForm.phone.trim() && !/^(010|011|012|015)\d{8}$/.test(noForm.phone.replace(/\s|-/g, ''))) errs.phone = 'رقم غير صحيح (010/011/012/015)'
     const allItems = getMenuItems()
     const details = Object.entries(noQtys)
       .filter(([, qty]) => qty > 0)
@@ -214,14 +215,11 @@ export default function Orders() {
 
       {/* FILTER TABS */}
       <div
-        className="no-scrollbar"
         style={{
           display: 'flex',
           alignItems: 'center',
-          gap: 6,
-          overflowX: 'auto',
+          gap: 4,
           marginBottom: 16,
-          paddingBottom: 2,
         }}
       >
         {tabs.map(tab => {
@@ -232,10 +230,10 @@ export default function Orders() {
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
               style={{
-                flexShrink: 0,
+                flex: 1,
                 height: 34,
                 borderRadius: 'var(--radius-full)',
-                padding: '0 14px',
+                padding: '0 4px',
                 fontSize: 12,
                 fontWeight: 600,
                 cursor: 'pointer',
@@ -744,7 +742,8 @@ export default function Orders() {
                   </div>
                   <div>
                     <p style={{ ...F, fontSize: 13, fontWeight: 700, color: 'var(--text-2)', marginBottom: 6 }}>رقم الهاتف <span style={{ color: 'var(--text-3)', fontWeight: 400 }}>(اختياري)</span></p>
-                    <input style={inp} placeholder="01XXXXXXXXX" value={noForm.phone} onChange={e => setNoForm(f => ({ ...f, phone: e.target.value }))} />
+                    <input style={{ ...inp, ...(noErrors.phone ? { borderColor: 'var(--red)' } : {}) }} placeholder="01XXXXXXXXX" value={noForm.phone} onChange={e => { setNoForm(f => ({ ...f, phone: e.target.value })); setNoErrors(p => ({ ...p, phone: '' })) }} dir="ltr" />
+                    {noErrors.phone && <p style={{ ...F, color: 'var(--red)', fontSize: 12, marginTop: 4 }}>{noErrors.phone}</p>}
                   </div>
                 </div>
 
