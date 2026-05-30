@@ -23,11 +23,13 @@ export default function HambergerMenu() {
   const [editItem, setEditItem] = useState(null)
   const [form, setForm] = useState({ name: '', price: '', categoryId: 1, description: '', active: true, bestseller: false, discountTag: '' })
   const [openMenuId, setOpenMenuId] = useState(null)
+  const [menuPos, setMenuPos] = useState(null)
   const [formErrors, setFormErrors] = useState({})
   const [showCatForm, setShowCatForm] = useState(false)
   const [newCatName, setNewCatName] = useState('')
   const [catNameError, setCatNameError] = useState('')
   const menuRef = useRef(null)
+  const menuTriggerRef = useRef(null)
 
   useEffect(() => {
     const t = setTimeout(() => setLoading(false), 1000)
@@ -36,7 +38,10 @@ export default function HambergerMenu() {
 
   useEffect(() => {
     function handleOutside(e) {
-      if (menuRef.current && !menuRef.current.contains(e.target)) setOpenMenuId(null)
+      if (
+        menuRef.current && !menuRef.current.contains(e.target) &&
+        !(menuTriggerRef.current && menuTriggerRef.current.contains(e.target))
+      ) setOpenMenuId(null)
     }
     document.addEventListener('mousedown', handleOutside)
     return () => document.removeEventListener('mousedown', handleOutside)
@@ -279,33 +284,43 @@ export default function HambergerMenu() {
                   >
                     <span style={{ position: 'absolute', top: 3, width: 16, height: 16, background: 'white', borderRadius: '50%', transition: 'all 0.2s', right: item.active ? 3 : 'auto', left: item.active ? 'auto' : 3 }} />
                   </button>
-                  <div style={{ position: 'relative' }} ref={openMenuId === item.id ? menuRef : null}>
+                  <div style={{ position: 'relative' }}>
                     <button
-                      onClick={(e) => { e.stopPropagation(); setOpenMenuId(openMenuId === item.id ? null : item.id) }}
+                      ref={openMenuId === item.id ? menuTriggerRef : null}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        if (openMenuId === item.id) {
+                          setOpenMenuId(null)
+                        } else {
+                          const rect = e.currentTarget.getBoundingClientRect()
+                          setMenuPos({ top: rect.bottom + 4, right: window.innerWidth - rect.right })
+                          setOpenMenuId(item.id)
+                        }
+                      }}
                       className="btn-icon sm"
                       style={{ background: openMenuId === item.id ? 'var(--surface-2)' : 'transparent', border: 'none', color: 'var(--text-3)' }}
                     >
                       <More size={15} />
                     </button>
-                    {openMenuId === item.id && (
-                      <div style={{ position: 'absolute', left: 0, top: 36, background: 'var(--surface-3)', border: '1px solid var(--border-strong)', borderRadius: 10, overflow: 'hidden', zIndex: 200, minWidth: 120, boxShadow: 'var(--shadow-lg)' }}>
+                    {openMenuId === item.id && menuPos && (
+                      <div ref={menuRef} style={{ position: 'fixed', top: menuPos.top, right: menuPos.right, background: 'var(--surface)', border: '1px solid var(--border-strong)', borderRadius: 10, overflow: 'hidden', zIndex: 9999, minWidth: 130, boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}>
                         <button onClick={() => { openEdit(item); setOpenMenuId(null) }}
-                          style={{ width: '100%', textAlign: 'right', padding: '9px 14px', fontSize: 13, color: 'var(--text-2)', background: 'transparent', border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}
+                          style={{ width: '100%', textAlign: 'right', padding: '10px 16px', fontSize: 13, color: 'var(--text)', background: 'transparent', border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', display: 'flex', alignItems: 'center', gap: 8 }}
                           onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-2)'}
                           onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-                        >تعديل</button>
+                        >✏️ تعديل</button>
                         <button
                           onClick={() => { setItems(prev => { const next = [...prev, { ...item, id: Date.now(), name: item.name + ' (نسخة)' }]; setMenuItems(next); return next }); setOpenMenuId(null) }}
-                          style={{ width: '100%', textAlign: 'right', padding: '9px 14px', fontSize: 13, color: 'var(--text-2)', background: 'transparent', border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}
+                          style={{ width: '100%', textAlign: 'right', padding: '10px 16px', fontSize: 13, color: 'var(--text)', background: 'transparent', border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', display: 'flex', alignItems: 'center', gap: 8 }}
                           onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-2)'}
                           onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-                        >نسخ</button>
+                        >📋 نسخ</button>
                         <div style={{ height: 1, background: 'var(--border)', margin: '2px 0' }} />
                         <button onClick={() => { deleteItem(item.id); setOpenMenuId(null) }}
-                          style={{ width: '100%', textAlign: 'right', padding: '9px 14px', fontSize: 13, color: 'var(--red)', background: 'transparent', border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif' }}
+                          style={{ width: '100%', textAlign: 'right', padding: '10px 16px', fontSize: 13, color: 'var(--red)', background: 'transparent', border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', display: 'flex', alignItems: 'center', gap: 8 }}
                           onMouseEnter={e => e.currentTarget.style.background = 'var(--red-muted)'}
                           onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-                        >حذف</button>
+                        >🗑️ حذف</button>
                       </div>
                     )}
                   </div>
