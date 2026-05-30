@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { TrendUp, TrendDown, ShoppingBag, People, DollarSquare, ArrowLeft, ToggleOn, ExportSquare } from 'iconsax-react'
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
@@ -66,6 +66,53 @@ export default function Dashboard() {
     const t = setTimeout(() => setLoading(false), 1000)
     return () => clearTimeout(t)
   }, [])
+
+  // ── New-order sound ──────────────────────────────────────────────
+  const knownIds = useRef(null)
+
+  function playOrderSound() {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)()
+      const playNote = (freq, start, dur) => {
+        const osc = ctx.createOscillator()
+        const gain = ctx.createGain()
+        osc.connect(gain)
+        gain.connect(ctx.destination)
+        osc.type = 'sine'
+        osc.frequency.setValueAtTime(freq, start)
+        gain.gain.setValueAtTime(0, start)
+        gain.gain.linearRampToValueAtTime(0.45, start + 0.012)
+        gain.gain.exponentialRampToValueAtTime(0.001, start + dur)
+        osc.start(start)
+        osc.stop(start + dur)
+      }
+      const t = ctx.currentTime
+      playNote(880, t, 0.45)
+      playNote(1108, t + 0.12, 0.35)
+      playNote(1320, t + 0.22, 0.30)
+      setTimeout(() => ctx.close(), 1200)
+    } catch (_) {}
+  }
+
+  useEffect(() => {
+    const check = () => {
+      const current = getOrders().filter(o => o.status === 'new').map(o => o.id)
+      if (knownIds.current === null) {
+        knownIds.current = new Set(current)
+        return
+      }
+      const hasNew = current.some(id => !knownIds.current.has(id))
+      if (hasNew) {
+        playOrderSound()
+        setRefreshKey(k => k + 1)
+      }
+      knownIds.current = new Set(current)
+    }
+    const interval = setInterval(check, 4000)
+    check()
+    return () => clearInterval(interval)
+  }, [])
+  // ────────────────────────────────────────────────────────────────
 
   const orders = getOrders()
   const newOrders = orders.filter(o => o.status === 'new' && !dismissed.has(o.id))
