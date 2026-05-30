@@ -1,13 +1,13 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useContext, createContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   Global, Scan, Notification, Category, Star1, Shop,
   ArrowLeft2, ArrowRight2, TickCircle, HambergerMenu, CloseCircle,
-  Call, Sms, Instagram, Facebook
+  Call, Sms, Instagram, Facebook, Sun, Moon
 } from 'iconsax-react'
 
-/* ─── Design Tokens ───────────────────────────────────────── */
-const C = {
+/* ─── Design Tokens ─────────────────────────────────────────── */
+const C_light = {
   orange:      '#E8572A',
   orangeHov:   '#D04B22',
   orangeLight: '#FFF1EC',
@@ -28,61 +28,90 @@ const C = {
   red:         '#DC3545',
   redLight:    '#F8D7DA',
 }
+
+const C_dark = {
+  orange:      '#E8572A',
+  orangeHov:   '#D04B22',
+  orangeLight: 'rgba(232,87,42,0.18)',
+  orangeMid:   'rgba(232,87,42,0.15)',
+  orangeBorder:'rgba(232,87,42,0.35)',
+  navy:        '#EEEDF8',
+  navyLight:   '#D0CEF0',
+  white:       '#111119',
+  gray50:      '#0D0D18',
+  gray100:     '#1A1A28',
+  gray200:     'rgba(255,255,255,0.1)',
+  gray400:     'rgba(255,255,255,0.3)',
+  gray600:     '#9A98B8',
+  gray700:     '#C4C2DC',
+  gray900:     '#EEEDF8',
+  green:       '#34D399',
+  greenLight:  'rgba(52,211,153,0.15)',
+  red:         '#F87171',
+  redLight:    'rgba(248,113,113,0.12)',
+}
+
+const LandingThemeCtx = createContext({ C: C_light, isDark: false, toggle: () => {} })
+
 const F = "'Tajawal', 'Zain', sans-serif"
 const scrollTo = id => {
   const el = document.getElementById(id)
   if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 
-/* ─── Global Styles ───────────────────────────────────────── */
-const GlobalStyles = () => (
-  <style>{`
-    @keyframes fadeUp   { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
-    @keyframes fadeIn   { from{opacity:0} to{opacity:1} }
-    @keyframes pulse    { 0%,100%{opacity:1} 50%{opacity:.5} }
-    @keyframes marquee  { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-    @keyframes float    { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
-    .fazz-fadeup   { animation: fadeUp 0.55s ease both }
-    .fazz-fadein   { animation: fadeIn 0.4s ease both }
-    .fazz-float    { animation: float 4s ease-in-out infinite }
-    .fazz-btn-primary {
-      display:inline-flex; align-items:center; gap:8px;
-      background:${C.orange}; color:#fff; border:none;
-      font-family:${F}; font-weight:800; font-size:16px;
-      border-radius:12px; padding:14px 28px; cursor:pointer;
-      transition:background .18s,transform .15s,box-shadow .18s;
-      text-decoration:none;
-    }
-    .fazz-btn-primary:hover { background:${C.orangeHov}; transform:translateY(-2px); box-shadow:0 8px 24px rgba(232,87,42,.35); }
-    .fazz-btn-outline {
-      display:inline-flex; align-items:center; gap:8px;
-      background:transparent; color:${C.navy}; border:2px solid ${C.gray200};
-      font-family:${F}; font-weight:700; font-size:15px;
-      border-radius:12px; padding:13px 24px; cursor:pointer;
-      transition:border-color .18s,color .18s,transform .15s;
-      text-decoration:none;
-    }
-    .fazz-btn-outline:hover { border-color:${C.orange}; color:${C.orange}; transform:translateY(-2px); }
-    .fazz-card {
-      background:#fff; border:1.5px solid ${C.gray200};
-      border-radius:16px; transition:border-color .2s, transform .2s, box-shadow .2s;
-    }
-    .fazz-card:hover { border-color:${C.orangeBorder}; transform:translateY(-4px); box-shadow:0 12px 32px rgba(232,87,42,.10); }
-    .fazz-section-badge {
-      display:inline-flex; align-items:center; gap:6px;
-      background:${C.orangeLight}; color:${C.orange};
-      border:1.5px solid ${C.orangeBorder};
-      border-radius:999px; padding:4px 14px;
-      font-family:${F}; font-size:13px; font-weight:700;
-    }
-    * { box-sizing:border-box; margin:0; padding:0; }
-    html { scroll-behavior: smooth; }
-    body { direction:rtl; }
-  `}</style>
-)
+/* ─── Global Styles ──────────────────────────────────────────── */
+const GlobalStyles = () => {
+  const { C } = useContext(LandingThemeCtx)
+  return (
+    <style>{`
+      @keyframes fadeUp   { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+      @keyframes fadeIn   { from{opacity:0} to{opacity:1} }
+      @keyframes pulse    { 0%,100%{opacity:1} 50%{opacity:.5} }
+      @keyframes marquee  { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+      @keyframes float    { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+      .fazz-fadeup   { animation: fadeUp 0.55s ease both }
+      .fazz-fadein   { animation: fadeIn 0.4s ease both }
+      .fazz-float    { animation: float 4s ease-in-out infinite }
+      .fazz-btn-primary {
+        display:inline-flex; align-items:center; gap:8px;
+        background:${C.orange}; color:#fff; border:none;
+        font-family:${F}; font-weight:800; font-size:16px;
+        border-radius:12px; padding:14px 28px; cursor:pointer;
+        transition:background .18s,transform .15s,box-shadow .18s;
+        text-decoration:none;
+      }
+      .fazz-btn-primary:hover { background:${C.orangeHov}; transform:translateY(-2px); box-shadow:0 8px 24px rgba(232,87,42,.35); }
+      .fazz-btn-outline {
+        display:inline-flex; align-items:center; gap:8px;
+        background:transparent; color:${C.navy}; border:2px solid ${C.gray200};
+        font-family:${F}; font-weight:700; font-size:15px;
+        border-radius:12px; padding:13px 24px; cursor:pointer;
+        transition:border-color .18s,color .18s,transform .15s;
+        text-decoration:none;
+      }
+      .fazz-btn-outline:hover { border-color:${C.orange}; color:${C.orange}; transform:translateY(-2px); }
+      .fazz-card {
+        background:${C.white}; border:1.5px solid ${C.gray200};
+        border-radius:16px; transition:border-color .2s, transform .2s, box-shadow .2s;
+      }
+      .fazz-card:hover { border-color:${C.orangeBorder}; transform:translateY(-4px); box-shadow:0 12px 32px rgba(232,87,42,.10); }
+      .fazz-section-badge {
+        display:inline-flex; align-items:center; gap:6px;
+        background:${C.orangeLight}; color:${C.orange};
+        border:1.5px solid ${C.orangeBorder};
+        border-radius:999px; padding:4px 14px;
+        font-family:${F}; font-size:13px; font-weight:700;
+      }
+      * { box-sizing:border-box; margin:0; padding:0; }
+      html { scroll-behavior: smooth; }
+      body { direction:rtl; }
+    `}</style>
+  )
+}
 
-/* ─── Navbar ──────────────────────────────────────────────── */
+/* ─── Navbar ─────────────────────────────────────────────────── */
 function Navbar() {
+  const { C, isDark, toggle } = useContext(LandingThemeCtx)
   const navigate = useNavigate()
   const [scrolled, setScrolled]   = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -104,7 +133,7 @@ function Navbar() {
       <nav dir="rtl" style={{
         position: 'fixed', top: 0, insetInline: 0, zIndex: 100,
         height: 68,
-        background: scrolled ? 'rgba(255,255,255,0.97)' : 'rgba(255,255,255,0.85)',
+        background: scrolled ? (isDark ? 'rgba(17,17,25,0.97)' : 'rgba(255,255,255,0.97)') : (isDark ? 'rgba(17,17,25,0.85)' : 'rgba(255,255,255,0.85)'),
         backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)',
         borderBottom: `1.5px solid ${scrolled ? C.gray200 : 'transparent'}`,
         transition: 'background .3s, border-color .3s, box-shadow .3s',
@@ -143,28 +172,51 @@ function Navbar() {
           onMouseEnter={e => e.target.style.color = C.orange}
           onMouseLeave={e => e.target.style.color = C.gray700}
           >تسجيل الدخول</button>
+
+          {/* Dark/Light toggle */}
+          <button onClick={toggle} style={{
+            width: 36, height: 36, borderRadius: 10,
+            background: C.gray100, border: `1.5px solid ${C.gray200}`,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            cursor: 'pointer', transition: 'all .15s',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = C.orange; e.currentTarget.style.background = C.orangeLight }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = C.gray200; e.currentTarget.style.background = C.gray100 }}
+          >
+            {isDark ? <Sun size={18} color={C.orange} /> : <Moon size={18} color={C.gray700} />}
+          </button>
+
           <button className="fazz-btn-primary" onClick={() => navigate('/login')}
             style={{ fontSize: 14, padding: '10px 22px', borderRadius: 10 }}>
             ابدأ مجاناً
           </button>
         </div>
 
-        {/* Mobile hamburger */}
-        <button onClick={() => setMobileOpen(o => !o)} style={{
-          display: 'none', background: 'none', border: 'none', cursor: 'pointer',
-          padding: 4,
-        }} className="fazz-mobile-menu-btn">
-          {mobileOpen
-            ? <CloseCircle size={28} color={C.navy} />
-            : <HambergerMenu size={28} color={C.navy} />}
-        </button>
+        {/* Mobile: toggle + hamburger */}
+        <div style={{ display: 'none', alignItems: 'center', gap: 8 }} className="fazz-mobile-right">
+          <button onClick={toggle} style={{
+            width: 34, height: 34, borderRadius: 10,
+            background: C.gray100, border: `1.5px solid ${C.gray200}`,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            cursor: 'pointer',
+          }}>
+            {isDark ? <Sun size={16} color={C.orange} /> : <Moon size={16} color={C.gray700} />}
+          </button>
+          <button onClick={() => setMobileOpen(o => !o)} style={{
+            background: 'none', border: 'none', cursor: 'pointer', padding: 4,
+          }} className="fazz-mobile-menu-btn">
+            {mobileOpen
+              ? <CloseCircle size={28} color={C.navy} />
+              : <HambergerMenu size={28} color={C.navy} />}
+          </button>
+        </div>
       </nav>
 
       {/* Mobile drawer */}
       {mobileOpen && (
         <div dir="rtl" style={{
           position: 'fixed', top: 68, insetInline: 0, zIndex: 99,
-          background: '#fff', borderBottom: `1.5px solid ${C.gray200}`,
+          background: C.white, borderBottom: `1.5px solid ${C.gray200}`,
           padding: '20px 24px 28px', display: 'flex', flexDirection: 'column', gap: 4,
           boxShadow: '0 8px 32px rgba(26,26,46,.12)',
         }}>
@@ -192,6 +244,7 @@ function Navbar() {
       <style>{`
         @media (max-width:768px) {
           .fazz-desktop-nav { display:none !important; }
+          .fazz-mobile-right { display:flex !important; }
           .fazz-mobile-menu-btn { display:flex !important; }
         }
       `}</style>
@@ -199,8 +252,9 @@ function Navbar() {
   )
 }
 
-/* ─── Dashboard Mockup ────────────────────────────────────── */
+/* ─── Dashboard Mockup ───────────────────────────────────────── */
 function DashboardMockup() {
+  const { C } = useContext(LandingThemeCtx)
   const orders = [
     { id: '#٢١٤', item: 'كفتة مشوية × ٢',  status: 'جديد',      dot: C.orange },
     { id: '#٢١٣', item: 'شاورما دجاج',     status: 'تحضير',     dot: '#3B82F6' },
@@ -208,7 +262,7 @@ function DashboardMockup() {
   ]
   return (
     <div className="fazz-float" style={{
-      background: C.navy,
+      background: C_dark.gray50,
       borderRadius: 20,
       padding: 20,
       width: '100%',
@@ -231,9 +285,9 @@ function DashboardMockup() {
       {/* Stats row */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10, marginBottom: 18 }}>
         {[
-          { label: 'طلبات اليوم', val: '٣٢', up: true },
-          { label: 'المبيعات',    val: '١٨٤٠ج', up: true },
-          { label: 'متوسط الطلب', val: '٥٧ج',   up: false },
+          { label: 'طلبات اليوم', val: '٣٢' },
+          { label: 'المبيعات',    val: '١٨٤٠ج' },
+          { label: 'متوسط الطلب', val: '٥٧ج' },
         ].map((s, i) => (
           <div key={i} style={{ background: 'rgba(255,255,255,.06)', borderRadius: 12, padding: '10px 12px' }}>
             <p style={{ fontFamily: F, fontSize: 10, color: 'rgba(255,255,255,.5)', marginBottom: 4 }}>{s.label}</p>
@@ -268,7 +322,7 @@ function DashboardMockup() {
       {/* Floating badge */}
       <div style={{
         position: 'absolute', top: -14, left: -14,
-        background: '#fff', border: `1.5px solid ${C.gray200}`,
+        background: C.white, border: `1.5px solid ${C.gray200}`,
         borderRadius: 12, padding: '8px 14px',
         display: 'flex', alignItems: 'center', gap: 8,
         boxShadow: '0 4px 16px rgba(26,26,46,.12)',
@@ -294,8 +348,9 @@ function DashboardMockup() {
   )
 }
 
-/* ─── Hero ────────────────────────────────────────────────── */
+/* ─── Hero ───────────────────────────────────────────────────── */
 function Hero() {
+  const { C } = useContext(LandingThemeCtx)
   const navigate = useNavigate()
   const badges = ['✓ لا عمولة', '✓ موقع خاص بك', '✓ QR Code جاهز']
 
@@ -363,8 +418,9 @@ function Hero() {
   )
 }
 
-/* ─── Pain Section ────────────────────────────────────────── */
+/* ─── Pain Section ───────────────────────────────────────────── */
 function PainSection() {
+  const { C } = useContext(LandingThemeCtx)
   const [monthly, setMonthly] = useState(30)
   const [avg, setAvg]         = useState(80)
   const commission = Math.round(monthly * avg * 30 * 0.20)
@@ -387,7 +443,7 @@ function PainSection() {
         {/* Comparison */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 20, marginBottom: 48 }}>
           {/* Old way */}
-          <div style={{ background: C.navy, borderRadius: 20, padding: 32, color: '#fff' }}>
+          <div style={{ background: C_dark.gray50, borderRadius: 20, padding: 32, color: '#fff' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 24 }}>
               <div style={{ width: 40, height: 40, borderRadius: 10, background: 'rgba(255,255,255,.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>😤</div>
               <div>
@@ -473,8 +529,9 @@ function PainSection() {
   )
 }
 
-/* ─── How It Works ────────────────────────────────────────── */
+/* ─── How It Works ───────────────────────────────────────────── */
 function HowItWorks() {
+  const { C } = useContext(LandingThemeCtx)
   const navigate = useNavigate()
   const steps = [
     {
@@ -517,14 +574,12 @@ function HowItWorks() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))', gap: 24, position: 'relative' }}>
           {steps.map((s, i) => (
             <div key={i} style={{ position: 'relative' }}>
-              {/* Connector line (desktop) */}
               {i < steps.length - 1 && (
                 <div style={{
                   position: 'absolute', top: 32, left: '-12%',
                   width: '24%', height: 2,
                   background: `linear-gradient(90deg, ${C.orangeBorder}, transparent)`,
-                  zIndex: 0,
-                  display: 'block',
+                  zIndex: 0, display: 'block',
                 }} />
               )}
               <div className="fazz-card" style={{ padding: '32px 28px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
@@ -555,33 +610,16 @@ function HowItWorks() {
   )
 }
 
-/* ─── Features Grid ───────────────────────────────────────── */
+/* ─── Features Grid ──────────────────────────────────────────── */
 function FeaturesGrid() {
+  const { C } = useContext(LandingThemeCtx)
   const features = [
-    {
-      Icon: Global, title: 'موقع خاص بتصميمك',
-      desc: 'موقعك على الإنترنت بعنوانك الخاص — هويتك، ألوانك، طريقتك — مش تصميم تطبيق تاني',
-    },
-    {
-      Icon: Scan, title: 'QR Code جاهز للطباعة',
-      desc: 'اطبعه على المنيو والطاولات — عميلك يمسح ويطلب ويدفع من موبايله في ثوانٍ',
-    },
-    {
-      Icon: Notification, title: 'استقبال طلبات لحظي',
-      desc: 'كل طلب جديد بيوصلك فوري — صوت، إشعار، وبيظهر في لوحة التحكم مباشرة',
-    },
-    {
-      Icon: Category, title: 'لوحة تحكم شاملة',
-      desc: 'إحصائيات، تقارير، تاريخ الطلبات، وإدارة القائمة — كل حاجة من مكان واحد',
-    },
-    {
-      Icon: Star1, title: 'برنامج ولاء للزبائن',
-      desc: 'نقاط وهدايا لزبائنك الدايمين — خليهم يرجعوا تاني ويجيبوا معاهم ناس',
-    },
-    {
-      Icon: Shop, title: 'ماركتبليس موحد',
-      desc: 'مطعمك بيظهر في قائمة Fazz للزبائن الجدد — مبيعات إضافية بدون مجهود',
-    },
+    { Icon: Global, title: 'موقع خاص بتصميمك', desc: 'موقعك على الإنترنت بعنوانك الخاص — هويتك، ألوانك، طريقتك — مش تصميم تطبيق تاني' },
+    { Icon: Scan, title: 'QR Code جاهز للطباعة', desc: 'اطبعه على المنيو والطاولات — عميلك يمسح ويطلب ويدفع من موبايله في ثوانٍ' },
+    { Icon: Notification, title: 'استقبال طلبات لحظي', desc: 'كل طلب جديد بيوصلك فوري — صوت، إشعار، وبيظهر في لوحة التحكم مباشرة' },
+    { Icon: Category, title: 'لوحة تحكم شاملة', desc: 'إحصائيات، تقارير، تاريخ الطلبات، وإدارة القائمة — كل حاجة من مكان واحد' },
+    { Icon: Star1, title: 'برنامج ولاء للزبائن', desc: 'نقاط وهدايا لزبائنك الدايمين — خليهم يرجعوا تاني ويجيبوا معاهم ناس' },
+    { Icon: Shop, title: 'ماركتبليس موحد', desc: 'مطعمك بيظهر في قائمة Fazz للزبائن الجدد — مبيعات إضافية بدون مجهود' },
   ]
 
   return (
@@ -621,8 +659,9 @@ function FeaturesGrid() {
   )
 }
 
-/* ─── Pricing ─────────────────────────────────────────────── */
+/* ─── Pricing ────────────────────────────────────────────────── */
 function Pricing() {
+  const { C } = useContext(LandingThemeCtx)
   const navigate = useNavigate()
   const plans = [
     {
@@ -681,7 +720,7 @@ function Pricing() {
           {plans.map((p, i) => (
             <div key={i} style={{
               flex: '1 1 300px', maxWidth: 400,
-              background: p.featured ? C.navy : C.white,
+              background: p.featured ? C_dark.gray50 : C.white,
               border: p.featured ? `2.5px solid ${C.orange}` : `1.5px solid ${C.gray200}`,
               borderRadius: 20,
               padding: '36px 32px',
@@ -741,8 +780,9 @@ function Pricing() {
   )
 }
 
-/* ─── Testimonials ────────────────────────────────────────── */
+/* ─── Testimonials ───────────────────────────────────────────── */
 function Testimonials() {
+  const { C } = useContext(LandingThemeCtx)
   const [active, setActive] = useState(0)
   const testimonials = [
     {
@@ -789,13 +829,11 @@ function Testimonials() {
             borderRadius: 20, padding: 'clamp(28px,5vw,48px)',
             minHeight: 260,
           }}>
-            {/* Stars */}
             <div style={{ display: 'flex', gap: 4, marginBottom: 20 }}>
               {Array.from({ length: testimonials[active].stars }).map((_, i) => (
                 <Star1 key={i} size={20} color="#FBBF24" variant="Bold" />
               ))}
             </div>
-
             <p style={{
               fontFamily: F, fontSize: 'clamp(15px,2vw,18px)', fontWeight: 500,
               color: C.gray700, lineHeight: 1.85, margin: '0 0 28px',
@@ -803,7 +841,6 @@ function Testimonials() {
             }}>
               "{testimonials[active].quote}"
             </p>
-
             <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
               <div style={{
                 width: 48, height: 48, borderRadius: '50%',
@@ -835,12 +872,10 @@ function Testimonials() {
             <div style={{ display: 'flex', gap: 8 }}>
               {testimonials.map((_, i) => (
                 <button key={i} onClick={() => setActive(i)} style={{
-                  width: active === i ? 24 : 8, height: 8,
-                  borderRadius: 4,
+                  width: active === i ? 24 : 8, height: 8, borderRadius: 4,
                   background: active === i ? C.orange : C.gray200,
                   border: 'none', cursor: 'pointer',
-                  transition: 'width .25s, background .25s',
-                  padding: 0,
+                  transition: 'width .25s, background .25s', padding: 0,
                 }} />
               ))}
             </div>
@@ -860,13 +895,12 @@ function Testimonials() {
         {/* Stats strip */}
         <div style={{
           display: 'flex', gap: 0, marginTop: 44,
-          background: C.navy, borderRadius: 16, overflow: 'hidden',
-          flexWrap: 'wrap',
+          background: C_dark.gray50, borderRadius: 16, overflow: 'hidden', flexWrap: 'wrap',
         }}>
           {[
             { val: '٤.٩ ★', label: 'متوسط التقييم' },
             { val: '+٥٠٠', label: 'مطعم يستخدم Fazz' },
-            { val: '٩٨٪', label: 'نسبة الرضا' },
+            { val: '٩٨٪',  label: 'نسبة الرضا' },
           ].map((s, i) => (
             <div key={i} style={{
               flex: '1 1 140px', padding: '24px 20px', textAlign: 'center',
@@ -882,17 +916,17 @@ function Testimonials() {
   )
 }
 
-/* ─── Final CTA ───────────────────────────────────────────── */
+/* ─── Final CTA ──────────────────────────────────────────────── */
 function FinalCTA() {
+  const { C } = useContext(LandingThemeCtx)
   const navigate = useNavigate()
   return (
     <section dir="rtl" style={{
       padding: 'clamp(80px,10vw,120px) clamp(16px,6vw,80px)',
-      background: C.navy,
+      background: C_dark.gray50,
       textAlign: 'center',
       position: 'relative', overflow: 'hidden',
     }}>
-      {/* Background decoration */}
       <div style={{ position: 'absolute', top: '-30%', right: '-10%', width: 500, height: 500, borderRadius: '50%', background: `radial-gradient(circle, rgba(232,87,42,.18) 0%, transparent 65%)`, pointerEvents: 'none' }} />
       <div style={{ position: 'absolute', bottom: '-20%', left: '-5%', width: 400, height: 400, borderRadius: '50%', background: `radial-gradient(circle, rgba(232,87,42,.1) 0%, transparent 65%)`, pointerEvents: 'none' }} />
 
@@ -935,8 +969,9 @@ function FinalCTA() {
   )
 }
 
-/* ─── Footer ──────────────────────────────────────────────── */
+/* ─── Footer ─────────────────────────────────────────────────── */
 function Footer() {
+  const { C } = useContext(LandingThemeCtx)
   const navigate = useNavigate()
   return (
     <footer dir="rtl" style={{
@@ -1054,7 +1089,7 @@ function Footer() {
   )
 }
 
-/* ─── WhatsApp Float ──────────────────────────────────────── */
+/* ─── WhatsApp Float ─────────────────────────────────────────── */
 function WhatsAppFloat() {
   const [show, setShow] = useState(false)
   useEffect(() => {
@@ -1085,15 +1120,25 @@ function WhatsAppFloat() {
   )
 }
 
-/* ─── Page ────────────────────────────────────────────────── */
+/* ─── Page ───────────────────────────────────────────────────── */
 export default function Landing() {
+  const [isDark, setIsDark] = useState(() => localStorage.getItem('c_theme') === 'dark')
+
+  const toggle = () => {
+    const next = !isDark
+    setIsDark(next)
+    localStorage.setItem('c_theme', next ? 'dark' : 'light')
+  }
+
+  const C = isDark ? C_dark : C_light
+
   useEffect(() => {
     document.title = 'Fazz فَذّ — امتلك مطعمك الرقمي بدون عمولة'
     window.scrollTo(0, 0)
   }, [])
 
   return (
-    <>
+    <LandingThemeCtx.Provider value={{ C, isDark, toggle }}>
       <GlobalStyles />
       <div dir="rtl" style={{ background: C.white, minHeight: '100vh', fontFamily: F, overflowX: 'hidden' }}>
         <Navbar />
@@ -1107,6 +1152,6 @@ export default function Landing() {
         <Footer />
         <WhatsAppFloat />
       </div>
-    </>
+    </LandingThemeCtx.Provider>
   )
 }
