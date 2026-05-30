@@ -189,6 +189,7 @@ export default function HambergerMenu() {
   }
 
   return (
+    <>
     <Layout title="إدارة القائمة">
       {/* Category tabs + add button */}
       <div className="animate-fade-in" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16, gap: 12 }}>
@@ -535,5 +536,6 @@ export default function HambergerMenu() {
       onConfirm={() => { deleteItem(confirmDeleteId); setConfirmDeleteId(null) }}
       onCancel={() => setConfirmDeleteId(null)}
     />
+    </>
   )
 }

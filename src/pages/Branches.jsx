@@ -139,6 +139,7 @@ export default function Branches() {
   const closedCount = branches.length - openCount
 
   return (
+    <>
     <Layout title="الفروع">
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
@@ -291,5 +292,6 @@ export default function Branches() {
       onConfirm={() => { remove(confirmDeleteId); setConfirmDeleteId(null) }}
       onCancel={() => setConfirmDeleteId(null)}
     />
+    </>
   )
 }
