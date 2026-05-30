@@ -171,7 +171,7 @@ export default function CustomerLanding() {
         {isLoggedIn ? (
           <h1 style={{ fontSize: 28, fontWeight: 900, color: 'white', marginBottom: 10, lineHeight: 1.3, textShadow: '0 2px 12px rgba(0,0,0,0.15)' }}>
             أهلاً، {profile.name?.split(' ')[0]} 👋<br />
-            <span style={{ fontSize: 22, fontWeight: 700 }}>شو تحب تطلب اليوم؟</span>
+            <span style={{ fontSize: 22, fontWeight: 700 }}>عايز تطلب إيه النهارده؟</span>
           </h1>
         ) : (
           <h1 style={{ fontSize: 30, fontWeight: 900, color: 'white', marginBottom: 12, lineHeight: 1.3, textShadow: '0 2px 12px rgba(0,0,0,0.15)' }}>
@@ -188,7 +188,7 @@ export default function CustomerLanding() {
         )}
 
         <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.88)', marginBottom: 32, lineHeight: 1.8 }}>
-          اكتشف أفضل المطاعم، اطلب بسهولة، وتتبع طلبك خطوة بخطوة — مع مكافآت تزداد مع كل وجبة 🎁
+          اكتشف أحسن المطاعم، اطلب بسهولة، وتابع طلبك خطوة بخطوة — مع مكافآت تزيد مع كل وجبة 🎁
         </p>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -476,7 +476,7 @@ export default function CustomerLanding() {
 
             {filteredRestaurants.length === 0 && (
               <div style={{ textAlign: 'center', padding: '32px 0', color: 'var(--text-2)', fontSize: 14 }}>
-                لا توجد مطاعم في هذه الفئة حالياً
+                مفيش مطاعم في الفئة دي دلوقتي
               </div>
             )}
           </div>
@@ -608,7 +608,7 @@ export default function CustomerLanding() {
               onClick={() => navigate('/customer-login')}
               style={{ padding: '8px 14px', borderRadius: 10, background: color, color: 'white', fontWeight: 700, fontSize: 12, border: 'none', cursor: 'pointer', fontFamily: 'Zain, sans-serif', flexShrink: 0, whiteSpace: 'nowrap' }}
             >
-              سجّل الآن
+              سجّل دلوقتي
             </button>
             <button
               onClick={() => setDismissedBanner(true)}

@@ -275,7 +275,7 @@ function DashboardMockup() {
       }}>
         <span style={{ fontSize: 18 }}>🎉</span>
         <div>
-          <p style={{ fontFamily: F, fontSize: 10, color: C.gray600 }}>وفّرت هذا الشهر</p>
+          <p style={{ fontFamily: F, fontSize: 10, color: C.gray600 }}>وفّرت الشهر ده</p>
           <p style={{ fontFamily: F, fontSize: 15, fontWeight: 800, color: C.green }}>١٢٠٠ ج عمولة</p>
         </div>
       </div>
@@ -340,7 +340,7 @@ function Hero() {
               ابدأ مجاناً — ١٤ يوم <ArrowLeft2 size={18} />
             </button>
             <button className="fazz-btn-outline" onClick={() => scrollTo('how')}>
-              شاهد كيف يعمل
+              شوف بيشتغل إزاي
             </button>
           </div>
 
@@ -400,7 +400,7 @@ function PainSection() {
               'بياناتك وزبائنك ليهم',
               'تصميمهم — مش تصميمك',
               'قواعدهم — أنت تتبعها',
-              'يحذفوك متى ما شاؤوا',
+              'يحذفوك امتى ما شاؤوا',
             ].map((t, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
                 <div style={{ width: 22, height: 22, borderRadius: '50%', background: '#DC354522', border: '1.5px solid #DC354555', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -481,7 +481,7 @@ function HowItWorks() {
       num: '١',
       icon: '🎉',
       title: 'اشترك مجاناً',
-      desc: 'أنشئ حسابك في دقيقتين — اسم مطعمك وبياناتك الأساسية وتبدأ فوراً بدون أي تحميل أو تثبيت',
+      desc: 'اعمل حسابك في دقيقتين — اسم مطعمك وبياناتك الأساسية وتبدأ فوراً بدون أي تنزيل أو تثبيت',
     },
     {
       num: '٢',
@@ -547,7 +547,7 @@ function HowItWorks() {
         <div style={{ textAlign: 'center', marginTop: 44 }}>
           <button className="fazz-btn-primary" onClick={() => navigate('/login')}
             style={{ fontSize: 16, padding: '15px 40px' }}>
-            ابدأ مجاناً الآن <ArrowLeft2 size={18} />
+            ابدأ مجاناً دلوقتي <ArrowLeft2 size={18} />
           </button>
         </div>
       </div>
@@ -645,7 +645,7 @@ function Pricing() {
       price: 500,
       badge: 'الأكثر شيوعاً',
       featured: true,
-      desc: 'لمطعم نشط يريد النمو والاستقلالية',
+      desc: 'لمطعم شغال وعايز ينمو ويبقى مستقل',
       cta: 'ابدأ الـ Pro',
       features: [
         'طلبات غير محدودة — صفر عمولة',
@@ -673,7 +673,7 @@ function Pricing() {
             سعر واضح. بدون مفاجآت.
           </h2>
           <p style={{ fontFamily: F, fontSize: 16, color: C.gray600 }}>
-            ابدأ مجاناً — ادفع بالجنيه المصري — ألغِ وقتما تشاء
+            ابدأ مجاناً — ادفع بالجنيه المصري — ألغي امتى ما تحب
           </p>
         </div>
 
@@ -899,7 +899,7 @@ function FinalCTA() {
       <div style={{ position: 'relative', zIndex: 1 }}>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: C.orangeMid, border: `1.5px solid ${C.orangeBorder}`, borderRadius: 999, padding: '5px 18px', marginBottom: 24 }}>
           <span style={{ width: 8, height: 8, borderRadius: '50%', background: C.orange, boxShadow: `0 0 8px ${C.orange}`, display: 'inline-block' }} />
-          <span style={{ fontFamily: F, fontSize: 13, fontWeight: 700, color: C.orange }}>متاح الآن — ابدأ في دقيقتين</span>
+          <span style={{ fontFamily: F, fontSize: 13, fontWeight: 700, color: C.orange }}>متاح دلوقتي — ابدأ في دقيقتين</span>
         </div>
 
         <h2 style={{

@@ -184,7 +184,7 @@ export default function Dashboard() {
           <div style={{ flex: 1 }}>
             <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', lineHeight: 1.3 }}>{getConfig().name}</p>
             <p style={{ fontSize: 11, fontWeight: 500, color: isOpen ? 'var(--green)' : 'var(--text-3)', marginTop: 2 }}>
-              {isOpen ? 'مفتوح · حتى 11 مساءً' : 'مغلق مؤقتاً'}
+              {isOpen ? 'مفتوح · لحد ١١ بالليل' : 'مغلق دلوقتي'}
             </p>
           </div>
           <button
@@ -229,7 +229,7 @@ export default function Dashboard() {
             }}
           >
             <ToggleOn size={12} />
-            {isOpen ? 'إغلاق مؤقت' : 'فتح المطعم'}
+            {isOpen ? 'اقفل دلوقتي' : 'افتح المطعم'}
           </button>
         </div>
       </div>
