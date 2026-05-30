@@ -587,7 +587,7 @@ function HowItWorks() {
                   width: 56, height: 56, borderRadius: '50%',
                   background: C.orange, color: '#fff',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontFamily: "'Inter', sans-serif", fontWeight: 900, fontSize: 22,
+                  fontFamily: "'Zain', sans-serif", fontWeight: 900, fontSize: 22,
                   margin: '0 auto 18px',
                   boxShadow: `0 8px 24px ${C.orangeBorder}`,
                 }}>{s.num}</div>
@@ -747,7 +747,7 @@ function Pricing() {
                 {p.price === 0
                   ? <span style={{ fontFamily: F, fontWeight: 900, fontSize: 40, color: p.featured ? '#fff' : C.navy }}>مجاني</span>
                   : <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
-                      <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 900, fontSize: 46, color: C.orange }}>{p.price}</span>
+                      <span style={{ fontFamily: "'Zain',sans-serif", fontWeight: 900, fontSize: 46, color: C.orange }}>{p.price}</span>
                       <span style={{ fontFamily: F, fontSize: 16, color: p.featured ? 'rgba(255,255,255,.7)' : C.gray600 }}>ج / شهر</span>
                     </div>
                 }
@@ -906,7 +906,7 @@ function Testimonials() {
               flex: '1 1 140px', padding: '24px 20px', textAlign: 'center',
               borderLeft: i > 0 ? '1px solid rgba(255,255,255,.1)' : 'none',
             }}>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 900, fontSize: 30, color: C.orange, marginBottom: 4 }}>{s.val}</p>
+              <p style={{ fontFamily: "'Zain',sans-serif", fontWeight: 900, fontSize: 30, color: C.orange, marginBottom: 4 }}>{s.val}</p>
               <p style={{ fontFamily: F, fontSize: 13, color: 'rgba(255,255,255,.65)' }}>{s.label}</p>
             </div>
           ))}

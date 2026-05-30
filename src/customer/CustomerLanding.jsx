@@ -457,7 +457,7 @@ export default function CustomerLanding() {
                     <span style={{ color: 'var(--text-3)', fontSize: 10 }}>·</span>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
                       <Star1 size={11} color="#F59E0B" fill="#F59E0B" />
-                      <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)', fontFamily: 'Inter' }}>{r.rating}</span>
+                      <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)', fontFamily: 'Zain, sans-serif' }}>{r.rating}</span>
                     </div>
                     <span style={{ color: 'var(--text-3)', fontSize: 10 }}>·</span>
                     <Clock size={11} color="var(--text-3)" />

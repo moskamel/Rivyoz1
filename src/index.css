@@ -130,9 +130,9 @@ html, body {
   text-rendering: optimizeLegibility;
 }
 
-/* Numbers / prices — Inter, ltr, tabular */
+/* Numbers / prices — Zain, ltr, tabular */
 .num {
-  font-family: 'Inter', 'Roboto Mono', monospace;
+  font-family: 'Zain', sans-serif;
   direction: ltr;
   display: inline-block;
   font-variant-numeric: tabular-nums;
