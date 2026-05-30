@@ -628,36 +628,45 @@ function RestaurantSlider() {
     { name: 'بيت الكشري',        cat: 'مصري',          emoji: '🫙', city: 'الجيزة',        joined: 'منذ ٦ أشهر' },
     { name: 'فطير مشلتيت',       cat: 'فطير',          emoji: '🥞', city: 'طنطا',          joined: 'منذ ٤ أشهر' },
   ]
+  const row2 = [...restaurants].reverse()
   return (
-    <section dir="rtl" style={{ padding: 'clamp(64px,8vw,100px) 0', background: C.gray50, borderTop: `1.5px solid ${C.gray200}`, overflow: 'hidden' }}>
+    <section style={{ padding: 'clamp(64px,8vw,100px) 0', background: C.gray50, borderTop: `1.5px solid ${C.gray200}`, overflow: 'hidden' }}>
       <style>{`
-        @keyframes marquee-ltr { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
-        @keyframes marquee-rtl { 0%{transform:translateX(-50%)} 100%{transform:translateX(0)} }
-        .marquee-track     { animation: marquee-ltr 38s linear infinite; }
-        .marquee-track-rev { animation: marquee-rtl 42s linear infinite; }
-        .marquee-track:hover, .marquee-track-rev:hover { animation-play-state: paused; }
-        .rest-card:hover { border-color: ${C.orange} !important; box-shadow: 0 8px 28px rgba(249,115,22,0.14) !important; }
+        @keyframes mq-fwd  { 0%{transform:translateX(0)}    100%{transform:translateX(-50%)} }
+        @keyframes mq-back { 0%{transform:translateX(-50%)} 100%{transform:translateX(0)}    }
+        .mq-fwd  { display:flex; flex-wrap:nowrap; width:max-content; animation:mq-fwd  36s linear infinite; will-change:transform; }
+        .mq-back { display:flex; flex-wrap:nowrap; width:max-content; animation:mq-back 42s linear infinite; will-change:transform; }
+        .mq-fwd:hover, .mq-back:hover { animation-play-state:paused; }
+        .rest-card:hover { border-color:${C.orange} !important; box-shadow:0 8px 28px rgba(249,115,22,0.14) !important; }
       `}</style>
-      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 clamp(16px,6vw,80px)', marginBottom: 48, textAlign: 'center' }}>
+
+      {/* Header */}
+      <div dir="rtl" style={{ maxWidth: 1100, margin: '0 auto', padding: '0 clamp(16px,6vw,80px)', marginBottom: 48, textAlign: 'center' }}>
         <div className="fazz-section-badge" style={{ marginBottom: 16 }}>🏪 مجتمعنا</div>
         <h2 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(26px,4vw,44px)', color: C.navy, letterSpacing: '-0.5px', margin: '0 0 12px' }}>مطاعم انضمت لـ Fazz</h2>
         <p style={{ fontFamily: F, fontSize: 16, color: C.gray600, maxWidth: 480, margin: '0 auto' }}>+٥٠٠ مطعم من كل مصر بيستخدموا Fazz كل يوم — وبيوفّروا عمولتهم</p>
       </div>
-      <div style={{ position: 'relative', overflow: 'hidden', marginBottom: 16 }}>
-        <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 140, background: `linear-gradient(to left,${C.gray50},transparent)`, zIndex: 10, pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 140, background: `linear-gradient(to right,${C.gray50},transparent)`, zIndex: 10, pointerEvents: 'none' }} />
-        <div className="marquee-track" style={{ display: 'flex', width: 'max-content', padding: '6px 0' }}>
+
+      {/* Row 1 — forward */}
+      <div style={{ position: 'relative', overflow: 'hidden', marginBottom: 14 }}>
+        <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 120, background: `linear-gradient(to left,${C.gray50},transparent)`, zIndex: 10, pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 120, background: `linear-gradient(to right,${C.gray50},transparent)`, zIndex: 10, pointerEvents: 'none' }} />
+        <div className="mq-fwd">
           {[...restaurants, ...restaurants].map((r, i) => <RestCard key={i} r={r} C={C} />)}
         </div>
       </div>
+
+      {/* Row 2 — backward */}
       <div style={{ position: 'relative', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 140, background: `linear-gradient(to left,${C.gray50},transparent)`, zIndex: 10, pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 140, background: `linear-gradient(to right,${C.gray50},transparent)`, zIndex: 10, pointerEvents: 'none' }} />
-        <div className="marquee-track-rev" style={{ display: 'flex', width: 'max-content', padding: '6px 0' }}>
-          {[...[...restaurants].reverse(), ...[...restaurants].reverse()].map((r, i) => <RestCard key={i} r={r} C={C} />)}
+        <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 120, background: `linear-gradient(to left,${C.gray50},transparent)`, zIndex: 10, pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 120, background: `linear-gradient(to right,${C.gray50},transparent)`, zIndex: 10, pointerEvents: 'none' }} />
+        <div className="mq-back">
+          {[...row2, ...row2].map((r, i) => <RestCard key={i} r={r} C={C} />)}
         </div>
       </div>
-      <div style={{ maxWidth: 1100, margin: '44px auto 0', padding: '0 clamp(16px,6vw,80px)' }}>
+
+      {/* Stats bar */}
+      <div dir="rtl" style={{ maxWidth: 1100, margin: '44px auto 0', padding: '0 clamp(16px,6vw,80px)' }}>
         <div style={{ display: 'flex', gap: 0, background: C.white, border: `1.5px solid ${C.gray200}`, borderRadius: 20, overflow: 'hidden', flexWrap: 'wrap' }}>
           {[
             { val: '+٥٠٠', label: 'مطعم مسجل', icon: '🏪' },
@@ -679,7 +688,7 @@ function RestaurantSlider() {
 
 function RestCard({ r, C }) {
   return (
-    <div className="rest-card" style={{ background: C.white, border: `1.5px solid ${C.gray200}`, borderRadius: 16, padding: '14px 18px', display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0, width: 230, marginInlineEnd: 14, boxShadow: '0 2px 8px rgba(0,0,0,0.04)', transition: 'border-color .2s,box-shadow .2s', cursor: 'default' }}>
+    <div className="rest-card" style={{ background: C.white, border: `1.5px solid ${C.gray200}`, borderRadius: 16, padding: '14px 18px', display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0, width: 230, marginRight: 14, boxShadow: '0 2px 8px rgba(0,0,0,0.04)', transition: 'border-color .2s,box-shadow .2s', cursor: 'default' }}>
       <div style={{ width: 46, height: 46, borderRadius: 13, flexShrink: 0, background: C.orangeLight, border: `1.5px solid ${C.orangeBorder}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22 }}>{r.emoji}</div>
       <div style={{ minWidth: 0, flex: 1 }}>
         <p style={{ fontFamily: F, fontWeight: 800, fontSize: 13, color: C.navy, marginBottom: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.name}</p>
