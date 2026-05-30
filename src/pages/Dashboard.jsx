@@ -249,7 +249,7 @@ export default function Dashboard() {
         <div className="glass" style={{ padding: '20px' }}>
           <div style={{ marginBottom: 16 }}>
             <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>المبيعات</p>
-            <div className="flex items-center gap-1" style={{ background: 'var(--surface-2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-full)', padding: 3 }}>
+            <div className="flex items-center gap-1" style={{ background: 'var(--surface-2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-full)', padding: 3, width: 'fit-content' }}>
               {periodOptions.map(opt => (
                 <button key={opt} onClick={() => setPeriod(opt)}
                   style={{
