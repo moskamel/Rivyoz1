@@ -303,7 +303,7 @@ function LoyaltyTab() {
             { name: 'منى عبد الرحمن',       pts: 680,  tier: 'موثوق', color: '#60A5FA', clv: '340ج'   },
           ].map((u, i) => (
             <div key={u.name} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '11px 20px', borderBottom: i < 3 ? '1px solid var(--border)' : 'none' }}>
-              <span style={{ width: 24, height: 24, borderRadius: 7, background: 'var(--surface-2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 700, color: 'var(--text-2)', fontFamily: 'Inter', flexShrink: 0 }}>{i + 1}</span>
+              <span style={{ width: 24, height: 24, borderRadius: 7, background: 'var(--surface-2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 700, color: 'var(--text-2)', fontFamily: 'Zain, sans-serif', flexShrink: 0 }}>{i + 1}</span>
               <p style={{ flex: 1, fontSize: 13, fontWeight: 500, color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{u.name}</p>
               <span style={{ fontSize: 10, color: 'var(--text-3)', flexShrink: 0 }}>CLV {u.clv}</span>
               <span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 6, background: 'var(--surface-2)', color: u.color, fontWeight: 600, flexShrink: 0 }}>{u.tier}</span>

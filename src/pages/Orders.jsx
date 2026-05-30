@@ -254,7 +254,7 @@ export default function Orders() {
                 <span style={{
                   fontSize: 10,
                   fontWeight: 800,
-                  fontFamily: 'Inter, sans-serif',
+                  fontFamily: 'Zain, sans-serif',
                   minWidth: 16,
                   height: 16,
                   borderRadius: 'var(--radius-full)',
@@ -343,7 +343,7 @@ export default function Orders() {
                     fontSize: 12,
                     fontWeight: 800,
                     color: 'var(--text-2)',
-                    fontFamily: 'Inter, sans-serif',
+                    fontFamily: 'Zain, sans-serif',
                     direction: 'ltr',
                   }}>
                     #{order.id}
@@ -366,7 +366,7 @@ export default function Orders() {
                     fontSize: 16,
                     fontWeight: 800,
                     color: 'var(--accent)',
-                    fontFamily: 'Inter, sans-serif',
+                    fontFamily: 'Zain, sans-serif',
                   }}>
                     {order.total} ج
                   </span>

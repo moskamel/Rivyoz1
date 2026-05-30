@@ -51,7 +51,7 @@ export default function NotificationBell() {
       >
         <Notification size={18} />
         {unreadCount > 0 && (
-          <span style={{ position: 'absolute', top: 4, right: 4, width: 16, height: 16, background: 'var(--red)', color: 'white', fontSize: 9, fontWeight: 700, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Inter' }}>
+          <span style={{ position: 'absolute', top: 4, right: 4, width: 16, height: 16, background: 'var(--red)', color: 'white', fontSize: 9, fontWeight: 700, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Zain, sans-serif' }}>
             {unreadCount}
           </span>
         )}

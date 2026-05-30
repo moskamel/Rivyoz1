@@ -15,7 +15,7 @@ const CustomTooltip = ({ active, payload, label }) => {
     return (
       <div style={{ background: 'var(--surface-3)', border: '1px solid var(--border-strong)', borderRadius: 10, padding: '8px 12px', boxShadow: '0 8px 24px rgba(0,0,0,0.4)' }}>
         <p style={{ fontSize: 11, color: 'var(--text-2)', marginBottom: 2 }}>{label}</p>
-        <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--accent)', fontFamily: 'Inter' }}>{payload[0].value.toLocaleString('ar-EG')} ج</p>
+        <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--accent)', fontFamily: 'Zain, sans-serif' }}>{payload[0].value.toLocaleString('ar-EG')} ج</p>
       </div>
     )
   }
@@ -298,7 +298,7 @@ export default function Dashboard() {
                   border: i === 0 ? '1px solid var(--border-accent)' : '1px solid var(--border)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: 10, fontWeight: 800, color: i === 0 ? 'var(--accent)' : 'var(--text-2)',
-                  flexShrink: 0, fontFamily: 'Inter'
+                  flexShrink: 0, fontFamily: 'Zain, sans-serif'
                 }}>{i + 1}</span>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <p className="truncate-1" style={{ fontSize: 12, fontWeight: 600, color: 'var(--text)', marginBottom: 5 }}>{item.name}</p>

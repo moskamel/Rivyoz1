@@ -139,7 +139,7 @@ function Tip({ active, payload, label, unit = 'ج' }) {
     <div style={{ background: 'var(--surface-3)', border: '1px solid var(--border-strong)', borderRadius: 10, padding: '8px 12px', boxShadow: '0 8px 24px rgba(0,0,0,0.4)' }}>
       <p style={{ fontSize: 11, color: 'var(--text-2)', marginBottom: 4 }}>{label}</p>
       {payload.map((p, i) => (
-        <p key={i} style={{ fontSize: 13, fontWeight: 700, color: p.color || C.accent, fontFamily: 'Inter' }}>
+        <p key={i} style={{ fontSize: 13, fontWeight: 700, color: p.color || C.accent, fontFamily: 'Zain, sans-serif' }}>
           {p.name && <span style={{ color: 'var(--text-3)', fontWeight: 400, marginLeft: 4 }}>{p.name}</span>}
           {typeof p.value === 'number' ? (unit === 'ج' ? `${p.value.toLocaleString()} ج` : p.value) : p.value}
         </p>
@@ -222,7 +222,7 @@ function ExecutiveTab({ period }) {
             </defs>
             <CartesianGrid stroke="var(--border)" strokeDasharray="4 4" vertical={false} />
             <XAxis dataKey="day" tick={{ fontSize: 11, fontFamily: 'Zain', fill: 'var(--text-3)' }} axisLine={false} tickLine={false} />
-            <YAxis tick={{ fontSize: 10, fill: 'var(--text-3)', fontFamily: 'Inter' }} axisLine={false} tickLine={false} width={44} />
+            <YAxis tick={{ fontSize: 10, fill: 'var(--text-3)', fontFamily: 'Zain' }} axisLine={false} tickLine={false} width={44} />
             <Tooltip content={<Tip />} />
             <Area type="monotone" dataKey="cur" fill="url(#fillCur)" stroke="none" />
             <Line type="monotone" dataKey="prev" stroke="var(--border-strong)" strokeWidth={1.5} strokeDasharray="4 4" dot={false} name="سابق" />
@@ -323,7 +323,7 @@ function SalesTab({ period }) {
             </defs>
             <CartesianGrid stroke="var(--border)" strokeDasharray="4 4" vertical={false} />
             <XAxis dataKey="day" tick={{ fontSize: 11, fontFamily: 'Zain', fill: 'var(--text-3)' }} axisLine={false} tickLine={false} />
-            <YAxis tick={{ fontSize: 10, fill: 'var(--text-3)', fontFamily: 'Inter' }} axisLine={false} tickLine={false} width={44} />
+            <YAxis tick={{ fontSize: 10, fill: 'var(--text-3)', fontFamily: 'Zain' }} axisLine={false} tickLine={false} width={44} />
             <Tooltip content={<Tip />} />
             <Area type="monotone" dataKey="cur" fill="url(#gradSales)" stroke="none" />
             <Line type="monotone" dataKey="prev" stroke="var(--border-strong)" strokeWidth={1.5} strokeDasharray="4 4" dot={false} name="سابق" />
@@ -374,7 +374,7 @@ function SalesTab({ period }) {
         <ResponsiveContainer width="100%" height={180}>
           <BarChart data={categoryData} layout="vertical" margin={{ top: 0, right: 10, left: 0, bottom: 0 }}>
             <CartesianGrid stroke="var(--border)" strokeDasharray="4 4" horizontal={false} />
-            <XAxis type="number" tick={{ fontSize: 10, fill: 'var(--text-3)', fontFamily: 'Inter' }} axisLine={false} tickLine={false} />
+            <XAxis type="number" tick={{ fontSize: 10, fill: 'var(--text-3)', fontFamily: 'Zain' }} axisLine={false} tickLine={false} />
             <YAxis dataKey="name" type="category" tick={{ fontSize: 12, fontFamily: 'Zain', fill: 'var(--text-2)' }} axisLine={false} tickLine={false} width={100} />
             <Tooltip content={<Tip />} />
             <Bar dataKey="rev" radius={[0, 4, 4, 0]} name="الإيراد">
@@ -496,7 +496,7 @@ function CustomersTab() {
             <BarChart data={retentionData} margin={{ top: 4, right: 4, left: 0, bottom: 0 }}>
               <CartesianGrid stroke="var(--border)" strokeDasharray="4 4" vertical={false} />
               <XAxis dataKey="m" tick={{ fontSize: 11, fontFamily: 'Zain', fill: 'var(--text-3)' }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fontSize: 10, fill: 'var(--text-3)', fontFamily: 'Inter' }} axisLine={false} tickLine={false} width={30} />
+              <YAxis tick={{ fontSize: 10, fill: 'var(--text-3)', fontFamily: 'Zain' }} axisLine={false} tickLine={false} width={30} />
               <Tooltip content={p => <Tip {...p} unit="عميل" />} />
               <Bar dataKey="new" fill={C.green} radius={[4, 4, 0, 0]} name="جدد" stackId="a" />
               <Bar dataKey="ret" fill={C.blue}  radius={[4, 4, 0, 0]} name="عائدون" stackId="a" />
@@ -652,7 +652,7 @@ function BranchesTab() {
           <BarChart data={branchData} margin={{ top: 4, right: 4, left: 0, bottom: 0 }}>
             <CartesianGrid stroke="var(--border)" strokeDasharray="4 4" vertical={false} />
             <XAxis dataKey="name" tick={{ fontSize: 11, fontFamily: 'Zain', fill: 'var(--text-3)' }} axisLine={false} tickLine={false} />
-            <YAxis tick={{ fontSize: 10, fill: 'var(--text-3)', fontFamily: 'Inter' }} axisLine={false} tickLine={false} width={44} />
+            <YAxis tick={{ fontSize: 10, fill: 'var(--text-3)', fontFamily: 'Zain' }} axisLine={false} tickLine={false} width={44} />
             <Tooltip content={<Tip />} />
             <Bar dataKey="rev" radius={[6, 6, 0, 0]} name="الإيراد">
               {branchData.map((_, i) => <Cell key={i} fill={[C.accent, C.blue, C.green][i]} />)}
@@ -713,7 +713,7 @@ function MarketingTab() {
           <ComposedChart data={loyaltyVsNot} margin={{ top: 4, right: 4, left: 0, bottom: 0 }}>
             <CartesianGrid stroke="var(--border)" strokeDasharray="4 4" vertical={false} />
             <XAxis dataKey="m" tick={{ fontSize: 11, fontFamily: 'Zain', fill: 'var(--text-3)' }} axisLine={false} tickLine={false} />
-            <YAxis tick={{ fontSize: 10, fill: 'var(--text-3)', fontFamily: 'Inter' }} axisLine={false} tickLine={false} width={40} />
+            <YAxis tick={{ fontSize: 10, fill: 'var(--text-3)', fontFamily: 'Zain' }} axisLine={false} tickLine={false} width={40} />
             <Tooltip content={<Tip />} />
             <Line type="monotone" dataKey="loyal"   stroke={C.accent} strokeWidth={2.5} dot={{ r: 3, fill: C.accent, stroke: 'var(--bg)', strokeWidth: 2 }} name="أعضاء الولاء" />
             <Line type="monotone" dataKey="regular" stroke="var(--border-strong)" strokeWidth={1.5} strokeDasharray="4 4" dot={false} name="عملاء عاديون" />

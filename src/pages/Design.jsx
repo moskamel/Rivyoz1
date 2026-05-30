@@ -103,7 +103,7 @@ function ColorTab() {
               <div key={i.n} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid #F3F4F6' }}>
                 <p style={{ fontSize: 12, fontWeight: 600, color: '#111' }}>{i.n}</p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ fontSize: 13, fontWeight: 800, color, fontFamily: 'Inter' }}>{i.p} ج</span>
+                  <span style={{ fontSize: 13, fontWeight: 800, color, fontFamily: 'Zain, sans-serif' }}>{i.p} ج</span>
                   <div style={{ width: 24, height: 24, borderRadius: 7, background: color, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: 14, fontWeight: 700 }}>+</div>
                 </div>
               </div>
@@ -398,7 +398,7 @@ function ItemsPicker({ selected, onChange }) {
                       {checked && <Check size={10} color="white" strokeWidth={3} />}
                     </div>
                     <span style={{ flex: 1, fontSize: 13, color: checked ? 'var(--accent)' : 'var(--text)', fontWeight: checked ? 600 : 400 }}>{item.name}</span>
-                    <span style={{ fontSize: 11, color: 'var(--text-3)', fontFamily: 'Inter' }}>{item.price} ج</span>
+                    <span style={{ fontSize: 11, color: 'var(--text-3)', fontFamily: 'Zain, sans-serif' }}>{item.price} ج</span>
                   </div>
                 )
               })}
@@ -467,8 +467,8 @@ function CombosTab() {
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{c.name}</p>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 2 }}>
-                    <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--accent)', fontFamily: 'Inter' }}>{c.price} ج</span>
-                    {c.originalPrice > 0 && <span style={{ fontSize: 10, color: 'var(--text-3)', textDecoration: 'line-through', fontFamily: 'Inter' }}>{c.originalPrice}</span>}
+                    <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--accent)', fontFamily: 'Zain, sans-serif' }}>{c.price} ج</span>
+                    {c.originalPrice > 0 && <span style={{ fontSize: 10, color: 'var(--text-3)', textDecoration: 'line-through', fontFamily: 'Zain, sans-serif' }}>{c.originalPrice}</span>}
                     {pct > 0 && <span style={{ fontSize: 10, fontWeight: 700, padding: '1px 6px', borderRadius: 5, background: 'var(--green-muted)', color: 'var(--green)' }}>خصم {pct}%</span>}
                   </div>
                 </div>
@@ -538,7 +538,7 @@ function CombosTab() {
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>{form.name}</p>
                   {form.selectedItems.length > 0 && <p style={{ fontSize: 11, color: 'var(--text-3)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{itemsLabel(form.selectedItems)}</p>}
-                  <p style={{ fontSize: 13, fontWeight: 800, color: 'var(--accent)', fontFamily: 'Inter', marginTop: 2 }}>
+                  <p style={{ fontSize: 13, fontWeight: 800, color: 'var(--accent)', fontFamily: 'Zain, sans-serif', marginTop: 2 }}>
                     {form.price} ج {form.originalPrice && <span style={{ fontSize: 11, color: 'var(--text-3)', textDecoration: 'line-through' }}>{form.originalPrice}</span>}
                   </p>
                 </div>
@@ -627,14 +627,14 @@ function CategoriesTab() {
               {/* Drag handle */}
               <span style={{ color: 'var(--text-3)', fontSize: 16, lineHeight: 1, flexShrink: 0, cursor: 'grab' }}>⠿</span>
               {/* Position */}
-              <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-3)', fontFamily: 'Inter', minWidth: 18, flexShrink: 0 }}>#{i + 1}</span>
+              <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-3)', fontFamily: 'Zain, sans-serif', minWidth: 18, flexShrink: 0 }}>#{i + 1}</span>
               {/* Thumb */}
               <div style={{ width: 36, height: 36, borderRadius: 10, background: 'var(--surface-2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, flexShrink: 0, border: '1px solid var(--border)', overflow: 'hidden' }}>
                 {item.image ? <img src={item.image} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : '🍽️'}
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.name}</p>
-                <p style={{ fontSize: 11, color: 'var(--accent)', fontWeight: 700, fontFamily: 'Inter' }}>{item.price} ج</p>
+                <p style={{ fontSize: 11, color: 'var(--accent)', fontWeight: 700, fontFamily: 'Zain, sans-serif' }}>{item.price} ج</p>
               </div>
               <button onClick={() => removeFromSlider(item.id)} style={{ padding: 5, borderRadius: 7, background: 'var(--red-muted)', border: 'none', cursor: 'pointer', color: 'var(--red)', display: 'flex', flexShrink: 0 }}>
                 <CloseCircle size={12} />
@@ -670,7 +670,7 @@ function CategoriesTab() {
                       onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                     >
                       <span style={{ flex: 1, fontSize: 13, color: 'var(--text)' }}>{item.name}</span>
-                      <span style={{ fontSize: 11, color: 'var(--text-3)', fontFamily: 'Inter' }}>{item.price} ج</span>
+                      <span style={{ fontSize: 11, color: 'var(--text-3)', fontFamily: 'Zain, sans-serif' }}>{item.price} ج</span>
                       <Add size={13} style={{ color: 'var(--accent)', flexShrink: 0 }} />
                     </div>
                   ))}
