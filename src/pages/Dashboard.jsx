@@ -327,53 +327,49 @@ export default function Dashboard() {
           </Link>
         </div>
 
-        <div>
-          {recentOrders.map((order, i) => (
-            <div
-              key={order.id}
-              className="flex items-center"
-              style={{
-                padding: '12px 20px',
-                borderBottom: i < recentOrders.length - 1 ? '1px solid var(--border)' : 'none',
-                transition: 'background var(--dur-fast) ease',
-                gap: 12
-              }}
-              onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-2)'}
-              onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-            >
-              {/* Order # */}
-              <div style={{
-                minWidth: 34, height: 34, borderRadius: 8, flexShrink: 0,
-                background: 'var(--surface-2)', border: '1px solid var(--border)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 11, fontWeight: 800, color: 'var(--text-2)', fontFamily: 'Zain, sans-serif',
-                padding: '0 6px',
-              }}>
-                #{order.id}
-              </div>
-
-              {/* Customer & table */}
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <p className="truncate-1" style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>{order.items}</p>
-                <p style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 2 }}>{order.table} · {order.time}</p>
-              </div>
-
-              {/* Items count */}
-              <span style={{ fontSize: 11, color: 'var(--text-3)', flexShrink: 0 }}>
-                {order.details?.length ?? '—'} أصناف
-              </span>
-
-              {/* Total */}
-              <p className="num" style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', flexShrink: 0 }}>
-                {order.total} ج
-              </p>
-
-              {/* Status badge */}
-              <span className={`badge badge-pill ${statusBadgeClass[order.status] ?? 'badge-default'}`}>
-                {statusMap[order.status]?.label}
-              </span>
-            </div>
-          ))}
+        <div style={{ overflowX: 'auto' }}>
+          <table className="table-base">
+            <thead>
+              <tr>
+                <th style={{ width: 48 }}>#</th>
+                <th>الطلب</th>
+                <th style={{ width: 80, textAlign: 'center' }}>الأصناف</th>
+                <th style={{ width: 90, textAlign: 'center' }}>الإجمالي</th>
+                <th style={{ width: 110, textAlign: 'center' }}>الحالة</th>
+              </tr>
+            </thead>
+            <tbody>
+              {recentOrders.map((order) => (
+                <tr key={order.id}>
+                  <td style={{ padding: '10px 16px' }}>
+                    <div style={{
+                      minWidth: 34, height: 28, borderRadius: 8, display: 'inline-flex',
+                      alignItems: 'center', justifyContent: 'center', padding: '0 6px',
+                      background: 'var(--surface-2)', border: '1px solid var(--border)',
+                      fontSize: 11, fontWeight: 800, color: 'var(--text-2)', fontFamily: 'Zain, sans-serif',
+                    }}>
+                      #{order.id}
+                    </div>
+                  </td>
+                  <td style={{ padding: '10px 16px' }}>
+                    <p className="truncate-1" style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>{order.items}</p>
+                    <p style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 2 }}>{order.table} · {order.time}</p>
+                  </td>
+                  <td style={{ padding: '10px 16px', textAlign: 'center' }}>
+                    <span style={{ fontSize: 12, color: 'var(--text-3)' }}>{order.details?.length ?? '—'} أصناف</span>
+                  </td>
+                  <td style={{ padding: '10px 16px', textAlign: 'center' }}>
+                    <span className="num" style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>{order.total} ج</span>
+                  </td>
+                  <td style={{ padding: '10px 16px', textAlign: 'center' }}>
+                    <span className={`badge badge-pill ${statusBadgeClass[order.status] ?? 'badge-default'}`}>
+                      {statusMap[order.status]?.label}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
 
