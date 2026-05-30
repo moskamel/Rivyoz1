@@ -175,15 +175,6 @@ export function Navbar() {
             onMouseLeave={e => e.target.style.color = C.gray700}
             >{l.label}</button>
           ))}
-          <button onClick={() => navigate('/login')} style={{
-            background: 'none', border: 'none', cursor: 'pointer',
-            fontFamily: F, fontWeight: 600, fontSize: 15, color: C.gray700,
-            transition: 'color .15s', padding: '4px 0',
-          }}
-          onMouseEnter={e => e.target.style.color = C.orange}
-          onMouseLeave={e => e.target.style.color = C.gray700}
-          >تسجيل الدخول</button>
-
           <button onClick={toggle} style={{
             width: 36, height: 36, borderRadius: 999,
             background: C.gray100, border: `1.5px solid ${C.gray200}`,
@@ -238,12 +229,6 @@ export function Navbar() {
               borderBottom: `1px solid ${C.gray100}`,
             }}>{l.label}</button>
           ))}
-          <button onClick={() => { navigate('/login'); setMobileOpen(false) }} style={{
-            background: 'none', border: 'none', cursor: 'pointer',
-            fontFamily: F, fontWeight: 700, fontSize: 17, color: C.navy,
-            textAlign: 'right', padding: '12px 0',
-            borderBottom: `1px solid ${C.gray100}`,
-          }}>تسجيل الدخول</button>
           <button className="fazz-btn-primary" onClick={() => { navigate('/login'); setMobileOpen(false) }}
             style={{ marginTop: 12, width: '100%', justifyContent: 'center', fontSize: 16, padding: '14px' }}>
             ابدأ مجاناً
@@ -334,7 +319,7 @@ export function Footer() {
             </div>
             <div>
               <p style={{ fontFamily: F, fontWeight: 800, fontSize: 14, color: C.navy, marginBottom: 16 }}>الحساب</p>
-              {['تسجيل الدخول', 'إنشاء حساب مجاني'].map(l => (
+              {['إنشاء حساب مجاني'].map(l => (
                 <div key={l} style={{ marginBottom: 12 }}>
                   <button onClick={() => navigate('/login')} style={{
                     background: 'none', border: 'none', cursor: 'pointer',
