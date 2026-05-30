@@ -83,8 +83,7 @@ function ImageUpload({ label, hint, value, onChange, aspect = 'banner' }) {
     onChange(b64)
   }
 
-  const isBanner = aspect === 'banner'
-  const h = isBanner ? 120 : 96
+  const h = 120
 
   return (
     <div>
@@ -141,7 +140,7 @@ function ImageUpload({ label, hint, value, onChange, aspect = 'banner' }) {
             </div>
           </>
         ) : (
-          <div style={{ textAlign: 'center', padding: 16 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: 16 }}>
             <Camera size={22} color="var(--text-3)" style={{ marginBottom: 8 }} />
             <p style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-2)', marginBottom: 3 }}>
               {dragging ? 'أفلت الصورة هنا' : 'اضغط أو اسحب صورة'}
