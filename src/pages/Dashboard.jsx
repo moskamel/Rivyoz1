@@ -343,10 +343,11 @@ export default function Dashboard() {
             >
               {/* Order # */}
               <div style={{
-                width: 34, height: 34, borderRadius: 8, flexShrink: 0,
+                minWidth: 34, height: 34, borderRadius: 8, flexShrink: 0,
                 background: 'var(--surface-2)', border: '1px solid var(--border)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 11, fontWeight: 800, color: 'var(--text-2)', fontFamily: 'Inter'
+                fontSize: 11, fontWeight: 800, color: 'var(--text-2)', fontFamily: 'Zain, sans-serif',
+                padding: '0 6px',
               }}>
                 #{order.id}
               </div>
