@@ -332,6 +332,15 @@ function BannersTab() {
       )}
       {toast && <Toast message={toast} />}
     </div>
+    <ConfirmDialog
+      open={confirmDeleteId !== null}
+      title="حذف البانر؟"
+      message="سيتم حذف هذا البانر نهائياً."
+      confirmLabel="احذف"
+      onConfirm={() => { remove(confirmDeleteId); setConfirmDeleteId(null) }}
+      onCancel={() => setConfirmDeleteId(null)}
+    />
+    </>
   )
 }
 
@@ -421,15 +430,6 @@ function ItemsPicker({ selected, onChange }) {
         </>
       )}
     </div>
-    <ConfirmDialog
-      open={confirmDeleteId !== null}
-      title="حذف البانر؟"
-      message="سيتم حذف هذا البانر نهائياً."
-      confirmLabel="احذف"
-      onConfirm={() => { remove(confirmDeleteId); setConfirmDeleteId(null) }}
-      onCancel={() => setConfirmDeleteId(null)}
-    />
-    </>
   )
 }
 
