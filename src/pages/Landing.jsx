@@ -157,7 +157,7 @@ function TrustBar() {
     <section dir="rtl" style={{ background: C_dark.gray50, padding: '0 clamp(16px,6vw,80px)' }}>
       <div style={{ maxWidth: 1100, margin: '0 auto', display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
         {[
-          { val: '+٥٠٠', label: 'مطعم يستخدم Fazz' },
+          { val: '+٥٠٠', label: 'مطعم يستخدم ريڤيو' },
           { val: 'صفر ٪', label: 'عمولة على طلباتك' },
           { val: '+١٢٠٠٠', label: 'طلب يومي على المنصة' },
           { val: '٩٨٪', label: 'نسبة رضا العملاء' },
@@ -219,7 +219,7 @@ function PainSection() {
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 24 }}>
               <div style={{ width: 40, height: 40, borderRadius: 10, background: C.orangeLight, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>🚀</div>
               <div>
-                <p style={{ fontFamily: F, fontWeight: 800, fontSize: 17, color: C.navy }}>مع Fazz</p>
+                <p style={{ fontFamily: F, fontWeight: 800, fontSize: 17, color: C.navy }}>مع ريڤيو</p>
                 <p style={{ fontFamily: F, fontSize: 12, color: C.orange, fontWeight: 600 }}>الطريقة الذكية</p>
               </div>
             </div>
@@ -254,11 +254,11 @@ function PainSection() {
               <p style={{ fontFamily: F, fontSize: 26, fontWeight: 900, color: C.red }}>{commission.toLocaleString('ar-EG')} ج</p>
             </div>
             <div style={{ background: C.greenLight, border: `1.5px solid rgba(25,135,84,.25)`, borderRadius: 14, padding: '18px 20px', textAlign: 'center' }}>
-              <p style={{ fontFamily: F, fontSize: 12, color: C.green, marginBottom: 6, fontWeight: 600 }}>توفيرك مع Fazz شهرياً</p>
+              <p style={{ fontFamily: F, fontSize: 12, color: C.green, marginBottom: 6, fontWeight: 600 }}>توفيرك مع ريڤيو شهرياً</p>
               <p style={{ fontFamily: F, fontSize: 26, fontWeight: 900, color: C.green }}>{Math.max(0, commission - fazzCost).toLocaleString('ar-EG')} ج</p>
             </div>
           </div>
-          <p style={{ fontFamily: F, fontSize: 13, color: C.gray600, textAlign: 'center', marginTop: 14 }}>اشتراك Fazz Pro = ٥٠٠ ج/شهر فقط 💪</p>
+          <p style={{ fontFamily: F, fontSize: 13, color: C.gray600, textAlign: 'center', marginTop: 14 }}>اشتراك ريڤيو Pro = ٥٠٠ ج/شهر فقط 💪</p>
         </div>
       </div>
     </section>
@@ -307,7 +307,7 @@ function FeatureShowcase() {
       icon: People,
       label: 'الفريق والفروع',
       title: 'أدر فريقك وفروعك من شاشة واحدة',
-      desc: 'من موظف واحد لسلسلة فروع — Fazz بيكبر معاك وبيدي كل فرد في الفريق صلاحياته.',
+      desc: 'من موظف واحد لسلسلة فروع — ريڤيو بيكبر معاك وبيدي كل فرد في الفريق صلاحياته.',
       bullets: ['٥ أدوار: مدير، مشرف، كاشير، مطبخ، توصيل','مقارنة أداء الفروع في لوحة واحدة','إضافة وحذف الموظفين بسهولة','صلاحيات وصول مختلفة لكل دور','تقارير مبيعات لكل فرع على حدة'],
       mockup: <TeamMockup />,
     },
@@ -329,7 +329,7 @@ function FeatureShowcase() {
             كل اللي محتاجه لتشغيل مطعمك
           </h2>
           <p style={{ fontFamily: F, fontSize: 16, color: C.gray600, maxWidth: 480, margin: '0 auto' }}>
-            من الطلب الأول للتقرير الشهري — Fazz بيغطي كل خطوة
+            من الطلب الأول للتقرير الشهري — ريڤيو بيغطي كل خطوة
           </p>
         </div>
 
@@ -582,7 +582,7 @@ function HowItWorks() {
           <h2 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(26px,4vw,44px)', color: C.navy, letterSpacing: '-0.5px', margin: '0 0 12px' }}>
             ٣ خطوات — وأنت أون لاين
           </h2>
-          <p style={{ fontFamily: F, fontSize: 16, color: C.gray600 }}>بدون تعقيد ولا تدريب مطوّل — Fazz مصمم عشان تشتغل بيه من أول يوم</p>
+          <p style={{ fontFamily: F, fontSize: 16, color: C.gray600 }}>بدون تعقيد ولا تدريب مطوّل — ريڤيو مصمم عشان تشتغل بيه من أول يوم</p>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))', gap: 24, position: 'relative' }}>
           {steps.map((s, i) => (
@@ -634,8 +634,8 @@ function RestaurantSlider() {
       {/* Header */}
       <div dir="rtl" style={{ maxWidth: 1100, margin: '0 auto', padding: '0 clamp(16px,6vw,80px)', marginBottom: 48, textAlign: 'center' }}>
         <div className="fazz-section-badge" style={{ marginBottom: 16 }}>🏪 مجتمعنا</div>
-        <h2 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(26px,4vw,44px)', color: C.navy, letterSpacing: '-0.5px', margin: '0 0 12px' }}>مطاعم انضمت لـ Fazz</h2>
-        <p style={{ fontFamily: F, fontSize: 16, color: C.gray600, maxWidth: 480, margin: '0 auto' }}>+٥٠٠ مطعم من كل مصر بيستخدموا Fazz كل يوم — وبيوفّروا عمولتهم</p>
+        <h2 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(26px,4vw,44px)', color: C.navy, letterSpacing: '-0.5px', margin: '0 0 12px' }}>مطاعم انضمت لـ ريڤيو</h2>
+        <p style={{ fontFamily: F, fontSize: 16, color: C.gray600, maxWidth: 480, margin: '0 auto' }}>+٥٠٠ مطعم من كل مصر بيستخدموا ريڤيو كل يوم — وبيوفّروا عمولتهم</p>
       </div>
 
       {/* Single seamless row */}
@@ -709,7 +709,7 @@ function Pricing() {
       badge: 'الأكثر شيوعاً', featured: true,
       desc: 'لمطعم شغال وعايز ينمو ويبقى مستقل',
       cta: 'ابدأ الـ Pro',
-      features: ['طلبات غير محدودة — صفر عمولة','ماركتبليس Fazz الموحد','برنامج ولاء متكامل للزبائن','تقارير مبيعات + رؤى AI','إشعارات واتساب للزبائن','إدارة فريق العمل والفروع','دعم ٧ أيام / ٢٤ ساعة','دومين خاص بمطعمك','تخصيص كامل للهوية البصرية'],
+      features: ['طلبات غير محدودة — صفر عمولة','ماركتبليس ريڤيو الموحد','برنامج ولاء متكامل للزبائن','تقارير مبيعات + رؤى AI','إشعارات واتساب للزبائن','إدارة فريق العمل والفروع','دعم ٧ أيام / ٢٤ ساعة','دومين خاص بمطعمك','تخصيص كامل للهوية البصرية'],
     },
   ]
 
@@ -792,9 +792,9 @@ function Testimonials() {
   const { C } = useContext(LandingThemeCtx)
   const [active, setActive] = useState(0)
   const testimonials = [
-    { quote: 'من أول ما اشتركت في Fazz بطلت أدفع ٢٠٪ عمولة. في أول شهر وفّرت أكتر من ١٥٠٠ جنيه. الموقع سهل جداً وعملائي بيحبوا يطلبوا منه.', name: 'محمد الغزالي', restaurant: 'مطعم كبابجي مدينة نصر', stars: 5 },
+    { quote: 'من أول ما اشتركت في ريڤيو بطلت أدفع ٢٠٪ عمولة. في أول شهر وفّرت أكتر من ١٥٠٠ جنيه. الموقع سهل جداً وعملائي بيحبوا يطلبوا منه.', name: 'محمد الغزالي', restaurant: 'مطعم كبابجي مدينة نصر', stars: 5 },
     { quote: 'كنت خايفة إن الإعداد يكون معقد. في ساعة واحدة مطعمي كان أون لاين. دلوقتي QR Code على كل طاولة وعملائي بيطلبوا من موبايلهم.', name: 'نرمين حسن', restaurant: 'كافيه ويف — الإسكندرية', stars: 5 },
-    { quote: 'عندي ٣ فروع وFazz بيخليني أتابعهم كلهم من شاشة واحدة. التقارير اليومية واضحة والأرباح بيّنة. أنصح أي صاحب مطعم يجرب.', name: 'كريم وهبي', restaurant: 'سلسلة شاورما كروز', stars: 5 },
+    { quote: 'عندي ٣ فروع وريڤيو بيخليني أتابعهم كلهم من شاشة واحدة. التقارير اليومية واضحة والأرباح بيّنة. أنصح أي صاحب مطعم يجرب.', name: 'كريم وهبي', restaurant: 'سلسلة شاورما كروز', stars: 5 },
     { quote: 'برنامج الولاء غيّر كل حاجة. زبائني الثابتين بقوا يطلبوا أكتر عشان يكسبوا النقاط. المبيعات زادت ١٨٪ في شهرين بس.', name: 'هند السيد', restaurant: 'مطعم هند للمأكولات الشعبية', stars: 5 },
   ]
   const prev = () => setActive(a => (a - 1 + testimonials.length) % testimonials.length)
@@ -804,7 +804,7 @@ function Testimonials() {
       <div style={{ maxWidth: 900, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: 48 }}>
           <div className="fazz-section-badge" style={{ marginBottom: 16 }}>⭐ آراء العملاء</div>
-          <h2 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(26px,4vw,44px)', color: C.navy, letterSpacing: '-0.5px', margin: '0 0 12px' }}>مطاعم بتثق في Fazz</h2>
+          <h2 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(26px,4vw,44px)', color: C.navy, letterSpacing: '-0.5px', margin: '0 0 12px' }}>مطاعم بتثق في ريڤيو</h2>
         </div>
         <div style={{ position: 'relative' }}>
           <div style={{ background: C.gray50, border: `1.5px solid ${C.gray200}`, borderRadius: 20, padding: 'clamp(28px,5vw,48px)', minHeight: 260 }}>
@@ -833,7 +833,7 @@ function Testimonials() {
           </div>
         </div>
         <div style={{ display: 'flex', gap: 0, marginTop: 44, background: C_dark.gray50, borderRadius: 16, overflow: 'hidden', flexWrap: 'wrap' }}>
-          {[{ val: '٤.٩ ★', label: 'متوسط التقييم' }, { val: '+٥٠٠', label: 'مطعم يستخدم Fazz' }, { val: '٩٨٪', label: 'نسبة الرضا' }].map((s, i) => (
+          {[{ val: '٤.٩ ★', label: 'متوسط التقييم' }, { val: '+٥٠٠', label: 'مطعم يستخدم ريڤيو' }, { val: '٩٨٪', label: 'نسبة الرضا' }].map((s, i) => (
             <div key={i} style={{ flex: '1 1 140px', padding: '24px 20px', textAlign: 'center', borderLeft: i > 0 ? '1px solid rgba(255,255,255,.1)' : 'none' }}>
               <p style={{ fontFamily: "'Zain',sans-serif", fontWeight: 900, fontSize: 30, color: C.orange, marginBottom: 4 }}>{s.val}</p>
               <p style={{ fontFamily: F, fontSize: 13, color: 'rgba(255,255,255,.65)' }}>{s.label}</p>
@@ -850,12 +850,12 @@ function FAQ() {
   const { C } = useContext(LandingThemeCtx)
   const [open, setOpen] = useState(null)
   const items = [
-    { q: 'هل في عمولة على الطلبات من Fazz؟', a: 'لا خالص. Fazz مش بياخد أي عمولة على طلباتك. بتدفع اشتراك ثابت كل شهر بس — والباقي كله ليك أنت.' },
+    { q: 'هل في عمولة على الطلبات من ريڤيو؟', a: 'لا خالص. ريڤيو مش بياخد أي عمولة على طلباتك. بتدفع اشتراك ثابت كل شهر بس — والباقي كله ليك أنت.' },
     { q: 'كيف يطلب زبائني من موقعي؟', a: 'بيمسحوا QR Code اللي بتطبعه أو بيدخلوا على رابط موقعك مباشرة من الموبايل. مش محتاجين يحملوا أي تطبيق.' },
     { q: 'ممكن أدير أكتر من فرع؟', a: 'آه. الـ Pro plan بيدعم فروع غير محدودة — كل فرع بلوحة بياناته الخاصة، مع مقارنة شاملة بين الفروع من شاشة واحدة.' },
     { q: 'هل محتاج خبرة تقنية عشان أبدأ؟', a: 'مش محتاج خالص. الإعداد الكامل بياخد أقل من ٣٠ دقيقة بدون أي كود ولا تصميم. لو احتجت مساعدة، فريق الدعم موجود ٧ أيام.' },
     { q: 'ممكن أغير تصميم موقعي وقائمتي في أي وقت؟', a: 'آه تماماً. بتغير الألوان، الصور، الأصناف، والأسعار لحظياً من لوحة التحكم — بدون ما تحتاج حد تاني.' },
-    { q: 'إيه الفرق بين المجاني والـ Pro؟', a: 'المجاني كويس للبداية ولحد ٣٠ طلب يومياً. الـ Pro بيفتح طلبات غير محدودة، برنامج الولاء، تقارير AI، إدارة الفريق، والظهور في ماركتبليس Fazz.' },
+    { q: 'إيه الفرق بين المجاني والـ Pro؟', a: 'المجاني كويس للبداية ولحد ٣٠ طلب يومياً. الـ Pro بيفتح طلبات غير محدودة، برنامج الولاء، تقارير AI، إدارة الفريق، والظهور في ماركتبليس ريڤيو.' },
   ]
   return (
     <section dir="rtl" style={{ padding: 'clamp(64px,8vw,100px) clamp(16px,6vw,80px)', background: C.gray50, borderTop: `1.5px solid ${C.gray200}` }}>
@@ -908,7 +908,7 @@ function FinalCTA() {
         </div>
         <h2 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(30px,5vw,58px)', color: '#fff', lineHeight: 1.2, letterSpacing: '-1px', margin: '0 0 16px' }}>جاهز تبدأ؟</h2>
         <p style={{ fontFamily: F, fontSize: 'clamp(15px,2vw,19px)', color: 'rgba(255,255,255,.7)', margin: '0 0 12px', lineHeight: 1.7 }}>١٤ يوم مجاناً — لا بطاقة بنكية — إلغاء في أي وقت</p>
-        <p style={{ fontFamily: F, fontSize: 14, color: C.orange, fontWeight: 700, margin: '0 0 44px' }}>انضم لـ +٥٠٠ مطعم بيستخدموا Fazz كل يوم</p>
+        <p style={{ fontFamily: F, fontSize: 14, color: C.orange, fontWeight: 700, margin: '0 0 44px' }}>انضم لـ +٥٠٠ مطعم بيستخدموا ريڤيو كل يوم</p>
         <button className="fazz-btn-primary" onClick={() => navigate('/login')} style={{ fontSize: 18, padding: '18px 52px', boxShadow: '0 16px 48px rgba(249,115,22,.5)' }}>
           ابدأ دلوقتي — مجاناً
         </button>
@@ -934,7 +934,7 @@ function WhatsAppFloat() {
     return () => window.removeEventListener('scroll', fn)
   }, [])
   return (
-    <a href="https://wa.me/201000000000?text=مرحبا،%20أريد%20معرفة%20المزيد%20عن%20Fazz" target="_blank" rel="noopener noreferrer"
+    <a href="https://wa.me/201000000000?text=مرحبا،%20أريد%20معرفة%20المزيد%20عن%20ريڤيو" target="_blank" rel="noopener noreferrer"
       style={{ position: 'fixed', bottom: 28, left: 24, zIndex: 200, width: 56, height: 56, borderRadius: '50%', background: '#25D366', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 20px rgba(37,211,102,.45)', textDecoration: 'none', transition: 'transform .2s,opacity .3s', opacity: show ? 1 : 0, transform: show ? 'scale(1)' : 'scale(0.7)', pointerEvents: show ? 'all' : 'none' }}
       onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.1)'}
       onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
@@ -960,7 +960,7 @@ export default function Landing() {
   const C = isDark ? C_dark : C_light
 
   useEffect(() => {
-    document.title = 'Fazz فَذّ — امتلك مطعمك الرقمي بدون عمولة'
+    document.title = 'ريڤيو — امتلك مطعمك الرقمي بدون عمولة'
     window.scrollTo(0, 0)
   }, [])
 

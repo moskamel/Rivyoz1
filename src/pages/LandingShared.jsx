@@ -155,11 +155,11 @@ export function Navbar() {
         {/* Logo */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer' }} onClick={handleLogo}>
           <div style={{ width: 40, height: 40, borderRadius: 12, background: C.orange, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <span style={{ fontFamily: F, fontWeight: 900, fontSize: 20, color: '#fff', letterSpacing: '-1px' }}>F</span>
+            <span style={{ fontFamily: F, fontWeight: 900, fontSize: 20, color: '#fff', letterSpacing: '-1px' }}>R</span>
           </div>
           <div>
-            <span style={{ fontFamily: F, fontWeight: 900, fontSize: 22, color: C.navy, letterSpacing: '-0.5px' }}>Fazz</span>
-            <span style={{ fontFamily: F, fontSize: 11, color: C.gray600, display: 'block', lineHeight: 1, marginTop: 1 }}>فَذّ</span>
+            <span style={{ fontFamily: F, fontWeight: 900, fontSize: 22, color: C.navy, letterSpacing: '-0.5px' }}>Rivyo</span>
+            <span style={{ fontFamily: F, fontSize: 11, color: C.gray600, display: 'block', lineHeight: 1, marginTop: 1 }}>ريڤيو</span>
           </div>
         </div>
 
@@ -264,11 +264,11 @@ export function Footer() {
           <div style={{ maxWidth: 280 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14, cursor: 'pointer' }} onClick={() => navigate('/rivyo')}>
               <div style={{ width: 40, height: 40, borderRadius: 12, background: C.orange, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <span style={{ fontFamily: F, fontWeight: 900, fontSize: 20, color: '#fff' }}>F</span>
+                <span style={{ fontFamily: F, fontWeight: 900, fontSize: 20, color: '#fff' }}>R</span>
               </div>
               <div>
-                <span style={{ fontFamily: F, fontWeight: 900, fontSize: 20, color: C.navy }}>Fazz</span>
-                <span style={{ fontFamily: F, fontSize: 11, color: C.gray600, display: 'block', lineHeight: 1, marginTop: 1 }}>فَذّ</span>
+                <span style={{ fontFamily: F, fontWeight: 900, fontSize: 20, color: C.navy }}>Rivyo</span>
+                <span style={{ fontFamily: F, fontSize: 11, color: C.gray600, display: 'block', lineHeight: 1, marginTop: 1 }}>ريڤيو</span>
               </div>
             </div>
             <p style={{ fontFamily: F, fontSize: 14, color: C.gray600, lineHeight: 1.8, margin: '0 0 20px' }}>
@@ -277,7 +277,7 @@ export function Footer() {
             <div style={{ display: 'flex', gap: 10 }}>
               {[
                 { Icon: Call,      href: 'tel:+201000000000' },
-                { Icon: Sms,       href: 'mailto:hello@fazz.app' },
+                { Icon: Sms,       href: 'mailto:hello@rivyo.app' },
                 { Icon: Instagram, href: '#' },
                 { Icon: Facebook,  href: '#' },
               ].map(({ Icon, href }, i) => (
@@ -321,7 +321,7 @@ export function Footer() {
               <p style={{ fontFamily: F, fontWeight: 800, fontSize: 14, color: C.navy, marginBottom: 16 }}>تواصل معنا</p>
               <div style={{ fontFamily: F, fontSize: 14, color: C.gray600, lineHeight: 2.2 }}>
                 <div>📞 ٠١٠٠٠٠٠٠٠٠٠</div>
-                <div>📧 hello@fazz.app</div>
+                <div>📧 hello@rivyo.app</div>
                 <div style={{ marginTop: 4 }}>
                   <a href="https://wa.me/201000000000" target="_blank" rel="noopener noreferrer"
                     style={{ color: '#25D366', fontWeight: 700, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
@@ -337,7 +337,7 @@ export function Footer() {
           paddingTop: 24, borderTop: `1.5px solid ${C.gray200}`,
           display: 'flex', gap: 12, justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap',
         }}>
-          <span style={{ fontFamily: F, fontSize: 13, color: C.gray600 }}>© 2025 Fazz — جميع الحقوق محفوظة</span>
+          <span style={{ fontFamily: F, fontSize: 13, color: C.gray600 }}>© 2025 Rivyo — جميع الحقوق محفوظة</span>
           <div style={{ display: 'flex', gap: 20 }}>
             {[
               { label: 'سياسة الخصوصية', path: '/privacy' },
