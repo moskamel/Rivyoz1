@@ -551,3 +551,49 @@ html, body {
 @media (max-width: 640px) {
   .admin-page-content { padding: 12px; }
 }
+
+/* ─── Scroll Reveal System ──────────────────────────────────── */
+@keyframes sr-up    { from{opacity:0;transform:translateY(32px)} to{opacity:1;transform:translateY(0)} }
+@keyframes sr-scale { from{opacity:0;transform:scale(.95)} to{opacity:1;transform:scale(1)} }
+@keyframes sr-left  { from{opacity:0;transform:translateX(24px)} to{opacity:1;transform:translateX(0)} }
+
+.sr { opacity: 0; }
+.sr.sr-visible { animation: sr-up 0.55s cubic-bezier(.22,1,.36,1) both; }
+.sr-scale.sr-visible { animation: sr-scale 0.45s cubic-bezier(.34,1.56,.64,1) both; }
+.sr-left.sr-visible  { animation: sr-left 0.5s cubic-bezier(.22,1,.36,1) both; }
+
+.sr-stagger .sr:nth-child(1).sr-visible { animation-delay: 0s }
+.sr-stagger .sr:nth-child(2).sr-visible { animation-delay: .08s }
+.sr-stagger .sr:nth-child(3).sr-visible { animation-delay: .16s }
+.sr-stagger .sr:nth-child(4).sr-visible { animation-delay: .24s }
+.sr-stagger .sr:nth-child(5).sr-visible { animation-delay: .32s }
+.sr-stagger .sr:nth-child(6).sr-visible { animation-delay: .40s }
+.sr-stagger .sr:nth-child(7).sr-visible { animation-delay: .48s }
+.sr-stagger .sr:nth-child(8).sr-visible { animation-delay: .56s }
+
+/* ─── Theme Transition ──────────────────────────────────────── */
+:root, [data-theme="light"] {
+  transition: background-color .35s ease, color .25s ease, border-color .25s ease;
+}
+.glass, .glass-interactive {
+  transition: background .3s ease, border-color .3s ease, box-shadow .3s ease, transform .18s ease;
+}
+
+/* ─── Count-Up Number ───────────────────────────────────────── */
+.num-animate {
+  display: inline-block;
+  transition: opacity .2s ease;
+}
+
+/* ─── Feature Tab Fade ──────────────────────────────────────── */
+@keyframes tab-fade { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+.tab-content-enter { animation: tab-fade .35s cubic-bezier(.22,1,.36,1) both; }
+
+/* ─── FAQ Accordion ─────────────────────────────────────────── */
+.faq-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows .3s cubic-bezier(.22,1,.36,1);
+}
+.faq-body.faq-open { grid-template-rows: 1fr; }
+.faq-body > div { overflow: hidden; }

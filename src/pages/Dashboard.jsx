@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { TrendUp, TrendDown, ShoppingBag, People, DollarSquare, ArrowLeft, ToggleOn, ExportSquare } from 'iconsax-react'
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
@@ -23,10 +23,46 @@ const CustomTooltip = ({ active, payload, label }) => {
   return null
 }
 
+function useStatCountUp(target) {
+  const [display, setDisplay] = useState(0)
+  const [triggered, setTriggered] = useState(false)
+  const rafRef = useRef(null)
+  const cardRef = useRef(null)
+
+  useEffect(() => {
+    const el = cardRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setTriggered(true); observer.disconnect() } },
+      { threshold: 0.3 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
+    if (!triggered) return
+    const duration = 900
+    const start = performance.now()
+    const easeOut = t => 1 - Math.pow(1 - t, 3)
+    const tick = now => {
+      const p = Math.min((now - start) / duration, 1)
+      setDisplay(Math.round(easeOut(p) * target))
+      if (p < 1) rafRef.current = requestAnimationFrame(tick)
+    }
+    rafRef.current = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(rafRef.current)
+  }, [triggered, target])
+
+  return { cardRef, display }
+}
+
 function StatCard({ label, value, change, icon: Icon, color }) {
   const positive = change >= 0
+  const { cardRef, display } = useStatCountUp(value)
+
   return (
-    <div className="glass glass-interactive" style={{ padding: '20px' }}>
+    <div ref={cardRef} className="glass glass-interactive" style={{ padding: '20px' }}>
       <div className="flex items-start justify-between" style={{ marginBottom: 16 }}>
         <div style={{
           width: 38, height: 38, borderRadius: 10,
@@ -45,7 +81,7 @@ function StatCard({ label, value, change, icon: Icon, color }) {
         )}
       </div>
       <p className="num" style={{ fontSize: 28, fontWeight: 800, color: 'var(--text)', letterSpacing: '-0.02em', lineHeight: 1, marginBottom: 6 }}>
-        {value.toLocaleString()}
+        {display.toLocaleString()}
       </p>
       <p style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-3)', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
         {label}

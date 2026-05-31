@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react'
+import { useEffect, useState, useContext, useRef, cloneElement, Children } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   Global, Scan, Notification, Star1, Shop,
@@ -11,14 +11,94 @@ import {
   GlobalStyles, Navbar, Footer,
 } from './LandingShared'
 
+/* ─── Scroll Reveal Helpers ──────────────────────────────────── */
+function useRevealRef(delay = 0) {
+  const ref = useRef(null)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => el.classList.add('sr-visible'), delay)
+          observer.disconnect()
+        }
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [delay])
+  return ref
+}
+
+function Reveal({ children, delay = 0, className = '', style = {} }) {
+  const ref = useRevealRef(delay)
+  return <div ref={ref} className={`sr ${className}`} style={style}>{children}</div>
+}
+
+function StaggerReveal({ children, style = {}, className = '', tag: Tag = 'div' }) {
+  const ref = useRef(null)
+  const [triggered, setTriggered] = useState(false)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const obs = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) { setTriggered(true); obs.disconnect() } },
+      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+
+  const arr = Children.toArray(children)
+  return (
+    <Tag ref={ref} className={className} style={style}>
+      {arr.map((child, i) =>
+        cloneElement(child, {
+          style: {
+            ...child.props.style,
+            opacity: triggered ? undefined : 0,
+            animation: triggered
+              ? `sr-up .55s cubic-bezier(.22,1,.36,1) ${i * 80}ms both`
+              : 'none',
+          }
+        })
+      )}
+    </Tag>
+  )
+}
+
 /* ─── Dashboard Mockup ───────────────────────────────────────── */
-function DashboardMockup() {
-  const { C } = useContext(LandingThemeCtx)
-  const orders = [
-    { id: '#٢١٤', item: 'كفتة مشوية × ٢',  status: 'جديد',    dot: C.orange },
+const ORDER_CYCLE = [
+  [
+    { id: '#٢١٤', item: 'كفتة مشوية × ٢',  status: 'جديد',    dot: '#F97316' },
     { id: '#٢١٣', item: 'شاورما دجاج',      status: 'تحضير',   dot: '#3B82F6' },
     { id: '#٢١٢', item: 'بيتزا مارغريتا',  status: 'جاهز ✓',  dot: '#22C55E' },
-  ]
+  ],
+  [
+    { id: '#٢١٥', item: 'برجر دجاج × ٢',   status: 'جديد',    dot: '#F97316' },
+    { id: '#٢١٤', item: 'كفتة مشوية × ٢',  status: 'تحضير',   dot: '#EAB308' },
+    { id: '#٢١٣', item: 'شاورما دجاج',      status: 'جاهز ✓',  dot: '#22C55E' },
+  ],
+  [
+    { id: '#٢١٦', item: 'فراخ مشوية',       status: 'جديد',    dot: '#F97316' },
+    { id: '#٢١٥', item: 'برجر دجاج × ٢',   status: 'تحضير',   dot: '#3B82F6' },
+    { id: '#٢١٤', item: 'كفتة مشوية × ٢',  status: 'توصيل 🛵', dot: '#8B5CF6' },
+  ],
+]
+
+function DashboardMockup() {
+  const { C } = useContext(LandingThemeCtx)
+  const [cycleIdx, setCycleIdx] = useState(0)
+
+  useEffect(() => {
+    const id = setInterval(() => setCycleIdx(i => (i + 1) % ORDER_CYCLE.length), 2400)
+    return () => clearInterval(id)
+  }, [])
+
+  const orders = ORDER_CYCLE[cycleIdx]
   return (
     <div className="fazz-float" style={{
       background: C_dark.gray50, borderRadius: 20, padding: 20,
@@ -48,14 +128,17 @@ function DashboardMockup() {
         ))}
       </div>
       <div style={{ background: 'rgba(255,255,255,.04)', borderRadius: 14, overflow: 'hidden' }}>
-        <div style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,.06)' }}>
+        <div style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <p style={{ fontFamily: F, fontSize: 12, fontWeight: 700, color: 'rgba(255,255,255,.7)' }}>الطلبات الحالية</p>
+          <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#22C55E', boxShadow: '0 0 6px #22C55E', display: 'inline-block', animation: 'pulse 1.5s ease-in-out infinite' }} />
         </div>
         {orders.map((o, i) => (
-          <div key={i} style={{
+          <div key={o.id} style={{
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             padding: '11px 14px',
             borderBottom: i < orders.length - 1 ? '1px solid rgba(255,255,255,.04)' : 'none',
+            animation: 'fadeIn .3s ease both',
+            animationDelay: `${i * 0.06}s`,
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <span style={{ width: 8, height: 8, borderRadius: '50%', background: o.dot, flexShrink: 0 }} />
@@ -155,7 +238,7 @@ function TrustBar() {
   const { C } = useContext(LandingThemeCtx)
   return (
     <section dir="rtl" style={{ background: C_dark.gray50, padding: '0 clamp(16px,6vw,80px)' }}>
-      <div style={{ maxWidth: 1100, margin: '0 auto', display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
+      <StaggerReveal style={{ maxWidth: 1100, margin: '0 auto', display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
         {[
           { val: '+٥٠٠', label: 'مطعم يستخدم ريڤيو' },
           { val: 'صفر ٪', label: 'عمولة على طلباتك' },
@@ -171,7 +254,7 @@ function TrustBar() {
             <p style={{ fontFamily: F, fontSize: 12, color: 'rgba(255,255,255,.55)', lineHeight: 1.4 }}>{s.label}</p>
           </div>
         ))}
-      </div>
+      </StaggerReveal>
     </section>
   )
 }
@@ -196,7 +279,7 @@ function PainSection() {
             تطبيقات الطلبات بتاخد ٢٠٪ من كل طلب — وانت بتدفع وهم بيكسبوا
           </p>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 20, marginBottom: 48 }}>
+        <StaggerReveal style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 20, marginBottom: 48 }}>
           <div style={{ background: C_dark.gray50, borderRadius: 20, padding: 32, color: '#fff' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 24 }}>
               <div style={{ width: 40, height: 40, borderRadius: 10, background: 'rgba(255,255,255,.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>😤</div>
@@ -230,7 +313,7 @@ function PainSection() {
               </div>
             ))}
           </div>
-        </div>
+        </StaggerReveal>
         <h3 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(20px,3vw,28px)', color: C.navy, textAlign: 'center', margin: '0 0 24px' }}>
           احسب كم بتخسر كل شهر 👇
         </h3>
@@ -323,7 +406,7 @@ function FeatureShowcase() {
       borderTop: `1.5px solid ${C.gray200}`,
     }}>
       <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: 52 }}>
+        <Reveal style={{ textAlign: 'center', marginBottom: 52 }}>
           <div className="fazz-section-badge" style={{ marginBottom: 16 }}>✨ المميزات</div>
           <h2 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(26px,4vw,44px)', color: C.navy, letterSpacing: '-0.5px', margin: '0 0 12px' }}>
             كل اللي محتاجه لتشغيل مطعمك
@@ -331,7 +414,7 @@ function FeatureShowcase() {
           <p style={{ fontFamily: F, fontSize: 16, color: C.gray600, maxWidth: 480, margin: '0 auto' }}>
             من الطلب الأول للتقرير الشهري — ريڤيو بيغطي كل خطوة
           </p>
-        </div>
+        </Reveal>
 
         {/* Tab bar */}
         <div style={{ display: 'flex', gap: 8, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 40 }}>
@@ -359,7 +442,7 @@ function FeatureShowcase() {
         </div>
 
         {/* Content panel */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 32, alignItems: 'center' }}>
+        <div key={active} className="tab-content-enter" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 32, alignItems: 'center' }}>
           {/* Text side */}
           <div>
             <div style={{ width: 52, height: 52, borderRadius: 14, background: C.orangeLight, border: `1.5px solid ${C.orangeBorder}`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
@@ -584,13 +667,10 @@ function HowItWorks() {
           </h2>
           <p style={{ fontFamily: F, fontSize: 16, color: C.gray600 }}>بدون تعقيد ولا تدريب مطوّل — ريڤيو مصمم عشان تشتغل بيه من أول يوم</p>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))', gap: 24, position: 'relative' }}>
+        <StaggerReveal style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))', gap: 24, position: 'relative' }}>
           {steps.map((s, i) => (
-            <div key={i} style={{ position: 'relative' }}>
-              {i < steps.length - 1 && (
-                <div style={{ position: 'absolute', top: 32, left: '-12%', width: '24%', height: 2, background: `linear-gradient(90deg, ${C.orangeBorder}, transparent)`, zIndex: 0 }} />
-              )}
-              <div className="fazz-card" style={{ padding: '32px 28px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
+            <div key={i}>
+              <div className="fazz-card" style={{ padding: '32px 28px', textAlign: 'center' }}>
                 <div style={{ width: 56, height: 56, borderRadius: '50%', background: C.orange, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Zain', sans-serif", fontWeight: 900, fontSize: 22, margin: '0 auto 18px', boxShadow: `0 8px 24px ${C.orangeBorder}` }}>{s.num}</div>
                 <div style={{ fontSize: 36, marginBottom: 14 }}>{s.icon}</div>
                 <h3 style={{ fontFamily: F, fontWeight: 800, fontSize: 19, color: C.navy, margin: '0 0 10px' }}>{s.title}</h3>
@@ -598,7 +678,7 @@ function HowItWorks() {
               </div>
             </div>
           ))}
-        </div>
+        </StaggerReveal>
         <div style={{ textAlign: 'center', marginTop: 44 }}>
           <button className="fazz-btn-primary" onClick={() => navigate('/login')} style={{ fontSize: 16, padding: '15px 40px' }}>ابدأ مجاناً دلوقتي</button>
         </div>
@@ -656,7 +736,7 @@ function RestaurantSlider() {
 
       {/* Stats bar */}
       <div dir="rtl" style={{ maxWidth: 1100, margin: '44px auto 0', padding: '0 clamp(16px,6vw,80px)' }}>
-        <div style={{ display: 'flex', gap: 0, background: C.white, border: `1.5px solid ${C.gray200}`, borderRadius: 20, overflow: 'hidden', flexWrap: 'wrap' }}>
+        <StaggerReveal style={{ display: 'flex', gap: 0, background: C.white, border: `1.5px solid ${C.gray200}`, borderRadius: 20, overflow: 'hidden', flexWrap: 'wrap' }}>
           {[
             { val: '+٥٠٠', label: 'مطعم مسجل', icon: '🏪' },
             { val: '+١٥', label: 'محافظة مصرية', icon: '📍' },
@@ -669,7 +749,7 @@ function RestaurantSlider() {
               <p style={{ fontFamily: F, fontSize: 13, color: C.gray600 }}>{s.label}</p>
             </div>
           ))}
-        </div>
+        </StaggerReveal>
       </div>
     </section>
   )
@@ -716,7 +796,7 @@ function Pricing() {
   return (
     <section id="pricing" dir="rtl" style={{ padding: 'clamp(64px,8vw,100px) clamp(16px,6vw,80px)', background: C.white, borderTop: `1.5px solid ${C.gray200}` }}>
       <div style={{ maxWidth: 900, margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: 48 }}>
+        <Reveal style={{ textAlign: 'center', marginBottom: 48 }}>
           <div className="fazz-section-badge" style={{ marginBottom: 16 }}>💰 الأسعار</div>
           <h2 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(26px,4vw,44px)', color: C.navy, letterSpacing: '-0.5px', margin: '0 0 12px' }}>
             سعر واضح. بدون مفاجآت.
@@ -731,7 +811,7 @@ function Pricing() {
               <span style={{ background: C.green, color: '#fff', fontSize: 10, fontWeight: 800, padding: '2px 7px', borderRadius: 20 }}>وفّر ٢٠٪</span>
             </button>
           </div>
-        </div>
+        </Reveal>
 
         <div style={{ display: 'flex', gap: 24, justifyContent: 'center', flexWrap: 'wrap', alignItems: 'stretch' }}>
           {plans.map((p, i) => {
@@ -871,19 +951,21 @@ function FAQ() {
           {items.map((item, i) => {
             const isOpen = open === i
             return (
-              <div key={i} style={{ background: C.white, border: `1.5px solid ${isOpen ? C.orange : C.gray200}`, borderRadius: 16, overflow: 'hidden', transition: 'border-color .2s' }}>
+              <div key={i} style={{ background: C.white, border: `1.5px solid ${isOpen ? C.orange : C.gray200}`, borderRadius: 16, overflow: 'hidden', transition: 'border-color .25s' }}>
                 <button onClick={() => setOpen(isOpen ? null : i)} style={{
                   width: '100%', padding: '18px 22px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12,
                   background: 'transparent', border: 'none', cursor: 'pointer', textAlign: 'right',
                 }}>
                   <span style={{ fontFamily: F, fontSize: 15, fontWeight: 700, color: isOpen ? C.orange : C.navy }}>{item.q}</span>
-                  <ArrowDown2 size={18} color={isOpen ? C.orange : C.gray600} style={{ flexShrink: 0, transform: isOpen ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform .2s' }} />
+                  <ArrowDown2 size={18} color={isOpen ? C.orange : C.gray600} style={{ flexShrink: 0, transform: isOpen ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform .25s cubic-bezier(.22,1,.36,1)' }} />
                 </button>
-                {isOpen && (
-                  <div style={{ padding: '0 22px 18px', borderTop: `1px solid ${C.gray200}` }}>
-                    <p style={{ fontFamily: F, fontSize: 14, color: C.gray700, lineHeight: 1.8, margin: '14px 0 0' }}>{item.a}</p>
+                <div className={`faq-body${isOpen ? ' faq-open' : ''}`}>
+                  <div>
+                    <div style={{ padding: '0 22px 18px', borderTop: `1px solid ${C.gray200}` }}>
+                      <p style={{ fontFamily: F, fontSize: 14, color: C.gray700, lineHeight: 1.8, margin: '14px 0 0' }}>{item.a}</p>
+                    </div>
                   </div>
-                )}
+                </div>
               </div>
             )
           })}

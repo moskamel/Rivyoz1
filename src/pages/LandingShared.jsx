@@ -66,10 +66,17 @@ export function GlobalStyles() {
       @keyframes fadeIn   { from{opacity:0} to{opacity:1} }
       @keyframes pulse    { 0%,100%{opacity:1} 50%{opacity:.5} }
       @keyframes marquee  { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-      @keyframes float    { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
-      .fazz-fadeup   { animation: fadeUp 0.55s ease both }
+      @keyframes float    { 0%,100%{transform:translateY(0) rotate(-0.5deg)} 33%{transform:translateY(-12px) rotate(0.5deg)} 66%{transform:translateY(-6px) rotate(-0.25deg)} }
+      @keyframes floatBadge { 0%,100%{transform:translateY(0) rotate(-1deg)} 50%{transform:translateY(-8px) rotate(1deg)} }
+      .fazz-fadeup   { animation: fadeUp 0.55s cubic-bezier(.22,1,.36,1) both }
       .fazz-fadein   { animation: fadeIn 0.4s ease both }
-      .fazz-float    { animation: float 4s ease-in-out infinite }
+      .fazz-float    { animation: float 5s ease-in-out infinite }
+      .fazz-float-badge { animation: floatBadge 4s ease-in-out infinite }
+      html, body, * { transition: background-color .3s ease, border-color .25s ease, color .2s ease; }
+      *[style*="animation"], .fazz-float, .fazz-float-badge, .fazz-btn-primary, .fazz-btn-outline { transition: none !important; }
+      .fazz-btn-primary { transition: background .18s, transform .15s, box-shadow .18s !important; }
+      .fazz-btn-outline { transition: border-color .18s, color .18s, transform .15s !important; }
+      .fazz-card        { transition: border-color .2s, transform .2s, box-shadow .2s !important; }
       .fazz-btn-primary {
         display:inline-flex; align-items:center; gap:8px;
         background:${C.orange}; color:#fff; border:none;
