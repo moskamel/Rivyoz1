@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ShoppingCart, CloseCircle, SearchNormal1, ArrowLeft2, ArrowRight2, Tag, Flash, HambergerMenu, Moon, Sun, Location } from 'iconsax-react'
-import { getConfig, getMenuItems, getCategories, getBanners, getCombos, getCustomerProfile, clearCustomerProfile, getCustomerPoints, getReviews, addReview } from '../lib/restaurantStore'
+import { ShoppingCart, CloseCircle, SearchNormal1, ArrowLeft2, ArrowRight2, Tag, Flash, HambergerMenu, Moon, Sun, Location, ArrowDown2, Check } from 'iconsax-react'
+import { getConfig, getMenuItems, getCategories, getBanners, getCombos, getCustomerProfile, clearCustomerProfile, getCustomerPoints, getReviews, addReview, getBranches } from '../lib/restaurantStore'
 import { useCart } from './CartContext'
 import { useTheme } from '../lib/ThemeContext'
 import CustomerFooter from './CustomerFooter'
@@ -353,14 +353,108 @@ function ReviewsSection({ config, customerProfile, navigate }) {
   )
 }
 
+/* ─── Branch Picker Sheet ───────────────────────────────────── */
+function BranchPickerSheet({ branches, selected, accentColor, onSelect, onClose }) {
+  return (
+    <>
+      <div
+        onClick={onClose}
+        style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 300 }}
+      />
+      <div style={{
+        position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 301,
+        background: 'var(--surface)', borderRadius: '24px 24px 0 0',
+        maxWidth: 480, margin: '0 auto',
+        fontFamily: 'Zain, sans-serif',
+        boxShadow: '0 -8px 40px rgba(0,0,0,0.2)',
+      }} dir="rtl">
+        {/* Handle */}
+        <div style={{ display: 'flex', justifyContent: 'center', paddingTop: 12, paddingBottom: 4 }} onClick={onClose}>
+          <div style={{ width: 40, height: 4, background: 'var(--border-strong)', borderRadius: 2 }} />
+        </div>
+        {/* Header */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 20px 14px', borderBottom: '1px solid var(--border)' }}>
+          <div>
+            <p style={{ fontWeight: 800, fontSize: 16, color: 'var(--text)', marginBottom: 2 }}>اختر فرعك</p>
+            <p style={{ fontSize: 12, color: 'var(--text-3)', fontWeight: 500 }}>سيتم التوصيل من الفرع المختار</p>
+          </div>
+          <button onClick={onClose} style={{ width: 32, height: 32, borderRadius: '50%', background: 'var(--surface-2)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-2)' }}>
+            <CloseCircle size={16} />
+          </button>
+        </div>
+        {/* Branch list */}
+        <div style={{ padding: '8px 16px 40px', display: 'flex', flexDirection: 'column', gap: 10, maxHeight: '60vh', overflowY: 'auto' }}>
+          {branches.map(branch => {
+            const isActive = selected?.id === branch.id
+            return (
+              <button
+                key={branch.id}
+                onClick={() => { onSelect(branch); onClose() }}
+                style={{
+                  width: '100%', textAlign: 'right', padding: '14px 16px',
+                  borderRadius: 16,
+                  background: isActive ? `${accentColor}10` : 'var(--surface-2)',
+                  border: isActive ? `2px solid ${accentColor}` : '1.5px solid var(--border)',
+                  cursor: 'pointer', fontFamily: 'Zain, sans-serif',
+                  transition: 'all 0.15s',
+                  display: 'flex', alignItems: 'center', gap: 14,
+                }}
+              >
+                {/* Icon */}
+                <div style={{ width: 44, height: 44, borderRadius: 14, background: isActive ? `${accentColor}20` : 'var(--surface-3)', border: `1.5px solid ${isActive ? accentColor + '40' : 'var(--border)'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: 20 }}>
+                  🏪
+                </div>
+                {/* Info */}
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                    <span style={{ fontSize: 14, fontWeight: 800, color: isActive ? accentColor : 'var(--text)' }}>
+                      {branch.name}
+                    </span>
+                    <span style={{
+                      fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 8,
+                      background: branch.isOpen ? '#DCFCE7' : '#FEE2E2',
+                      color: branch.isOpen ? '#166534' : '#991B1B',
+                    }}>
+                      {branch.isOpen ? 'مفتوح' : 'مغلق'}
+                    </span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginBottom: 3 }}>
+                    <Location size={11} color="var(--text-3)" />
+                    <span style={{ fontSize: 12, color: 'var(--text-3)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{branch.address}</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <span style={{ fontSize: 11, color: 'var(--text-3)' }}>🕐 {branch.opensAt} – {branch.closesAt}</span>
+                    {branch.phone && <span style={{ fontSize: 11, color: 'var(--text-3)' }}>📞 {branch.phone}</span>}
+                  </div>
+                </div>
+                {/* Check */}
+                {isActive && (
+                  <div style={{ width: 26, height: 26, borderRadius: '50%', background: accentColor, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Check size={14} color="white" />
+                  </div>
+                )}
+              </button>
+            )
+          })}
+        </div>
+      </div>
+    </>
+  )
+}
+
 /* ─── Main StoreFront ───────────────────────────────────────── */
 export default function StoreFront() {
   const navigate = useNavigate()
   const { isDark, toggle } = useTheme()
   const config = getConfig()
+  const branches = getBranches()
   const menuItems = getMenuItems()
   const categories = getCategories()
   const { addItem, clearCart, itemCount, total, cartRestaurant } = useCart()
+
+  const defaultBranch = branches.find(b => b.isOpen) || branches[0] || null
+  const [selectedBranch, setSelectedBranch] = useState(defaultBranch)
+  const [branchSheetOpen, setBranchSheetOpen] = useState(false)
 
   const customerProfile = getCustomerProfile()
   const pts = customerProfile ? getCustomerPoints(customerProfile.phone) : null
@@ -574,15 +668,35 @@ export default function StoreFront() {
             <ArrowRight2 size={20} />
           </button>
 
-          {/* Restaurant name — 15px from back button */}
+          {/* Restaurant name + branch picker */}
           <div style={{ marginRight: 15, flex: 1, minWidth: 0 }}>
             <p style={{ fontWeight: 900, fontSize: 15, color: 'var(--text)', lineHeight: 1.2 }}>{config.name}</p>
             <p style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 1 }}>⭐ 4.9 · {config.deliveryTime} دقيقة · توصيل 15ج</p>
-            {config.address && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: 3, marginTop: 2 }}>
-                <Location size={10} color="var(--text-3)" />
-                <span style={{ fontSize: 10, color: 'var(--text-3)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{config.address}</span>
-              </div>
+            {branches.length > 0 && (
+              <button
+                onClick={() => branches.length > 1 && setBranchSheetOpen(true)}
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 4,
+                  marginTop: 4, padding: '3px 10px 3px 8px',
+                  borderRadius: 20,
+                  background: selectedBranch?.isOpen ? `${config.color}14` : 'var(--surface-2)',
+                  border: `1px solid ${selectedBranch?.isOpen ? config.color + '40' : 'var(--border)'}`,
+                  cursor: branches.length > 1 ? 'pointer' : 'default',
+                  fontFamily: 'Zain, sans-serif',
+                  transition: 'all 0.15s',
+                }}
+              >
+                <span style={{ width: 6, height: 6, borderRadius: '50%', flexShrink: 0, background: selectedBranch?.isOpen ? '#22C55E' : '#9CA3AF' }} />
+                <span style={{ fontSize: 11, fontWeight: 700, color: selectedBranch?.isOpen ? config.color : 'var(--text-3)', maxWidth: 160, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  {selectedBranch ? selectedBranch.name : 'اختر فرعاً'}
+                </span>
+                {selectedBranch?.address && (
+                  <span style={{ fontSize: 10, color: 'var(--text-3)', maxWidth: 100, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    · {selectedBranch.address.split('،')[0]}
+                  </span>
+                )}
+                {branches.length > 1 && <ArrowDown2 size={11} style={{ color: 'var(--text-3)', flexShrink: 0 }} />}
+              </button>
             )}
           </div>
 
@@ -600,9 +714,9 @@ export default function StoreFront() {
           </button>
         </div>
 
-        {!config.isOpen && (
+        {selectedBranch && !selectedBranch.isOpen && (
           <div style={{ background: '#FEF3C7', color: '#92400E', fontSize: 12, fontWeight: 600, textAlign: 'center', padding: '8px 16px' }}>
-            المطعم مغلق حالياً — يفتح الساعة {config.opensAt} ظهر
+            {selectedBranch.name} مغلق حالياً — يفتح الساعة {selectedBranch.opensAt}
           </div>
         )}
       </div>
@@ -897,6 +1011,17 @@ export default function StoreFront() {
             </button>
           </div>
         </div>
+      )}
+
+      {/* ─── Branch Picker Sheet ─── */}
+      {branchSheetOpen && branches.length > 1 && (
+        <BranchPickerSheet
+          branches={branches}
+          selected={selectedBranch}
+          accentColor={config.color}
+          onSelect={setSelectedBranch}
+          onClose={() => setBranchSheetOpen(false)}
+        />
       )}
 
       {/* ─── Restaurant conflict dialog ─── */}
