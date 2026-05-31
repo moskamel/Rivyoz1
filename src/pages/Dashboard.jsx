@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom'
 import { TrendUp, TrendDown, ShoppingBag, People, DollarSquare, ArrowLeft, ToggleOn, ExportSquare } from 'iconsax-react'
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import Layout from '../components/layout/Layout'
-import { mockStats, mockSalesData, mockTopItems, statusMap } from '../lib/mock'
-import { getOrders, getConfig, setConfig, updateOrderStatus } from '../lib/restaurantStore'
+import { mockStats, mockSalesData, mockTopItems, mockBranchStats, mockBranchSalesData, statusMap } from '../lib/mock'
+import { getOrders, getOrdersByBranch, getConfig, setConfig, updateOrderStatus, getBranches } from '../lib/restaurantStore'
+import { useBranch } from '../lib/BranchContext'
 
 function Skel({ w = '100%', h = 16, r = 8, mb = 0 }) {
   return <div style={{ width: w, height: h, borderRadius: r, marginBottom: mb, background: 'var(--surface-3)', animation: 'skel-pulse 1.5s ease-in-out infinite' }} />
@@ -61,6 +62,8 @@ export default function Dashboard() {
   const [period, setPeriod] = useState('7 أيام')
   const [refreshKey, setRefreshKey] = useState(0)
   const [dismissed, setDismissed] = useState(new Set())
+  const { activeBranch } = useBranch()
+  const branches = getBranches()
 
   useEffect(() => {
     const t = setTimeout(() => setLoading(false), 1000)
@@ -114,9 +117,11 @@ export default function Dashboard() {
   }, [])
   // ────────────────────────────────────────────────────────────────
 
-  const orders = getOrders()
+  const orders = getOrdersByBranch(activeBranch?.id)
   const newOrders = orders.filter(o => o.status === 'new' && !dismissed.has(o.id))
   const firstNew = newOrders[0]
+  const branchStats = activeBranch ? (mockBranchStats[activeBranch.id] || mockStats) : mockStats
+  const salesData = activeBranch ? (mockBranchSalesData[activeBranch.id] || mockSalesData) : mockSalesData
 
   const handleAccept = (id) => {
     updateOrderStatus(id, 'preparing')
@@ -386,11 +391,59 @@ export default function Dashboard() {
 
       {/* ── STAT CARDS ── */}
       <div className="stagger" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 20 }}>
-        <StatCard label="مبيعات اليوم"  value={mockStats.revenue}      change={mockStats.revenueChange} icon={DollarSquare}   color="#f97316" />
-        <StatCard label="طلبات اليوم"   value={mockStats.orders}       change={mockStats.ordersChange}  icon={ShoppingBag}  color="#f97316" />
-        <StatCard label="متوسط الطلب"   value={mockStats.avgOrder}                                      icon={ExportSquare}  color="#f97316" />
-        <StatCard label="زبائن جدد"     value={mockStats.newCustomers}                                  icon={People}         color="#f97316" />
+        <StatCard label="مبيعات اليوم"  value={branchStats.revenue}      change={branchStats.revenueChange ?? branchStats.change} icon={DollarSquare}   color="#f97316" />
+        <StatCard label="طلبات اليوم"   value={branchStats.orders}        change={branchStats.ordersChange}  icon={ShoppingBag}  color="#f97316" />
+        <StatCard label="متوسط الطلب"   value={branchStats.avgOrder}                                         icon={ExportSquare}  color="#f97316" />
+        <StatCard label="زبائن جدد"     value={mockStats.newCustomers}                                       icon={People}         color="#f97316" />
       </div>
+
+      {/* ── BRANCH COMPARISON (all branches view) ── */}
+      {!activeBranch && branches.length > 1 && (
+        <div className="glass animate-fade-in" style={{ overflow: 'hidden', marginBottom: 20 }}>
+          <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>أداء الفروع</p>
+            <Link to="/branches" style={{ fontSize: 12, fontWeight: 600, color: 'var(--accent)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4 }}>
+              إدارة الفروع <ArrowLeft size={13} />
+            </Link>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: `repeat(${branches.length}, 1fr)` }}>
+            {branches.map((b, i) => {
+              const bs = mockBranchStats[b.id] || { revenue: 0, orders: 0, avgOrder: 0, change: 0 }
+              const maxRev = Math.max(...branches.map(br => (mockBranchStats[br.id] || {}).revenue || 1))
+              const pct = (bs.revenue / maxRev) * 100
+              return (
+                <div key={b.id} style={{ padding: '16px 20px', borderRight: i < branches.length - 1 ? '1px solid var(--border)' : 'none' }}>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 10 }}>
+                    <div>
+                      <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 3 }}>{b.name}</p>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                        <span className={`status-dot ${b.isOpen ? 'live' : 'idle'}`} />
+                        <span style={{ fontSize: 11, color: b.isOpen ? 'var(--green)' : 'var(--text-3)', fontWeight: 500 }}>
+                          {b.isOpen ? 'مفتوح' : 'مغلق'}
+                        </span>
+                      </div>
+                    </div>
+                    <span className={`badge badge-pill badge-sm ${bs.change >= 0 ? 'badge-green' : 'badge-red'}`}
+                      style={{ display: 'flex', alignItems: 'center', gap: 3, flexShrink: 0 }}>
+                      {bs.change >= 0 ? <TrendUp size={10} /> : <TrendDown size={10} />}
+                      {Math.abs(bs.change)}%
+                    </span>
+                  </div>
+                  <p className="num" style={{ fontSize: 22, fontWeight: 800, color: 'var(--accent)', lineHeight: 1, marginBottom: 3 }}>
+                    {bs.revenue.toLocaleString()} ج
+                  </p>
+                  <p style={{ fontSize: 11, color: 'var(--text-3)', marginBottom: 12 }}>
+                    {bs.orders} طلب · متوسط {bs.avgOrder} ج
+                  </p>
+                  <div style={{ height: 4, background: 'var(--surface-3)', borderRadius: 2 }}>
+                    <div style={{ height: 4, borderRadius: 2, background: 'var(--accent)', width: `${pct}%`, transition: 'width 0.7s var(--ease-default)' }} />
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )}
 
       {/* ── CHART + TOP ITEMS ── */}
       <div className="animate-slide-up" style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 12, marginBottom: 20 }}>
@@ -415,7 +468,7 @@ export default function Dashboard() {
             </div>
           </div>
           <ResponsiveContainer width="100%" height={160}>
-            <AreaChart data={mockSalesData}>
+            <AreaChart data={salesData}>
               <defs>
                 <linearGradient id="salesGrad" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%"   stopColor="var(--accent)" stopOpacity={0.20} />

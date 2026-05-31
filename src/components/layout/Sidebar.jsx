@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { Category, Task, Cup, Speaker, Chart, Settings, Export, People, UserTick, Box, Monitor, ArrowDown2, Check, Flash, ExportSquare, ColorSwatch, Logout, Star1, Building } from 'iconsax-react'
 import { getConfig, getOrders, getBranches } from '../../lib/restaurantStore'
+import { useBranch } from '../../lib/BranchContext'
 
 const navGrowth = [
   { to: '/customers', label: 'الزبائن', icon: People },
@@ -112,19 +113,17 @@ function NavGroup({ label, items }) {
 
 export default function Sidebar() {
   const [branchList, setBranchList] = useState(getBranches)
-  const [selectedBranch, setSelectedBranch] = useState(() => getBranches()[0]?.name || '')
   const [branchOpen, setBranchOpen] = useState(false)
   const [config, setConfigState] = useState(getConfig)
   const [newOrderCount, setNewOrderCount] = useState(() => getOrders().filter(o => o.status === 'new').length)
+  const { activeBranch, setActiveBranch } = useBranch()
   const navigate = useNavigate()
 
   useEffect(() => {
     const id = setInterval(() => {
       setNewOrderCount(getOrders().filter(o => o.status === 'new').length)
       setConfigState(getConfig())
-      const latest = getBranches()
-      setBranchList(latest)
-      setSelectedBranch(prev => latest.find(b => b.name === prev) ? prev : (latest[0]?.name || ''))
+      setBranchList(getBranches())
     }, 3000)
     return () => clearInterval(id)
   }, [])
@@ -222,24 +221,28 @@ export default function Sidebar() {
               justifyContent: 'space-between',
               padding: '7px 10px',
               borderRadius: 8,
-              background: 'var(--surface-2)',
-              border: '1px solid var(--border)',
+              background: activeBranch ? 'var(--accent-muted)' : 'var(--surface-2)',
+              border: activeBranch ? '1px solid var(--border-accent)' : '1px solid var(--border)',
               cursor: 'pointer',
-              transition: 'border-color var(--dur-normal) var(--ease-default)',
+              transition: 'all var(--dur-normal) var(--ease-default)',
               fontFamily: 'Zain, sans-serif',
             }}
-            onMouseEnter={e => (e.currentTarget.style.borderColor = 'var(--border-strong)')}
-            onMouseLeave={e => (e.currentTarget.style.borderColor = 'var(--border)')}
+            onMouseEnter={e => (e.currentTarget.style.borderColor = activeBranch ? 'var(--accent)' : 'var(--border-strong)')}
+            onMouseLeave={e => (e.currentTarget.style.borderColor = activeBranch ? 'var(--border-accent)' : 'var(--border)')}
           >
-            <span style={{ fontSize: 12, color: 'var(--text-2)', fontWeight: 500 }}>
-              {selectedBranch}
-            </span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              {activeBranch && <span className={`status-dot ${activeBranch.isOpen ? 'live' : 'idle'}`} style={{ width: 6, height: 6, flexShrink: 0 }} />}
+              <span style={{ fontSize: 12, color: activeBranch ? 'var(--accent)' : 'var(--text-2)', fontWeight: activeBranch ? 600 : 500 }}>
+                {activeBranch ? activeBranch.name : 'كل الفروع'}
+              </span>
+            </div>
             <ArrowDown2
               size={13}
               style={{
                 color: 'var(--text-3)',
                 transform: branchOpen ? 'rotate(180deg)' : 'none',
                 transition: 'transform var(--dur-normal) var(--ease-default)',
+                flexShrink: 0,
               }}
             />
           </button>
@@ -258,22 +261,38 @@ export default function Sidebar() {
                 boxShadow: 'var(--shadow-lg)',
               }}
             >
+              {/* All branches option */}
+              <button
+                onClick={() => { setActiveBranch(null); setBranchOpen(false) }}
+                style={{
+                  width: '100%', textAlign: 'right', padding: '9px 12px', fontSize: 12,
+                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                  cursor: 'pointer',
+                  color: activeBranch === null ? 'var(--accent)' : 'var(--text-2)',
+                  background: 'transparent', border: 'none',
+                  transition: 'background var(--dur-normal) var(--ease-default)',
+                  fontFamily: 'Zain, sans-serif',
+                  borderBottom: '1px solid var(--border)',
+                }}
+                onMouseEnter={e => (e.currentTarget.style.background = 'var(--surface-2)')}
+                onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <Building size={12} style={{ color: 'var(--text-3)', flexShrink: 0 }} />
+                  <span style={{ fontWeight: 600 }}>كل الفروع</span>
+                </div>
+                {activeBranch === null && <Check size={13} color="var(--accent)" />}
+              </button>
               {branchList.map(b => (
                 <button
                   key={b.id}
-                  onClick={() => { setSelectedBranch(b.name); setBranchOpen(false) }}
+                  onClick={() => { setActiveBranch(b); setBranchOpen(false) }}
                   style={{
-                    width: '100%',
-                    textAlign: 'right',
-                    padding: '9px 12px',
-                    fontSize: 12,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
+                    width: '100%', textAlign: 'right', padding: '9px 12px', fontSize: 12,
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                     cursor: 'pointer',
-                    color: selectedBranch === b.name ? 'var(--accent)' : 'var(--text-2)',
-                    background: 'transparent',
-                    border: 'none',
+                    color: activeBranch?.id === b.id ? 'var(--accent)' : 'var(--text-2)',
+                    background: 'transparent', border: 'none',
                     transition: 'background var(--dur-normal) var(--ease-default)',
                     fontFamily: 'Zain, sans-serif',
                   }}
@@ -284,7 +303,7 @@ export default function Sidebar() {
                     <span className={`status-dot ${b.isOpen ? 'live' : 'idle'}`} style={{ width: 6, height: 6, flexShrink: 0 }} />
                     <span>{b.name}</span>
                   </div>
-                  {selectedBranch === b.name && <Check size={13} color="var(--accent)" />}
+                  {activeBranch?.id === b.id && <Check size={13} color="var(--accent)" />}
                 </button>
               ))}
             </div>

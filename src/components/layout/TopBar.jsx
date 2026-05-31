@@ -3,6 +3,7 @@ import { Sun, Moon, SearchNormal1 } from 'iconsax-react'
 import { useNavigate } from 'react-router-dom'
 import NotificationBell from '../NotificationBell'
 import { getConfig } from '../../lib/restaurantStore'
+import { useBranch } from '../../lib/BranchContext'
 
 const roleLabels = {
   owner:   'صاحب المطعم',
@@ -25,6 +26,7 @@ export default function TopBar({ title }) {
   const role      = localStorage.getItem('auth_role') || 'owner'
   const roleLabel = roleLabels[role] || 'صاحب المطعم'
   const config    = getConfig()
+  const { activeBranch } = useBranch()
 
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark')
   const now = useClock()
@@ -62,8 +64,8 @@ export default function TopBar({ title }) {
         gap: 12,
       }}
     >
-      {/* Right: title + clock */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, minWidth: 0, flex: 1 }}>
+      {/* Right: title + branch chip + clock */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0, flex: 1 }}>
         <h1
           style={{
             fontSize: 15,
@@ -76,6 +78,16 @@ export default function TopBar({ title }) {
         >
           {title}
         </h1>
+        {activeBranch && (
+          <span style={{
+            fontSize: 11, fontWeight: 700, whiteSpace: 'nowrap',
+            padding: '3px 10px', borderRadius: 'var(--radius-full)',
+            background: 'var(--accent-muted)', color: 'var(--accent)',
+            border: '1px solid var(--border-accent)',
+          }}>
+            {activeBranch.name}
+          </span>
+        )}
         <span
           style={{
             fontSize: 11,

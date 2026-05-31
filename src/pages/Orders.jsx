@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react'
 import { CloseCircle, Check, Add, Minus } from 'iconsax-react'
 import Layout from '../components/layout/Layout'
 import { statusMap } from '../lib/mock'
-import { getOrders, updateOrderStatus, addOrder, getMenuItems, getCategories } from '../lib/restaurantStore'
+import { getOrders, getOrdersByBranch, updateOrderStatus, addOrder, getMenuItems, getCategories, getBranches } from '../lib/restaurantStore'
+import { useBranch } from '../lib/BranchContext'
 
 function Skel({ w = '100%', h = 16, r = 8, mb = 0 }) {
   return <div style={{ width: w, height: h, borderRadius: r, marginBottom: mb, background: 'var(--surface-3)', animation: 'skel-pulse 1.5s ease-in-out infinite' }} />
@@ -56,7 +57,9 @@ function statusBadge(status) {
 export default function Orders() {
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState('all')
-  const [orders, setOrders] = useState(getOrders)
+  const { activeBranch } = useBranch()
+  const branchMap = Object.fromEntries(getBranches().map(b => [b.id, b.name]))
+  const [orders, setOrders] = useState(() => getOrdersByBranch(activeBranch?.id))
   const [selected, setSelected] = useState(null)
   const [rejectModal, setRejectModal] = useState(null)
   const [rejectReason, setRejectReason] = useState('')
@@ -74,13 +77,18 @@ export default function Orders() {
     return () => clearTimeout(t)
   }, [])
 
+  // Re-filter immediately when branch changes
+  useEffect(() => {
+    setOrders(getOrdersByBranch(activeBranch?.id))
+  }, [activeBranch?.id])
+
   // Poll for new customer orders every 3 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      setOrders(getOrders())
+      setOrders(getOrdersByBranch(activeBranch?.id))
     }, 3000)
     return () => clearInterval(interval)
-  }, [])
+  }, [activeBranch?.id])
 
   const filtered = activeTab === 'all' ? orders : orders.filter(o => o.status === activeTab)
   const count = (key) => key === 'all' ? orders.length : orders.filter(o => o.status === key).length
@@ -350,11 +358,24 @@ export default function Orders() {
                   </span>
                 </div>
 
-                {/* Middle: table + time */}
+                {/* Middle: table + time + branch */}
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', margin: 0, lineHeight: 1.3 }}>
-                    {order.table}
-                  </p>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+                    <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', margin: 0, lineHeight: 1.3 }}>
+                      {order.table}
+                    </p>
+                    {!activeBranch && order.branchId && branchMap[order.branchId] && (
+                      <span style={{
+                        fontSize: 10, fontWeight: 700, padding: '1px 7px',
+                        borderRadius: 'var(--radius-full)',
+                        background: 'var(--accent-muted)', color: 'var(--accent)',
+                        border: '1px solid var(--border-accent)',
+                        whiteSpace: 'nowrap',
+                      }}>
+                        {branchMap[order.branchId]}
+                      </span>
+                    )}
+                  </div>
                   <p style={{ fontSize: 11, color: 'var(--text-3)', margin: 0, marginTop: 2, lineHeight: 1 }}>
                     {order.time}
                   </p>

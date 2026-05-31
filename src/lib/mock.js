@@ -15,13 +15,34 @@ export const mockStats = {
 }
 
 export const mockOrders = [
-  { id: 42, table: 'طاولة 4', items: 'كفتة + عصير', total: 135, status: 'new', time: 'منذ دقيقتين', customer: 'أحمد محمد', phone: '01012345678', payment: 'كاش عند الاستلام', details: [{ name: 'كفتة مشوية', qty: 1, price: 85, note: 'بدون فلفل' }, { name: 'عصير قصب', qty: 2, price: 50, note: '' }] },
-  { id: 41, table: 'طاولة 2', items: 'فراخ × 2', total: 140, status: 'preparing', time: 'منذ 8 دقائق', customer: 'محمد علي', phone: '01098765432', payment: 'كاش عند الاستلام', details: [{ name: 'فراخ مشوية', qty: 2, price: 70, note: '' }] },
-  { id: 40, table: 'استلام', items: 'بيتزا', total: 90, status: 'ready', time: 'منذ 15 دقيقة', customer: 'سارة أحمد', phone: '01155443322', payment: 'بطاقة', details: [{ name: 'بيتزا مارغريتا', qty: 1, price: 90, note: '' }] },
-  { id: 39, table: 'توصيل', items: 'وجبة عائلية', total: 280, status: 'delivering', time: 'منذ 22 دقيقة', customer: 'خالد محمود', phone: '01234567890', payment: 'كاش عند الاستلام', details: [{ name: 'كفتة مشوية', qty: 2, price: 85, note: '' }, { name: 'فراخ مشوية', qty: 1, price: 70, note: '' }, { name: 'عصير قصب', qty: 2, price: 25, note: '' }] },
-  { id: 38, table: 'طاولة 7', items: 'سلطة + مشروب', total: 65, status: 'done', time: 'منذ 40 دقيقة', customer: 'فاطمة حسن', phone: '01567891234', payment: 'بطاقة', details: [{ name: 'سلطة خضراء', qty: 1, price: 35, note: '' }, { name: 'عصير برتقال', qty: 1, price: 30, note: '' }] },
-  { id: 37, table: 'توصيل', items: 'شاورما', total: 55, status: 'cancelled', time: 'منذ ساعة', customer: 'عمر كريم', phone: '01099887766', payment: 'كاش عند الاستلام', details: [{ name: 'شاورما دجاج', qty: 1, price: 55, note: '' }] },
+  { id: 42, branchId: 1, table: 'طاولة 4',  items: 'كفتة + عصير',   total: 135, status: 'new',       time: 'منذ دقيقتين',  customer: 'أحمد محمد',  phone: '01012345678', payment: 'كاش عند الاستلام', details: [{ name: 'كفتة مشوية', qty: 1, price: 85, note: 'بدون فلفل' }, { name: 'عصير قصب', qty: 2, price: 50, note: '' }] },
+  { id: 41, branchId: 1, table: 'طاولة 2',  items: 'فراخ × 2',      total: 140, status: 'preparing', time: 'منذ 8 دقائق',   customer: 'محمد علي',   phone: '01098765432', payment: 'كاش عند الاستلام', details: [{ name: 'فراخ مشوية', qty: 2, price: 70, note: '' }] },
+  { id: 40, branchId: 2, table: 'استلام',   items: 'بيتزا',          total: 90,  status: 'ready',     time: 'منذ 15 دقيقة', customer: 'سارة أحمد',  phone: '01155443322', payment: 'بطاقة',             details: [{ name: 'بيتزا مارغريتا', qty: 1, price: 90, note: '' }] },
+  { id: 39, branchId: 2, table: 'توصيل',    items: 'وجبة عائلية',   total: 280, status: 'delivering',time: 'منذ 22 دقيقة', customer: 'خالد محمود', phone: '01234567890', payment: 'كاش عند الاستلام', details: [{ name: 'كفتة مشوية', qty: 2, price: 85, note: '' }, { name: 'فراخ مشوية', qty: 1, price: 70, note: '' }, { name: 'عصير قصب', qty: 2, price: 25, note: '' }] },
+  { id: 38, branchId: 3, table: 'طاولة 7',  items: 'سلطة + مشروب', total: 65,  status: 'done',      time: 'منذ 40 دقيقة', customer: 'فاطمة حسن',  phone: '01567891234', payment: 'بطاقة',             details: [{ name: 'سلطة خضراء', qty: 1, price: 35, note: '' }, { name: 'عصير برتقال', qty: 1, price: 30, note: '' }] },
+  { id: 37, branchId: 1, table: 'توصيل',    items: 'شاورما',         total: 55,  status: 'cancelled', time: 'منذ ساعة',     customer: 'عمر كريم',   phone: '01099887766', payment: 'كاش عند الاستلام', details: [{ name: 'شاورما دجاج', qty: 1, price: 55, note: '' }] },
 ]
+
+export const mockBranchStats = {
+  1: { revenue: 1580, orders: 11, avgOrder: 144, change: +14, topItem: 'كفتة مشوية' },
+  2: { revenue: 870,  orders: 7,  avgOrder: 124, change: +6,  topItem: 'وجبة عائلية' },
+  3: { revenue: 210,  orders: 2,  avgOrder: 105, change: -4,  topItem: 'سلطة خضراء' },
+}
+
+export const mockBranchSalesData = {
+  1: [
+    { day: 'السبت', amount: 1200 }, { day: 'الأحد', amount: 1500 }, { day: 'الاثنين', amount: 1100 },
+    { day: 'الثلاثاء', amount: 1600 }, { day: 'الأربعاء', amount: 1400 }, { day: 'الخميس', amount: 1800 }, { day: 'الجمعة', amount: 1580 },
+  ],
+  2: [
+    { day: 'السبت', amount: 380 }, { day: 'الأحد', amount: 420 }, { day: 'الاثنين', amount: 350 },
+    { day: 'الثلاثاء', amount: 520 }, { day: 'الأربعاء', amount: 580 }, { day: 'الخميس', amount: 690 }, { day: 'الجمعة', amount: 870 },
+  ],
+  3: [
+    { day: 'السبت', amount: 220 }, { day: 'الأحد', amount: 180 }, { day: 'الاثنين', amount: 200 },
+    { day: 'الثلاثاء', amount: 280 }, { day: 'الأربعاء', amount: 220 }, { day: 'الخميس', amount: 310 }, { day: 'الجمعة', amount: 210 },
+  ],
+}
 
 export const mockMenuCategories = [
   { id: 1, name: 'مشويات', count: 5 },

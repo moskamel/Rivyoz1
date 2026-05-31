@@ -31,6 +31,7 @@ import About from './pages/About'
 import Privacy from './pages/Privacy'
 import Terms from './pages/Terms'
 import { CustomerThemeWrapper } from './lib/ThemeContext'
+import { BranchProvider } from './lib/BranchContext'
 
 function ProtectedRoute({ children }) {
   if (!localStorage.getItem('auth_role')) return <Navigate to="/login" replace />
@@ -78,7 +79,7 @@ function OfflineBanner() {
 
 export default function App() {
   return (
-    <>
+    <BranchProvider>
       <OfflineBanner />
       <Routes>
       <Route path="/login" element={<Login />} />
@@ -124,6 +125,6 @@ export default function App() {
         <Route path="/r/:slug" element={<RestaurantPage />} />
       </Route>
     </Routes>
-    </>
+    </BranchProvider>
   )
 }

@@ -226,6 +226,12 @@ export function getCustomerOrders(phone) {
   return getOrders().filter(o => o.phone === phone)
 }
 
+export function getOrdersByBranch(branchId) {
+  const orders = getOrders()
+  if (branchId == null) return orders
+  return orders.filter(o => !o.branchId || o.branchId === branchId)
+}
+
 /* ─── Branches ────────────────────────────────────────────── */
 const defaultBranches = [
   { id: 1, name: 'الفرع الرئيسي',     address: 'التجمع الخامس، القاهرة', phone: '01012345678', manager: 'أحمد رضا',    isOpen: true,  opensAt: '10:00', closesAt: '23:00' },
