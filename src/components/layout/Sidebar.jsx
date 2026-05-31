@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import { Category, Task, Cup, Speaker, Chart, Settings, Export, People, UserTick, Box, Monitor, ArrowDown2, Check, Flash, ExportSquare, ColorSwatch, Logout, Star1, Building } from 'iconsax-react'
 import { getConfig, getOrders, getBranches } from '../../lib/restaurantStore'
 import { useBranch } from '../../lib/BranchContext'
+import { clearSession } from '../../lib/auth'
 
 const navGrowth = [
   { to: '/customers', label: 'الزبائن', icon: People },
@@ -122,14 +123,12 @@ export default function Sidebar() {
   useEffect(() => {
     const id = setInterval(() => {
       setNewOrderCount(getOrders().filter(o => o.status === 'new').length)
-      setConfigState(getConfig())
-      setBranchList(getBranches())
-    }, 3000)
+    }, 5000)
     return () => clearInterval(id)
   }, [])
 
   const handleLogout = () => {
-    localStorage.removeItem('auth_role')
+    clearSession()
     navigate('/login')
   }
 

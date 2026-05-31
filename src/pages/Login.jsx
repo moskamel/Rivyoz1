@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Flash, Sun, Moon } from 'iconsax-react'
+import { createSession } from '../lib/auth'
 
 function Toast({ message, visible }) {
   return (
@@ -176,13 +177,13 @@ export default function Login() {
     setLoading(true)
     setTimeout(() => {
       setLoading(false)
-      localStorage.setItem('auth_role', 'owner')
+      createSession('owner')
       navigate('/')
     }, 800)
   }
 
   function demoLogin() {
-    localStorage.setItem('auth_role', 'owner')
+    createSession('owner')
     navigate('/')
   }
 
@@ -237,7 +238,7 @@ export default function Login() {
           <div style={{ width: 76, height: 76, background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(10px)', borderRadius: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', boxShadow: '0 20px 60px rgba(0,0,0,0.15)' }}>
             <Flash size={38} color="white" />
           </div>
-          <h1 style={{ fontSize: 40, fontWeight: 900, color: 'white', marginBottom: 8, letterSpacing: '-0.02em', fontFamily: 'Zain, sans-serif' }}>Fazz</h1>
+          <h1 style={{ fontSize: 40, fontWeight: 900, color: 'white', marginBottom: 8, letterSpacing: '-0.02em', fontFamily: 'Zain, sans-serif' }}>ريڤيو</h1>
           <p style={{ fontSize: 16, fontWeight: 600, color: 'rgba(255,255,255,0.85)', marginBottom: 6, fontFamily: 'Zain, sans-serif' }}>
             {mode === 'login' ? 'مرحباً بعودتك 👋' : 'انضم لـ +٥٠٠ مطعم 🚀'}
           </p>
@@ -278,7 +279,7 @@ export default function Login() {
             <div style={{ width: 36, height: 36, background: 'linear-gradient(135deg, #F97316, #EA6C10)', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Flash size={18} color="white" />
             </div>
-            <p style={{ fontSize: 20, fontWeight: 900, color: 'var(--text)', fontFamily: 'Zain, sans-serif' }}>Fazz</p>
+            <p style={{ fontSize: 20, fontWeight: 900, color: 'var(--text)', fontFamily: 'Zain, sans-serif' }}>ريڤيو</p>
           </div>
 
           {/* Mode tabs */}
@@ -304,7 +305,7 @@ export default function Login() {
           <p style={{ fontSize: 13, color: 'var(--text-3)', marginBottom: 24, fontFamily: 'Zain, sans-serif' }}>
             {step === 2
               ? `أدخل الرمز المُرسَل إلى ${maskedPhone()}`
-              : mode === 'login' ? 'سجّل دخولك لإدارة مطعمك' : 'أنضم إلى مئات المطاعم المستخدمة لـ Fazz'}
+              : mode === 'login' ? 'سجّل دخولك لإدارة مطعمك' : 'أنضم إلى مئات المطاعم المستخدمة لـ ريڤيو'}
           </p>
 
           {/* ── Step 1: Form ── */}
@@ -447,7 +448,7 @@ export default function Login() {
           </button>
 
           <p style={{ textAlign: 'center', fontSize: 11, color: 'var(--text-3)', marginTop: 22, fontFamily: 'Zain, sans-serif' }}>
-            Fazz · نظام إدارة المطاعم · جميع الحقوق محفوظة
+            ريڤيو · نظام إدارة المطاعم · جميع الحقوق محفوظة
           </p>
         </div>
       </div>

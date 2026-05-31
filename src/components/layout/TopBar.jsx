@@ -5,6 +5,7 @@ import NotificationBell from '../NotificationBell'
 import SearchModal from '../SearchModal'
 import { getConfig } from '../../lib/restaurantStore'
 import { useBranch } from '../../lib/BranchContext'
+import { getRole } from '../../lib/auth'
 
 const roleLabels = {
   owner:   'صاحب المطعم',
@@ -24,7 +25,7 @@ function useClock() {
 
 export default function TopBar({ title }) {
   const navigate  = useNavigate()
-  const role      = localStorage.getItem('auth_role') || 'owner'
+  const role      = getRole() || ''
   const roleLabel = roleLabels[role] || 'صاحب المطعم'
   const config    = getConfig()
   const { activeBranch } = useBranch()

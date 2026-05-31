@@ -84,6 +84,7 @@ export function addOrder(order) {
     ...order,
     id: orders.length > 0 ? Math.max(...orders.map(o => Number(o.id))) + 1 : 1,
     time: 'الآن',
+    createdAt: new Date().toISOString(),
     status: 'new',
   }
   const updated = [newOrder, ...orders]
@@ -91,7 +92,13 @@ export function addOrder(order) {
   return newOrder
 }
 
+const VALID_STATUSES = ['new', 'preparing', 'ready', 'delivering', 'done', 'cancelled']
+
 export function updateOrderStatus(id, status) {
+  if (!VALID_STATUSES.includes(status)) {
+    console.warn(`updateOrderStatus: invalid status "${status}"`)
+    return
+  }
   const orders = getOrders()
   const updated = orders.map(o => o.id === id ? { ...o, status } : o)
   localStorage.setItem('orders_list', JSON.stringify(updated))
