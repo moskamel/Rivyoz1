@@ -20,8 +20,21 @@ const levelConfig = {
   expert:      { label: 'خبير',   bg: 'var(--yellow-muted)',color: 'var(--yellow)', badgeClass: 'badge-yellow'  },
 }
 
-function CustomerDrawer({ customer, onClose }) {
+function CustomerDrawer({ customer, onUpdatePoints, onClose }) {
   const lvl = levelConfig[customer.level]
+  const [pointsInput, setPointsInput] = useState('')
+  const [pointsFeedback, setPointsFeedback] = useState(null)
+
+  function applyPoints(delta) {
+    const amount = parseInt(pointsInput, 10)
+    if (!amount || amount <= 0) return
+    const next = Math.max(0, customer.points + delta * amount)
+    onUpdatePoints(customer.id, next)
+    setPointsFeedback(delta > 0 ? `+${amount} نقطة` : `-${amount} نقطة`)
+    setPointsInput('')
+    setTimeout(() => setPointsFeedback(null), 2000)
+  }
+
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 50 }} dir="rtl" className="animate-fade-in">
       {/* Backdrop */}
@@ -86,6 +99,84 @@ function CustomerDrawer({ customer, onClose }) {
             ))}
           </div>
 
+          {/* Loyalty points manager */}
+          <div className="glass-2" style={{ borderRadius: 'var(--radius-lg)', padding: 16, marginBottom: 20 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+              <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-3)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                نقاط الولاء
+              </p>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span className="num" style={{ fontSize: 22, fontWeight: 800, color: 'var(--accent)', lineHeight: 1 }}>
+                  {customer.points}
+                </span>
+                <span style={{ fontSize: 11, color: 'var(--text-3)' }}>نقطة</span>
+                {pointsFeedback && (
+                  <span style={{
+                    fontSize: 12, fontWeight: 700,
+                    color: pointsFeedback.startsWith('+') ? 'var(--green)' : 'var(--red)',
+                    animation: 'fadeIn 0.2s ease',
+                  }}>
+                    {pointsFeedback}
+                  </span>
+                )}
+              </div>
+            </div>
+            <div style={{ display: 'flex', gap: 8 }}>
+              <input
+                type="number"
+                min="1"
+                value={pointsInput}
+                onChange={e => setPointsInput(e.target.value)}
+                placeholder="عدد النقاط"
+                style={{
+                  flex: 1, height: 38,
+                  background: 'var(--surface)',
+                  border: '1px solid var(--border)',
+                  borderRadius: 'var(--radius)',
+                  padding: '0 12px',
+                  fontSize: 13, color: 'var(--text)', outline: 'none',
+                  fontFamily: 'Zain, sans-serif',
+                  textAlign: 'center',
+                }}
+                onFocus={e => { e.target.style.borderColor = 'var(--accent)'; e.target.style.boxShadow = '0 0 0 3px var(--accent-muted)' }}
+                onBlur={e => { e.target.style.borderColor = 'var(--border)'; e.target.style.boxShadow = 'none' }}
+                onKeyDown={e => { if (e.key === 'Enter') applyPoints(1) }}
+              />
+              <button
+                onClick={() => applyPoints(1)}
+                disabled={!pointsInput || parseInt(pointsInput) <= 0}
+                style={{
+                  height: 38, padding: '0 14px',
+                  background: 'var(--green-muted)', color: 'var(--green)',
+                  border: '1px solid var(--green)',
+                  borderRadius: 'var(--radius)',
+                  fontWeight: 700, fontSize: 13, fontFamily: 'Zain, sans-serif',
+                  cursor: 'pointer', whiteSpace: 'nowrap',
+                  opacity: !pointsInput || parseInt(pointsInput) <= 0 ? 0.45 : 1,
+                  transition: 'opacity var(--dur-normal) ease',
+                }}
+              >
+                + إضافة
+              </button>
+              <button
+                onClick={() => applyPoints(-1)}
+                disabled={!pointsInput || parseInt(pointsInput) <= 0}
+                style={{
+                  height: 38, padding: '0 14px',
+                  background: 'rgba(var(--red-rgb,239,68,68),0.08)', color: 'var(--red)',
+                  border: '1px solid var(--red)',
+                  borderRadius: 'var(--radius)',
+                  fontWeight: 700, fontSize: 13, fontFamily: 'Zain, sans-serif',
+                  cursor: 'pointer', whiteSpace: 'nowrap',
+                  opacity: !pointsInput || parseInt(pointsInput) <= 0 ? 0.45 : 1,
+                  transition: 'opacity var(--dur-normal) ease',
+                }}
+              >
+                - خصم
+              </button>
+            </div>
+          </div>
+
           {/* Recent orders */}
           <p style={{ fontWeight: 600, fontSize: 11, color: 'var(--text-3)', marginBottom: 10, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
             آخر الطلبات
@@ -145,15 +236,21 @@ function CustomerDrawer({ customer, onClose }) {
 }
 
 export default function Customers() {
+  const [customers, setCustomers] = useState(mockCustomers)
   const [search, setSearch] = useState('')
   const [selected, setSelected] = useState(null)
 
-  const filtered = mockCustomers.filter(c =>
+  function handleUpdatePoints(id, newPoints) {
+    setCustomers(prev => prev.map(c => c.id === id ? { ...c, points: newPoints } : c))
+    setSelected(prev => prev && prev.id === id ? { ...prev, points: newPoints } : prev)
+  }
+
+  const filtered = customers.filter(c =>
     c.name.includes(search) || c.phone.includes(search)
   )
 
-  const activeCustomers = mockCustomers.filter(c => c.orders >= 5).length
-  const avgOrders = (mockCustomers.reduce((s, c) => s + c.orders, 0) / mockCustomers.length).toFixed(1)
+  const activeCustomers = customers.filter(c => c.orders >= 5).length
+  const avgOrders = (customers.reduce((s, c) => s + c.orders, 0) / customers.length).toFixed(1)
 
   return (
     <Layout title="الزبائن">
@@ -211,7 +308,7 @@ export default function Customers() {
       {/* Stats row */}
       <div style={{ display: 'flex', gap: 12, marginBottom: 20 }}>
         {[
-          { label: 'إجمالي الزبائن', value: mockCustomers.length, icon: People,       color: 'var(--blue)',   muted: 'var(--blue-muted)'   },
+          { label: 'إجمالي الزبائن', value: customers.length, icon: People,       color: 'var(--blue)',   muted: 'var(--blue-muted)'   },
           { label: 'زبائن نشطون',    value: activeCustomers,      icon: Activity,    color: 'var(--green)',  muted: 'var(--green-muted)'  },
           { label: 'متوسط الطلبات',  value: avgOrders,            icon: ShoppingBag, color: 'var(--accent)', muted: 'var(--accent-muted)' },
         ].map((s, i) => (
@@ -327,7 +424,7 @@ export default function Customers() {
         )}
       </div>
 
-      {selected && <CustomerDrawer customer={selected} onClose={() => setSelected(null)} />}
+      {selected && <CustomerDrawer customer={selected} onUpdatePoints={handleUpdatePoints} onClose={() => setSelected(null)} />}
     </Layout>
   )
 }
