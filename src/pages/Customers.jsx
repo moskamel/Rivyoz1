@@ -101,78 +101,78 @@ function CustomerDrawer({ customer, onUpdatePoints, onClose }) {
 
           {/* Loyalty points manager */}
           <div className="glass-2" style={{ borderRadius: 'var(--radius-lg)', padding: 16, marginBottom: 20 }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+            {/* Header */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
               <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-3)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                نقاط الولاء
+                إدارة النقاط
               </p>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                {pointsFeedback && (
+                  <span style={{ fontSize: 12, fontWeight: 700, color: pointsFeedback.startsWith('+') ? 'var(--green)' : 'var(--red)' }}>
+                    {pointsFeedback}
+                  </span>
+                )}
                 <span className="num" style={{ fontSize: 22, fontWeight: 800, color: 'var(--accent)', lineHeight: 1 }}>
                   {customer.points}
                 </span>
                 <span style={{ fontSize: 11, color: 'var(--text-3)' }}>نقطة</span>
-                {pointsFeedback && (
-                  <span style={{
-                    fontSize: 12, fontWeight: 700,
-                    color: pointsFeedback.startsWith('+') ? 'var(--green)' : 'var(--red)',
-                    animation: 'fadeIn 0.2s ease',
-                  }}>
-                    {pointsFeedback}
-                  </span>
-                )}
               </div>
             </div>
+            {/* Input */}
+            <input
+              type="number"
+              min="1"
+              value={pointsInput}
+              onChange={e => setPointsInput(e.target.value)}
+              placeholder="أدخل عدد النقاط"
+              style={{
+                width: '100%', height: 40, boxSizing: 'border-box',
+                background: 'var(--surface)',
+                border: '1px solid var(--border)',
+                borderRadius: 'var(--radius)',
+                padding: '0 14px',
+                fontSize: 14, color: 'var(--text)', outline: 'none',
+                fontFamily: 'Zain, sans-serif',
+                textAlign: 'right',
+                marginBottom: 10,
+              }}
+              onFocus={e => { e.target.style.borderColor = 'var(--accent)'; e.target.style.boxShadow = '0 0 0 3px var(--accent-muted)' }}
+              onBlur={e => { e.target.style.borderColor = 'var(--border)'; e.target.style.boxShadow = 'none' }}
+              onKeyDown={e => { if (e.key === 'Enter') applyPoints(1) }}
+            />
+            {/* Buttons */}
             <div style={{ display: 'flex', gap: 8 }}>
-              <input
-                type="number"
-                min="1"
-                value={pointsInput}
-                onChange={e => setPointsInput(e.target.value)}
-                placeholder="عدد النقاط"
-                style={{
-                  flex: 1, height: 38,
-                  background: 'var(--surface)',
-                  border: '1px solid var(--border)',
-                  borderRadius: 'var(--radius)',
-                  padding: '0 12px',
-                  fontSize: 13, color: 'var(--text)', outline: 'none',
-                  fontFamily: 'Zain, sans-serif',
-                  textAlign: 'center',
-                }}
-                onFocus={e => { e.target.style.borderColor = 'var(--accent)'; e.target.style.boxShadow = '0 0 0 3px var(--accent-muted)' }}
-                onBlur={e => { e.target.style.borderColor = 'var(--border)'; e.target.style.boxShadow = 'none' }}
-                onKeyDown={e => { if (e.key === 'Enter') applyPoints(1) }}
-              />
               <button
                 onClick={() => applyPoints(1)}
                 disabled={!pointsInput || parseInt(pointsInput) <= 0}
                 style={{
-                  height: 38, padding: '0 14px',
+                  flex: 1, height: 40,
                   background: 'var(--green-muted)', color: 'var(--green)',
-                  border: '1px solid var(--green)',
+                  border: '1px solid rgba(var(--green-rgb,34,197,94),0.35)',
                   borderRadius: 'var(--radius)',
-                  fontWeight: 700, fontSize: 13, fontFamily: 'Zain, sans-serif',
-                  cursor: 'pointer', whiteSpace: 'nowrap',
+                  fontWeight: 700, fontSize: 14, fontFamily: 'Zain, sans-serif',
+                  cursor: !pointsInput || parseInt(pointsInput) <= 0 ? 'not-allowed' : 'pointer',
                   opacity: !pointsInput || parseInt(pointsInput) <= 0 ? 0.45 : 1,
                   transition: 'opacity var(--dur-normal) ease',
                 }}
               >
-                + إضافة
+                + إضافة نقاط
               </button>
               <button
                 onClick={() => applyPoints(-1)}
                 disabled={!pointsInput || parseInt(pointsInput) <= 0}
                 style={{
-                  height: 38, padding: '0 14px',
-                  background: 'rgba(var(--red-rgb,239,68,68),0.08)', color: 'var(--red)',
-                  border: '1px solid var(--red)',
+                  flex: 1, height: 40,
+                  background: 'var(--red-muted, rgba(239,68,68,0.08))', color: 'var(--red)',
+                  border: '1px solid rgba(239,68,68,0.35)',
                   borderRadius: 'var(--radius)',
-                  fontWeight: 700, fontSize: 13, fontFamily: 'Zain, sans-serif',
-                  cursor: 'pointer', whiteSpace: 'nowrap',
+                  fontWeight: 700, fontSize: 14, fontFamily: 'Zain, sans-serif',
+                  cursor: !pointsInput || parseInt(pointsInput) <= 0 ? 'not-allowed' : 'pointer',
                   opacity: !pointsInput || parseInt(pointsInput) <= 0 ? 0.45 : 1,
                   transition: 'opacity var(--dur-normal) ease',
                 }}
               >
-                - خصم
+                - خصم نقاط
               </button>
             </div>
           </div>
