@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Sun, Moon, SearchNormal1 } from 'iconsax-react'
 import { useNavigate } from 'react-router-dom'
 import NotificationBell from '../NotificationBell'
+import SearchModal from '../SearchModal'
 import { getConfig } from '../../lib/restaurantStore'
 import { useBranch } from '../../lib/BranchContext'
 
@@ -28,8 +29,20 @@ export default function TopBar({ title }) {
   const config    = getConfig()
   const { activeBranch } = useBranch()
 
-  const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark')
+  const [theme, setTheme]       = useState(() => localStorage.getItem('theme') || 'dark')
+  const [searchOpen, setSearch] = useState(false)
   const now = useClock()
+
+  useEffect(() => {
+    const onKey = e => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault()
+        setSearch(o => !o)
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme === 'light' ? 'light' : '')
@@ -47,6 +60,7 @@ export default function TopBar({ title }) {
   const restaurantInitial = (config.name || 'م').charAt(0)
 
   return (
+    <>
     <header
       style={{
         height: 56,
@@ -112,7 +126,12 @@ export default function TopBar({ title }) {
       {/* Left: controls */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
         {/* Search */}
-        <button className="btn-icon md" title="بحث" style={{ cursor: 'pointer' }}>
+        <button
+          className="btn-icon md"
+          title="بحث (Ctrl+K)"
+          onClick={() => setSearch(true)}
+          style={{ cursor: 'pointer' }}
+        >
           <SearchNormal1 size={15} strokeWidth={2} />
         </button>
 
@@ -180,5 +199,8 @@ export default function TopBar({ title }) {
         </div>
       </div>
     </header>
+
+    {searchOpen && <SearchModal onClose={() => setSearch(false)} />}
+    </>
   )
 }
